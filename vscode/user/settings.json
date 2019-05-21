@@ -1,0 +1,121 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.pep8Enabled": true,
+    "python.linting.enabled": true,
+    "peacock.favoriteColors": [
+        {
+            "name": "Angular Red",
+            "value": "#b52e31"
+        },
+        {
+            "name": "Auth0 Orange",
+            "value": "#eb5424"
+        },
+        {
+            "name": "Azure Blue",
+            "value": "#007fff"
+        },
+        {
+            "name": "C# Purple",
+            "value": "#68217A"
+        },
+        {
+            "name": "Gatsby Purple",
+            "value": "#639"
+        },
+        {
+            "name": "Java Blue-Gray",
+            "value": "#557c9b"
+        },
+        {
+            "name": "JavaScript Yellow",
+            "value": "#f9e64f"
+        },
+        {
+            "name": "Mandalorian Blue",
+            "value": "#1857a4"
+        },
+        {
+            "name": "Node Green",
+            "value": "#215732"
+        },
+        {
+            "name": "React Blue",
+            "value": "#00b3e6"
+        },
+        {
+            "name": "Something Different",
+            "value": "#832561"
+        },
+        {
+            "name": "Vue Green",
+            "value": "#42b883"
+        }
+    ],
+    "scm.alwaysShowActions": true,
+    "scm.alwaysShowProviders": true,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "python.jediEnabled": false,
+    "files.exclude": {
+        "**/.idea": true,
+        "**/.vscode": true,
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.pyc": true,
+        "**/__pycache__": true,
+        "**/.env": true,
+    },
+    "editor.folding": false,
+    "editor.smoothScrolling": true,
+    "files.hotExit": "onExitAndWindowClose",
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "workbench.commandPalette.preserveInput": true,
+    "workbench.list.openMode": "doubleClick",
+    "workbench.quickOpen.closeOnFocusLost": false,
+    "workbench.tree.indent": 22,
+    "workbench.editor.highlightModifiedTabs": true,
+    "window.menuBarVisibility": "visible",
+    "search.location": "panel",
+    "search.showLineNumbers": true,
+    "debug.inlineValues": true,
+    "debug.toolBarLocation": "docked",
+    "github.gitCommand": "/usr/bin/git",
+    "python.analysis.diagnosticPublishDelay": 500,
+    "python.diagnostics.sourceMapsEnabled": false,
+    "autoDocstring.docstringFormat": "sphinx",
+    "autoDocstring.startOnNewLine": true,
+    "python.terminal.executeInFileDir": true,
+    "editor.tabCompletion": "on",
+    "python.linting.ignorePatterns": [
+        ".vscode/*.py",
+        "**/site-packages/**/*.py",
+        "**/virtualenvs/**/*.py",
+        "**/python3.7/**/*.py"
+    ],
+    "workbench.editor.labelFormat": "short",
+    "search.maintainFileSearchCache": true,
+    "files.autoSave": "afterDelay",
+    "workbench.colorCustomizations": {"gitDecoration.untrackedResourceForeground": "#bd4c4c",
+                                      "gitDecoration.addedResourceForeground": "#2d993f",
+                                      "gitDecoration.modifiedResourceForeground": "#4584ad",
+                                      "gitDecoration.deletedResourceForeground": "#857f7f",
+                                      "gitDecoration.ignoredResourceForeground": "#99840f",
+                                    "gitDecoration.conflictingResourceForeground": "#843fbd",
+                                    "list.warningForeground": "#ff0000",
+                                    "list.errorForeground": "#ff0000"
+                                },
+    "python.linting.pep8Args": [
+        "--max-line-length=100"
+    ],
+    "debug.allowBreakpointsEverywhere": true,
+    "python.analysis.symbolsHierarchyDepthLimit": 15,
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Darcula Pycharm with Dark GUI"
+}
