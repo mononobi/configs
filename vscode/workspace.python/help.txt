@@ -1,5 +1,7 @@
-1. `.vscode` folder should be placed into your project's root directory (where `.gitignore` is located).
+1. rename `_vscode` and `_env` to `.vscode` and `.env` before usage.
 
-2. `.env` file should be placed into your project's root directory (where `.gitignore` is located).
+2. `.vscode` folder should be placed into your project's root directory (where `.gitignore` is located).
 
-3. make sure to change paths and other stuff in different files to your correct environment.
+3. `.env` file should be placed into your project's root directory (where `.gitignore` is located).
+
+4. make sure to change paths and other stuff in different files to your correct environment.
