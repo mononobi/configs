@@ -1,0 +1,17 @@
+-server
+-Xms5g
+-Xmx10g
+-XX:NewRatio=3
+-Xss1024m
+-XX:+UseConcMarkSweepGC
+-XX:+CMSParallelRemarkEnabled
+-XX:ConcGCThreads=6
+-XX:ReservedCodeCacheSize=2048m
+-XX:+AlwaysPreTouch
+-XX:+TieredCompilation
+-XX:+UseCompressedOops
+-XX:SoftRefLRUPolicyMSPerMB=200
+-Dsun.io.useCanonCaches=false
+-Djava.net.preferIPv4Stack=true
+-Djsse.enableSNIExtension=false
+-ea

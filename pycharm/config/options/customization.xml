@@ -1,0 +1,44 @@
+<application>
+  <component name="com.intellij.ide.ui.customization.CustomActionsSchema">
+    <group value="Vcs.ShowTabbedFileHistory" is_action="true" action_type="-1" position="4">
+      <path value="root" />
+      <path value="Main Toolbar" />
+      <path value="MainToolBarSettings" />
+      <path value="VCS Actions" />
+      <option name="myInitialPosition" value="-1" />
+    </group>
+    <group value="Vcs.Push" is_action="true" action_type="1" position="1">
+      <path value="root" />
+      <path value="Main Toolbar" />
+      <path value="MainToolBarSettings" />
+      <path value="VCS Actions" />
+      <option name="myInitialPosition" value="-1" />
+    </group>
+    <group value="Vcs.ShowTabbedFileHistory" is_action="true" action_type="1" position="6">
+      <path value="root" />
+      <path value="Main Toolbar" />
+      <path value="MainToolBarSettings" />
+      <path value="VCS Actions" />
+      <option name="myInitialPosition" value="-1" />
+    </group>
+    <group value="Annotate" is_action="true" action_type="1" position="7">
+      <path value="root" />
+      <path value="Main Toolbar" />
+      <path value="MainToolBarSettings" />
+      <path value="VCS Actions" />
+      <option name="myInitialPosition" value="-1" />
+    </group>
+    <group value="Compare.Selected" is_action="true" action_type="1" position="8">
+      <path value="root" />
+      <path value="Main Toolbar" />
+      <path value="MainToolBarSettings" />
+      <path value="VCS Actions" />
+      <option name="myInitialPosition" value="-1" />
+    </group>
+    <group value="EditorToggleCase" is_action="true" action_type="1" position="11">
+      <path value="root" />
+      <path value="Main Toolbar" />
+      <option name="myInitialPosition" value="-1" />
+    </group>
+  </component>
+</application>
