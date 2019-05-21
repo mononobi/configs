@@ -1,0 +1,30 @@
+[installing]
+sudo /sbin/modprobe tun
+sudo apt-get install openconnect
+
+[connection]
+sudo openconnect us.cisadd2.com      [any server you want from list]
+
+[if system traffic not gone through vpn]
+sudo apt-get install vpnc vpnc-scripts
+sudo openconnect us.cisadd2.com --script=/etc/vpnc/vpnc-script
+
+
+
+[servers list]
+
+us6.cisadd2.com
+uk.cisadd2.com
+nl.cisadd2.com
+ca.cisadd2.com
+fr.cisadd2.com
+de.cisadd2.com
+cz.cisadd2.com
+
+us.cisadd3.com:800
+uk.cisadd3.com:800
+nl.cisadd3.com:800
+ca.cisadd3.com:800
+fr.cisadd3.com:800
+de.cisadd3.com:800
+cz.cisadd3.com:800

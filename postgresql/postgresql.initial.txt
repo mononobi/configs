@@ -1,0 +1,5 @@
+ALTER ROLE db_user
+    SET default_transaction_isolation TO 'read committed';
+
+ALTER DATABASE development_db
+    SET default_transaction_isolation TO 'read committed';

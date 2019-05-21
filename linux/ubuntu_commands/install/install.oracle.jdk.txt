@@ -1,0 +1,26 @@
+1. sudo apt-get purge openjdk-\*
+2. sudo mkdir -p /usr/local/java
+3. sudo cp -r jdk-8u51-linux-x64.tar.gz /usr/local/java/
+4. sudo tar xvzf jdk-8u51-linux-x64.tar.gz
+
+5. Update PATH file by opening  /etc/profile:
+
+   JAVA_HOME=/usr/local/java/jdk1.8.0_51
+   PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+   export JAVA_HOME
+   export PATH
+
+6. sudo update-alternatives --install "/usr/bin/java" "java" "/usr/local/java/jdk1.8.0_51/bin/java" 1
+   sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/local/java/jdk1.8.0_51/bin/javac" 1
+   sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/local/java/jdk1.8.0_51/bin/javaws" 1
+
+7. sudo update-alternatives --set java /usr/local/java/jdk1.8.0_51/bin/java
+   sudo update-alternatives --set javac /usr/local/java/jdk1.8.0_51/bin/javac
+   sudo update-alternatives --set javaws /usr/local/java/jdk1.8.0_51/bin/javaws
+
+8. source /etc/profile
+
+9. Reboot your system.
+
+10. java -version
+

@@ -1,0 +1,1 @@
+snap install postman --classic

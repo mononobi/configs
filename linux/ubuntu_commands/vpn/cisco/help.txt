@@ -1,0 +1,7 @@
+1. in `vpn` file, replace `{your_password}` and `{your_username}` with correct ones.
+
+2. if you do not have cisco installed, follow the instructions in `connection` file.
+
+3. you could copy `vpn` file into `/usr/local/sbin/` and make it executable by `chmod 777 vpn`
+   then you could run it by typing `vpn` in terminal.
+
