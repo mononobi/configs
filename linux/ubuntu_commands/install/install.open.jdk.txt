@@ -1,0 +1,14 @@
+1. sudo add-apt-repository ppa:openjdk-r/ppa
+2. sudo apt-get update
+3. sudo apt-get install openjdk-8-jdk
+
+==============================================================================================
+If you have more than one Java version installed on your system use the following command to switch versions:
+
+sudo update-alternatives --config java
+
+==============================================================================================
+Make sure your system is using the correct JDK:
+
+java -version
+
