@@ -76,7 +76,6 @@
     "files.trimFinalNewlines": true,
     "files.insertFinalNewline": true,
     "workbench.commandPalette.preserveInput": true,
-    "workbench.list.openMode": "doubleClick",
     "workbench.quickOpen.closeOnFocusLost": false,
     "workbench.tree.indent": 22,
     "workbench.editor.highlightModifiedTabs": true,
