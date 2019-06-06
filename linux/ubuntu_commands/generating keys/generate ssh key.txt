@@ -1,0 +1,6 @@
+1. ssh-keygen -t rsa -b 4096 -C "yourmail@gmail.com"
+
+2. eval "$(ssh-agent -s)"
+
+3. ssh-add ~/.ssh/name_rsa
+
