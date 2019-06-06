@@ -1,0 +1,23 @@
+1. installing fonts system-wide:
+/usr/local/share/fonts
+
+2. install if reload not available:
+apt-get install fontconfig
+
+3. reload fonts cache:
+fc-cache -f -v
+
+4. set fonts in tweaks application.
+
+5. restart system.
+
+======================================================================
+1. installing fonts per user:
+Home/.fonts
+
+2. no need to reload.
+
+3. set fonts in tweaks application.
+
+4. restart system.
+
