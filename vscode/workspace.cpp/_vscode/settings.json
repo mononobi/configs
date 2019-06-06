@@ -1,5 +1,7 @@
 {
+    "editor.fontFamily": "'Courier 10 Pitch Regular','Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
     "files.associations": {
+        "iostream": "cpp",
         "vector": "cpp",
         "string": "cpp"
     }
