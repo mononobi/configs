@@ -11,6 +11,9 @@ sudo openconnect us.cisadd2.com --script=/etc/vpnc/vpnc-script
 
 
 
+[new server]
+s7250.lnadd.site
+
 [servers list]
 
 us6.cisadd2.com
