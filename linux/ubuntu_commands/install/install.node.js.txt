@@ -1,0 +1,6 @@
+apt-get update
+apt-get install libssl1.0-dev
+apt-get install nodejs-dev
+apt-get install node-gyp
+apt-get install nodejs
+apt-get install npm
