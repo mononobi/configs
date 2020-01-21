@@ -1,0 +1,13 @@
+1. uninstall:
+sudo apt-get purge nvidia*
+
+2. install (a or b):
+
+a.
+sudo apt-get install nvidia-331
+
+b.
+sudo add-apt-repository ppa:xorg-edgers/ppa
+sudo apt-get update
+sudo apt-get install nvidia-346
+sudo add-apt-repository -r ppa:xorg-edgers/ppa
