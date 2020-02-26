@@ -1,0 +1,46 @@
+[File Locations]
+
+bin and clusters:
+/usr/lib/postgresql/VERSION_NUM
+
+configs:
+/etc/postgresql/VERSION_NUM
+
+var and actual data directory:
+/var/lib/postgresql/VERSION_NUM/
+
+logs:
+/var/log/postgresql
+
+[Start or Stop all clusters]
+
+sudo service postgresql start
+sudo service postgresql stop
+
+[View all available clusters]
+
+pg_lsclusters
+
+[Rename a cluster]
+
+sudo pg_renamecluster version_num current_name new_name
+
+[Upgrade a cluster to newly installed pg version]
+
+sudo pg_upgradecluster old_version_num current_name
+
+[Drop a cluster]
+
+sudo pg_dropcluster VERSION_NUM name
+
+[View the current version]
+
+Go into:
+/usr/lib/postgresql/VERSION_NUM/bin
+
+For server version:
+
+./postgres -V
+
+For client version:
+./psql -V

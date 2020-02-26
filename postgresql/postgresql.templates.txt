@@ -1,0 +1,3 @@
+template0: for each database to be independent of others.
+
+template1: for each database to inherit all newly added objects in template 1 descendants (ex. tables and other objects)

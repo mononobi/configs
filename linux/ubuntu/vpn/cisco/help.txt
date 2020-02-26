@@ -4,4 +4,3 @@
 
 3. you could copy `vpn` file into `/usr/local/sbin/` and make it executable by `chmod 777 vpn`
    then you could run it by typing `vpn` in terminal.
-

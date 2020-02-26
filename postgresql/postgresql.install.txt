@@ -1,0 +1,31 @@
+1. sudo apt update && sudo apt -y upgrade
+2. sudo reboot
+3. sudo apt install -y wget vim
+4. wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+5. RELEASE=$(lsb_release -cs)
+6. echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}"-pgdg main | sudo tee  /etc/apt/sources.list.d/pgdg.list
+7. cat /etc/apt/sources.list.d/pgdg.list
+8. sudo apt update
+9. sudo apt -y install postgresql-11
+10. sudo ss -tunelp | grep 5432 [check is up]
+11. sudo vim /etc/postgresql/11/main/postgresql.conf
+12. [Add below line under CONNECTIONS AND AUTHENTICATION section.]
+listen_addresses = '*' [IP of server(s)]
+13. [Add below lines under CLIENT CONNECTION DEFAULTS]
+timezone = 'UTC'
+client_encoding = utf-8
+default_transaction_isolation = 'read committed'
+14. sudo systemctl restart postgresql
+15. sudo ss -tunelp | grep 5432 [check is up]
+16. sudo ufw allow 5432/tcp
+17. sudo su - postgres
+18. psql -c "alter user postgres with password 'PASSWORD_HERE'"
+19. sudo -u postgres psql [or] psql
+20. create database mydb
+21. create user myuser with encrypted password 'mypass'
+22. grant all privileges on database mydb to myuser
+23. apt install pgadmin4
+
+[To update and/or remove old cluster (if required, with caution)]
+
+https://gorails.com/guides/upgrading-postgresql-version-on-ubuntu-server

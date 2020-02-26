@@ -1,7 +1,0 @@
-1. sudo apt install virtualenv   [install]
-2. virtualenv --python=python3.7 env   [create environment]
-3. source env/bin/activate   [activate env]
-[Set up a new project with a single application]
-4. sudo ufw allow 8000    [port number of server]
-5. pip install -r requirements.txt   [install needed requirements]
-6. pip freeze > requirements.txt     [freeze requirements]
