@@ -19,6 +19,10 @@ sudo systemctl status postgresql
 [switching to postgres user]
 sudo su - postgres
 
+[set password for postgres user]
+sudo su - postgres
+psql -c "alter user postgres with password 'PASSWORD_HERE'"
+
 [opening postgresql command line with user postgres]
 sudo -u postgres psql
 
