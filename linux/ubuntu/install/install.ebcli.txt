@@ -1,8 +1,8 @@
-download the code from:
+# download the code from:
 https://github.com/aws/aws-elastic-beanstalk-cli-setup
 
-install dependencies:
+# install dependencies:
 sudo apt-get install build-essential zlib1g-dev libssl-dev libncurses-dev libffi-dev libsqlite3-dev libreadline-dev libbz2-dev
 
-install ebcli:
+# install ebcli:
 python3.7 aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
