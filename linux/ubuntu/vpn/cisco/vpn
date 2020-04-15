@@ -1,1 +1,1 @@
-echo "{your_password}" | sudo openconnect s7250.lnadd.site --servercert sha256:d1988b24b9455378e624d87fc91c1696598b5303b43eb0695a51a33f9c20830f -u {your_username} --passwd-on-stdin
+sudo openconnect s7250.uiadd.site -u {your_username}

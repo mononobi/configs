@@ -12,10 +12,12 @@ sudo openconnect us.cisadd2.com --script=/etc/vpnc/vpnc-script
 
 
 [new server]
+s7250.uiadd.site
+
+[old servers list]
 s7250.lnadd.site
 s4890.uiadd.site
 
-[old servers list]
 us6.cisadd2.com
 uk.cisadd2.com
 nl.cisadd2.com
