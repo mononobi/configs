@@ -1,0 +1,10 @@
+[connection]
+
+define a new vpn in network settings.
+
+[servers]
+
+us.Vhadd.com
+uk.Vhadd.com
+nl.Vhadd.com
+cz.Vhadd.com
