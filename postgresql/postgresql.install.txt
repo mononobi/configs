@@ -15,16 +15,18 @@ listen_addresses = '*' [IP of server(s)]
 timezone = 'UTC'
 client_encoding = utf-8
 default_transaction_isolation = 'read committed'
-14. sudo systemctl restart postgresql
-15. sudo ss -tunelp | grep 5432 [check is up]
-16. sudo ufw allow 5432/tcp
-17. sudo su - postgres
-18. psql -c "alter user postgres with password 'PASSWORD_HERE'"
-19. sudo -u postgres psql [or] psql
-20. create database mydb
-21. create user myuser with encrypted password 'mypass'
-22. grant all privileges on database mydb to myuser
-23. apt install pgadmin4
+14. [Add below line under REPORTING AND LOGGING]
+log_timezone = 'UTC'
+15. sudo systemctl restart postgresql
+16. sudo ss -tunelp | grep 5432 [check is up]
+17. sudo ufw allow 5432/tcp
+18. sudo su - postgres
+19. psql -c "alter user postgres with password 'PASSWORD_HERE'"
+20. sudo -u postgres psql [or] psql
+21. create database mydb
+22. create user myuser with encrypted password 'mypass'
+23. grant all privileges on database mydb to myuser
+24. apt install pgadmin4
 
 [To update and/or remove old cluster (if required, with caution)]
 

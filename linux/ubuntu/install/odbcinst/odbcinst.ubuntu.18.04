@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+echo "Installing odbcinst."
+curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
+apt-get update
+ACCEPT_EULA=Y apt-get install msodbcsql17
+ACCEPT_EULA=Y apt-get install mssql-tools
+# shellcheck disable=SC2016
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+# shellcheck disable=SC2016
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+# shellcheck disable=SC1090
+. ~/.bashrc
+apt-get install unixodbc-dev
+odbcinst -j
+

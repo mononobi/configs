@@ -1,0 +1,42 @@
+# ubuntu 18.04
+sudo apt install pgadmin4
+
+# ubuntu 20.04
+sudo apt-get install build-essential libssl-dev libffi-dev libgmp3-dev
+sudo apt-get install python3-virtualenv libpq-dev python3-dev
+
+# create a virtual environment in place you want to install pgadmin
+mkdir pgadmin-project
+cd pgadmin-project
+virtualenv -p python3.8 pgadmin4
+
+# activate the virtual environment
+cd pgadmin4
+source bin/activate
+
+# download the latest stable version of pgadmin4 from pip category
+wget https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.21/pip/pgadmin4-4.21-py2.py3-none-any.whl
+
+# install the file you've downloaded using pip in virtualenv
+pip install pgadmin4-4.21-py2.py3-none-any.whl 
+
+# create config_local.py in installation folder of pgadmin4 in site-packages of virtualenv
+touch lib/python3.8/site-packages/pgadmin4/config_local.py
+
+# add following content into created file
+
+import os
+DATA_DIR = os.path.realpath(os.path.expanduser(u'~/.pgadmin/'))
+LOG_FILE = os.path.join(DATA_DIR, 'pgadmin4.log')
+SQLITE_PATH = os.path.join(DATA_DIR, 'pgadmin4.db')
+SESSION_DB_PATH = os.path.join(DATA_DIR, 'sessions')
+STORAGE_DIR = os.path.join(DATA_DIR, 'storage')
+SERVER_MODE = False
+
+# run the following command inside virtualenv to start application, application is accessible on 127.0.0.1:5050
+python lib/python3.8/site-packages/pgadmin4/pgAdmin4.py
+
+# you could save the following commands in a file in /usr/local/sbin to run the application with a single command.
+source {path_to_virtualenv_location}/bin/activate
+python {path_to_virtualenv_location}/lib/python3.8/site-packages/pgadmin4/pgAdmin4.py
+

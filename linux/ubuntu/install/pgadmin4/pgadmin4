@@ -1,0 +1,2 @@
+source /home/mono/workspace/pgadmin-project/pgadmin4/bin/activate
+python /home/mono/workspace/pgadmin-project/pgadmin4/lib/python3.8/site-packages/pgadmin4/pgAdmin4.py

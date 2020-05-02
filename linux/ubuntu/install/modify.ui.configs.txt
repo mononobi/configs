@@ -1,0 +1,11 @@
+# hide home icon from desktop
+gsettings set org.gnome.shell.extensions.desktop-icons show-home false
+
+# hide mounted drives from taskbar
+gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false
+
+# hide desktop icons
+gsettings set org.gnome.desktop.background show-desktop-icons false
+
+# disable experimental views
+gsettings set org.gnome.nautilus.preferences use-experimental-views false
