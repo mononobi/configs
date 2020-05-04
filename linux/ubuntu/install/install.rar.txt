@@ -1,0 +1,4 @@
+sudo apt-get install rar unrar
+
+# usage:
+# rar a -p -hp NEW_ARCHIVE_NAME.RAR FILE_NAME
