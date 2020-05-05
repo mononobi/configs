@@ -1,0 +1,43 @@
+# see available keys.
+
+ls -al /home/user_name/.ssh
+
+# generate ssh key.
+# when prompted for file name you could rename it to something meaningful.
+
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+
+# start the ssh agent.
+
+eval "$(ssh-agent -s)"
+
+# add the private key you've generated into ssh agent.
+
+ssh-add /home/user_name/.ssh/key
+
+# copy ssh public key to github.
+# open the public key available in '/home/user_name/.ssh/key.pub'
+# in a text editor and copy its content.
+# then go to 'https://github.com/settings/keys' and add a
+# new ssh key and paste the value there.
+
+# if your local repository is set to https you should change it
+# to ssh to be able to use the key you've just generated.
+# go to root folder of your local repository and execute this command.
+
+git remote -v
+
+# it will show the remote urls.
+# if the url is something like
+# 'origin  https://github.com/USERNAME/REPOSITORY.git' it means it is https.
+# if the url is something like
+# 'origin  git@github.com:USERNAME/REPOSITORY.git' it means it is ssh.
+# if the url is https, to change it to ssh execute this command.
+
+git remote set-url origin git@github.com:USERNAME/REPOSITORY.git
+
+# check that it is correctly changed.
+
+git remote -v
+
+# it should print 'origin  git@github.com:USERNAME/REPOSITORY.git'.
