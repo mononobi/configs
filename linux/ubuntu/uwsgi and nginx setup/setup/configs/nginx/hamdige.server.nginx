@@ -1,0 +1,75 @@
+include /etc/nginx/blocked-user-agents.rules;
+server {
+     if ($blockedagent) {
+         return 403;
+     }
+
+     ## if ($request_method !~ ^(GET|HEAD|POST)$) {
+     ##     return 444;
+     ## }
+
+     listen                 80 backlog=30000;
+     server_tokens          off;
+     server_name            hamdige.server;
+     charset                utf-8;
+     ssl_protocols          TLSv1 TLSv1.1 TLSv1.2;
+
+     client_body_timeout           60;
+     client_header_timeout         60;
+     client_header_buffer_size     32k;
+     large_client_header_buffers   2 32k;
+
+     proxy_http_version     1.1;
+     proxy_cache_bypass     $http_upgrade;
+     proxy_connect_timeout  30;
+     proxy_send_timeout     60;
+     proxy_read_timeout     60;
+
+     proxy_set_header Upgrade              $http_upgrade;
+     proxy_set_header Connection           "upgrade";
+     proxy_set_header Host                 $host;
+     proxy_set_header X-Real-IP            $remote_addr;
+     proxy_set_header X-Forwarded-For      $proxy_add_x_forwarded_for;
+     proxy_set_header X-Forwarded-Proto    $scheme;
+     proxy_set_header X-Forwarded-Host     $host;
+     proxy_set_header X-Forwarded-Port     $server_port;
+
+     access_log    off; ## /var/log/hamdige/nginx/access.log;
+     error_log     /var/log/hamdige/nginx/error.log;
+
+     location / {
+         include      uwsgi_params;
+         uwsgi_pass   unix:/var/run/hamdige.server/hamdige.server.sock;
+
+         uwsgi_param  HTTP_X_REAL_IP $remote_addr;
+
+         client_max_body_size          5M;
+         client_body_buffer_size       128k;
+         proxy_buffer_size             4k;
+         proxy_buffers                 4 4k;
+         proxy_busy_buffers_size       4k;
+     }
+
+     location /static {
+         alias /var/app_root/hamdige_server/static;
+
+         uwsgi_param  HTTP_X_REAL_IP $remote_addr;
+
+         client_max_body_size          20M;
+         client_body_buffer_size       512k;
+         proxy_buffer_size             16k;
+         proxy_buffers                 8 16k;
+         proxy_busy_buffers_size       16k;
+     }
+
+     ## location /img/ {
+     ##    valid_referers none blocked hamdige.server;
+     ##     if ($invalid_referer) {
+     ##         return   403;
+     ##     }
+
+     ## only requests to our host are allowed
+     if ($host !~ ^(hamdige.server)$ ) {
+         return 444;
+     }
+}

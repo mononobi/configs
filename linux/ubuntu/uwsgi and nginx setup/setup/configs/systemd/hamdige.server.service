@@ -1,0 +1,23 @@
+[Unit]
+Description=uwsgi instance to serve hamdige application server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+# emergency (0), alert (1), critical (2), error (3),
+# warning (4), notice (5), info (6), debug (7)
+LogLevelMax=3
+User=app_user
+Group=www-data
+Type=notify
+WorkingDirectory=/var/app_root/hamdige_server/app
+Environment="PATH=/var/app_root/hamdige_server/.venv/bin"
+RuntimeDirectory=hamdige.server
+PIDFile=/var/run/hamdige.server/hamdige.server.pid
+ExecStart=/var/app_root/hamdige_server/.venv/bin/uwsgi --ini /var/app_root/hamdige_server/app/hamdige/settings/uwsgi.config
+ExecReload=/var/app_root/hamdige_server/.venv/bin/uwsgi --reload /var/run/hamdige.server/hamdige.server.pid
+Restart=always
+RestartSec=200ms
+
+[Install]
+WantedBy=multi-user.target
