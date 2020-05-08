@@ -1,9 +1,11 @@
-1. fuser -n tcp -k 8000      [find all processes on specified port]
+1. fuser -n tcp 8000         [find all processes on specified port]
 
-2. kill -9 PID               [kill process with specified PID]
+2. fuser -n tcp -k 8000      [find all processes on specified port and kill them]
 
-3. netstat | grep port-no    [find all up ports]
+3. kill -9 PID               [kill process with specified PID]
 
-4. netstat | grep name       [find all up names]
+4. netstat | grep port-no    [find all up ports]
 
-5. killall -9 python         [kill all processes with name python]
+5. netstat | grep name       [find all up names]
+
+6. killall -9 python         [kill all processes with name python]
