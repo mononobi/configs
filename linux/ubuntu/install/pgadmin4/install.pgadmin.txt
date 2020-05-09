@@ -26,6 +26,7 @@ touch lib/python3.8/site-packages/pgadmin4/config_local.py
 # add following content into created file
 
 import os
+
 DATA_DIR = os.path.realpath(os.path.expanduser(u'~/.pgadmin/'))
 LOG_FILE = os.path.join(DATA_DIR, 'pgadmin4.log')
 SQLITE_PATH = os.path.join(DATA_DIR, 'pgadmin4.db')
@@ -37,6 +38,8 @@ SERVER_MODE = False
 python lib/python3.8/site-packages/pgadmin4/pgAdmin4.py
 
 # you could save the following commands in a file in /usr/local/sbin to run the application with a single command.
-source {path_to_virtualenv_location}/bin/activate
-python {path_to_virtualenv_location}/lib/python3.8/site-packages/pgadmin4/pgAdmin4.py
 
+#!/bin/bash
+
+. {path_to_virtualenv_location}/bin/activate
+python {path_to_virtualenv_location}/lib/python3.8/site-packages/pgadmin4/pgAdmin4.py
