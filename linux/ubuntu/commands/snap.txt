@@ -1,0 +1,2 @@
+snap changes
+snap abort id          [abort snap operation with given id]

@@ -14,4 +14,6 @@
 
 8. free -h                   [shows memory usage info]
 
-9. ps -axjf | grep [PID | name]       [shows process info for given name or pid]
+9. ps -axjf | grep name      [shows process info for given name]
+
+10. ps -jf -p PID            [shows process info for given PID]
