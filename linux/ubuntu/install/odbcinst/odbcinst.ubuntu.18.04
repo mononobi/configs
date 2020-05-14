@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 echo "Installing odbcinst."
 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
@@ -15,4 +14,3 @@ echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 . ~/.bashrc
 apt-get install unixodbc-dev
 odbcinst -j
-

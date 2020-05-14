@@ -1,0 +1,9 @@
+# to mount partitions on startup, you should add each partition with its
+# UUID into fstab file. to get all available partitions and their UUID,
+# execute:
+
+sudo blkid
+
+# then replace the fstab file in /etc/fstab
+# the sample fstab file should be changed according to your partitions.
+# the sample fstab-ntfs file shows how to mount ntfs partitions.

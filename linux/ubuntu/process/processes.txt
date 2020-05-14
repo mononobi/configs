@@ -9,3 +9,9 @@
 5. netstat | grep name       [find all up names]
 
 6. killall -9 python         [kill all processes with name python]
+
+7. top                       [shows all running processes and their resource usage]
+
+8. free -h                   [shows memory usage info]
+
+9. ps -axjf | grep [PID | name]       [shows process info for given name or pid]

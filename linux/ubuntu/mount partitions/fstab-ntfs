@@ -1,0 +1,14 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+
+UUID=04E0ACA9E0ACA282 /media/mono/data                    ntfs-3g permissions     0       1 
+UUID=14A46A19A469FE1C /media/mono/video                   ntfs-3g permissions     0       1
+UUID=DC5ABA635ABA3A5A /media/mono/movies-1                ntfs-3g permissions     0       1
+UUID=C8B6C953B6C942A4 /media/mono/movies-2                ntfs-3g permissions     0       1
+UUID=5ED00889D0086A1B /media/mono/archives                ntfs-3g permissions     0       1
+UUID=28D40046D40018A8 /media/mono/movies-3                ntfs-3g permissions     0       1
+UUID=8E9C8E4C9C8E2EB1 /media/mono/audio                   ntfs-3g permissions     0       1
+UUID=DEFACEEAFACEBE51 /media/mono/movies-4                ntfs-3g permissions     0       1
