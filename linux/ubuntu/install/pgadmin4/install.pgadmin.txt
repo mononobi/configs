@@ -2,6 +2,10 @@
 sudo apt install pgadmin4
 
 # ubuntu 20.04
+sudo apt install pgadmin4
+
+# on distributions where official package is not available yet.
+# for example right after a new major os release.
 sudo apt-get install build-essential libssl-dev libffi-dev libgmp3-dev
 sudo apt-get install python3-virtualenv libpq-dev python3-dev
 
