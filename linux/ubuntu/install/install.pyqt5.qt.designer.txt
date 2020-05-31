@@ -1,0 +1,1 @@
+sudo apt-get install qtcreator pyqt5-dev-tools
