@@ -1,1 +1,5 @@
 sudo apt-get install qtcreator pyqt5-dev-tools
+
+# to convert created ui files in designer into python, execute:
+# pyuic5 file.ui -o file.py
+# and then import the file.py in your PyQt5 app.
