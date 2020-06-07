@@ -1,0 +1,35 @@
+# you should download the plex media server from here:
+# https://www.plex.tv/media-server-downloads/
+# then go to download path and execute:
+sudo dpkg -i file_name.deb
+
+# then check status:
+systemctl status plexmediaserver
+
+# if it is not running, execute following command to run it:
+systemctl start plexmediaserver
+
+# execute this command:
+systemctl enable plexmediaserver
+
+# execute the following command to see the source list file name of plex:
+dpkg -L plexmediaserver
+
+# the file is something like this:
+# /etc/apt/sources.list.d/plexmediaserver.list
+# open the above file and uncomment the last line of it.
+
+# then run the below command:
+wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
+sudo apt update
+
+# now plex media server will be updated through normal os updates.
+
+# plex media server home directory is:
+/var/lib/plexmediaserver
+
+# plex media server metadata directory is:
+/usr/lib/plexmediaserver
+
+# allow 32400 port in ufw.
+# add all client ips that want to connect to server in plex network settings.
