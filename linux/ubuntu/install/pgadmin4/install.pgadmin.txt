@@ -1,7 +1,4 @@
-# ubuntu 18.04
-sudo apt install pgadmin4
-
-# ubuntu 20.04
+# you should first add the required repository into source list of ubuntu.
 sudo apt install pgadmin4
 
 # on distributions where official package is not available yet.
