@@ -25,10 +25,10 @@ sudo apt update
 
 # now plex media server will be updated through normal os updates.
 
-# plex media server home directory is:
+# plex media server home directory and metadata is:
 /var/lib/plexmediaserver
 
-# plex media server metadata directory is:
+# plex media server executables directory is:
 /usr/lib/plexmediaserver
 
 # allow 32400 port in ufw.
