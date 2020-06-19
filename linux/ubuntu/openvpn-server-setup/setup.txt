@@ -1,0 +1,544 @@
+# all operations in this file must be done using a non-root user which is in sudoers list.
+# to add a user into sudoers list, execute below command as root.
+
+sudo adduser user_name sudo
+
+# install ufw
+
+sudo apt-get install ufw
+
+# enable open ssh in firewall
+
+sudo ufw allow OpenSSH
+sudo ufw enable
+sudo ufw status
+
+# install these packages
+
+sudo apt update
+sudo apt install openvpn easy-rsa
+
+# make this directory in user's home.
+
+mkdir ~/easy-rsa
+
+# now you will need to create a symlink from the easyrsa script that the
+# package installed into the ~/easy-rsa directory that you just created.
+
+ln -s /usr/share/easy-rsa/* ~/easy-rsa/
+
+# ensure the directory’s owner is your non-root sudo user and restrict access to that user.
+
+sudo chown user_name ~/easy-rsa
+chmod 700 ~/easy-rsa
+
+# create a file called vars in easy-rsa directory.
+
+cd ~/easy-rsa
+touch vars
+
+# open the vars file.
+
+vi vars
+
+# put these lines inside the file.
+# you could change values as you want, just do not change the last two lines.
+
+set_var EASYRSA_REQ_COUNTRY    "IR"
+set_var EASYRSA_REQ_PROVINCE   "Tehran"
+set_var EASYRSA_REQ_CITY       "Tehran"
+set_var EASYRSA_REQ_ORG        "Private"
+set_var EASYRSA_REQ_EMAIL      "your_email@domain.com"
+set_var EASYRSA_REQ_OU         "Community"
+set_var EASYRSA_ALGO "ec"
+set_var EASYRSA_DIGEST "sha512"
+
+# execute below command.
+
+cd ~/easy-rsa
+./easyrsa init-pki
+
+
+# execute this and provide a strong password.
+# you should also provide a name for the CA instance to be referenced by others.
+# we reference to the above CA instance name as "vpn-server-ca" in this
+# document. but you should change it to what you have named it.
+
+./easyrsa build-ca
+
+
+# execute below command in local machine and copy the public certificate
+# from server. this file will be used by clients and other servers.
+
+scp remote_user@server_ip:/home/remote_user/easy-rsa/pki/ca.crt /home/local_user/ca.crt
+
+# copy the private certifcate into your local machine and keep it in a really safe place.
+# on your local machine, execute this.
+
+scp remote_user@server_ip:/home/remote_user/easy-rsa/pki/private/ca.key /home/local_user/ca.key
+
+# execute this on server.
+
+cp ~/easy-rsa/pki/ca.crt /tmp/ca.crt
+
+# you should also copy the ca.crt file in the same location as above, on each client.
+
+cp /path_to_file/ca.crt /tmp/ca.crt
+
+# then, execute this.
+
+sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
+
+# now, on the server, execute the following commands.
+
+cd ~/easy-rsa
+./easyrsa gen-req vpn-server-ca nopass
+
+sudo cp /home/user_name/easy-rsa/pki/private/vpn-server-ca.key /etc/openvpn/server/
+
+############## this line is only required if the CA server and OpenVPN server are separated.
+############## ./easyrsa import-req /home/user_name/easy-rsa/pki/reqs/vpn-server-ca.req vpn-server-ca
+
+# now execute this and input the password of "ca.key" when prompted.
+
+./easyrsa sign-req server vpn-server-ca
+
+# now execute this to copy required files.
+
+sudo cp /home/user_name/easy-rsa/pki/issued/vpn-server-ca.crt /etc/openvpn/server
+sudo cp /home/user_name/easy-rsa/pki/ca.crt /etc/openvpn/server
+
+# for extra layer of security, do the following.
+
+cd ~/easy-rsa
+openvpn --genkey --secret ta.key
+sudo cp ta.key /etc/openvpn/server
+
+# now server is almost ready and we need to create client configs.
+# to do so execute following commands.
+
+mkdir -p ~/client-configs/keys
+
+######################################## for each new client, you should repeat the following commands ########################################
+
+# we refer to client which is creating as client1, you should replace it with any name that you want.
+
+cd ~/easy-rsa
+./easyrsa gen-req client1 nopass
+
+cp ~/easy-rsa/pki/private/client1.key ~/client-configs/keys/
+
+############## this line is only required if the CA server and OpenVPN server are separated.
+############## ./easyrsa import-req /home/user_name/easy-rsa/pki/reqs/client1.req client1
+
+# now execute this and input the password of "ca.key" when prompted.
+
+./easyrsa sign-req client client1
+
+# now copy the signed file.
+
+cp /home/user_name/easy-rsa/pki/issued/client1.crt ~/client-configs/keys/
+
+######################################## for each new client, you should repeat the above commands ########################################
+
+# now we must configure OpenVPN server.
+
+sudo cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz /etc/openvpn/server/
+sudo gunzip /etc/openvpn/server/server.conf.gz
+
+# open the config file and edit the contents as described.
+
+sudo vi /etc/openvpn/server/server.conf
+
+# find the HMAC section of the configuration by searching for the "tls-auth" directive.
+# then comment the first line by adding a ";" to its beginning, and add the second line below it.
+
+;tls-auth ta.key 0 # This file is secret
+tls-crypt ta.key
+
+# find the section on cryptographic ciphers by looking for the "cipher" lines. The default
+# value is set to "AES-256-CBC" comment the first line and add the second and third lines below it.
+
+;cipher AES-256-CBC
+cipher AES-256-GCM
+auth SHA256
+
+# find the line containing a "dh" directive. comment out the existing line
+# that looks like "dh dh2048.pem" or "dh dh.pem" and add the second line below it.
+
+;dh dh2048.pem
+dh none
+
+# find and uncomment the "user nobody" and "group nogroup" lines
+# by removing the ";" sign from the beginning of each line.
+
+user nobody
+group nogroup
+
+######################################## the below configs may break the connection. if they did so, reverse them to default ########################################
+
+# find and uncomment the line containing push "redirect-gateway def1 bypass-dhcp".
+# doing so will tell your client to redirect all of its traffic through your OpenVPN Server.
+
+push "redirect-gateway def1 bypass-dhcp"
+
+# below the last line, find the "dhcp-option" section. again, remove the ";" from
+# the beginning of both of the lines to uncomment them. these lines will tell your
+# client to use the free OpenDNS resolvers at the listed IP addresses.
+# if you prefer other DNS resolvers you can substitute them in place of the existed IPs.
+
+push "dhcp-option DNS 208.67.222.222"
+push "dhcp-option DNS 208.67.220.220"
+
+######################################## the above configs may break the connection, if they did so, reverse them to default ########################################
+
+######################################## the below configs are optional and it is best to leave them on default values if there is no need for change ########################################
+
+# optional configs, leave them on default if there is no nedd for change.
+# if you do switch the protocol to TCP, you will also need to change the
+# "explicit-exit-notify" directive’s value from "1" to "0".
+
+# for tcp server.
+port 443
+proto tcp
+explicit-exit-notify 0
+
+# for udp server.
+port 1194
+proto udp
+explicit-exit-notify 1
+
+######################################## the above configs are optional and it is best to leave them on default values if there is no need for change ########################################
+
+# replace "server.crt" and "server.key" with what ever name
+# that you used as CA instance name. we used "vpn-server-ca" in this document.
+# after that, save and close the server.conf file.
+
+cert vpn-server-ca.crt
+key vpn-server-ca.key
+
+# now open the following file and edit it as described.
+
+sudo vi /etc/sysctl.conf
+
+# now find "net.ipv4.ip_forward = 1" line and uncomment it.
+# then save and close the file.
+
+net.ipv4.ip_forward = 1
+
+# then execute the following command to reload and see the changed config.
+
+sudo sysctl -p
+
+# execute the following commands to configure firewall and NAT.
+# this command shows the public network interface of server.
+
+ip route list default
+
+# the network interface is a name like "eth0" in the output.
+# sample output: default via 159.65.160.1 dev eth0 proto static
+
+# now that you found the public network interface name, open the following file.
+
+sudo vi /etc/ufw/before.rules
+
+# add the following lines into the top of the file.
+# remember to change "eth0" with whichever name that you found for public network interface.
+# then save and close the file.
+
+
+# START OPENVPN RULES
+# NAT table rules
+*nat
+:POSTROUTING ACCEPT [0:0]
+# Allow traffic from OpenVPN client to eth0 (change to the interface you discovered!)
+-A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE
+COMMIT
+# END OPENVPN RULES
+
+
+# now open the following file and edit as described.
+
+sudo vi /etc/default/ufw
+
+# change the "DEFAULT_FORWARD_POLICY" as below.
+
+DEFAULT_FORWARD_POLICY="ACCEPT"
+
+# execute below commands.
+# if you have changed the default port and protocol in
+# server.conf file, you should use the correct values here.
+
+sudo ufw allow 1194/udp
+sudo ufw allow OpenSSH
+
+sudo ufw disable
+sudo ufw enable
+
+# now enable and start the OpenVPN service.
+
+sudo systemctl -f enable openvpn-server@server.service
+sudo systemctl start openvpn-server@server.service
+
+##################################### creating script to manage client generation #####################################
+
+# execute below commands.
+
+mkdir -p ~/client-configs/files
+cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf ~/client-configs/base.conf
+
+# open the created base file.
+
+vi ~/client-configs/base.conf
+
+# find "remote" and set the server public IP. if you changed the default port, you must also replace it here.
+# you must also set the correct protocol to match the server.conf value.
+
+remote server_ip 1194
+proto udp
+
+# uncomment the below lines
+
+user nobody
+group nogroup
+
+# find the directives that set the ca, cert, and key. comment out these directives.
+
+;ca ca.crt
+;cert client.crt
+;key client.key
+
+# comment out the "tls-auth" directive.
+
+;tls-auth ta.key 1
+
+# mirror the cipher and auth settings that you set in the /etc/openvpn/server/server.conf file.
+
+cipher AES-256-GCM
+auth SHA256
+
+# add the key-direction directive somewhere in the file with value set to 1.
+
+key-direction 1
+
+# add below lines to the end of the file. then save and close it.
+
+# for clients that do not use systemd-resolved to manage DNS.
+; script-security 2
+; up /etc/openvpn/update-resolv-conf
+; down /etc/openvpn/update-resolv-conf
+
+# for clients that use systemd-resolved for DNS resolution
+; script-security 2
+; up /etc/openvpn/update-systemd-resolved
+; down /etc/openvpn/update-systemd-resolved
+; down-pre
+; dhcp-option DOMAIN-ROUTE .
+
+# now we create a script to automate the client config generation.
+
+touch ~/client-configs/make_config.sh
+
+# open the created file and add the following content to it. then save and close it.
+
+vi ~/client-configs/make_config.sh
+
+####################### file contents to be added ##########################
+
+#!/bin/bash
+
+# First argument: Client identifier
+
+EASYRSA_DIR=~/easy-rsa
+CA_DIR=~/easy-rsa/pki
+KEY_DIR=~/client-configs/keys
+OUTPUT_DIR=~/client-configs/files
+BASE_CONFIG=~/client-configs/base.conf
+
+cat ${BASE_CONFIG} \
+    <(echo -e '<ca>') \
+    ${CA_DIR}/ca.crt \
+    <(echo -e '</ca>\n<cert>') \
+    ${KEY_DIR}/${1}.crt \
+    <(echo -e '</cert>\n<key>') \
+    ${KEY_DIR}/${1}.key \
+    <(echo -e '</key>\n<tls-crypt>') \
+    ${EASYRSA_DIR}/ta.key \
+    <(echo -e '</tls-crypt>') \
+    > ${OUTPUT_DIR}/${1}.ovpn
+
+####################### file contents to be added ##########################
+
+# make the file executable.
+
+chmod 700 ~/client-configs/make_config.sh
+
+# now we create the config for "client1" which we generated its keys earlier.
+
+cd ~/client-configs
+./make_config.sh client1
+
+# the "client1.ovpn" file will be created in ~/client-configs/files.
+# you must copy the file into the client.
+# run the following command on your local machine to copy the file.
+
+scp remote_user@server_ip:/home/remote_user/client-configs/files/client1.ovpn /home/local_user
+
+# on linux clients, ececute below command to detect the DNS resolution method in use.
+
+cat /etc/resolv.conf
+
+# if your system is configured to use systemd-resolved for DNS resolution, the
+# iP address after the nameserver option will be 127.0.0.53.
+
+# sample output:
+# nameserver 127.0.0.53
+# options edns0
+
+# for this type of DNS resolution, you must execute below commands.
+
+sudo apt install openvpn-systemd-resolved
+
+# now open the "client1.ovpn" file on your local machine and uncomment the part related to systemd-resolved.
+
+vi client1.ovpn
+
+# now uncomment below lines. then save and close the file.
+
+script-security 2
+up /etc/openvpn/update-systemd-resolved
+down /etc/openvpn/update-systemd-resolved
+down-pre
+dhcp-option DOMAIN-ROUTE .
+
+# if your client system is not using systemd-resolved to manage DNS, check to see
+# if your distribution includes an /etc/openvpn/update-resolv-conf script instead.
+
+ls /etc/openvpn
+
+# if the output contains below file. then open client1.ovpn and uncomment the
+# part related to systems that not using systemd-resolved to manage DNS.
+
+# sample output:
+# update-resolv-conf
+
+# open the client1.ovpn file on your local machine.
+
+vi client1.ovpn
+
+# now uncomment these lines. then save and close it.
+
+script-security 2
+up /etc/openvpn/update-resolv-conf
+down /etc/openvpn/update-resolv-conf
+
+######################################################## if you want OpenVPN to serve on both tcp and udp ports ########################################################
+
+# execute the command below to copy the server.conf file.
+
+cd /etc/openvpn/server
+sudo cp server.conf server2.conf
+
+# open the new file and edit as follows.
+
+sudo vi server2.conf
+
+# change these values in file. then save and close it.
+
+port 443
+proto tcp
+server 10.8.1.0 255.255.255.0
+explicit-exit-notify 0
+
+# execute this command.
+
+sudo ufw allow 443/tcp
+
+# open this file and edit as follows.
+
+sudo vi /etc/ufw/before.rules
+
+# add this line in the section you have added earlier in this document.
+# find the section by looking for "START OPENVPN RULES".
+# add this line below the previous line which was "-A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE".
+
+-A POSTROUTING -s 10.8.1.0/8 -o eth0 -j MASQUERADE
+
+# execute this.
+
+sudo ufw disable
+sudo ufw enable
+
+# create a copy of base.conf to use as base for tcp client configs.
+
+cd ~/client-configs
+cp base.conf base.tcp.conf
+
+# change these values in file. then save and close it.
+
+proto tcp
+remote server_ip 443
+
+# copy the script to generate tcp configs.
+
+cp make_config.sh make_config_tcp.sh
+
+# open the file to and edit as follows.
+
+vi make_config_tcp.sh
+
+# change these values. then save and close the file.
+
+# base.conf to base.tcp.conf
+# .ovpn to .tcp.ovpn
+
+# now you could enable and run the tcp server by this commands.
+
+sudo systemctl -f enable openvpn-server@server2.service
+sudo systemctl start openvpn-server@server2.service
+
+# generating a single script to create certificates and config files for each client, tcp and udp.
+# exectue this.
+
+cd ~/client_configs
+touch make_client.sh
+chmod 700 make_client.sh
+vi make_client.sh
+
+# copy the following text into opened file. then save and close it.
+
+######################## file content ########################
+#!/bin/bash
+
+# First argument: Client identifier
+
+cd ~/easy-rsa
+
+./easyrsa gen-req ${1} nopass
+
+cp ~/easy-rsa/pki/private/${1}.key ~/client-configs/keys/
+
+./easyrsa sign-req client ${1}
+
+cp ~/easy-rsa/pki/issued/${1}.crt ~/client-configs/keys/
+
+cd ~/client-configs/
+
+./make_config.sh ${1}
+
+./make_config_tcp.sh ${1}
+######################## file content ########################
+
+# now you could call make_client.sh to generate certificates and config files
+# automatically. note that you will be asked some questions during the operation.
+
+# example usage:
+./make_client.sh client_name
+
+# IMPORTANT: after creating all your needed clients config files, it is highly recommended to
+# back-up the ca.key from server into a safe place on your local machine, and delete the ca.key
+# from server. and anytime you wanted to create new clients you could copy the ca.key into server
+# again. the ca.key file is in "~/easy-rsa/pki/private" folder.
+
+# all the required scripts and files that are described in this guid are available in the scripts folder.

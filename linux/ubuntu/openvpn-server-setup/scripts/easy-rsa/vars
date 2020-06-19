@@ -1,0 +1,8 @@
+set_var EASYRSA_REQ_COUNTRY    "DE"
+set_var EASYRSA_REQ_PROVINCE   "Hamburg"
+set_var EASYRSA_REQ_CITY       "Hamburg"
+set_var EASYRSA_REQ_ORG        "Private"
+set_var EASYRSA_REQ_EMAIL      "your-email@somewhere.com"
+set_var EASYRSA_REQ_OU         "Community"
+set_var EASYRSA_ALGO "ec"
+set_var EASYRSA_DIGEST "sha512"
