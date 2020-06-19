@@ -1,6 +1,8 @@
-1. `config` folder must be placed into /home/.PyCharm*/
+1. `config` folder must be placed into ~/.PyCharm*/ for older versions and
+    into ~/.config/JetBrains/PyCharm*/ for newer versions.
 
-2. `original.vmoptions` contains the default pycharm vmoptions that causes ui freezing multiple times per working session on some linux distros.
-    vmoptions in `config` folder is revised so that does not cause ui freezes anymore. but if you have less memory, make sure to change the memory related stuff.
+2. `original.vmoptions` contains the default pycharm vmoptions that causes ui freezing
+    multiple times per working session on some linux distros.
+    vmoptions in `config` folder is revised so that does not cause ui freezes anymore.
+    but if you have less memory, make sure to change the memory related stuff.
     ui freezing is not related to memory configs.
-
