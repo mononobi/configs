@@ -1,0 +1,17 @@
+# these packages must be installed to be able to install and build psycopg2 from pip.
+# for some older python versions you must also specify the exact
+# version, for example python3.6-dev.
+
+sudo apt-get install python-dev python3-dev
+sudo apt-get install libpq-dev
+
+# you also need pg_config program. it is usually installed by the libpq-dev package
+# but sometimes it is not in a PATH directory. having it in the PATH greatly streamlines
+# the installation, so try running pg_config --version. if it returns an error or an unexpected
+# version number then locate the directory containing the pg_config shipped with the right
+# libpq version (usually /usr/lib/postgresql/X.Y/bin/) and add it to the PATH:
+# $ export PATH=/usr/lib/postgresql/X.Y/bin/:$PATH
+# you only need pg_config to compile psycopg2, not for its regular usage.
+
+# now you could install pycopg2 from pip.
+# pip install psycopg2
