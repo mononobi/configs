@@ -1,0 +1,2 @@
+grep -R word path                 [search file contents in the path recursively for word]
+find path file_name               [search for files with given name in given path]

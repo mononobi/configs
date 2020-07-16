@@ -1,1 +1,1 @@
-1. stat file-name           [shows given file info]
+stat file-name                [shows given file info]

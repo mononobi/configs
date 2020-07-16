@@ -1,0 +1,4 @@
+# this is a credential store.
+# it could be used for different use cases such as using with docker.
+
+sudo apt-get install pass

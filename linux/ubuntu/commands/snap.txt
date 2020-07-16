@@ -1,2 +1,2 @@
-snap changes
+snap changes           [show running install processes]
 snap abort id          [abort snap operation with given id]

@@ -1,0 +1,5 @@
+# change encoding of text file:
+# iconv -f "from_encoding" -t "to_encoding" from_file -o to_file
+# for example:
+
+iconv -f "windows-1256" -t "UTF-8" Big.Eyes.sub9.fa-IR.srt -o Big.Eyes.sub9.utf8.fa-IR.srt
