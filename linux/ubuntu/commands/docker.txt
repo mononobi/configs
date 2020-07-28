@@ -9,3 +9,13 @@ docker images purge                          		[remove all images including thos
 docker inspect container_name_or_id          		[show detailed info of a container]
 docker exec -it container_name_or_id /bin/bash		[get a bash shell inside container]
 docker exec -it container_name_or_id command		[execute a command inside container]
+docker volume ls                                    [list all mounted docker volumes]
+docker volume inspect volume_name                   [show detailed info of a volume]
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+# docker data directory is in:
+/var/lib/docker/
+
+# docker mounted volumes are created in:
+/var/lib/docker/volumes/
