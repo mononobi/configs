@@ -545,4 +545,4 @@ cd ~/client-configs/
 # from server. and anytime you wanted to create new clients you could copy the ca.key into server
 # again. the ca.key file is in "~/easy-rsa/pki/private" folder.
 
-# all the required scripts and files that are described in this guid are available in the scripts folder.
+# all the required scripts and files that are described in this guide are available in the scripts folder.
