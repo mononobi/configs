@@ -11,6 +11,7 @@ docker exec -it container_name_or_id /bin/bash		[get a bash shell inside contain
 docker exec -it container_name_or_id command		[execute a command inside container]
 docker volume ls                                    [list all mounted docker volumes]
 docker volume inspect volume_name                   [show detailed info of a volume]
+docker build --tag name:major.minor .               [build an image from a DockerFile with given tag]
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 

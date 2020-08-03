@@ -1,7 +1,10 @@
 pip install pipenv                  [install pipenv]
 
 # ============================================================================================================================================
-# pipenv supports the automatic loading of environmental variables when a .env file exists in the top-level directory. That way, when you #'pipenv shell' to open the virtual environment, it loads your environmental variables from the file. The .env file just contains key-#value pairs:
+# pipenv supports the automatic loading of environmental variables when a .env file exists
+# in the top-level directory. That way, when you 'pipenv shell' to open the virtual
+# environment, it loads your environmental variables from the file. The .env file
+# just contains key-value pairs:
 
 # SOME_ENV_CONFIG=some_value
 # SOME_OTHER_ENV_CONFIG=some_other_value

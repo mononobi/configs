@@ -2,9 +2,9 @@
 2. pipenv shell --python 3.7           [create env for first time and activate it]
 3. pipenv shell                        [activate already created env]
 4. pipenv lock                         [lock all installed requirements]
-5. pipenv install --ignore-pipfile     [install all locked requirements in new env from Pipfile.lock] [use this in production]
-5. pipenv install                      [install all requirements in new env from Pipfile] [this may break in production]
-5. pipenv install --dev                [install all basic requirements and those needed for development in new env]
+5. pipenv install --ignore-pipfile     [install just packages requirements and not dev-packages in new env from Pipfile.lock] [use this in production]
+5. pipenv install                      [install all packages and dev-packages requirements in new env from Pipfile] [this may break in production]
+5. pipenv install --dev                [install just packages requirements and not dev-packages]
 6. pipenv check                        [check for security vulnerabilities in env]
 7. pipenv run <command>                [run a command in env without activating the env shell]
 8. pipenv uninstall [dependency]       [uninstall the specified dependency from env]
@@ -15,7 +15,7 @@
 12. pipenv install -r dev-requirements.txt --dev  [install requirements from requirements.txt of virtualenv as dev] [for compatibility]
 13. pipenv lock -r > requirements.txt  [lock requirements into old-style requirements.txt] [for compatibility]
 14. pipenv lock -r -d > dev-requirements.txt [lock dev requirements into old-style requirements.txt] [for compatibility]
-15. pipenv sync                        [install all dependencies from pipfile.lock]
+15. pipenv sync                        [install or update all dependencies from pipfile.lock]
 16. pipenv --rm                        [remove the current env]
 
 ============================================================================================================================================
