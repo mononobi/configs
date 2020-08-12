@@ -26,8 +26,11 @@ psql -c "alter user postgres with password 'PASSWORD_HERE'"
 [opening postgresql command line with user postgres]
 sudo -u postgres psql
 
+[opening postgresql command line with user postgres without sudo]
+psql -U postgres
+
 [creating user from psql command line]
 create user myuser with encrypted password 'mypass'
 
 [default data directory]
-/var/lib/postgresql/11/main
+/var/lib/postgresql/{VERSION_NUM}/main

@@ -22,7 +22,7 @@ log_timezone = 'UTC'
 17. sudo ufw allow 5432/tcp
 18. sudo su - postgres
 19. psql -c "alter user postgres with password 'PASSWORD_HERE'"
-20. sudo -u postgres psql [or] psql
+20. sudo -u postgres psql [or] psql -U postgres
 21. create database mydb
 22. create user myuser with encrypted password 'mypass'
 23. grant all privileges on database mydb to myuser
