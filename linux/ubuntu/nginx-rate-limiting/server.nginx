@@ -1,0 +1,12 @@
+# this values must be added into an nginx config file to enable rate limiting.
+# in 'zone=app_server:50m', 50m is meaning that 50 megabytes memory will be allocated to
+# store different client ips for rate limiting. on average, each 16000 different ips, will
+# take about only 1 megabytes of memory.
+
+limit_req_zone $binary_remote_addr zone=app_server:50m rate=8r/s;
+
+server {
+    limit_req zone=app_server burst=12 nodelay;
+    limit_req_log_level warn;
+    limit_req_status 429;
+}
