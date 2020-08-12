@@ -3,6 +3,10 @@
 # store different client ips for rate limiting. on average, each 16000 different ips, will
 # take about only 1 megabytes of memory.
 
+# in 'limit_req zone=app_server burst=12 nodelay', burst=12 is meaning that up to 12
+# more requests than limit, which is 8, will be kept in queue to be processed later.
+# without returning error response to them.
+
 limit_req_zone $binary_remote_addr zone=app_server:50m rate=8r/s;
 
 server {
