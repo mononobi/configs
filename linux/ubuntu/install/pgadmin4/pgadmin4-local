@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo Starting pgAdmin4 ...
+echo YOUR_ROOT_PASSWORD | sudo -S python3.8 /usr/share/pgadmin4/web/pgAdmin4.py

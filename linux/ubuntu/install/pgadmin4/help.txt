@@ -1,0 +1,14 @@
+# you could install the normal version using ubuntu package manager.
+# but use the "pgadmin4-local" script to run it to prevent further problems.
+# you have to first install postgresql and then:
+
+sudo apt-get install pgadmin4
+
+sudo cp pgadmin4-local /usr/local/sbin
+
+sudo chmod 777 /usr/local/sbin/pgadmin4-local
+
+sudo chown YOUR_USER:YOUR_USER /usr/local/sbin/pgadmin4-local
+
+# you have to change "SERVER_MODE=False" in "/usr/share/pgadmin4/web/config.py"
+# now you could put "pgadmin-local" into startup commands to make pgadmin4 available on boot.
