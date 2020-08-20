@@ -28,6 +28,9 @@ sudo apt update
 # plex media server home directory and metadata is:
 /var/lib/plexmediaserver
 
+# you could create a symlink to another location if you want store
+# metadata files in another place.
+
 # plex media server executables directory is:
 /usr/lib/plexmediaserver
 
