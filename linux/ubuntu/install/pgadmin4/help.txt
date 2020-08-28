@@ -11,4 +11,8 @@ sudo chmod 777 /usr/local/sbin/pgadmin4-local
 sudo chown YOUR_USER:YOUR_USER /usr/local/sbin/pgadmin4-local
 
 # you have to change "SERVER_MODE=False" in "/usr/share/pgadmin4/web/config.py"
+# and execute this command:
+
+sudo mkdir /var/cache/pgadmin
+
 # now you could put "pgadmin-local" into startup commands to make pgadmin4 available on boot.

@@ -1,4 +1,8 @@
+# python2
 pip install pipenv                  [install pipenv]
+
+# python3
+pip3 install pipenv                 [install pipenv]
 
 # ============================================================================================================================================
 # pipenv supports the automatic loading of environmental variables when a .env file exists

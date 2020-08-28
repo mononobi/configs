@@ -16,8 +16,11 @@ sudo systemctl restart postgresql
 [showing postgresql service status]
 sudo systemctl status postgresql
 
-[switching to postgres user]
+[switching to postgres user as a linux user]
 sudo su - postgres
+
+[switching to postgres user as a linux user]
+sudo su postgres
 
 [set password for postgres user]
 sudo su - postgres
