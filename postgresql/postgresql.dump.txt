@@ -1,5 +1,5 @@
 # to create a new database from an existing database (on same server or on another server) 
-# with all available data, you must create a dump from existing database and the restore it 
+# with all available data, you must create a dump from existing database and then restore it 
 # into new database.
 
 # creating dump from existing database:
