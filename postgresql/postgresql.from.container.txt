@@ -1,0 +1,14 @@
+# to connect from any docker container to a local psotgresql server:
+
+1. set listen_addresses = '*' in 'postgresql.conf' file.
+
+2. add two new host records in 'pg_hba.conf' file inside IPv4 section as example:
+
+# docker containers
+host    all             all             172.18.0.0/16           md5
+# real local ip
+host    all             all             192.168.2.0/16          md5
+
+3. restart postgresql service:
+
+sudo systemctl restart postgresql
