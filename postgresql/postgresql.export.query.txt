@@ -1,0 +1,3 @@
+# execute this in a postgres shell to export query into csv.
+
+Copy(SQL_QUERY) To 'file_path' With CSV DELIMITER ',' HEADER;
