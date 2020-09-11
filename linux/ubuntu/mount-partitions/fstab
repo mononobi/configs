@@ -18,3 +18,5 @@ UUID=f8a6693f-5231-4eaf-8762-dbfe7b6ab042 /home           ext4    defaults      
 /dev/disk/by-uuid/28D40046D40018A8 /mnt/movies-3 auto nosuid,nodev,nofail,x-gvfs-show 0 0
 /dev/disk/by-uuid/8E9C8E4C9C8E2EB1 /mnt/audio auto nosuid,nodev,nofail,x-gvfs-show 0 0
 /dev/disk/by-uuid/DEFACEEAFACEBE51 /mnt/movies-4 auto nosuid,nodev,nofail,x-gvfs-show 0 0
+/dev/disk/by-uuid/C45E20535E204112 /mnt/movies-5 auto nosuid,nodev,nofail,x-gvfs-show 0 0
+/dev/disk/by-uuid/F2402C58402C25B7 /mnt/movies-6 auto nosuid,nodev,nofail,x-gvfs-show 0 0
