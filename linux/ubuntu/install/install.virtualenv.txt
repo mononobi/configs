@@ -1,1 +1,5 @@
-sudo apt install virtualenv
+# python2
+pip install virtualenv                  [install virtualenv]
+
+# python3
+pip3 install virtualenv                 [install virtualenv]
