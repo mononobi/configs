@@ -1,0 +1,1 @@
+echo PASSWORD@USER | sudo -S  chown USER:USER /var/run/docker.sock
