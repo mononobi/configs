@@ -2,10 +2,25 @@
 # with all available data, you must create a dump from existing database and then restore it 
 # into new database.
 
-# creating dump from existing database:
+# creating dump from existing database for data and structure:
 
 sudo su postgres
 pg_dump -U postgres -d existing_db_name -f dump.sql
+
+# creating dump of only some tables for data and structure:
+
+sudo su postgres
+pg_dump -U postgres -d existing_db_name -t table1 -t table2 ... -f dump.sql
+
+# creating dump from existing database for data without structure:
+
+sudo su postgres
+pg_dump -U postgres --column-inserts -a -d existing_db_name -f dump.sql
+
+# creating dump of data without structure for only some tables:
+
+sudo su postgres
+pg_dump -U postgres --column-inserts -a -t table1 -t table2 ... -d existing_db_name -f dump.sql
 
 # restoring dump on new database:
 # you must first create new database then restore data into it.
