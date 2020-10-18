@@ -1,0 +1,19 @@
+sudo apt update
+sudo apt install resolvconf
+
+sudo systemctl start resolvconf.service
+sudo systemctl enable resolvconf.service
+sudo systemctl status resolvconf.service
+
+# adding new dsn servers:
+sudo vi /etc/resolvconf/resolv.conf.d/head
+
+# add new dns servers into file and save it.
+# nameserver ip1
+# nameserver ip2
+
+# restart service
+sudo systemctl restart resolvconf.service
+
+# check new dns servers are written to file:
+sudo less /etc/resolv.conf
