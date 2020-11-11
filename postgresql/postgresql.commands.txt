@@ -37,3 +37,6 @@ create user myuser with encrypted password 'mypass'
 
 [default data directory]
 /var/lib/postgresql/{VERSION_NUM}/main
+
+[drop a database]
+drop database "database-name"

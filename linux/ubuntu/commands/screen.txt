@@ -1,0 +1,26 @@
+# create a screen.
+screen -S name
+
+# connect to a screen.
+screen -rx name
+
+# connect to a screen and disconnect all other connected users to a screen.
+screen -rd name
+
+# disconnect from a screen.
+(ctrl + a) + d
+
+# create a new page in an screen.
+(ctrl + a) + c
+
+# kill a screen and disconnect all.
+(ctrl + a) + k
+
+# navigate to next page of a screen.
+(ctrl + a) + n
+
+# navigate to previous page of a screen.
+(ctrl + a) + p
+
+# shrink screen.
+(ctrl + a) + |
