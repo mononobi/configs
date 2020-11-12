@@ -1,0 +1,20 @@
+# you can override any required configs in redis.conf sample file
+# and copy it in redis config location: /etc/redis/redis.conf
+
+# to start a redis cli, execute:
+redis-cli
+
+# start redis server on system startup.
+sudo systemctl enable redis
+
+# start redis server.
+sudo systemctl start redis
+
+# restart redis server.
+sudo systemctl restart redis
+
+# get redis server status.
+sudo systemctl status redis
+
+# stop redis server.
+sudo systemctl stop redis
