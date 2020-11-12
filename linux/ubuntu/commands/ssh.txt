@@ -1,0 +1,5 @@
+ssh remote_user@remote_server                    [connect to server using default port]
+
+ssh -p port_no remote_user@remote_server         [connect to server using specified port]
+
+ssh -i key_file remote_user@remote_server        [connect to server providing given ssh key]

@@ -1,13 +1,3 @@
-stat file-or-dir-name                                                   [shows given file or directory info]
-
-du -h file-or-dir-name                                                  [shows file or directory size]
-
-df -h                                                                   [shows mounted partitions info]
-
-scp remote_user@remote_server:/remote_path /local_path                  [copy file from remote server into local machine]
-
-scp -P port-no remote_user@remote_server:/remote_path /local_path       [copy file from remote server into local machine]
-
-scp /local_path remote_user@remote_server:/remote_path                  [copy file to remote server from local machine]
-
-scp -P port-no /local_path remote_user@remote_server:/remote_path       [copy file to remote server from local machine]
+stat file-or-dir-name                               [shows given file or directory info]
+du -h file-or-dir-name                              [shows file or directory size]
+df -h                                               [shows mounted partitions info]
