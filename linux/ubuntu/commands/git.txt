@@ -9,3 +9,4 @@ git clone https://github.com/owner/name.git .      					    [clone a repository 
 git checkout -b local-branch-name origin/remote-branch-name             [checkout a remote branch into a new local branch]
 git pull                                                                [pull changes from remote branch into current local branch]
 git checkout HEAD .                                                     [restore all locally deleted files]
+git remote set-url origin new-remote-repo-address                       [change the remote address of a local repository]
