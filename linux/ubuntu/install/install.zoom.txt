@@ -1,0 +1,11 @@
+# download zoom package from here:
+https://zoom.us/download
+
+# execute this:
+sudo dpkg -i file_name.deb
+
+# if installation failed, execute this:
+apt --fix-broken install
+
+# then try to install again:
+sudo dpkg -i file_name.deb
