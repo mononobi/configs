@@ -1,1 +1,1 @@
-sudo openconnect s7250.uiadd.site -u {your_username}
+sudo openconnect {SERVER_ADDRESS} -u {YOUR_USERNAME}

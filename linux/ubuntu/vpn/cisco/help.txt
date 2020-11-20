@@ -1,4 +1,5 @@
-1. in `vpn` file, replace `{your_password}` and `{your_username}` with correct ones.
+1. in `vpn` file, replace `{SERVER_ADDRESS}`, `{YOUR_PASSWORD}` and `{YOUR_USERNAME}` with
+   correct ones.
 
 2. if you do not have cisco installed, follow the instructions in `connection` file.
 
