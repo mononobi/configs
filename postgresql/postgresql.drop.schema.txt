@@ -1,0 +1,10 @@
+# note that this example will drop and create the 'public' schema and grant access to user 'postgres'.
+
+sudo su postgres
+psql -U postgres
+
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
