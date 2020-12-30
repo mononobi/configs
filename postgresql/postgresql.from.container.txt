@@ -17,3 +17,13 @@ host    all             all             192.168.2.0/16          md5
 4. restart postgresql service:
 
 sudo systemctl restart postgresql
+
+5. if you have firewall enabled, you must allow the postgresql port
+   (5432 by default) in firewall to let containers connect to it:
+
+sudo ufw allow 5432
+sudo ufw allow 5432/tcp
+
+# then check whether the port is opened:
+
+sudo ufw status
