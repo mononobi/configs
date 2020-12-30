@@ -22,7 +22,13 @@ sudo systemctl restart postgresql
    (5432 by default) in firewall to let containers connect to it:
 
 sudo ufw allow 5432
-sudo ufw allow 5432/tcp
+
+# or if you want to only allow connections from container's network:
+
+sudo ufw allow from 172.18.0.0/16 to any port 5432
+
+# note that '172.18.0.0' is the network ip of containers and might
+# be different on different systems.
 
 # then check whether the port is opened:
 
