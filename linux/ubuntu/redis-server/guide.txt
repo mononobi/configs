@@ -18,3 +18,17 @@ sudo systemctl status redis
 
 # stop redis server.
 sudo systemctl stop redis
+
+# to let clients connect to redis on your system's real ip address beside
+# the local address, change this:
+
+bind 127.0.0.1 ::1
+
+to this in '/etc/redis/redis.conf' file:
+
+bind 127.0.0.1 ::1 192.168.2.104
+
+# where '192.168.2.104' is your system's real local ip address.
+# then restart redis server:
+
+sudo systemctl restart redis
