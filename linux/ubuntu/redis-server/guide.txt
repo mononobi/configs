@@ -33,6 +33,10 @@ ExecStop=/bin/kill -s TERM $MAINPID
 ExecStartPost=/bin/sh -c "echo $MAINPID > /var/run/redis/redis.pid"
 PIDFile=/run/redis/redis-server.pid
 
+# then execute this to reload service configs:
+
+sudo systemctl daemon-reload
+
 # to let clients connect to redis on your system's real ip address beside
 # the local address, change this:
 
