@@ -19,7 +19,7 @@ sudo systemctl status redis
 # stop redis server.
 sudo systemctl stop redis
 
-# to fix pid file errors add these two lines into '/etc/systemd/system/redis.service'
+# to fix pid file errors, add these two lines into '/etc/systemd/system/redis.service'
 # file under the [Service] section:
 
 ExecStop=/bin/kill -s TERM $MAINPID
