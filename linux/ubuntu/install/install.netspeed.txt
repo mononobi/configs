@@ -1,0 +1,12 @@
+# go to 'https://extensions.gnome.org/extension/104/netspeed/' and
+# enable browser extension if it is not already enabled.
+
+# open a terminal and install this:
+
+sudo apt install chrome-gnome-shell
+
+# now refresh the 'https://extensions.gnome.org/extension/104/netspeed/'
+# page and toggle the install icon.
+
+# to modify settings of netspeed, open the 'Gnome Tweaks' app and find
+# netspeed in extensions tab.
