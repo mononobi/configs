@@ -1,0 +1,15 @@
+# if you want to use pillow image processing python package, you must install this before pillow:
+
+sudo apt-get install libjpeg-dev
+
+# if you're on ubuntu 14.04, also install this:
+
+sudo apt-get install libjpeg8-dev
+
+# if you already have pillow installed, you must uninstall it and reinstall it again with:
+
+pip install --no-cache-dir -I pillow
+
+# if you want a specific version of pillow, you must install it with:
+
+pip install --no-cache-dir -Iv pillow==SOME.SPECIFIC.VERSION
