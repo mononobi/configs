@@ -1,0 +1,8 @@
+# to repeat a command in terminal every n seconds, execute this:
+
+watch -n SECONDS COMMAND_OR_SCRIPT
+
+# for example:
+
+watch -n 10 script.sh
+watch -n 25 python main.py
