@@ -1,23 +1,38 @@
 # you can override any required configs in redis.conf sample file
 # and copy it in redis config location: /etc/redis/redis.conf
 
-# to start a redis cli, execute:
+# to start a redis cli on localhost, execute:
 redis-cli
 
+# to connect to non-localhost, execute below command where
+# 'IP_ADDRESS' is your non-localhost ip address:
+
+redis-cli -h IP_ADDRESS
+
 # start redis server on system startup.
+
 sudo systemctl enable redis
+sudo systemctl enable redis-server
 
 # start redis server.
+
 sudo systemctl start redis
+sudo systemctl start redis-server
 
 # restart redis server.
+
 sudo systemctl restart redis
+sudo systemctl restart redis-server
 
 # get redis server status.
+
 sudo systemctl status redis
+sudo systemctl status redis-server
 
 # stop redis server.
+
 sudo systemctl stop redis
+sudo systemctl stop redis-server
 
 # to fix pid file errors, add these two lines into '/etc/systemd/system/redis.service'
 # file under the [Service] section:
@@ -37,6 +52,7 @@ PIDFile=/run/redis/redis-server.pid
 
 sudo systemctl daemon-reload
 sudo systemctl restart redis
+sudo systemctl restart redis-server
 
 # to let clients connect to redis on your system's real ip address beside
 # the local address, change this:
@@ -53,3 +69,4 @@ bind 127.0.0.1 192.168.2.104
 # then restart redis service:
 
 sudo systemctl restart redis
+sudo systemctl restart redis-server
