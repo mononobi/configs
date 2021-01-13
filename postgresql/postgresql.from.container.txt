@@ -9,7 +9,7 @@
 # docker containers
 host    all             all             172.18.0.0/16           md5
 # real local ip
-host    all             all             192.168.2.0/16          md5
+host    all             all             192.168.0.0/16          md5
 
 # note that '172.18.0.0' is the network ip of containers and might
 # be different on different systems.
