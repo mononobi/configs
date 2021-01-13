@@ -13,9 +13,9 @@ BEGIN
                    case when url ~ '^%[0-9a-fA-F][0-9a-fA-F]'
                    then array['']
                    end
-            || regexp_split_to_array (url, '(%[0-9a-fA-F][0-9a-fA-F])+', 'i') plain,
+            || regexp_split_to_array(url, '(%[0-9a-fA-F][0-9a-fA-F])+', 'i') plain,
 
-            array(select (regexp_matches (url, '((?:%[0-9a-fA-F][0-9a-fA-F])+)', 'gi'))[1]) encoded
+            array(select (regexp_matches(url, '((?:%[0-9a-fA-F][0-9a-fA-F])+)', 'gi'))[1]) encoded
             )
 
         select string_agg(plain[i] || coalesce(convert_from(decode(replace(encoded[i], '%',''), 'hex'), 'utf8'),''),'')
