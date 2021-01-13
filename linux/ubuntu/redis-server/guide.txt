@@ -70,3 +70,19 @@ bind 127.0.0.1 192.168.2.104
 
 sudo systemctl restart redis
 sudo systemctl restart redis-server
+
+# if you have firewall enabled, you must allow the redis port
+# (6379 by default) in firewall to let containers connect to it:
+
+sudo ufw allow 6379
+
+# or if you want to only allow connections from container's network:
+
+sudo ufw allow from 172.18.0.0/16 to any port 6379
+
+# note that '172.18.0.0' is the network ip of containers and might
+# be different on different systems.
+
+# then check whether the port is opened:
+
+sudo ufw status
