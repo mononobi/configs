@@ -1,0 +1,6 @@
+# to filter logs only for 'PURGE' requests, execute this on the server that
+varnish is installed:
+
+varnishlog -g request -q 'ReqMethod eq "PURGE"'
+
+# now you will see logs in real time for 'PURGE' requests.
