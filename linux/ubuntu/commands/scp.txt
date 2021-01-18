@@ -1,7 +1,15 @@
-scp remote_user@remote_server:/remote_path /local_path                  [copy file from remote server into local machine using default port]
+# copy file from remote server into local machine using default port.
 
-scp -P port_no remote_user@remote_server:/remote_path /local_path       [copy file from remote server into local machine using specified port]
+scp remote_user@remote_server:/remote_path /local_path
 
-scp /local_path remote_user@remote_server:/remote_path                  [copy file to remote server from local machine using default port]
+# copy file from remote server into local machine using specified port.
 
-scp -P port_no /local_path remote_user@remote_server:/remote_path       [copy file to remote server from local machine using specified port]
+scp -P port_no remote_user@remote_server:/remote_path /local_path
+
+# copy file to remote server from local machine using default port.
+
+scp /local_path remote_user@remote_server:/remote_path
+
+# copy file to remote server from local machine using specified port.
+
+scp -P port_no /local_path remote_user@remote_server:/remote_path

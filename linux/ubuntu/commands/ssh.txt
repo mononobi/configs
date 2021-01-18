@@ -1,5 +1,15 @@
-ssh remote_user@remote_server                    [connect to server using default port]
+# connect to server using default port.
 
-ssh -p port_no remote_user@remote_server         [connect to server using specified port]
+ssh remote_user@remote_server
 
-ssh -i key_file remote_user@remote_server        [connect to server providing given ssh key]
+# connect to server using specified port.
+
+ssh -p port_no remote_user@remote_server
+
+# connect to server providing given ssh key.
+
+ssh -i key_file remote_user@remote_server
+
+# connect to server using password and bypassing local keys, if any.
+
+ssh -o PreferredAuthentications=password remote_user@remote_server
