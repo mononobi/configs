@@ -10,3 +10,6 @@ git checkout -b local-branch-name origin/remote-branch-name             [checkou
 git pull                                                                [pull changes from remote branch into current local branch]
 git checkout HEAD .                                                     [restore all locally deleted files]
 git remote set-url origin new-remote-repo-address                       [change the remote address of a local repository]
+
+# you could also change the url in .git/config file inside your project
+# to change the remote address.
