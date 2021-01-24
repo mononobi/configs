@@ -1,6 +1,21 @@
-# to filter logs only for 'PURGE' requests, execute this on the server that
-varnish is installed:
+# to view all varnish logs, execute this on the server that varnish is installed:
+
+varnishlog
+
+# to filter logs only for specific http requests, execute this:
+
+varnishlog -g request -q 'ReqMethod eq "METHOD"'
+
+# for example to filter logs for 'PURGE' requests:
 
 varnishlog -g request -q 'ReqMethod eq "PURGE"'
 
-# now you will see logs in real time for 'PURGE' requests.
+# to filter logs for specific http status code execute this:
+
+varnishlog -q 'RespStatus == STATUS_CODE' -g request
+
+# for example to filter logs for http status code '503':
+
+varnishlog -q 'RespStatus == 503' -g request
+
+# note that all of the above commands will show logs in real time.
