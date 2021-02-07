@@ -86,3 +86,6 @@ sudo ufw allow from 172.18.0.0/16 to any port 6379
 # then check whether the port is opened:
 
 sudo ufw status
+
+# there is a utility script named 'redis-reload' that you could copy to '/usr/local/sbin/'
+# and also add it into startup commands to make redis server always ready.
