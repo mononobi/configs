@@ -1,0 +1,23 @@
+url to get image through proxy:
+
+{PROXY_URL:PROXY_PORT}/{SIZE_OPTIONS}/{MINIO_URL:MINIO_PORT}/{IMAGE_PATH}
+
+# example:
+
+http://localhost:8080/x0.9/http://nginx:9000/images/ucl.png
+
+# image proxy github:
+
+https://github.com/willnorris/imageproxy
+
+# minio github:
+
+https://github.com/minio/minio
+
+# minio python client github:
+
+https://github.com/minio/minio-py
+
+# minio mc command line tool github:
+
+https://github.com/minio/mc

@@ -1,0 +1,14 @@
+# rename '_.mc' to '.mc' for usage.
+# '.mc' folder must be next to 'mc' file.
+
+# you could define your preferred alias names with their configs in '.mc/config.json' file
+# then use it in different mc commands.
+
+# you must copy mc file into '/usr/local/sbin' and make it executable using:
+
+chown USER:USER mc
+chmod 755 mc
+
+# to see all mc commands, execute this:
+
+mc --help
