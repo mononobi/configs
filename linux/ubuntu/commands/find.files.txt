@@ -1,0 +1,39 @@
+# find images that are created from this date unward:
+
+find . -newerct YYYY-MM-DD -name "*.jpg"
+
+# find images that are modified from this date unward:
+
+find . -newermt YYYY-MM-DD -name "*.jpg"
+
+# find images that are created from start date up to specified end date:
+
+find . -newerct YYYY-MM-DD ! -newerct yyyy-mm-dd -name "*.jpg"
+
+# find images that are modified from start date up to specified end date:
+
+find . -newermt YYYY-MM-DD ! -newermt yyyy-mm-dd -name "*.jpg"
+
+# find images that are created N days ago.
+
+find . -ctime N -name "*.jpg"
+
+# find images that are modified N days ago.
+
+find . -mtime N -name "*.jpg"
+
+# you could use >> to save the list of files in a file:
+
+find . -newermt YYYY-MM-DD -name "*.jpg" >> list.txt
+
+# to copy a list of images to a different folder:
+
+xargs -a list.txt cp -t FOLDER_NAME/
+
+# or use this:
+
+for file in $(<list.txt); do cp "$file" FOLDER_NAME; done
+
+# or use this, but the list argument should have a limited length:
+
+cp $(<list.txt) FOLDER_NAME/

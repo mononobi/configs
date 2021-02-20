@@ -1,5 +1,9 @@
+# download mc executable from here:
+
+wget https://dl.min.io/client/mc/release/linux-amd64/mc
+
 # rename '_.mc' to '.mc' for usage.
-# '.mc' folder must be next to 'mc' file.
+# '.mc' folder must be in current user's home directory.
 
 # you could define your preferred alias names with their configs in '.mc/config.json' file
 # then use it in different mc commands.
