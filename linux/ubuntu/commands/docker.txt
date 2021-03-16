@@ -21,6 +21,7 @@ docker volume create --name volume_name             [create and mount a volume w
 docker volume prune                                 [delete all mounted and not used volumes]
 docker system prune                                 [remove all orphan and not used containers]
 docker build --tag name:major.minor .               [build an image from a DockerFile with given tag]
+docker inspect container_name_or_id | grep com.docker.compose        [find docker-compose file of a running container]
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 
