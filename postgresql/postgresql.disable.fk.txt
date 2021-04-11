@@ -1,0 +1,8 @@
+# disable fk on a table:
+
+alter table TABLE_NAME disable trigger all;
+
+
+# enable fk on a table:
+
+alter table TABLE_NAME enable trigger all;

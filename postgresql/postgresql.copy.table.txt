@@ -1,0 +1,31 @@
+# create a copy of table with data and structure:
+
+CREATE TABLE new_table AS 
+TABLE existing_table;
+
+
+# create a copy of table structure without data:
+
+CREATE TABLE new_table AS 
+TABLE existing_table 
+WITH NO DATA;
+
+
+# create a copy of table with structure and partial data:
+
+CREATE TABLE new_table AS 
+SELECT
+*
+FROM
+    existing_table
+WHERE
+    condition;
+
+
+# insert records from one table to another with custom names and conditions.
+# the new table must be created first.
+
+INSERT INTO new_table (col1, col2)
+SELECT col1, col2
+FROM existing_table
+WHERE ....;
