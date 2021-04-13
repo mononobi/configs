@@ -29,3 +29,13 @@ INSERT INTO new_table (col1, col2)
 SELECT col1, col2
 FROM existing_table
 WHERE ....;
+
+
+# to update a table from another table use this:
+
+UPDATE new_table
+SET column1 = old_table.column1,
+    column2 = old_table.column2,
+    column3 = old_table.column3
+FROM old_table
+WHERE old_table.id = new_table.id
