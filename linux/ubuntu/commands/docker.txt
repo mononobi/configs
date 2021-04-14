@@ -45,6 +45,6 @@ docker push local.registry.com/NEW_NAME:NEW_TAG
 
 # get list of images in local registry:
 
-curl -u USER:PASS -X GET https://local.registry.com:5000/v2/_catalog
+curl -u USER:PASS -X GET https://local.registry.com:PORT/v2/_catalog
 
 curl -u USER:PASS -X GET https://local.registry.com/v2/_catalog
