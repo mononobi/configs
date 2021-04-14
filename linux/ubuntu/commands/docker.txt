@@ -30,3 +30,21 @@ docker inspect container_name_or_id | grep com.docker.compose        [find docke
 
 # docker mounted volumes are created in:
 /var/lib/docker/volumes/
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+# push image to local registry:
+
+docker pull remote.registry.com/url/NAME:TAG
+
+docker tag remote.registry.com/url/NAME:TAG local.registry.com/NEW_NAME:NEW_TAG
+
+docker push local.registry.com/NEW_NAME:NEW_TAG
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+# get list of images in local registry:
+
+curl -u USER:PASS -X GET https://local.registry.com:5000/v2/_catalog
+
+curl -u USER:PASS -X GET https://local.registry.com/v2/_catalog
