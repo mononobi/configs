@@ -389,7 +389,7 @@ cd ~/client-configs
 
 scp remote_user@server_ip:/home/remote_user/client-configs/files/client1.ovpn /home/local_user
 
-# on linux clients, ececute below command to detect the DNS resolution method in use.
+# on linux clients, execute below command to detect the DNS resolution method in use.
 
 cat /etc/resolv.conf
 
