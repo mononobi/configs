@@ -1,12 +1,8 @@
 # python2
 pip install pipenv                  [install pipenv]
-pip install -U pipenv               [update]
-pip install -U virtualenv           [update]
 
 # python3
 pip3 install pipenv                 [install pipenv]
-pip3 install -U pipenv              [update]
-pip3 install -U virtualenv          [update]
 
 # ============================================================================================================================================
 # pipenv supports the automatic loading of environmental variables when a .env file exists
@@ -16,4 +12,9 @@ pip3 install -U virtualenv          [update]
 
 # SOME_ENV_CONFIG=some_value
 # SOME_OTHER_ENV_CONFIG=some_other_value
+# ============================================================================================================================================
+
+# NOTE1: you should not install pipenv using apt-get.
+# NOTE2: you should not install virtualenv using pip.
+
 # ============================================================================================================================================
