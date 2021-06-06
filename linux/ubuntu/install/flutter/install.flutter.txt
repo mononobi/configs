@@ -1,0 +1,86 @@
+# install theses requirements:
+
+sudo apt-get install bash curl file git unzip xz-utils zip libglu1-mesa
+
+# NOTE: you have to use vpn and dns changer to be able to download from iran.
+
+# install flutter using snap (DOES NOT WORK, USE MANUAL INSTALLATION INSTEAD):
+
+sudo snap install flutter --classic
+
+# install flutter manually:
+
+# download an stable release from:
+
+https://flutter.dev/docs/development/tools/sdk/releases?tab=linux
+
+for example:
+
+wget https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_2.2.1-stable.tar.xz
+
+# extract downloaded file in your home directory, for example:
+
+mkdir ~/.flutter-sdk
+tar -xf flutter_linux_2.2.1-stable.tar.xz -C ~/.flutter-sdk
+
+# update your PATH to include flutter sdk bin:
+
+# open ~/.bashrc:
+
+vi ~/.bashrc
+
+# add these lines into file:
+# replace [PATH_OF_FLUTTER_GIT_DIRECTORY] with the directory path of your sdk.
+
+export PATH="$PATH:[PATH_OF_FLUTTER_GIT_DIRECTORY]/bin"
+
+# for example:
+
+export PATH="$PATH:/home/mono/.flutter-sdk/flutter/bin"
+
+# save and close the file and run:
+
+source ~/.bashrc
+
+# execute this to check the PATH:
+
+echo $PATH
+
+# execute this to check the path of flutter bin and dart bin:
+
+which flutter
+which flutter dart
+
+# execute this to pre-download all required dependencies for android and iOS;
+
+flutter precache
+
+# execute this to check that all required dependencies are met:
+
+flutter doctor -v
+
+# run this command to install extra dependencies for desktop support:
+
+sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
+
+# run these commands to enable flutter for different environments:
+
+flutter config --enable-web
+flutter config --enable-linux-desktop
+flutter config --enable-macos-desktop
+flutter config --enable-windows-desktop
+flutter config --enable-android
+flutter config --enable-ios
+
+# to see current configs, run:
+
+flutter config
+
+# to update the installed version of flutter, run:
+
+flutter upgrade
+
+# to only update the dependency packages that your app is using and not flutter itself, run:
+# NOTE: this command should be run from the root directory of each project.
+
+flutter pub upgrade

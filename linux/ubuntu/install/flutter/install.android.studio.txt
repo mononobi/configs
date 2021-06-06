@@ -1,0 +1,10 @@
+# Note: you will need a vpn and dns changer to be able to download from iran.
+
+# download and install android studio from:
+
+https://developer.android.com/studio
+
+# run android studio and go through the 'Android Studio Setup Wizard' to install
+# android SDK and all its dependencies needed by flutter for android.
+
+# NOTE: you can also install android studio from jetbrains toolbox that is more convenient.
