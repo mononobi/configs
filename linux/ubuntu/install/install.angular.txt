@@ -1,0 +1,3 @@
+# first install node.js, then:
+
+npm install -g @angular/cli
