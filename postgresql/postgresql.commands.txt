@@ -40,3 +40,6 @@ create user myuser with encrypted password 'mypass'
 
 [drop a database]
 drop database "database-name"
+
+[get version of running postgresql server]
+pg_config --version
