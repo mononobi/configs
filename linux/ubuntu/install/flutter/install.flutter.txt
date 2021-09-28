@@ -1,4 +1,4 @@
-# install theses requirements:
+# install these requirements:
 
 sudo apt-get install bash curl file git unzip xz-utils zip libglu1-mesa
 
@@ -10,7 +10,7 @@ sudo snap install flutter --classic
 
 # install flutter manually:
 
-# download an stable release from:
+# download a stable release from:
 
 https://flutter.dev/docs/development/tools/sdk/releases?tab=linux
 
