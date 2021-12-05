@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ ! -f "/usr/lib/uwsgi/plugins/python39_plugin.so" ]
+then
+    echo "Installing uwsgi's python3.9 plugin."
+    apt install python3.9 python3.9-dev python3-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre3-dev libssl-dev zlib1g-dev
+    export PYTHON=python3.9
+    uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python39"
+    mv python39_plugin.so /usr/lib/uwsgi/plugins/python39_plugin.so
+    chmod 644 /usr/lib/uwsgi/plugins/python39_plugin.so
+else
+    echo "uwsgi's python3.9 plugin is already installed."
+fi
