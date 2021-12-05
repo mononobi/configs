@@ -1,0 +1,2 @@
+# to remove a PWA app icon from applications list, go to
+# ~/.local/share/applications/ and delete the related icon.
