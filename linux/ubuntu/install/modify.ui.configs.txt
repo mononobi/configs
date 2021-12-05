@@ -1,3 +1,5 @@
+# run these commands both as root and non-root.
+
 # hide home icon from desktop
 gsettings set org.gnome.shell.extensions.desktop-icons show-home false
 

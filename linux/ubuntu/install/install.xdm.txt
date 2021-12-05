@@ -1,0 +1,7 @@
+# download the latest version from 'https://xtremedownloadmanager.com/'.
+# extract the downloaded archive and go into the extracted directory.
+
+# execute these commands:
+
+sudo chmod 777 install.sh
+sudo ./install.sh

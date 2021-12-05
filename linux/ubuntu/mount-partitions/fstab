@@ -11,7 +11,7 @@ UUID=c3a7e731-019c-47a8-997b-795483ddf3c5 /               ext4    errors=remount
 UUID=f8a6693f-5231-4eaf-8762-dbfe7b6ab042 /home           ext4    defaults        0       2
 /swapfile                                 none            swap    sw              0       0
 /dev/disk/by-uuid/14A46A19A469FE1C /mnt/video auto nosuid,nodev,nofail,x-gvfs-show 0 0
-/dev/disk/by-uuid/04E0ACA9E0ACA282 /mnt/data auto nosuid,nodev,nofail,x-gvfs-show 0 0
+/dev/disk/by-uuid/8A20C43D20C431CD /mnt/data auto nosuid,nodev,nofail,x-gvfs-show 0 0
 /dev/disk/by-uuid/DC5ABA635ABA3A5A /mnt/movies-1 auto nosuid,nodev,nofail,x-gvfs-show 0 0
 /dev/disk/by-uuid/C8B6C953B6C942A4 /mnt/movies-2 auto nosuid,nodev,nofail,x-gvfs-show 0 0
 /dev/disk/by-uuid/5ED00889D0086A1B /mnt/archives auto nosuid,nodev,nofail,x-gvfs-show 0 0

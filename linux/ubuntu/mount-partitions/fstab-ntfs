@@ -4,7 +4,7 @@
 # device; this may be used with UUID= as a more robust way to name devices
 # that works even if disks are added and removed. See fstab(5).
 
-UUID=04E0ACA9E0ACA282 /mnt/data                    ntfs-3g permissions     0       1
+UUID=8A20C43D20C431CD /mnt/data                    ntfs-3g permissions     0       1
 UUID=14A46A19A469FE1C /mnt/video                   ntfs-3g permissions     0       1
 UUID=DC5ABA635ABA3A5A /mnt/movies-1                ntfs-3g permissions     0       1
 UUID=C8B6C953B6C942A4 /mnt/movies-2                ntfs-3g permissions     0       1

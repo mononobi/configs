@@ -1,6 +1,10 @@
 # go to 'https://extensions.gnome.org/extension/104/netspeed/' and
 # enable browser extension if it is not already enabled.
 
+# check your shell version with this command to choose the related download if needed:
+
+gnome-shell --version
+
 # open a terminal and install this:
 
 sudo apt install chrome-gnome-shell
