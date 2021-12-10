@@ -1,0 +1,5 @@
+# to activate the photo viewer app on windows 10, execute the
+# 'activate.photo.viewer.win.10.reg' registry script.
+
+# to deactivate the photo viewer app on windows 10, execute the
+# 'deactivate.photo.viewer.win.10.reg' registry script.
