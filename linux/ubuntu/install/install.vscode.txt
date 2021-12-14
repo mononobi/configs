@@ -1,2 +1,5 @@
-sudo snap install --classic code
+sudo snap install code --classic --channel=latest/stable
 
+# always check for the latest channel before installing:
+
+snap info code

@@ -1,0 +1,2 @@
+# go to 'https://extensions.gnome.org/extension/104/netspeed/'
+# page and toggle the install icon.

@@ -1,0 +1,2 @@
+# go to 'https://extensions.gnome.org/extension/905/refresh-wifi-connections/'
+# page and toggle the install icon.

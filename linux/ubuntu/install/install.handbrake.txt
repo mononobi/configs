@@ -1,1 +1,5 @@
-sudo snap install handbrake-jz
+sudo snap install handbrake-jz --channel=latest/stable
+
+# always check for the latest channel before installing:
+
+snap info handbrake-jz

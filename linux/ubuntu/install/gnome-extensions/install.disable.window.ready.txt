@@ -1,0 +1,2 @@
+# go to 'https://extensions.gnome.org/extension/2182/noannoyance/'
+# page and toggle the install icon.

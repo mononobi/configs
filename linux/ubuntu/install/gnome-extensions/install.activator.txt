@@ -1,0 +1,9 @@
+# go to 'https://extensions.gnome.org' and install the
+# browser extension if it is not already installed.
+
+# open a terminal and install this:
+
+sudo apt install chrome-gnome-shell
+
+# to modify settings of each installed extension, open the 'Gnome Tweaks'
+# app and find the extension in extensions tab.

@@ -1,2 +1,7 @@
-# sudo snap install pycharm-professional --classic
-sudo snap install pycharm-community --classic
+sudo snap install pycharm-professional --classic --channel=latest/stable
+sudo snap install pycharm-community --classic --channel=latest/stable
+
+# always check for the latest channel before installing:
+
+snap info pycharm-professional
+snap info pycharm-community

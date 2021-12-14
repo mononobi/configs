@@ -1,1 +1,5 @@
-snap install postman --classic
+snap install postman --classic --channel=v9/stable
+
+# always check for the latest channel before installing:
+
+snap info postman

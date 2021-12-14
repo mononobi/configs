@@ -1,4 +1,8 @@
-sudo snap install telegram-desktop
+sudo snap install telegram-desktop --channel=latest/stable
+
+# always check for the latest channel before installing:
+
+snap info telegram-desktop
 
 # apt install is not recommended and has an obsolete version.
 
