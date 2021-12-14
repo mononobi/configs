@@ -7,3 +7,7 @@ sudo apt install chrome-gnome-shell
 
 # to modify settings of each installed extension, open the 'Gnome Tweaks'
 # app and find the extension in extensions tab.
+
+# to disable extensions version compatibility check, execute this:
+
+dconf write /org/gnome/shell/disable-extension-version-validation
