@@ -20,4 +20,3 @@ Home/.fonts
 3. set fonts in tweaks application.
 
 4. restart system.
-
