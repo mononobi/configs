@@ -1,1 +1,9 @@
-sudo apt-get install poedit
+sudo snap install poedit --channel=latest/stable
+
+# always check for the latest channel before installing:
+
+snap info poedit
+
+# apt install is not recommended and has an obsolete version.
+
+# sudo apt-get install poedit
