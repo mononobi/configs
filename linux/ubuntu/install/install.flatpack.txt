@@ -1,0 +1,20 @@
+# install on ubuntu 18 or above:
+
+sudo apt install flatpak
+
+# install on older ubuntu systems:
+
+sudo add-apt-repository ppa:flatpak/stable
+sudo apt update
+sudo apt install flatpak
+
+# execute this to add flathub repository:
+
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# execute this command to install flatpak plugin for ubuntu software app integration:
+# note that installing the flatpak plugin will also install a deb version of
+# ubuntu software app and results in two ubuntu software apps being installed
+# at the same time.
+
+sudo apt install gnome-software-plugin-flatpak

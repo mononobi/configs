@@ -1,0 +1,9 @@
+sudo apt-get install virt-manager
+
+# after installation, execute this command to see if your cpu supports kvm:
+
+kvm-ok
+
+# if your cpu supports kvm, install these packages:
+
+sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
