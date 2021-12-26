@@ -13,5 +13,5 @@ sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
 sudo chown YOUR_USER:YOUR_USER /var/run/libvirt/libvirt-sock
 
 # to perform the above command on each system boot (which is required), you can edit
-# and copy the 'vm.prepare' file into '/usr/local/sbin' and add it into start up
+# and copy the 'vm.prepare' file into '/usr/local/sbin' and add it into startup
 # applications.
