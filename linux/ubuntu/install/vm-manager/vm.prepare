@@ -1,0 +1,1 @@
+echo YOUR_PASSWORD@YOUR_USER | sudo -S  chown YOUR_USER:YOUR_USER /var/run/libvirt/libvirt-sock
