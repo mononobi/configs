@@ -2,3 +2,4 @@
 
 /usr/share/applications
 ~/.local/share/applications
+~/.gnome/apps
