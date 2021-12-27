@@ -4,3 +4,7 @@ sudo apt-get install ufw
 
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
+
+# to also include a gui firewall app, install this:
+
+sudo apt-get install gufw
