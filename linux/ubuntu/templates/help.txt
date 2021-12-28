@@ -1,0 +1,2 @@
+# copy all of these folders into '~/Templates' folder to add
+# them into right click context menu.
