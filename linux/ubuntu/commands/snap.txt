@@ -1,2 +1,15 @@
-snap changes           [show running install processes]
-snap abort id          [abort snap operation with given id]
+# show running installation processes:
+
+snap changes
+
+# abort snap operation with given id:
+
+snap abort ID
+
+# get list of installed snap packages:
+
+snap list
+
+# get the info of given snap package name (installed or not installed):
+
+snap info PACKAGE_NAME
