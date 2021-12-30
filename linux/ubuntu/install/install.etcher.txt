@@ -1,0 +1,6 @@
+# etcher is a bootable usb creator.
+# it needs a vpn to be installed in some countries.
+
+sudo curl -1sLf 'https://dl.cloudsmith.io/public/balena/etcher/setup.deb.sh' | sudo -E bash
+sudo apt-get update
+sudo apt-get install balena-etcher-electron
