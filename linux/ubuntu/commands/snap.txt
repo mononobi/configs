@@ -10,6 +10,6 @@ snap abort ID
 
 snap list
 
-# get the info of given snap package name (installed or not installed):
+# get the info of given snap package name (installed and not installed):
 
 snap info PACKAGE_NAME
