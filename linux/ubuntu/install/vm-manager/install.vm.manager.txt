@@ -4,6 +4,10 @@ sudo apt-get install virt-manager
 
 kvm-ok
 
+# or you can execute this command and if it returns a value more than 0, your cpu supports kvm:
+
+egrep -c '(vmx|svm)' /proc/cpuinfo
+
 # if your cpu supports kvm, install these packages:
 
 sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
