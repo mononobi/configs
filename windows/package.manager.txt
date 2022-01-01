@@ -6,15 +6,15 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 
-# install gui:
+# install gui as administrator:
 
 choco install chocolateygui
 
-# update package manager:
+# update package manager as administrator:
 
 choco upgrade chocolatey
 
-# update gui:
+# update gui as administrator:
 
 choco upgrade chocolateygui
 
@@ -25,3 +25,7 @@ choco -v
 # get list of packages installed using package manager:
 
 choco list --installed
+
+# update all installed packages as administrator:
+
+choco upgrade all -y
