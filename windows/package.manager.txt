@@ -1,0 +1,27 @@
+# install using powershell as administrator:
+
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# install using cmd as administrator:
+
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+
+# install gui:
+
+choco install chocolateygui
+
+# update package manager:
+
+choco upgrade chocolatey
+
+# update gui:
+
+choco upgrade chocolateygui
+
+# check the installed version:
+
+choco -v
+
+# get list of packages installed using package manager:
+
+choco list --installed
