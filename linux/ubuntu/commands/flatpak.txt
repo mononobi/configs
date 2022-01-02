@@ -1,0 +1,3 @@
+# get the list of installed flatpak packages:
+
+flatpak list

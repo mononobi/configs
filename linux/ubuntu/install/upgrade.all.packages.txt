@@ -1,2 +1,12 @@
+# for apt installed apps:
+
 sudo apt-get update
 sudo apt-get upgrade
+
+# for flatpak installed apps:
+
+sudo flatpak update
+
+# for snap installed apps:
+
+sudo snap refresh
