@@ -1,0 +1,7 @@
+# on ubuntu 20.04 and lower:
+
+sudo apt-get install gnome-tweak-tool
+
+# on ubuntu 20.10 and higher:
+
+sudo apt-get install gnome-tweaks
