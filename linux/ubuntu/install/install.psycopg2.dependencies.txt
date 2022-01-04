@@ -2,7 +2,7 @@
 # for some older python versions you must also specify the exact
 # version, for example python3.6-dev.
 
-sudo apt-get install python-dev python3.5-dev python3.7-dev python3.8-dev
+sudo apt-get install python-dev python3.5-dev python3.7-dev python3.8-dev python3.9-dev python3.10-dev
 sudo apt-get install libpq-dev
 
 # you also need pg_config program. it is usually installed by the libpq-dev package
