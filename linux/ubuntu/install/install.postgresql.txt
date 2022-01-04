@@ -10,7 +10,6 @@ cat /etc/apt/sources.list.d/pgdg.list
 sudo apt update
 sudo apt -y install postgresql-* [change * to desired version number ex. 12]
 sudo ss -tunelp | grep 5432 [check is up]
-sudo apt install pgadmin4
 
 [Upgrade]
 
