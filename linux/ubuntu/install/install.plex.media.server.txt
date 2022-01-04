@@ -49,4 +49,4 @@ sudo chmod -R 775 plexmediaserver
 /usr/lib/plexmediaserver
 
 # allow 32400 port in ufw.
-# add all client ips that want to connect to server in plex network settings.
+# add all client ips which want to connect to server in plex network settings.
