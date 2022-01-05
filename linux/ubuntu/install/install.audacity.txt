@@ -1,0 +1,12 @@
+# audacity is an audio editing and mixing tool.
+
+# visit this page and download the latest app image:
+# https://www.audacityteam.org/download/
+
+# then make the downloaded file executable by:
+
+sudo chmod 775 file_name
+
+# then run the app image.
+
+# note that the apt package version is obsolete and not recommended.

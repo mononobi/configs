@@ -1,0 +1,5 @@
+# mixxx is a DJ software.
+
+sudo add-apt-repository ppa:mixxx/mixxx
+sudo apt update
+sudo apt install mixxx

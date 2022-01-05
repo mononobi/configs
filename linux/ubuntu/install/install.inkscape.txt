@@ -1,0 +1,10 @@
+# inkscape is an illustrator and design tool application.
+
+# visit this page and download the latest app image:
+# https://inkscape.org/release/
+
+# then make the downloaded file executable by:
+
+sudo chmod 775 file_name
+
+# then run the app image.
