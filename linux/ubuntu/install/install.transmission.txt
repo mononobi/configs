@@ -1,3 +1,9 @@
+# full version with gtk gui:
+
 sudo add-apt-repository ppa:transmissionbt/ppa
 sudo apt-get update
 sudo apt-get install transmission-gtk transmission-cli transmission-common transmission-daemon
+
+# normal version:
+
+sudo apt-get install transmission
