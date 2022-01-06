@@ -1,6 +1,6 @@
 # after installation, go to start menu and type 'sql server {YEAR} Configuration Manager'.
 # open the configuration manager and select the 'SQL Server Network Configuration'
 # and select 'Protocols for MSSQLSERVER'.
-# now double-click on 'TCP/IP' and set Enabled to Yes and confirm.
+# now double-click on 'TCP/IP' and set 'Enabled' to 'Yes' and confirm.
 # now go to 'SQL Server Services' on the configuration form and restart these services:
 # SQL Server, SQL Server Agent.
