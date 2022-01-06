@@ -3,4 +3,5 @@
 # and select 'Protocols for MSSQLSERVER'.
 # now double-click on 'TCP/IP' and set 'Enabled' to 'Yes' and confirm.
 # now go to 'SQL Server Services' on the configuration form and restart these services:
-# SQL Server, SQL Server Agent.
+# 'SQL Server'
+# 'SQL Server Agent'
