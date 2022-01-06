@@ -1,0 +1,20 @@
+# open start menu, type 'gpedit.msc' and select the 'Edit group policy' item to
+# launch the 'Local Group Policy Editor'.
+
+# use the sidebar on the left to navigate to
+# 'Computer Configuration > Administrative Templates > Windows Components > Search'.
+
+# double-click on these policies and set the status of them to 'Enabled' and click ok:
+
+# 'Do not allow web search'
+# 'Don't search the web or display web results in Search'
+
+# use the sidebar on the left to navigate to
+# 'Computer Configuration > Administrative Templates > Windows Components > Microsoft Edge'.
+
+# double-click on these policies and set the status of them to 'Disabled' and click ok:
+
+# 'Allow Microsoft Edge to pre-launch at Windows startup, when the system is idle, and each time Microsoft Edge is closed'
+# 'Allow Microsoft Edge to start and load the Start and New Tab page at Windows startup and each time Microsoft Edge is closed'
+
+# restart the PC if changes did not immediately take effect.
