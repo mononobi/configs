@@ -1,0 +1,12 @@
+# time service name in windows services gui is 'WindowsTime'.
+# these commands can be used to synchronize and manage time service manually.
+# note that these commands must be executed through 'cmd.exe' and as administrator.
+
+net stop w32time
+w32tm /unregister
+w32tm /register
+net start w32time
+w32tm /resync
+
+sc triggerinfo w32time start/networkon stop/networkoff
+sc triggerinfo w32time delete

@@ -1,0 +1,34 @@
+# these commands should be used to manage windows services from cli.
+# note that these commands must be executed through 'cmd.exe' and as administrator.
+
+# stop a service:
+
+net stop SERVICE_NAME
+
+# start a service:
+
+net start SERVICE_NAME
+
+# register a service:
+
+SERVICE_NAME /register
+
+# unregister a service:
+
+SERVICE_NAME /unregister
+
+# execute a command of a service:
+
+SERVICE_NAME /SERVICE_COMMAND
+
+# add trigger to start a service:
+
+sc triggerinfo SERVICE_NAME start/START_CRITERIA
+
+# add trigger to stop a service:
+
+sc triggerinfo SERVICE_NAME stop/STOP_CRITERIA
+
+# remove all triggers of a service:
+
+sc triggerinfo SERVICE_NAME delete
