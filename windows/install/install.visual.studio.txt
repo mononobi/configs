@@ -1,0 +1,5 @@
+# after installation, right click on visual studio shortcut and
+# select 'Troubleshoot compatibility'.
+# then select 'Troubleshoot program'.
+# then select 'The program requires additional permissions' and click
+# next and continue the instructions.
