@@ -5,3 +5,6 @@
 
 # then copy 'TimeSyncInvoke.exe' as a shortcut into:
 # C:\Users\{username}\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+
+# note that you should add these two files into antivirus exclusions.
+# otherwise, they can't be started.
