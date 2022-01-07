@@ -1,9 +1,0 @@
-# to fix the windows time service not starting and time syncing issues,
-# open a cmd as administrator, then execute these commands:
-
-net stop w32time
-w32tm /unregister
-w32tm /register
-net start w32time
-w32tm /resync
-sc triggerinfo w32time start/networkon stop/networkoff

@@ -1,4 +1,4 @@
-# to add keyboard changer to windows startup:
+# to add keyboard changer into windows startup:
 
 # copy 'KeyChanger.exe' and 'FarsiKeyboard.exe' files into a permanent location
 # and set compatibility mode of 'KeyChanger.exe' to windows xp sp3 for all users.
