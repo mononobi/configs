@@ -1,5 +1,5 @@
 1. sudo apt update
-2. sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+2. sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget libsqlite3-dev
 3. ./configure --enable-optimizations
 4. make -j 2            [number of cores]
 5. sudo make altinstall [generates python3.7]
