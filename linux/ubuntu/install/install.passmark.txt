@@ -1,0 +1,16 @@
+# passmark is a cpu and memory benchmarking and comparing tool.
+
+# you need to install this to be able to use passmark:
+
+sudo apt-get install libncurses5
+
+# go to this page and download the linux version:
+# 'https://www.passmark.com/products/pt_linux/index.php'
+
+# execute this command to make the downloaded file executable:
+
+sudo chmod 775 file_name
+
+# execute this to start benchmarking:
+
+./file_name
