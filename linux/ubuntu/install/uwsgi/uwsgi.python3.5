@@ -3,7 +3,7 @@
 if [ ! -f "/usr/lib/uwsgi/plugins/python35_plugin.so" ]
 then
     echo "Installing uwsgi's python3.5 plugin."
-    apt install python3.5 python3.5-dev python3-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre3-dev libssl-dev zlib1g-dev
+    apt install python3-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre3-dev libssl-dev zlib1g-dev
     export PYTHON=python3.5
     uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python35"
     mv python35_plugin.so /usr/lib/uwsgi/plugins/python35_plugin.so
