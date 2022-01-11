@@ -1,0 +1,11 @@
+# wireshark is a network protocol and packet analyzer.
+
+sudo apt-get install wireshark
+
+# execute this after installation to be able to inspect network from gui without root access:
+
+sudo dpkg-reconfigure wireshark-common
+
+# then select 'Yes' as response and execute this:
+
+sudo usermod -a -G wireshark {USER_NAME}
