@@ -1,0 +1,3 @@
+# this will install extra codecs and file type support.
+
+sudo apt-get install ubuntu-restricted-extras

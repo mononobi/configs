@@ -1,0 +1,4 @@
+# preload boosts performance by loading frequently used apps into ram.
+# you just need to install it, and it will be working on next startup.
+
+sudo apt-get install preload

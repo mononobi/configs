@@ -1,0 +1,4 @@
+# this app will help to reduce battery usage on laptops.
+# you just need to install it, and it will be working on next startup.
+
+sudo apt-get install tlp

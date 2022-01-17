@@ -1,0 +1,7 @@
+# this app lets you cleanup broken packages and unused files from your system.
+# it is recommended to run this app every 6 months.
+
+# note that when selecting items to clean up, on each item which selection
+# makes a warning, do not select it.
+
+sudo apt-get install bleachbit

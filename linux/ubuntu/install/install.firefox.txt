@@ -1,1 +1,12 @@
 sudo apt-get install firefox
+
+# open firefox and type this into url bar and hit enter:
+
+about:config
+
+# now type each one of these commands in url bar and set them to true.
+
+layers.acceleration.force-enabled
+gfx.webrender.all
+
+# note that if these changes made an issue to your usage experience, revert them back to false.
