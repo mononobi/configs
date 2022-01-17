@@ -1,16 +1,22 @@
-# run these commands both as root and non-root.
+# run these commands both as root and non-root:
 
-# hide home icon from desktop
+# hide home icon from desktop:
 gsettings set org.gnome.shell.extensions.desktop-icons show-home false
 
-# hide mounted drives from taskbar
+# hide mounted drives from taskbar:
 gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false
 
-# hide desktop icons
+# hide desktop icons:
 gsettings set org.gnome.desktop.background show-desktop-icons false
 
-# hide trash icon from taskbar
+# hide trash icon from taskbar:
 gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false
 
-# disable experimental views
+# disable experimental views:
 gsettings set org.gnome.nautilus.preferences use-experimental-views false
+
+# make bottom dock transparent:
+gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
+gsettings set org.gnome.shell.extensions.dash-to-dock min-alpha 0
+gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0
+gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0

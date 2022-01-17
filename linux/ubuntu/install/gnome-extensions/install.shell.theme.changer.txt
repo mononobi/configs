@@ -1,0 +1,15 @@
+# go to 'https://extensions.gnome.org/extension/19/user-themes/'
+# page and toggle the install icon.
+
+# then you can download shell themes and also icon themes from here:
+# 'https://www.gnome-look.org/'
+
+# for icon themes:
+# extract downloaded files and put the top two folders in:
+# '~/.icons'
+
+# for shell themes:
+# extract downloaded files and put the top folder in:
+# '~/.themes'
+
+# now open 'Gnome Tweaks' and change icons and shell in 'Appearance' tab.
