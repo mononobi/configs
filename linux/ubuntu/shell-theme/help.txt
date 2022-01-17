@@ -1,0 +1,17 @@
+# the zip file contains 3 material shell themes for gnome 40.
+
+# the blue one is revised and works perfectly.
+# the black and mint one must be revised to fit correctly.
+
+# to revise each theme, open 'gnome-shell.css' file of it and
+# search for these values and correct the related css attributes:
+
+/* Top Bar */
+
+/* Activities Ripple */
+#panel #panelActivities.panel-button
+
+/* Dash */
+#dash .overview-icon
+.dash-item-container .app-well-app, .show-apps
+.dash-label
