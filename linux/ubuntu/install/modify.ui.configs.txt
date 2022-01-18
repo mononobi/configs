@@ -15,7 +15,7 @@ gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false
 # disable experimental views:
 gsettings set org.gnome.nautilus.preferences use-experimental-views false
 
-# make bottom dock transparent:
+# make bottom dock transparent (only works on gnome >= 40):
 gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
 gsettings set org.gnome.shell.extensions.dash-to-dock min-alpha 0
 gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0
