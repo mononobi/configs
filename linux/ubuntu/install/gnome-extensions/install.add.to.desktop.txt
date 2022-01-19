@@ -1,0 +1,2 @@
+# go to 'https://extensions.gnome.org/extension/3240/add-to-desktop/'
+# page and toggle the install icon.
