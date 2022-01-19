@@ -1,2 +1,10 @@
 # go to 'https://extensions.gnome.org/extension/906/sound-output-device-chooser/'
 # page and toggle the install icon.
+
+# recommended settings:
+
+# integrate selector with slider: off
+# hide selector if there is only one device: off
+# display audio profiles for selection: off
+# omit device origins at volume menu: on
+# extend volume menu to fit device names: off
