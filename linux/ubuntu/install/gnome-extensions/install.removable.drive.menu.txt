@@ -1,0 +1,2 @@
+# go to 'https://extensions.gnome.org/extension/7/removable-drive-menu/'
+# page and toggle the install icon.

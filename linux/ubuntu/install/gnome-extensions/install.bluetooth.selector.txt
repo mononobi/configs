@@ -1,0 +1,2 @@
+# go to 'https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/'
+# page and toggle the install icon.
