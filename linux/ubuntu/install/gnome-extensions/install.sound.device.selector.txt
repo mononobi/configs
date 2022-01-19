@@ -5,6 +5,6 @@
 
 # integrate selector with slider: off
 # hide selector if there is only one device: off
-# display audio profiles for selection: off
+# display audio profiles for selection: on
 # omit device origins at volume menu: on
 # extend volume menu to fit device names: off
