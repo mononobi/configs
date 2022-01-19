@@ -1,1 +1,7 @@
+# this is recommended:
+
+sudo apt-get install gnome-weather
+
+# this is not recommended:
+
 sudo flatpak install org.gnome.Weather
