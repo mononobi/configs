@@ -1,0 +1,4 @@
+# go to 'https://extensions.gnome.org/extension/1380/weather-in-the-clock/'
+# page and toggle the install icon.
+
+# note that this extension requires gnome-weather to be installed.
