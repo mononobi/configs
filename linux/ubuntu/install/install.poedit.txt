@@ -1,3 +1,10 @@
+# flatpak is the recommended way to install:
+
+flatpak install flathub net.poedit.Poedit
+
+# you can also install using snap, but it's not recommended at all as
+# it has a terrible performance:
+
 sudo snap install poedit --channel=latest/stable
 
 # always check for the latest channel before installing:
