@@ -1,6 +1,14 @@
 # use these dns addresses in network settings instead of automatic dns:
 
+# google
+
 8.8.8.8
 8.8.4.4
 
+# cloudflare:
+
+1.1.1.1
+1.0.0.1
+
+# you can use all the above dns addresses at the same time for better stability.
 # now, you need to disconnect and then reconnect your network.
