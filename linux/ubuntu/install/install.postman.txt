@@ -1,3 +1,10 @@
+# flatpak is the recommended way to install:
+
+flatpak install flathub com.getpostman.Postman
+
+# you can also install using snap, but it's not recommended at all as
+# it has a terrible performance:
+
 snap install postman --classic --channel=v9/stable
 
 # always check for the latest channel before installing:

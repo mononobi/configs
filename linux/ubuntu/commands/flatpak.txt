@@ -1,3 +1,27 @@
 # get the list of installed flatpak packages:
 
 flatpak list
+
+# flatpak apps will be installed in one of these locations:
+
+# if you installed them system-wide (with sudo):
+
+/var/lib/flatpak/app
+
+# if you installed them per user (without sudo):
+
+~/.local/share/flatpak/app
+
+# app icons will be created in one of these locations:
+
+# if you installed them system-wide (with sudo):
+
+/var/lib/flatpak/exports/share/applications
+
+# if you installed them per user (without sudo):
+
+~/.local/share/flatpak/exports/share/applications
+
+# app data will be saved in:
+
+~/.var/app
