@@ -1,5 +1,10 @@
 # this app lets you customize boot menu entries.
 
+# if you are on older versions of ubuntu (19.04 or older), execute this:
+
 sudo add-apt-repository ppa:danielrichter2007/grub-customizer
 sudo apt-get update
+
+# now, install the application:
+
 sudo apt-get install grub-customizer
