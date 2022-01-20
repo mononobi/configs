@@ -1,0 +1,13 @@
+# the best match for theming is:
+
+# Applications:
+# Graphite-dark-compact
+
+# Cursor:
+# DMZ-White
+
+# Icons:
+# Material-Originals-Icons-Blue-dark
+
+Shell:
+# Material-Originals-Shell-40-Blue-Dark
