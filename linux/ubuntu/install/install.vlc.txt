@@ -1,1 +1,8 @@
+# flatpak is the recommended way to install:
+
+flatpak install flathub org.videolan.VLC
+
+# you can also install using apt, but it's not recommended because
+# it will not match the system theme:
+
 sudo apt-get install vlc
