@@ -24,3 +24,6 @@ flatpak install flathub nl.g4d.Girens
 flatpak install flathub io.qt.QtCreator
 flatpak install flathub chat.delta.desktop
 flatpak install org.gnome.Weather
+flatpak install flathub nl.hjdskes.gcolor3
+flatpak install flathub com.usebottles.bottles
+flatpak install flathub com.github.tchx84.Flatseal
