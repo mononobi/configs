@@ -1,0 +1,16 @@
+# jami is a distributed communication application without a server.
+
+# install using apt:
+
+# go to 'https://jami.net/download-jami-linux/' and choose your os
+# version and replace 'ubuntu_21.10' with your correct os version.
+
+sudo apt install gnupg dirmngr ca-certificates curl --no-install-recommends
+curl -s https://dl.jami.net/public-key.gpg | sudo tee /usr/share/keyrings/jami-archive-keyring.gpg > /dev/null
+sudo sh -c "echo 'deb [signed-by=/usr/share/keyrings/jami-archive-keyring.gpg] https://dl.jami.net/nightly/ubuntu_21.10/ jami main' > /etc/apt/sources.list.d/jami.list"
+sudo apt-get update
+sudo apt-get install jami
+
+# install using flatpak:
+
+flatpak install flathub net.jami.Jami
