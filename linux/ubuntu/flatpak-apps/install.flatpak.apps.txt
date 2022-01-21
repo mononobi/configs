@@ -19,11 +19,12 @@ flatpak install flathub net.sourceforge.squirrel_sql
 flatpak install flathub fr.handbrake.ghb
 flatpak install flathub org.blender.Blender
 flatpak install flathub com.anydesk.Anydesk
-flatpak install org.gnome.Maps
+flatpak install flathub org.gnome.Maps
 flatpak install flathub nl.g4d.Girens
 flatpak install flathub io.qt.QtCreator
 flatpak install flathub chat.delta.desktop
-flatpak install org.gnome.Weather
+flatpak install flathub org.gnome.Weather
 flatpak install flathub nl.hjdskes.gcolor3
 flatpak install flathub com.usebottles.bottles
 flatpak install flathub com.github.tchx84.Flatseal
+flatpak install flathub org.gnome.NetworkDisplays
