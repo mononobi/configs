@@ -1,0 +1,26 @@
+flatpak install flathub org.mozilla.firefox
+flatpak install flathub org.videolan.VLC
+flatpak install flathub org.libreoffice.LibreOffice
+flatpak install flathub org.gnome.Shotwell
+flatpak install flathub com.transmissionbt.Transmission
+flatpak install flathub org.remmina.Remmina
+flatpak install flathub net.poedit.Poedit
+flatpak install flathub org.atheme.audacious
+flatpak install flathub org.gimp.GIMP
+flatpak install flathub org.kde.kolourpaint
+flatpak install flathub org.mypaint.MyPaint
+flatpak install flathub com.getpostman.Postman
+flatpak install flathub org.signal.Signal
+flatpak install flathub org.telegram.desktop
+flatpak install flathub com.visualstudio.code
+flatpak install flathub org.chromium.Chromium
+flatpak install flathub us.zoom.Zoom
+flatpak install flathub net.sourceforge.squirrel_sql
+flatpak install flathub fr.handbrake.ghb
+flatpak install flathub org.blender.Blender
+flatpak install flathub com.anydesk.Anydesk
+flatpak install org.gnome.Maps
+flatpak install flathub nl.g4d.Girens
+flatpak install flathub io.qt.QtCreator
+flatpak install flathub chat.delta.desktop
+flatpak install org.gnome.Weather
