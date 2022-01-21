@@ -1,0 +1,8 @@
+# you can install using flatpak:
+
+flatpak install flathub com.slack.Slack
+
+# or you can go to 'https://slack.com/downloads/linux' and download the installer.
+# then execute this command:
+
+sudo apt install ./FILE_NAME.deb
