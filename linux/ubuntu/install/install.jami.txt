@@ -1,4 +1,5 @@
 # jami is a distributed communication application without a server.
+# note that this app may cause an issue preventing screen from going blank.
 
 # install using apt:
 
