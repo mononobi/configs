@@ -1,3 +1,4 @@
+sudo apt-get install libgtk-3.0
 sudo apt-get install gnome-themes-extra
 sudo apt-get install gtk2-engines-murrine
 sudo apt-get install sassc
