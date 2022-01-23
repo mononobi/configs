@@ -1,0 +1,12 @@
+# install dependencies:
+
+sudo apt-get install libglib2.0-dev-bin
+
+# then, execute this to change the login background:
+
+sudo ./ubuntu-gdm-set-background --image /PATH/TO/IMAGE.jpg
+
+# now, reboot your system.
+# if anything bad happened, execute this:
+
+sudo update-alternatives --quiet --set gdm-theme.gresource /usr/share/gnome-shell/theme/Yaru/gnome-shell-theme.gresource
