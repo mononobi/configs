@@ -6,7 +6,9 @@ sudo apt-get install libglib2.0-dev-bin
 
 sudo ./ubuntu-gdm-set-background --image /PATH/TO/IMAGE.jpg
 
-# now, reboot your system.
+# now, press 'Ctrl + Alt + F1' to see the login page. if changes does not
+# take effect immediately, reboot your system.
+
 # if anything bad happened, execute this:
 
 sudo update-alternatives --quiet --set gdm-theme.gresource /usr/share/gnome-shell/theme/Yaru/gnome-shell-theme.gresource
