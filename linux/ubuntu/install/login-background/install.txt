@@ -6,7 +6,7 @@ sudo apt-get install libglib2.0-dev-bin
 
 sudo ./ubuntu-gdm-set-background --image /PATH/TO/IMAGE.jpg
 
-# now, press 'Ctrl + Alt + F1' to see the login page. if changes does not
+# now, press 'Ctrl + Alt + F1' to see the login page. if changes did not
 # take effect immediately, reboot your system.
 
 # if anything bad happened, execute this:
