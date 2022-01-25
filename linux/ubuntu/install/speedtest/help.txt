@@ -1,0 +1,9 @@
+# this is the official cli client for speedtest by ookla.
+
+# copy the 'speedtest' file into '/usr/local/sbin' and execute this:
+
+chmod 755 speedtest
+
+# now you can start speed test from anywhere by executing:
+
+speedtest
