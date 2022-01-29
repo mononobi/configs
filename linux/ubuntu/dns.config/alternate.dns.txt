@@ -1,14 +1,19 @@
-# use these dns addresses in network settings instead of automatic dns:
+# use these dns addresses in network settings instead of automatic dns.
+# you can also set these in each web browser separately:
+
+# cloudflare (recommended):
+
+1.1.1.1
+1.0.0.1
 
 # google
 
 8.8.8.8
 8.8.4.4
 
-# cloudflare:
+# cloudflare for mobile:
 
-1.1.1.1
-1.0.0.1
+one.one.one.one
+1dot1dot1dot1.cloudflare-dns.com
 
-# you can use all the above dns addresses at the same time for better stability.
 # now, you need to disconnect and then reconnect your network.
