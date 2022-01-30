@@ -1,0 +1,3 @@
+# show the local and upstream dns address in use:
+
+resolvectl status
