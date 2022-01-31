@@ -1,0 +1,11 @@
+# to list the current browser priorities, execute this:
+
+sudo update-alternatives --config x-www-browser
+
+# to lower the priority of some browsers, execute this for each one you want:
+
+sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/BROWSER_NAME PRIORITY
+
+# for example:
+
+sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/brave-browser-stable 20
