@@ -10,4 +10,6 @@
 # Material-Originals-Icons-Blue-dark
 
 Shell:
+# Graphite-dark-compact
+# or
 # Material-Originals-Shell-40-Blue-Dark

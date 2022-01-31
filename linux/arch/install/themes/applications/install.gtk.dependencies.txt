@@ -1,0 +1,4 @@
+sudo pacman -S gtk3
+sudo pacman -S gnome-themes-extra
+sudo pacman -S gtk-engine-murrine
+sudo pacman -S sassc
