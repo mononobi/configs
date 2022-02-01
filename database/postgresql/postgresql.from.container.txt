@@ -14,6 +14,9 @@ host    all             all             192.168.0.0/16          md5
 # note that '172.18.0.0' is the network ip of containers and might
 # be different on different systems.
 
+# note that you should use whatever is used in other lines instead of 'md5'.
+# for example 'scram-sha-256'.
+
 4. restart postgresql service:
 
 sudo systemctl restart postgresql
