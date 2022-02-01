@@ -1,0 +1,4 @@
+# go to 'https://extensions.gnome.org/extension/4099/no-overview/'
+# page and toggle the install icon.
+
+# this extension will prevent overview page after login, for gnome > 40.
