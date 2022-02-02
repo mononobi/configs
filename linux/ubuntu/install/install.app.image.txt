@@ -1,0 +1,43 @@
+# to create an application icon for an app image, there are two ways:
+
+###### MANUAL ######
+
+# make the file executable:
+
+chmod +x FILE.AppImage
+
+# move it to local bin:
+
+cp FILE.AppImage ~/.local/bin
+
+# extract the app image to get the icon and .desktop files from it:
+
+./FILE.AppImage --appimage-extract
+
+# this will create a folder named 'squashfs-root'.
+
+# go to 'squashfs-root' folder and open '.desktop' file.
+# edit these lines in the file to point to the app image and icon:
+
+Exec=/home/USER_NAME/.local/bin/FILE.AppImage
+Icon=ICON_NAME
+
+# locate the app icon inside 'squashfs-root' and execute this:
+
+sudo cp ICON_NAME.png /usr/share/pixmaps/
+
+# now press 'Alt' + 'F2' and type 'r' and hit enter.
+# now the app icon will be visible on the app menu.
+
+###### AUTO ######
+
+sudo add-apt-repository ppa:appimagelauncher-team/stable
+sudo apt-get update
+sudo apt-get install appimagelauncher
+
+# now run the installed package:
+
+sudo appimagelauncher
+
+# once it's running, if you execute any app image, it will
+# show you an option to create shortcut for it.
