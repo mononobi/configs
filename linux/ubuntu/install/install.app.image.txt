@@ -10,7 +10,7 @@ chmod +x FILE.AppImage
 
 cp FILE.AppImage ~/.local/bin
 
-# extract the app image to get the icon and .desktop files from it:
+# extract the app image to get the icon and '.desktop' files from it:
 
 ./FILE.AppImage --appimage-extract
 
@@ -21,6 +21,10 @@ cp FILE.AppImage ~/.local/bin
 
 Exec=/home/USER_NAME/.local/bin/FILE.AppImage
 Icon=ICON_NAME
+
+# now copy '.desktop' file into this location:
+
+cp FILE.desktop ~/.local/share/applications
 
 # locate the app icon inside 'squashfs-root' and execute this:
 
