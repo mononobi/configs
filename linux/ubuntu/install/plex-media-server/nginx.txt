@@ -1,0 +1,28 @@
+# if you want to put the plex server behind nginx to set a
+# custom url for it, do it as follows:
+
+# execute this to open 'etc/hosts' file:
+
+sudo vi /etc/hosts
+
+# add your custom url instead of 'plex' at the line which contains 'localhost':
+
+127.0.0.1	localhost, plex
+
+# you can set any name you want instead of 'plex'.
+# note that if you changed it to another name here, you must
+# also change it in 'plex.conf' file.
+
+# save the file and exit.
+
+# execute this to copy 'plex.conf' file to nginx configs:
+
+sudo cp plex.conf /etc/nginx/conf.d
+
+# restart nginx and your web browser:
+
+sudo systemctl restart nginx
+
+# execute this to check if everything is working:
+
+sudo nginx -t
