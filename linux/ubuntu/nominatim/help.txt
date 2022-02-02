@@ -1,0 +1,17 @@
+# nominatim is a service for geocoding (getting a geolocation from an address or name).
+# the provided docker-compose file can be used to set up an on-premise nominatim instance.
+
+# to see detailed info on this docker-compose file, visit here:
+# 'https://github.com/mediagis/nominatim-docker'
+
+# note that you should change the two mounted volumes to a location
+# which is available on your server. you should change the host part only (left side).
+# host:guest
+
+# you should also set a password for database instance in the
+# file instead of 'DATABASE_PASSWORD_OF_YOUR_CHOICE'.
+
+# you can change the values of 'PBF_URL' and 'REPLICATION_URL' to get
+# different map data for other locations.
+
+# this docker-compose will prepare apache web-server, postgresql and nominatim instances.

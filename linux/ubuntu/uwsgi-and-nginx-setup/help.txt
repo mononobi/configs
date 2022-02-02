@@ -1,4 +1,4 @@
 these are fully detailed and required configs to deploy an application
 behind nginx and uwsgi. you could change any path and other configs to
-match your environment. the application name in this sample config is 'hamdige'
-that must be changed to your application name.
+match your environment. the application name in this sample config is
+'hamdige' that must be changed to your application name.

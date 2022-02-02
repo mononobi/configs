@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+    nominatim:
+        container_name: nominatim
+        image: mediagis/nominatim:4.0
+        restart: always
+        ports:
+            - "8080:8080"
+        environment:
+            PBF_URL: https://download.geofabrik.de/europe-latest.osm.pbf
+            REPLICATION_URL: https://download.geofabrik.de/europe-updates/
+            NOMINATIM_PASSWORD: DATABASE_PASSWORD_OF_YOUR_CHOICE
+            IMPORT_WIKIPEDIA: true
+            THREADS: 16
+            IMPORT_STYLE: full
+            REPLICATION_RECHECK_INTERVAL: 43200
+        volumes:
+            - /mnt/HC_Volume_16593701/osm/postgres:/var/lib/postgresql/12/main
+            - /mnt/HC_Volume_16593701/osm/flatnode:/nominatim/flatnode
+        shm_size: 16gb
