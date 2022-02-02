@@ -15,3 +15,5 @@
 # different map data for other locations.
 
 # this docker-compose will prepare apache web-server, postgresql and nominatim instances.
+
+# it is recommended to set 'shm_size' as half of your available ram.
