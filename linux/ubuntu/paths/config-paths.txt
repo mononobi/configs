@@ -10,3 +10,7 @@
 # host names:
 
 /etc/hosts
+
+# nginx configs:
+
+/etc/nginx/conf.d
