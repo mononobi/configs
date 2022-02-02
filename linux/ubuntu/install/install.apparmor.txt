@@ -1,0 +1,9 @@
+sudo apt-get install apparmor
+
+# if your installation of apparmor has some issues working with
+# other apps like docker, execute this:
+
+sudo dpkg-reconfigure apparmor
+sudo /etc/init.d/apparmor restart
+
+# now the problem should be fixed.
