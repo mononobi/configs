@@ -1,6 +1,6 @@
-# to create an application icon for an app image, there are two ways:
+# there are two ways to create an application icon for an app image:
 
-###### MANUAL ######
+############ MANUAL ############
 
 # make the file executable:
 
@@ -29,7 +29,7 @@ sudo cp ICON_NAME.png /usr/share/pixmaps/
 # now press 'Alt' + 'F2' and type 'r' and hit enter.
 # now the app icon will be visible on the app menu.
 
-###### AUTO ######
+############ AUTO ############
 
 sudo add-apt-repository ppa:appimagelauncher-team/stable
 sudo apt-get update
