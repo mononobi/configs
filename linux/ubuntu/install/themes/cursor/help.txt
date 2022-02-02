@@ -1,0 +1,4 @@
+# extract 'DMZ-White.zip' file and put the top folder in:
+# '~/.icons'
+
+# now open 'Gnome Tweaks' and change mouse cursor in 'Appearance' tab.
