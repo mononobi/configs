@@ -1,0 +1,12 @@
+# list of repositories:
+
+/etc/apt/sources.list
+/etc/apt/sources.list.d
+
+# dns servers in use:
+
+/etc/resolv.conf
+
+# host names:
+
+/etc/hosts
