@@ -1,0 +1,11 @@
+# show kernel version (use whichever you like):
+
+uname -r
+uname -a
+
+# show os info (use whichever you like):
+
+cat /etc/*-release
+lsb_release -a
+hostnamectl
+cat /proc/version

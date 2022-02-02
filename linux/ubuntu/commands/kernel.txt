@@ -1,3 +1,0 @@
-# show kernel version:
-
-uname -r
