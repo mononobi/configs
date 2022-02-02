@@ -1,0 +1,36 @@
+# if you want to put the any application behind nginx to set a
+# custom url for it, do it as follows:
+
+# execute this to open 'etc/hosts' file:
+
+sudo vi /etc/hosts
+
+# add your custom url instead of 'app' at the line which contains 'localhost':
+
+127.0.0.1	localhost app
+
+# you can set any name you want instead of 'app'.
+# note that if you changed it to another name here, you must
+# also change it in 'app.conf' file.
+# save the file and exit.
+
+# rename 'app.conf' to the real name of your app if you want.
+# open 'app.conf' and change these values:
+
+vi app.conf
+
+# 'app' -> to any name you have set in '/etc/hosts' file.
+# 'PORT_NUMBER' -> to the port number of your application.
+# save the file and exit.
+
+# execute this to copy 'app.conf' file to nginx configs:
+
+sudo cp app.conf /etc/nginx/conf.d
+
+# execute this to check if everything is working:
+
+sudo nginx -t
+
+# restart nginx and your web browser:
+
+sudo systemctl restart nginx

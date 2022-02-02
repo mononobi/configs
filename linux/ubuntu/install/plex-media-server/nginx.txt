@@ -7,7 +7,7 @@ sudo vi /etc/hosts
 
 # add your custom url instead of 'plex' at the line which contains 'localhost':
 
-127.0.0.1	localhost, plex
+127.0.0.1	localhost plex
 
 # you can set any name you want instead of 'plex'.
 # note that if you changed it to another name here, you must
@@ -19,10 +19,10 @@ sudo vi /etc/hosts
 
 sudo cp plex.conf /etc/nginx/conf.d
 
-# restart nginx and your web browser:
-
-sudo systemctl restart nginx
-
 # execute this to check if everything is working:
 
 sudo nginx -t
+
+# restart nginx and your web browser:
+
+sudo systemctl restart nginx
