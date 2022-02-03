@@ -1,3 +1,11 @@
 # show the local and upstream dns address in use:
 
 resolvectl status
+
+# show the 'A' records of a domain:
+
+nslookup -type=A SOME.DOMAIN
+
+# show the 'AAA' records of a domain:
+
+nslookup -type=AAA SOME.DOMAIN
