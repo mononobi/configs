@@ -1,0 +1,3 @@
+# get info on installed ram modules:
+
+sudo dmidecode --type 17
