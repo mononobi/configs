@@ -1,0 +1,62 @@
+# this guid will create valid production ready ssl certificates.
+
+# the online guids are available at:
+
+# https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/
+# https://letsencrypt.org/docs/rate-limits/
+# https://letsencrypt.org/docs/staging-environment/
+# https://certbot.eff.org/faq
+
+# execute these commands to install dependencies:
+
+sudo apt-get update
+sudo apt-get install certbot
+sudo apt-get install python3-certbot-nginx
+
+# assuming you’re starting with a fresh nginx install, use a text editor
+# to create a file in the '/etc/nginx/conf.d' directory named 'domain‑name.conf'
+# (so in our example, www.example.com.conf).
+
+# open the generated file and put these lines inside it:
+
+# 'www.example.com.conf' file content:
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    server_name example.com www.example.com;
+}
+
+# save the file and execute this to check if everything is working:
+
+nginx -t && nginx -s reload
+
+# first, request a certificate from certbot staging environment:
+
+sudo certbot --nginx --test-cert -d example.com -d www.example.com
+
+# if certificate is generated successfully, then execute this command
+# to generate real certificate:
+
+sudo certbot --nginx -d example.com -d www.example.com
+
+# now open the 'www.example.com.conf' file and revise it according
+# to your needs. then reload nginx:
+
+sudo nginx -t && nginx -s reload
+
+# the certbot will automatically modify the 'www.example.com.conf'
+# file and adds ssl certificate changes to it.
+
+# the generated certificate has an expiry period of 90 days.
+# to automatically renew it, execute this to open crontab file:
+
+sudo crontab -e
+
+# add this line into crontab file:
+
+0 12 * * * /usr/bin/certbot renew --quiet
+
+# save the file. now, the certbot will check the certificate daily at 12, and if
+# the certificate expire time is less than 30 days, it will be renewed and reconfigured.
