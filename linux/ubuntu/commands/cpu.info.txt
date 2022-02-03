@@ -1,0 +1,15 @@
+# get cpu info including current frequency:
+
+lscpu
+
+# get only cpu frequency info including current frequency:
+
+lscpu | grep "MHz"
+
+# get cpu info for each core/thread including current frequency for each core/thread:
+
+cat /proc/cpuinfo
+
+# get only cpu frequency info including current frequency for each core/thread:
+
+cat /proc/cpuinfo | grep "MHz"
