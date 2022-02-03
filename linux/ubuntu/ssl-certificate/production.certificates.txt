@@ -8,6 +8,11 @@
 # https://letsencrypt.org/docs/staging-environment/
 # https://certbot.eff.org/faq
 
+########## IMPORTANT NOTE ##########
+
+# the domain you are going to create certificate for, must have valid 'A' records
+# all pointing to the same IP of your server. otherwise, certbot will fail.
+
 # execute these commands to install dependencies:
 
 sudo apt-get update
