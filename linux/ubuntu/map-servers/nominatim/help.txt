@@ -19,6 +19,22 @@
 
 # it is recommended to set 'shm_size' as half of your available ram.
 
+# the 'IMPORT_STYLE' flag can be set to one of these values:
+
+# admin: only import administrative boundaries and places.
+# street: like the admin style but also adds streets.
+# address: import all data necessary to compute addresses down to house number level.
+# full: default style that also includes points of interest.
+# extratags: like the full style but also adds most of the osm tags into the extratags column.
+
+# if you want to enable updates, you can uncomment 'REPLICATION_URL' and
+# 'REPLICATION_RECHECK_INTERVAL' flags. but you should note that if updates
+# are enabled, the storage usage will grow much higher.
+
+# if you've already downloaded the map data, you can comment 'PBF_URL' and uncomment
+# 'PBF_PATH' instead. you should also uncomment the related volume.
+# note that you can not set both 'PBF_URL' and 'PBF_PATH' at the same time.
+
 # this docker-compose will prepare apache web-server, postgresql and nominatim instances.
 
 # start the compose file:
