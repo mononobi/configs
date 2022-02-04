@@ -23,17 +23,17 @@ sudo apt-get install python3-certbot-nginx
 
 # assuming you’re starting with a fresh nginx install, use a text editor
 # to create a file in the '/etc/nginx/conf.d' directory named 'domain‑name.conf'
-# (so in our example, www.example.com.conf).
+# (so in our example, www.domain.com.conf).
 
 # open the generated file and put these lines inside it:
 
-# 'www.example.com.conf' file content:
+# 'www.domain.com.conf' file content:
 
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
     root /var/www/html;
-    server_name example.com www.example.com;
+    server_name domain.com www.domain.com;
 }
 
 # save the file and execute this to check if everything is working:
@@ -42,19 +42,19 @@ nginx -t && nginx -s reload
 
 # first, request a certificate from certbot staging environment:
 
-sudo certbot --nginx --test-cert -d example.com -d www.example.com
+sudo certbot --nginx --test-cert -d domain.com -d www.domain.com
 
 # if certificate is generated successfully, then execute this command
 # to generate real certificate:
 
-sudo certbot --nginx -d example.com -d www.example.com
+sudo certbot --nginx -d domain.com -d www.domain.com
 
-# now open the 'www.example.com.conf' file and revise it according
+# now open the 'www.domain.com.conf' file and revise it according
 # to your needs. then reload nginx:
 
 sudo nginx -t && nginx -s reload
 
-# the certbot will automatically modify the 'www.example.com.conf'
+# the certbot will automatically modify the 'www.domain.com.conf'
 # file and adds ssl certificate changes to it.
 
 # the generated certificate has an expiry period of 90 days.
@@ -68,3 +68,7 @@ sudo crontab -e
 
 # save the file. now, the certbot will check the certificate daily at 12, and if
 # the certificate expire time is less than 30 days, it will be renewed and reconfigured.
+
+# there is a sample nginx config file 'www.domain.com.conf' for clarification.
+# the config file is configured in such a way that blocks access by IP address,
+# and also redirects http access to https access.
