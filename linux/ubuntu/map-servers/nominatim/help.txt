@@ -4,6 +4,9 @@
 # to see detailed info on this docker-compose file, visit here:
 # 'https://github.com/mediagis/nominatim-docker'
 
+# you can download the map data from this link:
+# 'https://download.geofabrik.de'
+
 # note that you should change the two mounted volumes to a location
 # which is available on your server. you should change the host part only (left side).
 # host:guest
@@ -17,3 +20,7 @@
 # it is recommended to set 'shm_size' as half of your available ram.
 
 # this docker-compose will prepare apache web-server, postgresql and nominatim instances.
+
+# start the compose file:
+
+docker-compose up -d

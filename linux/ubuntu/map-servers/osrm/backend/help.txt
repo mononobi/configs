@@ -1,0 +1,34 @@
+# osrm is a service for navigation (getting directions between two points).
+# the provided docker-compose file can be used to set up an on-premise osrm-backend instance.
+
+# to see detailed info on this docker-compose file, visit these links:
+# 'https://hub.docker.com/r/osrm/osrm-backend'
+# 'https://github.com/Project-OSRM/osrm-backend'
+
+# you can download map data from this link:
+# 'https://download.geofabrik.de'
+
+# note that you should change 'lebanon-latest' to whichever file
+# name that you have been downloaded as map data in all files.
+
+# you should also create a folder named 'data' beside the
+# 'docker-compose.yml' file and put the map data in it.
+
+# this docker-compose will prepare osrm-backend instance.
+# it does not include any web-servers (nginx or apache).
+
+### WHEN YOU'VE CREATED DATA FOLDER AND RENAMED ALL 'lebanon-latest' TO YOUR FILE NAME ###
+
+# execute this commands:
+
+sudo chmod 775 1-initialize.sh 2-partition.sh 3-customize.sh
+
+# now execute all 3 bash files one by one:
+
+./1-initialize.sh
+./2-partition.sh
+./3-customize.sh
+
+# now you can start the compose file:
+
+docker-compose up -d

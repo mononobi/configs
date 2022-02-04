@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+    osrm-frontend:
+        container_name: osrm-frontend
+        image: osrm/osrm-frontend
+        restart: always
+#        environment:
+#            OSRM_BACKEND: http://localhost:5000
+        ports:
+            - "9966:9966"

@@ -1,0 +1,17 @@
+# osrm is a service for navigation (getting directions between two points).
+# the provided docker-compose file can be used to set up an on-premise osrm-frontend instance.
+
+# to see detailed info on this docker-compose file, visit these links:
+# 'https://hub.docker.com/r/osrm/osrm-frontend'
+# 'https://github.com/Project-OSRM/osrm-frontend'
+
+# this docker-compose will prepare osrm-frontend instance.
+# it does not include any web-servers (nginx or apache).
+
+# you can change the value of 'OSRM_BACKEND' in compose file if
+# your osrm backend is up on another address or port.
+# note that if you set this variable, you should take care of CORS errors.
+
+# start the compose file:
+
+docker-compose up -d

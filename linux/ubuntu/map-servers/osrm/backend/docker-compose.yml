@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+    osrm-backend:
+        container_name: osrm-backend
+        image: osrm/osrm-backend
+        restart: always
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./data:/data
+        command: "osrm-routed --max-matching-size 1000 --max-table-size 1000 --max-viaroute-size 1000 --algorithm mld /data/lebanon-latest.osrm"
