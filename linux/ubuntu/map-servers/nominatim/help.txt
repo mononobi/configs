@@ -40,3 +40,28 @@
 # start the compose file:
 
 docker-compose up -d
+
+# if you've not enabled updates and don't want to do so, you can remove
+# more than half of the data from database after import is finished.
+# to do so, when import is finished and nominatim started serving requests,
+# execute this command to go inside the container:
+
+docker exec -it nominatim /bin/bash
+
+# execute this inside the container:
+
+su postgres
+
+# go to nominatim folder inside the container:
+
+cd /nominatim
+
+# execute this:
+
+nominatim freeze
+
+# it might give an error on deleting the flatnode file, which can be ignored.
+
+# exit from the container by executing this command two times in a row:
+
+exit
