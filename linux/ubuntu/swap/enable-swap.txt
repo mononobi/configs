@@ -1,0 +1,81 @@
+# check if your system already has swap enabled:
+
+sudo swapon --show
+
+# if it does already have swap enabled, you should first follow the
+# instructions in 'disable-swap.txt' file then follow below commands.
+# if the above command has no output, you can continue below.
+
+# create a swap file at root:
+
+sudo fallocate -l 5G /swapfile
+
+# 5G will tell the command to create a 5 GB swapfile.
+
+# if the 'fallocate' command is not available, use this command instead:
+
+sudo dd if=/dev/zero of=/swapfile bs=1024 count=5242880
+
+# note that: bs * count = swap_file_size_in_bytes
+# so in this example: 1024 * 5242880 = 5368709120 Bytes (5GB)
+
+# you can change 5G according to your needs. but consider these as a rule of thumb:
+
+- systems with less than 2 GB RAM -> 2 times the amount of RAM.
+- systems with 2 to 8 GB RAM -> the same size as the amount of RAM.
+- systems with more than 8 GB RAM -> at least 4 GB of swap.
+
+# set the permissions for created swapfile:
+
+sudo chmod 600 /swapfile
+
+# setup a linux swap area:
+
+sudo mkswap /swapfile
+
+# activate the swap:
+
+sudo swapon /swapfile
+
+# to make swap changes persistent, open '/etc/fstab' file:
+
+sudo nano /etc/fstab
+
+# add the following line into it:
+
+/swapfile   none   swap   sw   0   0
+
+# save the file.
+
+# check if the swap is activated:
+
+sudo swapon --show
+sudo free -h
+
+# you can adjust the swappiness value of linux kernel.
+# swappiness is a linux kernel property that defines how often the system will
+# use the swap space. swappiness can have a value between 0 and 100. a low value
+# will make the kernel to try to avoid swapping whenever possible while a higher
+# value will make the kernel to use the swap space more aggressively.
+# the default swappiness value is 60.
+
+# show current swappiness value:
+
+sudo cat /proc/sys/vm/swappiness
+
+# while the swappiness value of 60 is OK for most linux systems, for production
+# servers you should set a lower value.
+
+# to change the swappiness value, execute this:
+
+sudo sysctl vm.swappiness=10
+
+# to make this parameter persistent across reboots, open the '/etc/sysctl.conf' file:
+
+sudo nano /etc/sysctl.conf
+
+# add this line into the file:
+
+vm.swappiness=10
+
+# save the file.
