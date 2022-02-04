@@ -15,6 +15,6 @@
 
 /etc/nginx/conf.d
 
-# cron tabs:
+# crontabs:
 
 /etc/cron.d
