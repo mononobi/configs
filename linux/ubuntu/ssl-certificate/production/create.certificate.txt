@@ -1,5 +1,5 @@
 # this guid will create valid production ready ssl certificates
-# using 'https://letsencrypt.org/' service.
+# using 'https://letsencrypt.org' service.
 
 # the online guids are available at:
 
