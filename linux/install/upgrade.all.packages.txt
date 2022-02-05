@@ -10,3 +10,7 @@ sudo flatpak update
 # for snap installed apps:
 
 sudo snap refresh
+
+# for pacman installed apps:
+
+sudo pacman -Syyu
