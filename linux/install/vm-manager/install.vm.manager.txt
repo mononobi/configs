@@ -12,10 +12,10 @@ egrep -c '(vmx|svm)' /proc/cpuinfo
 
 sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
 
-# after running the application for the first time, execute this:
+# after installation, execute this to be able to create
+# and run virtual machines without root access:
 
-sudo chown YOUR_USER:YOUR_USER /var/run/libvirt/libvirt-sock
+sudo usermod -aG libvirt USER_NAME
+sudo usermod -aG kvm USER_NAME
 
-# to perform the above command on each system boot (which is required), you can edit
-# and copy the 'vm.prepare' file into '/usr/local/sbin' and add it into startup
-# applications.
+# you need to restart the pc for this change to take effect.
