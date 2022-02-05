@@ -1,9 +1,0 @@
-# you could copy 'docker-prepare' using this command:
-
-cp docker-prepare /usr/local/sbin/
-
-# then execute this on the new copied file:
-
-chown USER:USER /usr/local/sbin/docker-prepare
-
-# and add this script into startup scripts to always have docker ready on startup.
