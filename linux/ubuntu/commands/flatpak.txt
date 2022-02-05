@@ -2,6 +2,18 @@
 
 flatpak list
 
+# if you encountered errors while installing apps, execute these commands:
+
+flatpak update --appstream
+flatpak repair --user
+flatpak repair
+
+sudo flatpak update --appstream
+sudo flatpak repair --user
+sudo flatpak repair
+
+# now close the terminal and open a new terminal.
+
 # flatpak apps will be installed in one of these locations:
 
 # if you installed them system-wide (with sudo):
