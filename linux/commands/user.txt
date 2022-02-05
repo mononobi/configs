@@ -1,0 +1,54 @@
+# list all available users (including local and system users):
+
+cut -d: -f1 /etc/passwd
+
+# add a new user:
+
+sudo adduser USERNAME
+
+# remove a user:
+
+sudo userdel USERNAME
+
+# remove the home folder of the removed user:
+
+sudo rm -r /home/USERNAME
+
+# change the username of a user:
+
+usermod -l NEW_USERNAME OLD_USERNAME
+
+# change the password of a user:
+
+sudo passwd USERNAME
+
+# change details of a user:
+
+sudo chfn USERNAME
+
+# add a user to sudo group (both commands will do the same):
+
+sudo adduser USERNAME sudo
+sudo usermod -aG sudo USERNAME
+
+# add a user to a group:
+
+sudo usermod -aG GROUP_NAME USERNAME
+
+# list all groups which a user is a member of:
+
+groups USERNAME
+
+# get the user id and all group ids which a user is a member of:
+
+id USERNAME
+
+# get the list of all users which are a member of a group:
+
+getent group GROUP_NAME
+
+# get the list of all available groups (all commands will do the same):
+
+less /etc/group
+getent group
+getent group | cut -d: -f1
