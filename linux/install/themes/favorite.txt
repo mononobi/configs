@@ -12,4 +12,4 @@
 Shell:
 # Material-Originals-Shell-40-Blue-Dark
 # or
-# Graphite-dark-compact
+# Graphite-blue-dark-compact
