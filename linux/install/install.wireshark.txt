@@ -9,3 +9,5 @@ sudo dpkg-reconfigure wireshark-common
 # then select 'Yes' as response and execute this:
 
 sudo usermod -a -G wireshark USER_NAME
+
+# you need to restart the pc for this change to take effect.
