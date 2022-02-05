@@ -1,0 +1,3 @@
+# yay is the AUR package manager for arch based linux distros.
+
+sudo pacman -S yay
