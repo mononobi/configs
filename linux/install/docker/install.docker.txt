@@ -1,7 +1,10 @@
 sudo apt-get install docker
 sudo apt-get install docker.io
-sudo apt-get install docker-compose
 
 # this is required for docker login to work properly:
 
 sudo apt-get install gnupg2 pass
+
+# after installation, execute this to be able to run docker commands without root access:
+
+sudo usermod -a -G docker USER_NAME

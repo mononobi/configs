@@ -8,4 +8,4 @@ sudo dpkg-reconfigure wireshark-common
 
 # then select 'Yes' as response and execute this:
 
-sudo usermod -a -G wireshark {USER_NAME}
+sudo usermod -a -G wireshark USER_NAME
