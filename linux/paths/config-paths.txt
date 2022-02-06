@@ -22,4 +22,4 @@
 # ssh daemon:
 
 /etc/ssh/sshd_config -> defaults
-/etc/ssh/sshd_config.d -> custom
+/etc/ssh/sshd_config.d/ -> custom
