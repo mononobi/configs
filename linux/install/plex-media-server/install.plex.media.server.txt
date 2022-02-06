@@ -33,16 +33,19 @@ sudo apt update
 
 cd /var/lib/
 sudo rm -r plexmediaserver
-sudo ln -s /home/mono/.plexmediaserver/plexmediaserver .
+sudo ln -s /home/USERNAME/.plexmediaserver/plexmediaserver .
 
-# after creating symlink, you must set the owner of data directory and symlink to YOUR_USER:plex.
+# after creating symlink, you must add your user into 'plex'
+# group to be able to access metadata files without root permission:
 
-# and you must set the permission of data directory and symlink to 775.
+sudo usermod -aG plex USERNAME
 
-sudo chown -R YOUR_USER:plex directory_name
+# you should also set 'plex' as the owner of the directory and symlink:
+
+sudo chown -R plex:plex directory_name
 sudo chmod -R 775 directory_name
 
-sudo chown -R YOUR_USER:plex plexmediaserver
+sudo chown -R plex:plex plexmediaserver
 sudo chmod -R 775 plexmediaserver
 
 # plex media server executables directory is:
