@@ -18,3 +18,8 @@
 # crontabs:
 
 /etc/cron.d
+
+# ssh daemon:
+
+/etc/ssh/sshd_config -> defaults
+/etc/ssh/sshd_config.d -> custom
