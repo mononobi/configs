@@ -1,0 +1,10 @@
+# freecad is the open source alternative of autocad.
+# https://www.freecadweb.org/downloads.php
+
+# debian based:
+
+sudo apt-get install freecad
+
+# arch based:
+
+sudo pacman -S freecad
