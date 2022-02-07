@@ -1,0 +1,7 @@
+# iotop is an application for monitoring I/O access.
+
+sudo apt-get install iotop
+
+# monitor I/O access:
+
+sudo iotop -o
