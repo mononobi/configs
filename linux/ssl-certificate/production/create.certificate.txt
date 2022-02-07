@@ -73,5 +73,5 @@ sudo crontab -e
 # the config file is configured in such a way that blocks access by IP address,
 # and also redirects http access to https access.
 
-# all the created files can be found in this path:
+# all the created files can be found on this path:
 # '/etc/letsencrypt/live/'
