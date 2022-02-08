@@ -23,12 +23,16 @@
 
 sudo chmod 775 1-initialize.sh 2-partition.sh 3-customize.sh
 
-# now execute all 3 bash files one by one:
+# execute all 3 bash files one by one and check logs for each one to complete:
 
 ./1-initialize.sh
 ./2-partition.sh
 ./3-customize.sh
 
-# now you can start the compose file:
+# show logs:
+
+docker logs -f CONTAINER_ID
+
+# when all scripts are finished, you can start the compose file:
 
 docker-compose up -d
