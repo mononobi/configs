@@ -1,0 +1,19 @@
+# if you want to put your application server behind nginx, you can
+# use the fully featured sample config file 'app.conf' as your guide.
+
+# if you want to enable ssl certificate, see the related guidance in
+# 'ssl-certificate' directory.
+
+# after you've been configured your 'app.conf' file, execute
+# this to copy 'app.conf' file to nginx configs:
+
+sudo cp app.conf /etc/nginx/conf.d
+
+# execute this to check if everything is working:
+
+sudo nginx -t
+
+# restart nginx and your web browser (both commands are the same):
+
+sudo systemctl restart nginx
+sudo nginx -s reload
