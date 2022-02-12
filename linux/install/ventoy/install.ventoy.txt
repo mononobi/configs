@@ -38,3 +38,7 @@ sudo chown -R USER:USER /opt/ventoy
 
 # press 'Alt + F2' and input 'r' and hit 'Enter' to reload the shell.
 # now the app should be visible on your application menu.
+
+# if you want to update the version of ventoy, you only need to download the
+# newer version and then extract it into '/opt/ventoy/ventoy-current'
+# and make the '/opt/ventoy/ventoy-current/VentoyGUI.x86_64' file executable.
