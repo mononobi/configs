@@ -1,0 +1,3 @@
+# list all available audio devices:
+
+pacmd list-cards

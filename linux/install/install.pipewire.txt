@@ -1,0 +1,28 @@
+# PipeWire is an audio server which has better quality than PulseAudio
+# which is the default on ubuntu and most other distros.
+
+# to enable PipeWire and disable PulseAudio, execute these commands. note that
+# you should not execute all commands with sudo, only some of them:
+
+sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream
+sudo apt update
+sudo apt install pipewire pipewire-audio-client-libraries
+sudo apt install gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,media-session,bin,locales,tests}}
+systemctl --user daemon-reload
+systemctl --user --now disable pulseaudio.service pulseaudio.socket
+systemctl --user --now enable pipewire pipewire-pulse
+
+# now execute this to check if PipeWire is enabled:
+
+pactl info
+
+# to disable PipeWire and revert to PulseAudio, execute these commands:
+
+sudo apt remove pipewire pipewire-audio-client-libraries
+sudo apt remove gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,media-session,bin,locales,tests}}
+systemctl --user daemon-reload
+systemctl --user --now enable pulseaudio.service pulseaudio.socket
+
+# now execute this to check if PulseAudio is enabled:
+
+pactl info
