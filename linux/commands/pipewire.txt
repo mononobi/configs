@@ -1,0 +1,7 @@
+# list all available audio devices:
+
+pactl list cards
+
+# show multimedia server info:
+
+pactl info
