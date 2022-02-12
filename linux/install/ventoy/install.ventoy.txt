@@ -1,0 +1,40 @@
+# ventoy is a cross-platform usb multiboot creator.
+# it works on windows and linux and can create bootables for windows and linux.
+
+# first, head over to 'https://github.com/ventoy/Ventoy/releases'
+# and download the latest version.
+
+# execute this command to extract the downloaded file:
+
+tar -xf ventoy-X.Y.Z-linux.tar.gz
+
+# execute this command to make a directory for ventoy on '/opt':
+
+sudo mkdir /opt/ventoy
+
+# copy the extracted directory into created directory:
+
+cp -r ventoy-X.Y.Z /opt/ventoy/
+
+# rename the copied directory:
+
+mv /opt/ventoy/ventoy-X.Y.Z /opt/ventoy/ventoy-current
+
+# copy the 'files/ventoy.desktop' file into '~/.local/share/applications':
+
+cp files/ventoy.desktop ~/.local/share/applications
+
+# copy the 'files/ventoy.png' icon image into '/usr/share/pixmaps':
+
+sudo cp files/ventoy.png /usr/share/pixmaps
+
+# execute this to make the app file executable:
+
+sudo chmod 755 /opt/ventoy/ventoy-current/VentoyGUI.x86_64
+
+# execute this to make your user the owner of the app folder:
+
+sudo chown -R USER:USER /opt/ventoy
+
+# press 'Alt + F2' and input 'r' and hit 'Enter' to reload the shell.
+# now the app should be visible on your application menu.

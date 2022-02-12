@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Ventoy
+Exec=/opt/ventoy/ventoy-current/VentoyGUI.x86_64
+Terminal=false
+Type=Application
+Icon=ventoy
+StartupWMClass=Ventoy
