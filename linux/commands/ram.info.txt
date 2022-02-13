@@ -1,3 +1,7 @@
 # get info on installed ram modules:
 
 sudo dmidecode --type 17
+
+# get info on ram usage:
+
+free -h
