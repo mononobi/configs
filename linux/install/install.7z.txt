@@ -1,3 +1,5 @@
-sudo add-apt-repository universe
+# this line may break your system, use with cautious.
+# sudo add-apt-repository universe
+
 sudo apt update
 sudo apt install p7zip-full p7zip-rar
