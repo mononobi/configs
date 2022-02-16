@@ -1,3 +1,12 @@
+# if you're on a distro where it already includes libreoffice (ex. ubuntu based),
+# you should first remove the current version of libreoffice:
+
+sudo apt-get remove --purge libreoffice*
+sudo apt-get clean
+sudo apt-get autoremove
+
+# then add the up-to-date repository and install libreoffice:
+
 sudo add-apt-repository ppa:libreoffice/ppa
 sudo apt update
 sudo apt install libreoffice
