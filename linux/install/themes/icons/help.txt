@@ -1,4 +1,6 @@
 # extract 'Material-Originals-Icons-Blue.zip' file and put the top folders in:
 # '~/.icons'
 
+# note that both folders must be copied, otherwise it may not work.
+
 # now open 'Gnome Tweaks' and change icons in 'Appearance' tab.
