@@ -9,7 +9,11 @@
 # Icons:
 # Material-Originals-Icons-Blue-dark
 
-Shell:
+# Shell:
 # Material-Originals-Shell-40-Blue-Dark
 # or
 # Graphite-blue-dark-compact
+
+# Grub:
+# theme: tela
+# icon: color
