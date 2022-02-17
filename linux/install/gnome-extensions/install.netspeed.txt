@@ -1,2 +1,13 @@
 # go to 'https://extensions.gnome.org/extension/104/netspeed/'
 # page and toggle the install icon.
+
+# recommended settings:
+
+# show the icon: off
+# timer: 1000
+# digits: 3
+# label size: 38
+# unit label size: 34
+# menu label size: 65
+# use multiples of byte: on
+# use binary prefixes: off
