@@ -1,0 +1,5 @@
+# extract the 'grub2-themes.zip' file, then execute this command inside theme folder:
+
+sudo ./install.sh
+
+# select the desired options and it's done.
