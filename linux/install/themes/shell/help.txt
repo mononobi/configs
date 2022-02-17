@@ -3,6 +3,12 @@
 # the blue one is revised and works perfectly.
 # the black and mint one must be revised to fit correctly.
 
+# extract 'Material-Originals-Shell-40.zip' file and put the top folders in:
+# '~/.themes'
+
+# now open 'Gnome Tweaks' and change shell in 'Appearance' tab.
+# you must have installed gnome 'user-themes' extension first.
+
 # to revise each theme, open 'gnome-shell.css' file of it and
 # search for these values and correct the related css attributes:
 
