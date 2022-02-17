@@ -1,4 +1,4 @@
-# extract 'Material-Originals-Icons-Blue-dark.zip' file and put the top folder in:
+# extract 'Material-Originals-Icons-Blue.zip' file and put the top folders in:
 # '~/.icons'
 
 # now open 'Gnome Tweaks' and change icons in 'Appearance' tab.
