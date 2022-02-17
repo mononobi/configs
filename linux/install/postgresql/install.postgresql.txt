@@ -28,6 +28,12 @@ sudo nano /etc/postgresql/VERSION/main/pg_hba.conf
 # with this line:
 # local   all             postgres                                md5
 
+# replace this line:
+# local   all             all                                     peer
+
+# with this line:
+# local   all             all                                     md5
+
 # save the file.
 
 # execute this to set a password for 'postgres' user on database:
