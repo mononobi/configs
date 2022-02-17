@@ -1,0 +1,45 @@
+############# NEW INSTALLATION #############
+
+sudo apt update
+sudo apt -y upgrade
+sudo apt install -y wget
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+RELEASE=$(lsb_release -cs)
+echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}"-pgdg main | sudo tee  /etc/apt/sources.list.d/pgdg.list
+cat /etc/apt/sources.list.d/pgdg.list
+sudo apt update
+
+# change 'VERSION' to the version you want to be installed, for example 14:
+
+sudo apt -y install postgresql-VERSION
+
+# after installation has been finished, you can copy the provided 'db.conf' file
+# into postgresql 'conf.d' folder to modify required configs:
+
+sudo cp db.conf /etc/postgresql/VERSION/main/conf.d
+
+# to be able to connect to database locally using terminal, open 'pg_hba.conf' file:
+
+sudo nano /etc/postgresql/VERSION/main/pg_hba.conf
+
+# replace this line:
+# local   all             postgres                                peer
+
+# with this line:
+# local   all             postgres                                md5
+
+# save the file.
+
+# execute this to set a password for 'postgres' user on database:
+
+sudo su - postgres
+psql -c "alter user postgres with password 'PASSWORD_HERE'"
+
+# restart the postgresql service:
+
+sudo systemctl restart postgresql
+
+# check that postgresql is up and running:
+
+sudo ss -tunelp | grep 5432
+sudo systemctl status postgresql

@@ -1,0 +1,11 @@
+############# UPGRADE AN OLD INSTALLATION #############
+
+sudo apt update
+sudo apt -y upgrade
+
+# change 'VERSION' to the version you want to be installed, for example 14:
+
+sudo apt -y install postgresql-VERSION
+
+# to update and/or remove old cluster (if required, with caution) visit this page:
+# https://gorails.com/guides/upgrading-postgresql-version-on-ubuntu-server
