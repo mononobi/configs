@@ -43,3 +43,7 @@ sudo systemctl restart postgresql
 
 sudo ss -tunelp | grep 5432
 sudo systemctl status postgresql
+
+# you can connect to postgresql using terminal:
+
+psql -U postgres
