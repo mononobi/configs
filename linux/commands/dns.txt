@@ -9,3 +9,7 @@ nslookup -type=A SOME.DOMAIN
 # show the 'AAA' records of a domain:
 
 nslookup -type=AAA SOME.DOMAIN
+
+# check that qname minimisation is enabled by your dns server:
+
+dig +short txt qnamemintest.internet.nl
