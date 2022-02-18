@@ -1,0 +1,23 @@
+# show list of enabled services:
+
+systemctl list-unit-files --state=enabled --no-pager
+
+# enable a service on system startup:
+
+sudo systemctl enable SERVICE_NAME
+
+# disable a service on system startup:
+
+sudo systemctl disable SERVICE_NAME
+
+# start a service:
+
+sudo systemctl start SERVICE_NAME
+
+# stop a service:
+
+sudo systemctl stop SERVICE_NAME
+
+# restart a service:
+
+sudo systemctl restart SERVICE_NAME
