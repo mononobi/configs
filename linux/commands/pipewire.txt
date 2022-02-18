@@ -5,3 +5,17 @@ pactl list cards
 # show multimedia server info:
 
 pactl info
+
+# change the selected profile of current device:
+
+pactl set-card-profile DEVICE_NAME PROFILE_NAME
+
+# for example:
+
+pactl set-card-profile bluez_card.64_A2_F9_FE_EB_39 headset-head-unit-msbc
+pactl set-card-profile bluez_card.64_A2_F9_FE_EB_39 a2dp-sink-aptx
+
+# you should get the 'DEVICE_NAME' and 'PROFILE_NAME' from
+# the output of this command:
+
+pactl list cards
