@@ -1,0 +1,7 @@
+# make a request to a server:
+
+wrk -t 8 -c 80 https://example.com/api/users
+
+# you should replace the above url 'https://example.com/api/users' with your server url.
+# '-t' specifies the threads count.
+# '-c' specifies how many connections should be kept open and reused.
