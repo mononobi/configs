@@ -1,0 +1,14 @@
+# this guide will enable battery report of connected bluetooth devices in settings power menu.
+
+# open the bluetooth service file:
+
+sudo nano /lib/systemd/system/bluetooth.service
+
+# add '--experimental' at the end of the following line:
+
+# ExecStart=/usr/local/libexec/bluetooth/bluetoothd --experimental
+
+# restart bluetooth service:
+
+sudo systemctl daemon-reload
+sudo systemctl restart bluetooth
