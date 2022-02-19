@@ -1,0 +1,8 @@
+# to disable bitlocker encryption on a hard disk partition, open a
+# power shell as admin and execute this:
+
+Disable-BitLocker -MountPoint "DRIVE_LETTER:"
+
+# for example:
+
+Disable-BitLocker -MountPoint "C:"
