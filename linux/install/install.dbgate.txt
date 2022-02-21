@@ -1,0 +1,12 @@
+# dbgate is an open source cross-platform database management tool. it supports all
+# major database systems. it comes second to dbeaver regarding features.
+
+# go to this page and download the deb version:
+# https://dbgate.org/download
+
+# now execute this to install the app:
+sudo apt install ./FILE_NAME.deb
+
+# you can also install using snap (not recommended):
+
+sudo snap install dbgate
