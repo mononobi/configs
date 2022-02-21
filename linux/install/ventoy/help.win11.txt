@@ -1,0 +1,6 @@
+# if you want to be able to install windows 11 on a hardware which is not officially
+# supported by microsoft (ex. no TPM, no secure boot, less than 4GB RAM,
+# less than 64GB storage), you should do this after creating a bootable disk:
+
+# copy the 'files/ventoy.json' file into the 'ventoy' folder on the first partition
+# of the USB media (the partition which contains the windows image iso file as well).
