@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=APP_NAME
+Comment=
+Keywords=
+Exec=ABSOLUTE_PATH_TO_EXECUTABLE_FILE
+TryExec=
+Terminal=false
+Icon=ICON_NAME_OR_FULL_PATH
+Type=Application
+Categories=SEMICOLON;SEPARATED;CATEGORIES;
+MimeType=
+StartupNotify=false
+StartupWMClass=APP_NAME
+OnlyShowIn=
+Actions=

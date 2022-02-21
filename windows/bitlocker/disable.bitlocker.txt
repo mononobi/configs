@@ -6,3 +6,5 @@ Disable-BitLocker -MountPoint "DRIVE_LETTER:"
 # for example:
 
 Disable-BitLocker -MountPoint "C:"
+
+# this will take some time to finish, so wait until the end.
