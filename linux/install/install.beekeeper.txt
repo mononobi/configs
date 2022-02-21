@@ -1,0 +1,9 @@
+# beekeeper is an opensource cross-platform database management tool. it works just
+# like pgAdmin but has a relatively better ui and supports all major databases.
+# but it has way less features than 'dbeaver'.
+# https://docs.beekeeperstudio.io/installation
+
+wget --quiet -O - https://deb.beekeeperstudio.io/beekeeper.key | sudo apt-key add -
+echo "deb https://deb.beekeeperstudio.io stable main" | sudo tee /etc/apt/sources.list.d/beekeeper-studio-app.list
+sudo apt update
+sudo apt install beekeeper-studio

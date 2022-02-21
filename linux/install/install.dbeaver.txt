@@ -1,0 +1,13 @@
+# dbeaver is an open source cross-platform database management application supporting all
+# major database systems. it is a great open source alternative for JetBrains DataGrip app.
+# https://dbeaver.io
+
+# install using apt:
+
+sudo add-apt-repository ppa:serge-rider/dbeaver-ce
+sudo apt-get update
+sudo apt-get install dbeaver-ce
+
+# install using flatpak:
+
+flatpak install flathub io.dbeaver.DBeaverCommunity
