@@ -1,12 +1,19 @@
 # download the gui version app from this link:
-# https://windscribe.com/guides/linux
+# https://protonvpn.com/support/linux-ubuntu-vpn-setup/
 
 # note that this website is already filtered in iran, so you have to solve
 # the chicken and egg problem for downloading the vpn app.
+# so, for your convenience the '.deb' file is already available on
+# this repo if you could not download it from their site.
 
-# execute this to install:
+# execute this to add the proton-vpn repo in your linux:
 
 sudo dpkg -i FILE_NAME.deb
+
+# install the app:
+
+sudo apt-get update
+sudo apt-get install protonvpn
 
 # you should create an account or login if you already have one.
 # enjoy the free web without mollas of iran.
