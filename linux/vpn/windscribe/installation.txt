@@ -3,6 +3,8 @@
 
 # note that this website is already filtered in iran, so you have to solve
 # the chicken and egg problem for downloading the vpn app.
+# so, for your convenience the '.deb' file is already available on
+# this repo if you could not download it from their site.
 
 # execute this to install:
 
