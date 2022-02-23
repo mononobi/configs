@@ -1,7 +1,7 @@
 # initialize proton-vpn client for the first time:
 sudo protonvpn init
 
-# connect to fastest server:
+# connect to the fastest server:
 protonvpn connect -f
 
 # reconnect or connect to last used server:

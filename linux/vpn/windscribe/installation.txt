@@ -1,0 +1,11 @@
+# download the gui version app from this link:
+# https://windscribe.com/guides/linux
+# note that this website is already filtered in iran, so you have to solve
+# the chicken and egg problem for downloading the vpn app.
+
+# execute this to install:
+
+sudo dpkg -i FILE_NAME.deb
+
+# you should create an account or login if you already have one.
+# enjoy the free web without mollas of iran.
