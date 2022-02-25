@@ -1,3 +1,7 @@
-# default wallpaper paths:
+# default wallpapers path:
 
 /usr/share/backgrounds/
+
+# user wallpapers path:
+
+~/.local/share/backgrounds
