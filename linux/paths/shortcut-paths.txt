@@ -2,6 +2,6 @@
 
 /usr/share/applications
 ~/.local/share/applications
-~/.gnome/apps
 /var/lib/flatpak/exports/share/applications
+~/.gnome/apps
 ~/.local/share/flatpak/exports/share/applications
