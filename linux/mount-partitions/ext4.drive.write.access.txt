@@ -1,0 +1,11 @@
+# to be able to get write access to an external ext4 partition
+# (not included in linux file system), you should find out the mount
+# point of the given drive, then execute these commands:
+
+sudo chgrp adm /MOUNT_POINT
+sudo chmod g+w /MOUNT_POINT
+
+# for example:
+
+sudo chgrp adm /media/username/56d0c0ab-60a0-48bf-955d-bc2f283009b6
+sudo chmod g+w /media/username/56d0c0ab-60a0-48bf-955d-bc2f283009b6
