@@ -1,7 +1,0 @@
-# first install node.js, then:
-
-npm install -g @angular/cli
-
-# install material packages:
-
-ng add @angular/material
