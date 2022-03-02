@@ -9,6 +9,8 @@ sudo ./ubuntu-gdm-set-background --image /PATH/TO/IMAGE.jpg
 # now, press 'Ctrl + Alt + F1' to see the login page. if changes did not
 # take effect immediately, reboot your system.
 
+# there are two sample images in 'images' folder which you can use if you like them.
+
 # if anything bad happened, execute this:
 
 sudo update-alternatives --quiet --set gdm-theme.gresource /usr/share/gnome-shell/theme/Yaru/gnome-shell-theme.gresource

@@ -11,9 +11,10 @@
 
 # Shell:
 # Material-Originals-Shell-40-Blue-Dark
-# or
-# Graphite-blue-dark-compact
 
 # Grub:
 # theme: tela
 # icon: color
+
+# Login:
+# image: abstract-blur.jpg
