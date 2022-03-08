@@ -1,4 +1,4 @@
 echo PASSWORD@USER | sudo -S apt-get update
-echo PASSWORD@USER | sudo -S apt-get full-upgrade -y
+echo PASSWORD@USER | sudo -S apt-get upgrade -y
 echo PASSWORD@USER | sudo -S flatpak update -y
 echo PASSWORD@USER | sudo -S update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/firefox 600
