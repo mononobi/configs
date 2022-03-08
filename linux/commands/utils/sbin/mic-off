@@ -1,0 +1,1 @@
+pactl set-card-profile bluez_card.64_A2_F9_FE_EB_39 a2dp-sink-aptx

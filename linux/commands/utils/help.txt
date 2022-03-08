@@ -1,0 +1,26 @@
+# the 'sbin' folder contains some shortcut commands which can be copied into
+# '.local' directory in your user's home directory.
+
+# first open each file and edit 'USER' and 'PASSWORD' if needed, then execute this:
+
+cp -r sbin ~/.local
+
+# then add these lines into '~/.profile' file:
+
+######################## PUT BELOW LINES AT THE END OF THE FILE ########################
+
+# set PATH so it includes user's private sbin if it exists
+if [ -d "$HOME/.local/sbin" ] ; then
+    PATH="$HOME/.local/sbin:$PATH"
+fi
+
+######################## PUT ABOVE LINES AT THE END OF THE FILE ########################
+
+# then make the copied files executable:
+
+sudo chmod 755 ~/.local/sbin/*
+
+# now you should logout and login again for changes to take effect.
+
+# now you can execute those commands in the terminal without having to
+# input your password every time.
