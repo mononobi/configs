@@ -25,5 +25,11 @@ pg_dump -U postgres --column-inserts -a -t table1 -t table2 ... -d existing_db_n
 # restoring dump on new database:
 # you must first create new database then restore data into it.
 
+# you need to give the 'postgres' user access to dump file:
+
+sudo chown YOUR_USER:postgres dump.sql
+
+# then execute these commands to restore the dump:
+
 sudo su postgres
 psql -U postgres -d new_db_name -f dump.sql
