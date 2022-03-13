@@ -1,6 +1,6 @@
 sudo apt update
 sudo apt install build-essential checkinstall zlib1g-dev libncursesw5-dev libncurses5-dev tk-dev libbz2-dev libgdbm-dev libnss3-dev libc6-dev openssl libssl-dev libreadline-dev libffi-dev wget libsqlite3-dev
-./configure --enable-optimizations --enable-loadable-sqlite-extensions --enable-shared
+./configure --enable-optimizations --enable-loadable-sqlite-extensions --enable-shared --enable-framework
 make -j 4                         [number of cores]
 sudo make altinstall              [generates python3.8]
 sudo make install                 [overwrites to python3]
