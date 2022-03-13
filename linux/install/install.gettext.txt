@@ -1,0 +1,3 @@
+# gettext is a tool used for localizing applications.
+
+sudo apt-get install apt-utils gettext
