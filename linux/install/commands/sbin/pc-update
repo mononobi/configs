@@ -1,5 +1,5 @@
 echo PASSWORD@USER | sudo -S apt-get update
-echo PASSWORD@USER | sudo -S apt-get upgrade -y
-echo PASSWORD@USER | sudo -S flatpak update -y
-echo PASSWORD@USER | sudo -S snap refresh
-echo PASSWORD@USER | sudo -S update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/firefox 600
+sudo apt-get upgrade -y
+sudo flatpak update -y
+sudo snap refresh
+sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/firefox 600
