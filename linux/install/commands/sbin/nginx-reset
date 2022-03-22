@@ -1,0 +1,4 @@
+echo PASSWORD@USER | sudo -S systemctl stop apache2.service
+sudo systemctl disable apache2.service
+sudo systemctl start nginx
+sudo systemctl enable nginx
