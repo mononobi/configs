@@ -1,18 +1,24 @@
 # PipeWire is an audio server which has better quality than PulseAudio
 # which is the default on ubuntu and most other distros.
 
+# 'wireplumber' is the recommended library over 'pipewire-media-session'.
 # to enable PipeWire and disable PulseAudio, execute these commands. note that
 # you should not execute all commands with sudo, only some of them:
 
 sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream
+
+## EXECUTE THE BELOW LINE IF YOU WANT WIREPLUMBER ##
 sudo add-apt-repository ppa:pipewire-debian/wireplumber-upstream
+
 sudo apt update
 sudo apt install libfdk-aac2 libldacbt-{abr,enc}2 libopenaptx0
-## sudo apt install gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,media-session,bin,locales,tests}}
-sudo apt install gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,bin,locales,tests}}
-sudo apt install pipewire-doc
-## sudo apt-get install pipewire-media-session
+sudo apt install gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,bin,locales,tests,doc}}
+
+## EXECUTE THE BELOW LINE IF YOU WANT PIPEWIRE-MEDIA-SESSION ##
+sudo apt-get install pipewire-media-session
+## EXECUTE THE BELOW LINE IF YOU WANT WIREPLUMBER ##
 sudo apt-get install wireplumber{,-doc} gir1.2-wp-0.4 libwireplumber-0.4-{0,dev}
+
 sudo apt-get remove --purge blueman && sudo rm -f /var/lib/blueman/network.state
 sudo apt-get install blueman-git
 
@@ -20,8 +26,12 @@ systemctl --user daemon-reload
 systemctl --user --now disable pulseaudio.{socket,service}
 systemctl --user mask pulseaudio
 systemctl --user --now enable pipewire{,-pulse}.{socket,service}
-## systemctl --user --now enable pipewire-media-session.service
+
+## EXECUTE THE BELOW LINE IF YOU WANT PIPEWIRE-MEDIA-SESSION ##
+systemctl --user --now enable pipewire-media-session.service
+## EXECUTE THE BELOW LINE IF YOU WANT WIREPLUMBER ##
 systemctl --user --now enable wireplumber.service
+
 sudo systemctl enable --now blueman-mechanism.service
 
 # now execute this to check if PipeWire is enabled:
@@ -30,11 +40,13 @@ pactl info
 
 # to disable PipeWire and revert to PulseAudio, execute these commands:
 
-sudo apt remove pipewire pipewire-audio-client-libraries
-## sudo apt remove gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,media-session,bin,locales,tests}}
-sudo apt remove gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,bin,locales,tests}}
-sudo apt remove pipewire-doc
+sudo apt remove gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,bin,locales,tests,doc}}
+
+## EXECUTE THE BELOW LINE IF YOU HAVE INSTALLED PIPEWIRE-MEDIA-SESSION ##
+sudo apt remove pipewire-media-session
+## EXECUTE THE BELOW LINE IF YOU HAVE INSTALLED WIREPLUMBER ##
 sudo apt remove wireplumber{,-doc} gir1.2-wp-0.4 libwireplumber-0.4-{0,dev}
+
 sudo apt-get remove --purge blueman && sudo rm -f /var/lib/blueman/network.state
 
 systemctl --user daemon-reload
