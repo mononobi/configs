@@ -2,6 +2,7 @@
 # which is the default on ubuntu and most other distros.
 
 # 'wireplumber' is the recommended library over 'pipewire-media-session'.
+# note that only one of 'wireplumber' or 'pipewire-media-session' should be installed.
 # to enable PipeWire and disable PulseAudio, execute these commands. note that
 # you should not execute all commands with sudo, only some of them:
 
