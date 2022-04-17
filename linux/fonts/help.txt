@@ -13,7 +13,7 @@ fc-cache -f -v
 
 ======================================================================
 1. installing fonts per user:
-Home/.fonts
+~/.fonts
 
 2. no need to reload.
 
