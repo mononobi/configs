@@ -1,1 +1,1 @@
-echo PASSWORD@USER | sudo -S systemctl restart plexmediaserver
+echo PASSWORD | sudo -S systemctl restart plexmediaserver

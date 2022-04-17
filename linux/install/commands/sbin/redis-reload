@@ -1,1 +1,1 @@
-echo PASSWORD@USER | sudo -S systemctl restart redis-server
+echo PASSWORD | sudo -S systemctl restart redis-server

@@ -1,4 +1,4 @@
-echo PASSWORD@USER | sudo -S apt-get update
+echo PASSWORD | sudo -S apt-get update
 sudo apt-get upgrade -y
 sudo flatpak update -y
 sudo snap refresh
