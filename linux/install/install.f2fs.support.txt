@@ -1,0 +1,4 @@
+# f2fs file system is a common file system between linux and android.
+
+sudo apt update
+sudo apt-get install f2fs-tools
