@@ -2,4 +2,10 @@
 # sudo add-apt-repository universe
 
 sudo apt update
-sudo apt install exfat-fuse exfat-utils
+sudo apt install exfat-fuse
+
+# Ubuntu <= 21.10
+sudo apt install exfat-utils
+
+# Ubuntu >= 22.04
+sudo apt install exfatprogs
