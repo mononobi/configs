@@ -9,3 +9,7 @@ sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin
 # for example:
 
 sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/brave-browser-stable 20
+
+# example for browsers installed with flatpak:
+
+sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser /var/lib/flatpak/exports/bin/org.mozilla.firefox 600
