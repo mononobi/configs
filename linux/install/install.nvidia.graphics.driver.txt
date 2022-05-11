@@ -1,3 +1,5 @@
+# IF A VALID VERSION IS ALREADY INSTALLED:
+
 # uninstall:
 sudo apt-get purge nvidia*
 
@@ -11,3 +13,7 @@ sudo add-apt-repository ppa:xorg-edgers/ppa
 sudo apt-get update
 sudo apt-get install nvidia-346
 sudo add-apt-repository -r ppa:xorg-edgers/ppa
+
+# IF A VALID VERSION IS NOT INSTALLED AND A MANUAL DRIVER IS INSTALLED:
+
+sudo ubuntu-drivers install

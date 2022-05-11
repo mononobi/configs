@@ -12,6 +12,15 @@ sudo apt install flatpak
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
+# open the below file and add the specified line into it to let installed flatpak apps 
+# show up immediately after installation in applications list.
+
+sudo nano /etc/security/pam_env.conf
+
+# add this line and save the file:
+
+XDG_DATA_DIRS DEFAULT=/usr/local/share:/usr/share:/var/lib/flatpak/exports/share:${HOME}/.local/share/flatpak/exports/share
+
 # execute this command to install flatpak plugin for ubuntu software app integration:
 # note that installing the flatpak plugin will also install a deb version of
 # ubuntu software app and results in two ubuntu software apps being installed
