@@ -1,4 +1,10 @@
+# for good old days:
+
 sudo apt-get install firefox
+
+# ubuntu >= 22.04
+
+flatpak install flathub org.mozilla.firefox
 
 # open firefox and type this into url bar and hit enter:
 
