@@ -1,6 +1,11 @@
-# install these:
+### INSTALL BELOW IF YOU WANT SUPPORT BOTH IN BROWSER AND APP ###
 
 sudo apt install gnome-shell-extension-manager
+
+### INSTALL ABOVE IF YOU WANT SUPPORT BOTH IN BROWSER AND APP ###
+
+### INSTALL BELOW AND FOLLOW ALL IF YOU ONLY WANT SUPPORT IN BROWSER ###
+
 sudo apt install gnome-shell-extensions
 
 # go to 'https://extensions.gnome.org' and install the
@@ -9,6 +14,8 @@ sudo apt install gnome-shell-extensions
 # open a terminal and install this:
 
 sudo apt install chrome-gnome-shell
+
+### INSTALL ABOVE AND FOLLOW ALL IF YOU ONLY WANT SUPPORT IN BROWSER ###
 
 # to modify settings of each installed extension, open the 'Gnome Tweaks'
 # app and find the extension in extensions tab.
