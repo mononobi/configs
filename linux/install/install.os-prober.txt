@@ -2,8 +2,17 @@
 # installing some linux distros, the other os does not show up in boot menu.
 # to fix that, execute these commands:
 
+# recommended way:
+
+sudo rm /boot/grub/grub.cfg
+sudo update-grub
+
+# alternate way (may not work):
+
 sudo apt update
 sudo apt upgrade
 sudo apt install os-prober
 sudo os-prober
 sudo update-grub
+
+# restart the PC now.
