@@ -1,10 +1,29 @@
-# for good old days:
+# INSTALL ON UBUNTU <= 21.10:
 
 sudo apt-get install firefox
 
-# ubuntu >= 22.04
+# INSTALL ON UBUNTU >= 22.04:
+
+sudo add-apt-repository ppa:mozillateam/ppa
+
+# execute this at once:
+
+echo '
+Package: *
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+' | sudo tee /etc/apt/preferences.d/mozilla-firefox
+
+# execute these:
+
+echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+sudo apt install firefox
+
+# INSTALL USING FLATPAK (HAS SOME ISSUES):
 
 flatpak install flathub org.mozilla.firefox
+
+# AFTER INSTALLATION:
 
 # open firefox and type this into url bar and hit enter:
 
