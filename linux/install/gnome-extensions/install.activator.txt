@@ -21,6 +21,13 @@ sudo apt install chrome-gnome-shell
 # app and find the extension in extensions tab.
 # on newer versions of Gnome, open the extensions app separately.
 
-# to disable extensions version compatibility check, execute this:
+# to disable extensions version compatibility check for all extensions, execute this:
 
 dconf write /org/gnome/shell/disable-extension-version-validation
+
+# to make older extensions compatible with new gnome version, go to this location:
+
+~/.local/share/gnome-shell/extensions
+
+# go into the extension folder you want and open 'metadata.json' file and
+# add the current gnome version into 'shell-version' list.
