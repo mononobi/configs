@@ -17,6 +17,7 @@ sudo apt install gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.
 
 ## EXECUTE THE BELOW LINE IF YOU WANT PIPEWIRE-MEDIA-SESSION ##
 sudo apt-get install pipewire-media-session
+
 ## EXECUTE THE BELOW LINE IF YOU WANT WIREPLUMBER ##
 sudo apt-get install wireplumber{,-doc} gir1.2-wp-0.4 libwireplumber-0.4-{0,dev}
 
@@ -30,6 +31,7 @@ systemctl --user --now enable pipewire{,-pulse}.{socket,service}
 
 ## EXECUTE THE BELOW LINE IF YOU WANT PIPEWIRE-MEDIA-SESSION ##
 systemctl --user --now enable pipewire-media-session.service
+
 ## EXECUTE THE BELOW LINE IF YOU WANT WIREPLUMBER ##
 systemctl --user --now enable wireplumber.service
 
@@ -45,6 +47,7 @@ sudo apt remove gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2
 
 ## EXECUTE THE BELOW LINE IF YOU HAVE INSTALLED PIPEWIRE-MEDIA-SESSION ##
 sudo apt remove pipewire-media-session
+
 ## EXECUTE THE BELOW LINE IF YOU HAVE INSTALLED WIREPLUMBER ##
 sudo apt remove wireplumber{,-doc} gir1.2-wp-0.4 libwireplumber-0.4-{0,dev}
 
