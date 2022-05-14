@@ -3,10 +3,21 @@
 sudo apt update
 sudo apt -y upgrade
 sudo apt install -y wget
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc
 RELEASE=$(lsb_release -cs)
 echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}"-pgdg main | sudo tee  /etc/apt/sources.list.d/pgdg.list
 cat /etc/apt/sources.list.d/pgdg.list
+
+# open the created file:
+
+sudo nano /etc/apt/sources.list.d/pgdg.list
+
+# and add '[arch=amd64]' to this line after 'deb':
+# deb http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main
+
+# it should become this:
+# deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main
+
 sudo apt update
 
 # change 'VERSION' to the version you want to be installed, for example 14:
@@ -19,6 +30,8 @@ sudo apt -y install postgresql-VERSION
 sudo cp db.conf /etc/postgresql/VERSION/main/conf.d
 
 ########## ↓↓ IF YOU WANT TO LOGIN AS AN INDEPENDENT DATABASE USER IN TERMINAL ↓↓ ##########
+
+# NOTE THAT: this will prevent any non-interactive access to database (such as cronjobs, replication and ...)
 
 # if you want to login as any user in database without
 # having the relevant user in your linux, open 'pg_hba.conf' file:
