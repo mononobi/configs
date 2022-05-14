@@ -3,7 +3,7 @@
 if [ ! -f "/usr/lib/uwsgi/plugins/python38_plugin.so" ]
 then
     echo "Installing uwsgi's python3.8 plugin."
-    apt install python3.8-dev python3-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre3-dev libssl-dev zlib1g-dev
+    apt install python3.8-dev python3-distutils python3.8-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre3-dev libssl-dev zlib1g-dev
     export PYTHON=python3.8
     uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python38"
     mv python38_plugin.so /usr/lib/uwsgi/plugins/python38_plugin.so
