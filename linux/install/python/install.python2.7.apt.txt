@@ -1,7 +1,7 @@
-apt-get install python2.7
+sudo apt-get install python2.7
 
 # ubuntu 18.04
-apt install python-pip
+sudo apt install python-pip
 
 # ubuntu 20.04
 sudo add-apt-repository universe
