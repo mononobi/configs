@@ -1,5 +1,5 @@
 # these packages must be installed to be able to install and build psycopg2 from pip.
-# for some older python versions you must also specify the exact
+# for other python versions you must also specify the exact
 # version, for example python3.6-dev.
 
 sudo apt-get install python-dev python3.7-dev python3.8-dev python3.9-dev python3.10-dev python3.11-dev
