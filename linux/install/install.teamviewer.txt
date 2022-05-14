@@ -2,4 +2,9 @@ wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
 sudo apt install ./teamviewer_amd64.deb
 
 # check for auto updating:
+
 cat /etc/apt/sources.list.d/teamviewer.list
+
+# execute this command to add the PGP key into recommended place:
+
+wget --quiet -O - https://dl.teamviewer.com/download/linux/signature/TeamViewer2017.asc | sudo tee /etc/apt/trusted.gpg.d/teamviewer.asc
