@@ -1,6 +1,7 @@
 ### INSTALL BELOW IF YOU WANT SUPPORT BOTH IN BROWSER AND APP ###
 
 sudo apt install gnome-shell-extension-manager
+sudo apt install gnome-shell-extensions
 
 ### INSTALL ABOVE IF YOU WANT SUPPORT BOTH IN BROWSER AND APP ###
 
