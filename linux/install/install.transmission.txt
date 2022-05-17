@@ -1,21 +1,16 @@
-# installing transmission from their own repo lets you get the latest updates.
-# if your distro already has transmission installed, first remove the installed one.
-# on ubuntu, the installed version can be removed by this command:
+# use one of these two commands for installation, no need to execute both of them (they will install the same thing):
 
-sudo apt-get remove transmission-gtk
+sudo apt-get install transmission
+sudo apt-get install transmission-gtk
 
-# client with gtk gui (recommended):
+# latest client (ubuntu <= 20.10):
 
 sudo add-apt-repository ppa:transmissionbt/ppa
 sudo apt-get update
 sudo apt-get install transmission-gtk transmission-common
 
-# full client with gtk gui and remote and cli access:
+# latest client with remote and cli access (ubuntu <= 20.10):
 
 sudo add-apt-repository ppa:transmissionbt/ppa
 sudo apt-get update
 sudo apt-get install transmission-gtk transmission-cli transmission-common transmission-daemon
-
-# client with qt gui:
-
-sudo apt-get install transmission
