@@ -9,3 +9,8 @@ sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_
 # install pgadmin4:
 
 sudo apt-get install pgadmin4
+
+# after installation, stop and disable apache server which will be installed with pgadmin:
+
+sudo systemctl stop apache2
+sudo systemctl disable apache2
