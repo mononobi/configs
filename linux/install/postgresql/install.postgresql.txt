@@ -31,7 +31,7 @@ sudo cp db.conf /etc/postgresql/VERSION/main/conf.d
 
 ########## ↓↓ IF YOU WANT TO LOGIN AS AN INDEPENDENT DATABASE USER IN TERMINAL ↓↓ ##########
 
-# NOTE THAT: this will prevent any non-interactive access to database (such as cronjobs, replication and ...)
+# NOTE: this will prevent any non-interactive access to database (such as cronjobs, replication and ...)
 
 # if you want to login as any user in database without
 # having the relevant user in your linux, open 'pg_hba.conf' file:
