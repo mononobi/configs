@@ -14,11 +14,11 @@ sudo mkdir /opt/ventoy
 
 # copy the extracted directory into created directory:
 
-cp -r ventoy-X.Y.Z /opt/ventoy/
+sudo cp -r ventoy-X.Y.Z /opt/ventoy/
 
 # rename the copied directory:
 
-mv /opt/ventoy/ventoy-X.Y.Z /opt/ventoy/ventoy-current
+sudo mv /opt/ventoy/ventoy-X.Y.Z /opt/ventoy/ventoy-current
 
 # copy the 'files/ventoy.desktop' file into '~/.local/share/applications':
 
