@@ -20,7 +20,7 @@ dpkg -L plexmediaserver
 # open the above file and uncomment the last line of it.
 
 # then run the below command:
-wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
+wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo tee /etc/apt/trusted.gpg.d/plexmediaserver.asc
 sudo apt update
 
 # now plex media server will be updated through normal os updates.
@@ -42,8 +42,8 @@ sudo usermod -aG plex USERNAME
 
 # you should also set 'plex' as the owner of the directory and symlink:
 
-sudo chown -R plex:plex directory_name
-sudo chmod -R 775 directory_name
+sudo chown -R plex:plex .plexmediaserver
+sudo chmod -R 775 .plexmediaserver
 
 sudo chown -R plex:plex plexmediaserver
 sudo chmod -R 775 plexmediaserver
