@@ -2,4 +2,3 @@ pycharm default jdk runtime:
 /snap/pycharm-community/128/jre64
 
 change it with oracle jdk path from [Help -> Find Action: Switch Boot JDK]
-
