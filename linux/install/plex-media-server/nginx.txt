@@ -3,11 +3,11 @@
 
 # execute this to open 'etc/hosts' file:
 
-sudo vi /etc/hosts
+sudo nano /etc/hosts
 
 # add your custom url instead of 'plex' at the line which contains 'localhost':
 
-127.0.0.1	localhost plex
+127.0.0.1 localhost plex
 
 # you can set any name you want instead of 'plex'.
 # note that if you changed it to another name here, you must
