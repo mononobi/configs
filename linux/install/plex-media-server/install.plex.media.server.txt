@@ -4,16 +4,16 @@
 sudo dpkg -i file_name.deb
 
 # then check status:
-systemctl status plexmediaserver
+sudo systemctl status plexmediaserver
 
 # if it is not running, execute following command to run it:
-systemctl start plexmediaserver
+sudo systemctl start plexmediaserver
 
 # execute this command:
-systemctl enable plexmediaserver
+sudo systemctl enable plexmediaserver
 
 # execute the following command to see the source list file name of plex:
-dpkg -L plexmediaserver
+sudo dpkg -L plexmediaserver
 
 # the file is something like this:
 # /etc/apt/sources.list.d/plexmediaserver.list
@@ -42,11 +42,11 @@ sudo usermod -aG plex USERNAME
 
 # you should also set 'plex' as the owner of the directory and symlink:
 
-sudo chown -R plex:plex .plexmediaserver
-sudo chmod -R 775 .plexmediaserver
+sudo chown -R plex:plex /home/USERNAME/.plexmediaserver
+sudo chmod -R 775 /home/USERNAME/.plexmediaserver
 
-sudo chown -R plex:plex plexmediaserver
-sudo chmod -R 775 plexmediaserver
+sudo chown -R plex:plex /var/lib/plexmediaserver
+sudo chmod -R 775 /var/lib/plexmediaserver
 
 # plex media server executables directory is:
 /usr/lib/plexmediaserver
