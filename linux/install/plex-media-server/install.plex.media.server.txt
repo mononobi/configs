@@ -1,55 +1,88 @@
+# NOTE:
+# change 'mono' to your own username in this guide.
+
 # you should download the plex media server from here:
 # https://www.plex.tv/media-server-downloads/
 # then go to download path and execute:
+
 sudo dpkg -i file_name.deb
 
 # then check status:
+
 sudo systemctl status plexmediaserver
 
 # if it is not running, execute following command to run it:
+
 sudo systemctl start plexmediaserver
 
 # execute this command:
+
 sudo systemctl enable plexmediaserver
 
 # execute the following command to see the source list file name of plex:
+
 sudo dpkg -L plexmediaserver
 
 # the file is something like this:
 # /etc/apt/sources.list.d/plexmediaserver.list
+
 # open the above file and uncomment the last line of it.
 
-# then run the below command:
+# then run the below commands:
+
 wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo tee /etc/apt/trusted.gpg.d/plexmediaserver.asc
 sudo apt update
 
 # now plex media server will be updated through normal os updates.
 
-# plex media server home directory and metadata is:
+# if you want to have all plex metadata and indices folder in another place than the default one, or
+# you want to restore all your metadata after changing the OS you can do the following:
+
+# stop the plex server:
+
+sudo systemctl stop plexmediaserver
+
+# if it is your initial installation, and you don't have any metadata yet, create these folders:
+
+mkdir -p /home/mono/.plexmediaserver/plexmediaserver/Library/Application Support
+mkdir /home/mono/.plexmediaserver/tmp
+mkdir /home/mono/.plexmediaserver/db-backup
+
+# note that if you already have those folders, your user must be the owner of those
+# folders, if it's not, execute these commands:
+
+sudo chown -R mono:mono /home/mono/.plexmediaserver
+sudo chmod -R 775 /home/mono/.plexmediaserver
+
+# delete the default metadata folder:
+
+sudo rm -r /var/lib/plexmediaserver
+
+# copy the 'override.conf' file into this location with these commands
+# (change 'mono' to your own username in the file):
+
+sudo mkdir -p /etc/systemd/system/plexmediaserver.service.d
+sudo cp override.conf /etc/systemd/system/plexmediaserver.service.d
+sudo systemctl daemon-reload
+
+# start the plex server:
+
+sudo systemctl enable plexmediaserver
+sudo systemctl start plexmediaserver
+
+# allow 32400 port in ufw.
+# add all client ips which want to connect to server in plex network settings.
+
+# DEFAULT PATHS:
+
+# plex media server default metadata and index folder is:
 /var/lib/plexmediaserver
-
-# you could create a symlink to another location if you want to store
-# metadata files in another place.
-
-cd /var/lib/
-sudo rm -r plexmediaserver
-sudo ln -s /home/USERNAME/.plexmediaserver/plexmediaserver .
-
-# after creating symlink, you must add your user into 'plex'
-# group to be able to access metadata files without root permission:
-
-sudo usermod -aG plex USERNAME
-
-# you should also set 'plex' as the owner of the directory and symlink:
-
-sudo chown -R plex:plex /home/USERNAME/.plexmediaserver
-sudo chmod -R 775 /home/USERNAME/.plexmediaserver
-
-sudo chown -R plex:plex /var/lib/plexmediaserver
-sudo chmod -R 775 /var/lib/plexmediaserver
 
 # plex media server executables directory is:
 /usr/lib/plexmediaserver
 
-# allow 32400 port in ufw.
-# add all client ips which want to connect to server in plex network settings.
+# plex media server service file is:
+/lib/systemd/system/plexmediaserver.service
+
+# plex media server service drop-in file must be created in:
+/etc/systemd/system/plexmediaserver.service.d/override.conf
