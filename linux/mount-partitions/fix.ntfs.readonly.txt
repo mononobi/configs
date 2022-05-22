@@ -1,0 +1,14 @@
+# if one of the ntfs drives has no write access, try these
+# commands and restart after each one to see if problem is solved:
+
+# SOLUTION 1:
+
+sudo apt-get remove ntfsprogs && sudo apt-get install ntfs-3g
+
+# SOLUTION 2:
+
+sudo ntfsfix /dev/sdXN
+
+# for example:
+
+sudo ntfsfix /dev/sdc2

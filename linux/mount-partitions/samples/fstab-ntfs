@@ -3,14 +3,8 @@
 # Use 'blkid' to print the universally unique identifier for a
 # device; this may be used with UUID= as a more robust way to name devices
 # that works even if disks are added and removed. See fstab(5).
-#
-# <file system> <mount point>   <type>  <options>       <dump>  <pass>
-# / was on /dev/sda2 during installation
-UUID=c3a7e731-019c-47a8-997b-795483ddf3c5 /               ext4    errors=remount-ro 0       1
-# /home was on /dev/sda3 during installation
-UUID=f8a6693f-5231-4eaf-8762-dbfe7b6ab042 /home           ext4    defaults        0       2
-/swapfile                                 none            swap    sw              0       0
-UUID=8A20C43D20C431CD /mnt/data                    ntfs-3g permissions     0       1
+
+UUID=69D467B96923730B /mnt/data                    ntfs-3g permissions     0       1
 UUID=14A46A19A469FE1C /mnt/video                   ntfs-3g permissions     0       1
 UUID=DC5ABA635ABA3A5A /mnt/movies-1                ntfs-3g permissions     0       1
 UUID=C8B6C953B6C942A4 /mnt/movies-2                ntfs-3g permissions     0       1
