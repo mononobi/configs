@@ -1,4 +1,4 @@
-# if you want to put the any application behind nginx to set a
+# if you want to put any application behind nginx to set a
 # custom url for it, do it as follows:
 
 # execute this to open 'etc/hosts' file:
