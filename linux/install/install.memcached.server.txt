@@ -2,8 +2,8 @@ sudo apt-get install memcached
 
 sudo systemctl enable memcached
 
-sudo systemctl start memcached
-
 sudo systemctl stop memcached
+
+sudo systemctl start memcached
 
 sudo systemctl status memcached
