@@ -2,7 +2,7 @@
 
 sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
 
-# add your user into nordvpn group then relogin to system:
+# add your user into 'nordvpn' group then restart the system:
 
 sudo usermod -aG nordvpn USER_NAME
 
