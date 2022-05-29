@@ -11,7 +11,6 @@ redis-cli -h IP_ADDRESS
 
 # start redis server on system startup.
 
-sudo systemctl enable redis
 sudo systemctl enable redis-server
 
 # start redis server.
