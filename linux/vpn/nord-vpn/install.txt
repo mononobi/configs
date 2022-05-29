@@ -20,6 +20,7 @@ nordvpn set autoconnect off
 
 # connect:
 
+nordvpn connect
 nordvpn connect de
 
 # disconnect:
