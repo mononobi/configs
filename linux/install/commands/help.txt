@@ -16,6 +16,11 @@ fi
 
 ######################## PUT ABOVE LINES AT THE END OF THE FILE ########################
 
+# also add this to the final lines of '~/.bashrc' file where 'PATH' is defined.
+# append this to the end of 'PATH' line:
+
+# :~/.local/sbin:~/.local/bin
+
 # then make the copied files executable:
 
 sudo chmod 755 ~/.local/sbin/*

@@ -1,0 +1,38 @@
+# poetry is a python package and dependency manager.
+# it's an alternative to pipenv and others.
+
+# installation:
+
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+
+# add this to the end of '~/.profile' file if it is not already there:
+
+######################## PUT BELOW LINES AT THE END OF THE FILE ########################
+
+# set PATH so it includes poetry's bin if it exists
+if [ -d "$HOME/.poetry/bin" ] ; then
+    PATH="$HOME/.poetry/bin:$PATH"
+fi
+
+######################## PUT ABOVE LINES AT THE END OF THE FILE ########################
+
+# also add this to the final lines of '~/.bashrc' file where 'PATH' is defined.
+# append this to the end of 'PATH' line:
+
+# :~/.poetry/bin
+
+# updating:
+
+poetry self update
+
+# check version:
+
+poetry --version
+
+# uninstallation:
+
+python3 get-poetry.py --uninstall
+
+# poetry default executable path:
+
+# ~/.poetry/bin/
