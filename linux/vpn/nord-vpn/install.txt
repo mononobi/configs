@@ -1,0 +1,23 @@
+# execute this:
+
+sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
+
+# login:
+
+nordvpn login
+
+# set autoconnect on:
+
+nordvpn set autoconnect on
+
+# set autoconnect off:
+
+nordvpn set autoconnect off
+
+# connect:
+
+nordvpn connect de
+
+# disconnect:
+
+nordvpn disconnect
