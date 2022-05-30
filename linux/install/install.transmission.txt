@@ -1,7 +1,6 @@
-# use one of these two commands for installation, no need to execute both of them (they will install the same thing):
+# installation command:
 
 sudo apt-get install transmission
-sudo apt-get install transmission-gtk
 
 # latest client (ubuntu <= 20.10):
 
