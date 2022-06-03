@@ -11,6 +11,17 @@ git pull                                                                [pull ch
 git checkout HEAD .                                                     [restore all locally deleted files]
 git remote set-url origin new-remote-repo-address                       [change the remote address of a local repository]
 git shortlog -sne --since="01 Jan 2015" --before="01 Feb 2015"          [show number of commits per each user in a date range]
+git config user.email "EMAIL_ADDRESS"                                   [set user email for current repo]
+git config user.name "NAME"                                             [set user name for current repo]
+git config --global user.email "EMAIL_ADDRESS"                          [set user email for all repos]
+git config --global user.name "NAME"                                    [set user name for all repos]
 
-# you could also change the url in .git/config file inside your project
-# to change the remote address.
+# you could also change the remote url in '.git/config' file inside your project.
+
+# you could also add the below lines in '.git/config' file inside your project
+# to change the user name and email per repo:
+############################################################
+[user]
+	email = EMAIL_ADDRESS
+	name = NAME
+############################################################
