@@ -16,6 +16,14 @@ fi
 
 ######################## PUT ABOVE LINES AT THE END OF THE FILE ########################
 
+# remove this line from '~/.profile' file if it's there:
+
+######################## REMOVE BELOW LINE AT THE END OF THE FILE ########################
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+######################## REMOVE ABOVE LINE AT THE END OF THE FILE ########################
+
 # also add this to the final lines of '~/.bashrc' file where 'PATH' is defined.
 # append this to the end of 'PATH' line:
 
