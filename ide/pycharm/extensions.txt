@@ -1,0 +1,6 @@
+# these extensions are good to be installed:
+
+.env files support (Adel F)
+Docker (JetBrains)
+Ini (JetBrains)
+Nginx Configuration (meanmail)
