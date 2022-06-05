@@ -1,0 +1,15 @@
+# mesa-utils is a tool to show different graphic card information.
+
+# installation:
+
+sudo apt-get install mesa-utils
+
+# usage:
+
+# show all information:
+
+glxinfo
+
+# show info about video memory:
+
+glxinfo | grep 'memory'
