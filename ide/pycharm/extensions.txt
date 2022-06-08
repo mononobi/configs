@@ -4,3 +4,4 @@
 Docker (JetBrains)
 Ini (JetBrains)
 Nginx Configuration (meanmail)
+EnvFile (Borys Pierov)
