@@ -1,7 +1,9 @@
-# these extensions are good to be installed:
+################ RECOMMENDED EXTENSIONS ################
 
 .env files support (Adel F)
 Docker (JetBrains)
 Ini (JetBrains)
 Nginx Configuration (meanmail)
 EnvFile (Borys Pierov)
+
+########################################################
