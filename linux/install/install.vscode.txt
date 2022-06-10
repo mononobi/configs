@@ -1,3 +1,13 @@
+# install using apt (RECOMMENDED):
+
+# go to 'https://code.visualstudio.com/Download' page and download the latest version.
+# then execute this, it will also add the repository and signing key so
+# the vscode will be updated automatically through normal os updates:
+
+sudo apt install ./DOWNLOADED_FILE.deb
+
+# install using snap (NOT RECOMMENDED because some extensions do not work correctly):
+
 sudo snap install code --classic --channel=latest/stable
 
 # always check for the latest channel before installing:
