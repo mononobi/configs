@@ -12,7 +12,7 @@ tar -xf DOWNLOADED_ARCHIVE.tar.gz
 
 ./FILE_NAME
 
-# now toolbox app is installed. open it from app menu or taskbar and install pycharm from it.
+# now toolbox app is installed. open it from apps menu or taskbar and install pycharm from it.
 
 # install using snap (NOT RECOMMENDED):
 
