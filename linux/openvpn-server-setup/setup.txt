@@ -76,7 +76,7 @@ cd ~/easy-rsa
 
 scp remote_user@server_ip:/home/remote_user/easy-rsa/pki/ca.crt /home/local_user/ca.crt
 
-# copy the private certifcate into your local machine and keep it in a really safe place.
+# copy the private certificate into your local machine and keep it in a really safe place.
 # on your local machine, execute this.
 
 scp remote_user@server_ip:/home/remote_user/easy-rsa/pki/private/ca.key /home/local_user/ca.key
