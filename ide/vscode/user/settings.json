@@ -67,7 +67,7 @@
         "**/.DS_Store": true,
         "**/*.pyc": true,
         "**/__pycache__": true,
-        "**/.env": true,
+        "**/.env": true
     },
     "editor.folding": false,
     "editor.smoothScrolling": true,

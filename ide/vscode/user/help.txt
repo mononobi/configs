@@ -1,2 +1,1 @@
 1. `settings.json` should be placed in `/home/.config/Code/User`
-
