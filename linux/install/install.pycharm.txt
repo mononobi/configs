@@ -24,7 +24,7 @@ sudo snap install pycharm-community --classic --channel=latest/stable
 snap info pycharm-professional
 snap info pycharm-community
 
-################ RECOMMENDED EXTENSIONS ################
+################ RECOMMENDED PLUGINS ################
 
 .env files support (Adel F)
 Docker (JetBrains)
