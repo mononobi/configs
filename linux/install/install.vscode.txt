@@ -26,3 +26,16 @@ Path Intellisense (christian-kohler.path-intellisense)
 Terminal (formulahendry.terminal)
 
 ########################################################
+
+# fixing 'GitLab Workflow' not logging into gitlab after removing personal
+# token from ubuntu passwords or reinstalling the os:
+
+# open the vscode general storage sqlite db file from this path:
+# ~/.config/Code/User/globalStorage/state.vscdb
+
+# in the database, execute this query and save the changes:
+
+delete from ItemTable
+where key = 'GitLab.gitlab-workflow'
+
+# now you can login with your personal access token again in gitlab workflow extension.
