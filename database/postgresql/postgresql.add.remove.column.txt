@@ -1,0 +1,7 @@
+# add column:
+
+alter table TABLE_NAME add column NEW_COLUMN_NAME DATA_TYPE;
+
+# remove column:
+
+alter table TABLE_NAME drop column COLUMN_NAME;

@@ -1,0 +1,10 @@
+# there are two ways to add unique constraints:
+
+# using unique constraint (RECOMMENDED):
+
+alter table TABLE_NAME add constraint CONSTRAINT_NAME unique(column1, column2, ...);
+
+# using unique index:
+
+create unique index INDEX_NAME
+on TABLE_NAME(column1, column2, ...);
