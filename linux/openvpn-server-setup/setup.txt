@@ -199,7 +199,7 @@ push "dhcp-option DNS 208.67.220.220"
 
 ######################################## the below configs are optional and it is best to leave them on default values if there is no need for change ########################################
 
-# optional configs, leave them on default if there is no nedd for change.
+# optional configs, leave them on default if there is no need for change.
 # if you do switch the protocol to TCP, you will also need to change the
 # "explicit-exit-notify" directive’s value from "1" to "0".
 
