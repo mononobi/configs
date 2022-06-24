@@ -1,0 +1,31 @@
+# serve is a simple http server which allows you to run your pre-built js
+# app (react, angular and ...) in production mode for testing.
+
+# first you need to build your app (depending on which tool you're using):
+
+# using npm:
+
+npm build
+
+# using yarn:
+
+yarn build
+
+# now execute this command to install and run 'serve' as a temporary
+# package without really installing it:
+
+npx serve -s BUILD_FOLDER_NAME
+
+# now the app is running on the port which 'serve' will tell you (probably 3000).
+
+# if you want to install serve globally instead, run this (NOT RECOMMENDED):
+
+sudo npm install --location=global serve
+
+# and run the app with this command:
+
+serve -s BUILD_FOLDER_NAME
+
+# 'BUILD_FOLDER_NAME' probably would be one of these depending
+# on which tool you've used to build the app:
+# 'dist' or 'build'
