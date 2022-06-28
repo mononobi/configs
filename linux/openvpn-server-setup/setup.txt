@@ -593,6 +593,11 @@ explicit-exit-notify 0
 
 sudo iptables -t nat -F POSTROUTING
 
+# execute these to allow connection to new ports:
+
+sudo ufw allow 1195/udp
+sudo ufw allow 444/tcp
+
 # now restart ufw:
 
 sudo ufw disable
