@@ -248,7 +248,7 @@ ip route list default
 sudo vi /etc/ufw/before.rules
 
 # add the following lines into the top of the file.
-# remember to change "eth0" with whichever name that you found for public network interface.
+# remember to change "eth0" with whatever name that you found for public network interface.
 # then save and close the file.
 
 
@@ -257,7 +257,7 @@ sudo vi /etc/ufw/before.rules
 *nat
 :POSTROUTING ACCEPT [0:0]
 # Allow traffic from OpenVPN client to eth0 (change to the interface you discovered!)
--A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
 COMMIT
 # END OPENVPN RULES
 
@@ -465,9 +465,9 @@ sudo vi /etc/ufw/before.rules
 
 # add this line in the section you have added earlier in this document.
 # find the section by looking for "START OPENVPN RULES".
-# add this line below the previous line which was "-A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE".
+# add this line below the previous line which was "-A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE".
 
--A POSTROUTING -s 10.8.1.0/8 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.8.1.0/24 -o eth0 -j MASQUERADE
 
 # execute this.
 
@@ -497,13 +497,13 @@ vi make_config_tcp.sh
 # base.conf to base.tcp.conf
 # .ovpn to .tcp.ovpn
 
-# now you could enable and run the tcp server by this commands.
+# now you could enable and run the tcp server by these commands.
 
 sudo systemctl -f enable openvpn-server@server2.service
 sudo systemctl start openvpn-server@server2.service
 
 # generating a single script to create certificates and config files for each client, tcp and udp.
-# exectue this.
+# execute this:
 
 cd ~/client_configs
 touch make_client.sh
@@ -545,4 +545,77 @@ cd ~/client-configs/
 # from server. and anytime you wanted to create new clients you could copy the ca.key into server
 # again. the ca.key file is in "~/easy-rsa/pki/private" folder.
 
-# all the required scripts and files that are described in this guide are available in the scripts folder.
+# all the required scripts and files that are described in this guide are available in the 'scripts' folder.
+
+#################### A NOTE IF YOU HAVE A SERVER WITH MULTIPLE IPv4 ADDRESSES ####################
+
+# if your server has multiple (two or more) IPv4 addresses, and you want to utilize them, you
+# can create a separate 'server.N.conf' file per each IP and protocol (like we did here for
+# tcp and udp protocols for first ip) and configure these values in each one. let's assume
+# our server has a second ip which we call it 'IP2', and the original ip is 'IP1':
+
+# for udp server.
+port 1195
+proto udp
+server 10.8.2.0 255.255.255.0
+explicit-exit-notify 1
+
+# for tcp server:
+port 444
+proto tcp
+server 10.8.3.0 255.255.255.0
+explicit-exit-notify 0
+
+# note that the third part of vpn local ip (the number after 8) in each file must be
+# unique between all files. (0, 1, 2, 3) in our example.
+
+# now open the '/etc/ufw/before.rules' file and change it from current to new:
+
+# current file (if you have enabled both TCP and UDP):
+
+-A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.8.1.0/24 -o eth0 -j MASQUERADE
+
+# new file (if you have enabled both TCP and UDP):
+
+-A POSTROUTING -s 10.8.0.0/24 -o eth0 -j SNAT --to-source IP1
+-A POSTROUTING -s 10.8.1.0/24 -o eth0 -j SNAT --to-source IP1
+-A POSTROUTING -s 10.8.2.0/24 -o eth0 -j SNAT --to-source IP2
+-A POSTROUTING -s 10.8.3.0/24 -o eth0 -j SNAT --to-source IP2
+
+# remember to change "eth0" with whatever name that you found for public network
+# interface (the interface which exposes the 'IP1' not 'IP2'). because we connect
+# to vpn with 'IP1' and then server routes our connection to 'IP2' if we are connecting
+# through the configured port (444 or 1195 here).
+# then save and close the file.
+
+# execute this to clear all previous 'POSTROUTING' rules (IMPORTANT):
+
+sudo iptables -t nat -F POSTROUTING
+
+# now restart ufw:
+
+sudo ufw disable
+sudo ufw enable
+
+# execute this and check the result not containing any conflicting rules for 'POSTROUTING':
+
+sudo iptables-save -t nat
+
+# the correct result must only contain these rules for 'POSTROUTING':
+
+# -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j SNAT --to-source IP1
+# -A POSTROUTING -s 10.8.1.0/24 -o eth0 -j SNAT --to-source IP1
+# -A POSTROUTING -s 10.8.2.0/24 -o eth0 -j SNAT --to-source IP2
+# -A POSTROUTING -s 10.8.3.0/24 -o eth0 -j SNAT --to-source IP2
+
+# now execute these commands for each one of configured OpenVPN servers to restart
+# them (all instances including the ones for 'IP1'):
+
+sudo systemctl stop openvpn-server@server.N.service
+sudo systemctl -f enable openvpn-server@server.N.service
+sudo systemctl start openvpn-server@server.N.service
+
+# note that to replace 'N' with whatever names you've had given to your files.
+
+#################### A NOTE IF YOU HAVE A SERVER WITH MULTIPLE IPv4 ADDRESSES ####################
