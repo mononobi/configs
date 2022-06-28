@@ -24,6 +24,7 @@ IntelliCode (VisualStudioExptTeam.vscodeintellicode)
 npm Intellisense (christian-kohler.npm-intellisense)
 Path Intellisense (christian-kohler.path-intellisense)
 Terminal (formulahendry.terminal)
+vscode-pdf (tomoki1207.pdf)
 
 ########################################################
 
