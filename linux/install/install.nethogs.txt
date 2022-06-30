@@ -1,0 +1,9 @@
+# nethogs is a tool for monitoring which apps are using the network in real time.
+
+# install:
+
+sudo apt install nethogs
+
+# to see current apps which are using network, execute this:
+
+sudo nethogs
