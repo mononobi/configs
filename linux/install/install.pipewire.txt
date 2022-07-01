@@ -53,6 +53,10 @@ sudo apt remove pipewire-media-session
 ## EXECUTE THE BELOW LINE IF YOU HAVE INSTALLED WIREPLUMBER ##
 sudo apt remove wireplumber{,-doc} gir1.2-wp-0.4 libwireplumber-0.4-{0,dev}
 
+# if you did execute the above lines and gui got disappeared, execute this:
+
+sudo apt-get install --reinstall ubuntu-desktop
+
 ################### DO NOT EXECUTE ABOVE LINES, IT WILL RUIN YOUR SYSTEM ###################
 
 sudo apt-get remove --purge blueman && sudo rm -f /var/lib/blueman/network.state
