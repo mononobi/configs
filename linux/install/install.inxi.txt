@@ -1,0 +1,9 @@
+# inxi is a tool which shows hardware and driver info.
+
+# install:
+
+sudo apt install inxi
+
+# to see info including audio info, execute this:
+
+inxi -SMA

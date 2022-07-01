@@ -41,7 +41,9 @@ sudo systemctl enable --now blueman-mechanism.service
 
 pactl info
 
-# to disable PipeWire and revert to PulseAudio, execute these commands:
+# to DISABLE PipeWire and revert to PulseAudio, execute these commands:
+
+################### DO NOT EXECUTE BELOW LINES, IT WILL RUIN YOUR SYSTEM ###################
 
 sudo apt remove gstreamer1.0-pipewire libpipewire-0.3-{0,dev,modules} libspa-0.2-{bluetooth,dev,jack,modules} pipewire{,-{audio-client-libraries,pulse,bin,locales,tests,doc}}
 
@@ -51,10 +53,30 @@ sudo apt remove pipewire-media-session
 ## EXECUTE THE BELOW LINE IF YOU HAVE INSTALLED WIREPLUMBER ##
 sudo apt remove wireplumber{,-doc} gir1.2-wp-0.4 libwireplumber-0.4-{0,dev}
 
+################### DO NOT EXECUTE ABOVE LINES, IT WILL RUIN YOUR SYSTEM ###################
+
 sudo apt-get remove --purge blueman && sudo rm -f /var/lib/blueman/network.state
 
+# go to this folder and remove all files and folders starting with 'pipewire':
+
+cd ~/.config/systemd/user
+
+# execute these commands:
+
+sudo rm -r /usr/share/pipewire/
+
+systemctl --user unmask pulseaudio
 systemctl --user daemon-reload
 systemctl --user --now enable pulseaudio.service pulseaudio.socket
+
+# reboot system and then execute these commands:
+
+sudo apt-get install --reinstall alsa-base pulseaudio
+sudo alsa force-reload
+
+# reboot again and then execute this:
+
+pulseaudio --start
 
 # now execute this to check if PulseAudio is enabled:
 
