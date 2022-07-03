@@ -1,3 +1,5 @@
+# install pipewire AT YOUR OWN RISK, it does not work correctly after a few updates.
+
 # PipeWire is an audio server which has better quality than PulseAudio
 # which is the default on ubuntu and most other distros.
 
