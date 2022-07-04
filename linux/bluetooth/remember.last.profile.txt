@@ -1,0 +1,23 @@
+# this guide will configure pulse-audio to remember the last profile in-use with bluetooth device.
+
+# open the '/etc/pulse/default.pa' file:
+
+sudo nano /etc/pulse/default.pa
+
+# now look in the file contents and find the line which has this:
+
+load-module module-card-restore
+
+# change it to this:
+
+load-module module-card-restore restore_bluetooth_profile=true
+
+# NOTE:
+
+# if there was no line containing the 'load-module module-card-restore' value, add
+# the below line into the file:
+
+load-module module-card-restore restore_bluetooth_profile=true
+
+# save the file and reboot your system.
+# now the selected bluetooth profile will be remembered.
