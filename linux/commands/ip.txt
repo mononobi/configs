@@ -1,0 +1,15 @@
+# show all local and global IPv4 addresses:
+
+ip -4 addr
+
+# show only global IPv4 addresses:
+
+ip -4 addr show scope global
+
+# show all local and global IPv6 addresses:
+
+ip -6 addr
+
+# show only global IPv6 addresses:
+
+ip -6 addr show scope global
