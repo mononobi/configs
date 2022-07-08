@@ -18,4 +18,4 @@ cat ${BASE_CONFIG} \
     <(echo -e '</key>\n<tls-crypt>') \
     ${EASYRSA_DIR}/ta.key \
     <(echo -e '</tls-crypt>') \
-    > ${OUTPUT_DIR}/${1}.ovpn
+    > ${OUTPUT_DIR}/${1}.udp.ovpn

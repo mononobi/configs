@@ -39,7 +39,7 @@ touch vars
 
 # open the vars file.
 
-vi vars
+nano vars
 
 # put these lines inside the file.
 # you could change values as you want, just do not change the last two lines.
@@ -84,13 +84,6 @@ scp remote_user@server_ip:/home/remote_user/easy-rsa/pki/private/ca.key /home/lo
 # execute this on server.
 
 cp ~/easy-rsa/pki/ca.crt /tmp/ca.crt
-
-# you should also copy the ca.crt file in the same location as above, on each client.
-
-cp /path_to_file/ca.crt /tmp/ca.crt
-
-# then, execute this.
-
 sudo cp /tmp/ca.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
 
@@ -106,6 +99,7 @@ sudo cp /home/user_name/easy-rsa/pki/private/vpn-server-ca.key /etc/openvpn/serv
 
 # now execute this and input the password of "ca.key" when prompted.
 
+cd ~/easy-rsa
 ./easyrsa sign-req server vpn-server-ca
 
 # now execute this to copy required files.
@@ -116,7 +110,7 @@ sudo cp /home/user_name/easy-rsa/pki/ca.crt /etc/openvpn/server
 # for extra layer of security, do the following.
 
 cd ~/easy-rsa
-openvpn --genkey --secret ta.key
+openvpn --genkey secret ta.key
 sudo cp ta.key /etc/openvpn/server
 
 # now server is almost ready and we need to create client configs.
@@ -153,7 +147,7 @@ sudo gunzip /etc/openvpn/server/server.conf.gz
 
 # open the config file and edit the contents as described.
 
-sudo vi /etc/openvpn/server/server.conf
+sudo nano /etc/openvpn/server/server.conf
 
 # find the HMAC section of the configuration by searching for the "tls-auth" directive.
 # then comment the first line by adding a ";" to its beginning, and add the second line below it.
@@ -224,7 +218,7 @@ key vpn-server-ca.key
 
 # now open the following file and edit it as described.
 
-sudo vi /etc/sysctl.conf
+sudo nano /etc/sysctl.conf
 
 # now find "net.ipv4.ip_forward = 1" line and uncomment it.
 # then save and close the file.
@@ -245,7 +239,7 @@ ip route list default
 
 # now that you found the public network interface name, open the following file.
 
-sudo vi /etc/ufw/before.rules
+sudo nano /etc/ufw/before.rules
 
 # add the following lines into the top of the file.
 # remember to change "eth0" with whatever name that you found for public network interface.
@@ -264,7 +258,7 @@ COMMIT
 
 # now open the following file and edit as described.
 
-sudo vi /etc/default/ufw
+sudo nano /etc/default/ufw
 
 # change the "DEFAULT_FORWARD_POLICY" as below.
 
@@ -294,7 +288,7 @@ cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf ~/client-conf
 
 # open the created base file.
 
-vi ~/client-configs/base.conf
+nano ~/client-configs/base.conf
 
 # find "remote" and set the server public IP. if you changed the default port, you must also replace it here.
 # you must also set the correct protocol to match the server.conf value.
@@ -346,7 +340,7 @@ touch ~/client-configs/make_config.sh
 
 # open the created file and add the following content to it. then save and close it.
 
-vi ~/client-configs/make_config.sh
+nano ~/client-configs/make_config.sh
 
 ####################### file contents to be added ##########################
 
@@ -406,7 +400,7 @@ sudo apt install openvpn-systemd-resolved
 
 # now open the "client1.ovpn" file on your local machine and uncomment the part related to systemd-resolved.
 
-vi client1.ovpn
+nano client1.ovpn
 
 # now uncomment below lines. then save and close the file.
 
@@ -429,7 +423,7 @@ ls /etc/openvpn
 
 # open the client1.ovpn file on your local machine.
 
-vi client1.ovpn
+nano client1.ovpn
 
 # now uncomment these lines. then save and close it.
 
@@ -446,7 +440,7 @@ sudo cp server.conf server2.conf
 
 # open the new file and edit as follows.
 
-sudo vi server2.conf
+sudo nano server2.conf
 
 # change these values in file. then save and close it.
 
@@ -461,7 +455,7 @@ sudo ufw allow 443/tcp
 
 # open this file and edit as follows.
 
-sudo vi /etc/ufw/before.rules
+sudo nano /etc/ufw/before.rules
 
 # add this line in the section you have added earlier in this document.
 # find the section by looking for "START OPENVPN RULES".
@@ -490,7 +484,7 @@ cp make_config.sh make_config_tcp.sh
 
 # open the file to and edit as follows.
 
-vi make_config_tcp.sh
+nano make_config_tcp.sh
 
 # change these values. then save and close the file.
 
@@ -508,7 +502,7 @@ sudo systemctl start openvpn-server@server2.service
 cd ~/client_configs
 touch make_client.sh
 chmod 700 make_client.sh
-vi make_client.sh
+nano make_client.sh
 
 # copy the following text into opened file. then save and close it.
 
@@ -624,3 +618,12 @@ sudo systemctl start openvpn-server@server.N.service
 # note that to replace 'N' with whatever names you've had given to your files.
 
 #################### A NOTE IF YOU HAVE A SERVER WITH MULTIPLE IPv4 ADDRESSES ####################
+
+# check for the server to be up on different ports:
+
+netstat -lpan | grep :PORT
+
+# for example:
+
+netstat -lpan | grep :1194
+netstat -lpan | grep :443
