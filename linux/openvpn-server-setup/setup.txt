@@ -447,6 +447,19 @@ sudo nano server2.conf
 port 443
 proto tcp
 server 10.8.1.0 255.255.255.0
+
+# if your server has a public or local (link) ipv6, you can add the below line to prevent
+# client's ipv6 leakage.
+# note that if you do not add this line, all clients which have ipv6 are revealed with their
+# real ipv6 to the internet regardless of your server having or not having an ipv6.
+# note that this line will remove ipv6 from client and only exposes ipv4 of vpn server
+# to the internet.
+# to get the expanded version of your server's ipv6, go to this website:
+# https://dnschecker.org/ipv6-expand.php
+# you must replace 'AAAA', 'BBBB' and 'CCCC' with the first three parts of your server's ipv6.
+
+server-ipv6 AAAA:BBBB:CCCC:0124:0000:0000:0000:0000/64
+
 explicit-exit-notify 0
 
 # execute this command.
@@ -548,16 +561,42 @@ cd ~/client-configs/
 # tcp and udp protocols for first ip) and configure these values in each one. let's assume
 # our server has a second ip which we call it 'IP2', and the original ip is 'IP1':
 
-# for udp server.
+# FOR UDP SERVER:
 port 1195
 proto udp
 server 10.8.2.0 255.255.255.0
+
+# if your server has a public or local (link) ipv6, you can add the below line to prevent
+# client's ipv6 leakage.
+# note that if you do not add this line, all clients which have ipv6 are revealed with their
+# real ipv6 to the internet regardless of your server having or not having an ipv6.
+# note that this line will remove ipv6 from client and only exposes ipv4 of vpn server
+# to the internet.
+# to get the expanded version of your server's ipv6, go to this website:
+# https://dnschecker.org/ipv6-expand.php
+# you must replace 'AAAA', 'BBBB' and 'CCCC' with the first three parts of your server's ipv6.
+
+server-ipv6 AAAA:BBBB:CCCC:0125:0000:0000:0000:0000/64
+
 explicit-exit-notify 1
 
-# for tcp server:
+# FOR TCP SERVER:
 port 444
 proto tcp
 server 10.8.3.0 255.255.255.0
+
+# if your server has a public or local (link) ipv6, you can add the below line to prevent
+# client's ipv6 leakage.
+# note that if you do not add this line, all clients which have ipv6 are revealed with their
+# real ipv6 to the internet regardless of your server having or not having an ipv6.
+# note that this line will remove ipv6 from client and only exposes ipv4 of vpn server
+# to the internet.
+# to get the expanded version of your server's ipv6, go to this website:
+# https://dnschecker.org/ipv6-expand.php
+# you must replace 'AAAA', 'BBBB' and 'CCCC' with the first three parts of your server's ipv6.
+
+server-ipv6 AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64
+
 explicit-exit-notify 0
 
 # note that the third part of vpn local ip (the number after 8) in each file must be
