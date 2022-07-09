@@ -13,3 +13,11 @@ ip -6 addr
 # show only global IPv6 addresses:
 
 ip -6 addr show scope global
+
+# show ip addresses (v4 and v6) of a domain:
+
+nslookup DOMAIN
+
+for example:
+
+nslookup google.com
