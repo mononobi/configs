@@ -220,10 +220,16 @@ key vpn-server-ca.key
 
 sudo nano /etc/sysctl.conf
 
-# now find "net.ipv4.ip_forward = 1" line and uncomment it.
-# then save and close the file.
+# now find 'net.ipv4.ip_forward=1' line and uncomment it.
 
-net.ipv4.ip_forward = 1
+net.ipv4.ip_forward=1
+
+# if your server has public or local (link) ipv6, find 'net.ipv6.conf.all.forwarding=1' line
+# and uncomment it.
+
+net.ipv6.conf.all.forwarding=1
+
+# then save and close the file.
 
 # then execute the following command to reload and see the changed config.
 
