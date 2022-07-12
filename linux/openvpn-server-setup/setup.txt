@@ -142,12 +142,15 @@ cp /home/user_name/easy-rsa/pki/issued/client1.crt ~/client-configs/keys/
 
 # now we must configure OpenVPN server.
 
-sudo cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz /etc/openvpn/server/
-sudo gunzip /etc/openvpn/server/server.conf.gz
+sudo cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn/server/server.udp.conf
 
 # open the config file and edit the contents as described.
 
-sudo nano /etc/openvpn/server/server.conf
+sudo nano /etc/openvpn/server/server.udp.conf
+
+# find the 'topology' section and uncomment this line.
+
+topology subnet
 
 # find the HMAC section of the configuration by searching for the "tls-auth" directive.
 # then comment the first line by adding a ";" to its beginning, and add the second line below it.
@@ -211,7 +214,7 @@ explicit-exit-notify 1
 
 # replace "server.crt" and "server.key" with what ever name
 # that you used as CA instance name. we used "vpn-server-ca" in this document.
-# after that, save and close the server.conf file.
+# after that, save and close the 'server.udp.conf' file.
 
 cert vpn-server-ca.crt
 key vpn-server-ca.key
@@ -272,7 +275,7 @@ DEFAULT_FORWARD_POLICY="ACCEPT"
 
 # execute below commands.
 # if you have changed the default port and protocol in
-# server.conf file, you should use the correct values here.
+# server.udp.conf file, you should use the correct values here.
 
 sudo ufw allow 1194/udp
 sudo ufw allow OpenSSH
@@ -282,8 +285,8 @@ sudo ufw enable
 
 # now enable and start the OpenVPN service.
 
-sudo systemctl -f enable openvpn-server@server.service
-sudo systemctl start openvpn-server@server.service
+sudo systemctl -f enable openvpn-server@server.udp.service
+sudo systemctl start openvpn-server@server.udp.service
 
 ##################################### creating script to manage client generation #####################################
 
@@ -317,7 +320,7 @@ group nogroup
 
 ;tls-auth ta.key 1
 
-# mirror the cipher and auth settings that you set in the /etc/openvpn/server/server.conf file.
+# mirror the cipher and auth settings that you set in the /etc/openvpn/server/server.udp.conf file.
 
 cipher AES-256-GCM
 auth SHA256
@@ -439,14 +442,14 @@ down /etc/openvpn/update-resolv-conf
 
 ######################################################## if you want OpenVPN to serve on both tcp and udp ports ########################################################
 
-# execute the command below to copy the server.conf file.
+# execute the command below to copy the 'server.udp.conf' file.
 
 cd /etc/openvpn/server
-sudo cp server.conf server2.conf
+sudo cp server.udp.conf server.tcp.conf
 
 # open the new file and edit as follows.
 
-sudo nano server2.conf
+sudo nano server.tcp.conf
 
 # change these values in file. then save and close it.
 
@@ -512,8 +515,8 @@ nano make_config_tcp.sh
 
 # now you could enable and run the tcp server by these commands.
 
-sudo systemctl -f enable openvpn-server@server2.service
-sudo systemctl start openvpn-server@server2.service
+sudo systemctl -f enable openvpn-server@server.tcp.service
+sudo systemctl start openvpn-server@server.tcp.service
 
 # generating a single script to create certificates and config files for each client, tcp and udp.
 # execute this:
