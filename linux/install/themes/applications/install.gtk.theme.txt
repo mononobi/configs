@@ -2,4 +2,4 @@
 
 # extract the 'Graphite-GTK-Theme.zip' file, then execute this command inside theme folder:
 
-./install.sh -t all -s compact --tweaks rimless --tweaks normal
+./install.sh -t all -s compact --tweaks rimless --tweaks normal --tweaks black

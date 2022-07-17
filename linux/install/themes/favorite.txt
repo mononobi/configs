@@ -10,7 +10,8 @@
 # Material-Originals-Icons-Blue-dark
 
 # Shell:
-# Material-Originals-Shell-40-Blue-Dark
+# Yaru-blue-dark (Gnome > 40)
+# Material-Originals-Shell-40-Blue-Dark (Gnome = 40)
 
 # Grub:
 # theme: tela
