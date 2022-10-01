@@ -6,5 +6,5 @@ sudo blkid
 
 # then replace the fstab file in /etc/fstab
 # the 'fstab.sample' file should be changed according to your partitions.
-# the 'fstab-ntfs' file shows how to mount ntfs partitions.
+# the 'fstab.ntfs' file shows how to mount ntfs partitions.
 # the 'fstab' file is the file to be merged with available file.
