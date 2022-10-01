@@ -6,18 +6,23 @@
 #
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 # / was on /dev/sda2 during installation
-UUID=c3a7e731-019c-47a8-997b-795483ddf3c5 /               ext4    errors=remount-ro 0       1
-# /home was on /dev/sda3 during installation
-UUID=f8a6693f-5231-4eaf-8762-dbfe7b6ab042 /home           ext4    defaults        0       2
-/swapfile                                 none            swap    sw              0       0
-/dev/disk/by-uuid/14A46A19A469FE1C /mnt/video auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/69D467B96923730B /mnt/data auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/DC5ABA635ABA3A5A /mnt/movies-1 auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/C8B6C953B6C942A4 /mnt/movies-2 auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/5ED00889D0086A1B /mnt/archives auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/28D40046D40018A8 /mnt/movies-3 auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/8E9C8E4C9C8E2EB1 /mnt/audio auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/DEFACEEAFACEBE51 /mnt/movies-4 auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/C45E20535E204112 /mnt/movies-5 auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/F2402C58402C25B7 /mnt/movies-6 auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
-/dev/disk/by-uuid/1419FA3333C1111B /mnt/movies-external auto nosuid,nodev,nofail,x-gvfs-show,uid=1000 0 0
+UUID=473b5fca-6de3-4bc3-940e-85c986d4b372 /               ext4    errors=remount-ro 0       1
+# /boot/efi was on /dev/sda1 during installation
+UUID=1441-AD62  /boot/efi       vfat    umask=0077      0       1
+# /home was on /dev/sdb1 during installation
+UUID=a4de046c-dc64-4606-be93-9d71e692c4e9 /home           ext4    defaults        0       2
+#/swapfile                                 none            swap    sw              0       0
+/dev/disk/by-uuid/db158d91-aae5-4a5b-aea4-4c5c77d13861 /mnt/archives auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=ARCHIVES 0 0
+/dev/disk/by-uuid/f7842436-2722-40f2-802e-54c4ec45e878 /mnt/audio auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=AUDIO 0 0
+/dev/disk/by-uuid/55c08a76-6190-41b7-8ba9-065f701998dc /mnt/video auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=VIDEO 0 0
+/dev/disk/by-uuid/2f092931-e309-4a01-a060-71d2b14998f0 /mnt/movies-1 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-1 0 0
+/dev/disk/by-uuid/cd92a34e-2c2b-4669-a279-8d24801344ba /mnt/movies-2 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-2 0 0
+/dev/disk/by-uuid/382939ad-9a94-4812-90cd-a4b8e63027e8 /mnt/movies-3 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-3 0 0
+/dev/disk/by-uuid/e6134539-ddbc-4609-9131-1500028f4ce9 /mnt/movies-4 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-4 0 0
+/dev/disk/by-uuid/d7ef76fd-1964-4201-a5c9-d1ac109a1af0 /mnt/movies-5 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-5 0 0
+/dev/disk/by-uuid/7593844c-4e22-4922-a8e5-9a1126027630 /mnt/movies-6 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-6 0 0
+/dev/disk/by-uuid/6aa88180-f3f9-4501-92f7-92a7c4175308 /mnt/movies-7 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-7 0 0
+/dev/disk/by-uuid/99ef049f-727c-49a1-b4c8-d5c9bd4154c3 /mnt/movies-8 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-8 0 0
+/dev/disk/by-uuid/8d84add2-653d-45ba-a890-cc2f19b3f560 /mnt/movies-9 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-9 0 0
+/dev/disk/by-uuid/dc753780-03ec-418d-bc08-880d1f47d65d /mnt/movies-10 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-10 0 0
+/dev/disk/by-uuid/76800b43-9cd2-44b7-9c03-7e89e3837ba1 /mnt/movies-11 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=MOVIES-11 0 0
