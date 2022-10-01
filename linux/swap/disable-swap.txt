@@ -19,4 +19,7 @@ sudo rm /swapfile
 # execute this command to see if swap is disabled, it should have no output:
 
 sudo swapon --show
+
+# execute this command to see if swap is disabled, it should have '0' value for swap columns:
+
 free -h
