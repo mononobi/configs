@@ -1,0 +1,30 @@
+# if you want to restore a branch which is completely deleted (local and remote) use this guide.
+
+# execute this command and find the commits related to that branch:
+
+git reflog --no-abbrev
+
+# look through all commits and find the related commits. after that execute
+# this command for each one of found commits and see if they work (you should
+# replace 'SHA' with each one of commits sha values):
+
+git checkout SHA
+
+# if it didn't work, and you get an error, try this command:
+
+git fsck --full --no-reflogs --unreachable --lost-found | grep commit | cut -d\  -f3 | xargs -n 1 git log -n 1 --pretty=oneline > .git/lost-found.txt
+
+# now open the created '.git/lost-found.txt' file and look
+# for related commits to your deleted branch.
+
+# if you found a commit, execute this command (you should replace 'SHA'
+# with each one of commits sha values):
+
+git checkout SHA
+
+# after you've checked out successfully, you can browse the code.
+
+# if you want to make a branch from your founded commit, execute
+# this (you should replace 'BRANCH_NAME' with a desirable name):
+
+git checkout -b BRANCH_NAME
