@@ -20,3 +20,8 @@ gsettings set org.gnome.shell.extensions.dash-to-dock customize-alphas true
 gsettings set org.gnome.shell.extensions.dash-to-dock min-alpha 0
 gsettings set org.gnome.shell.extensions.dash-to-dock max-alpha 0
 gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0
+
+# run these commands only as non-root:
+
+# set a custom value for screen blank timeout (3600 is the value in seconds):
+gsettings set org.gnome.desktop.session idle-delay 3600

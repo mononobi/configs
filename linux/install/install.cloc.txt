@@ -1,1 +1,3 @@
+# this app provides a command to count the lines of code in files or folders.
+
 sudo apt install cloc
