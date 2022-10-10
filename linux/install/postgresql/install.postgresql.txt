@@ -29,7 +29,7 @@ sudo apt -y install postgresql-VERSION
 
 sudo cp db.conf /etc/postgresql/VERSION/main/conf.d
 
-########## ↓↓ IF YOU WANT TO LOGIN AS AN INDEPENDENT DATABASE USER IN TERMINAL ↓↓ ##########
+########## ↓↓ IF YOU WANT TO LOGIN AS AN INDEPENDENT DATABASE USER IN TERMINAL (NOT RECOMMENDED) ↓↓ ##########
 
 # NOTE: this will prevent any non-interactive access to database (such as cronjobs, replication and ...)
 
@@ -61,7 +61,7 @@ psql -U DB_USERNAME
 
 psql -U postgres
 
-########## ↑↑ IF YOU WANT TO LOGIN AS AN INDEPENDENT DATABASE USER IN TERMINAL ↑↑ ##########
+########## ↑↑ IF YOU WANT TO LOGIN AS AN INDEPENDENT DATABASE USER IN TERMINAL (NOT RECOMMENDED) ↑↑ ##########
 
 # execute this to set a password for 'postgres' user on database:
 
