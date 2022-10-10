@@ -1,0 +1,9 @@
+# all key files (public and private) which are in '~/.ssh' directory must be
+# set to '600' access level:
+
+cd ~/.ssh
+chmod 600 *
+
+# the '~/.ssh' folder itself must be set to '700' access level:
+
+chmod 700 ~/.ssh
