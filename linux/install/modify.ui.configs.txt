@@ -24,4 +24,8 @@ gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0
 # run these commands only as non-root:
 
 # set a custom value for screen blank timeout (3600 is the value in seconds):
+
+# NOTE: if this command issued any errors or warnings, try to install 'install.dbus.x11.txt'
+# first and then execute this command:
+
 gsettings set org.gnome.desktop.session idle-delay 3600
