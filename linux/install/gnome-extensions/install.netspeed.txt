@@ -3,6 +3,7 @@
 
 # recommended settings:
 
+# device to monitor: default
 # show the icon: off
 # timer: 1000
 # digits: 3
