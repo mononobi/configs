@@ -5,6 +5,7 @@
 
 curl -sSL https://install.python-poetry.org | python3 -
 
+###################################### REMOVE THESE SHIT ######################################
 # add this to the end of '~/.profile' file if it is not already there:
 
 ######################## PUT BELOW LINES AT THE END OF THE FILE ########################
@@ -28,8 +29,9 @@ export PATH="$HOME/.poetry/bin:$PATH"
 # append this to the end of 'PATH' line:
 
 # :~/.poetry/bin
+###################################### REMOVE THESE SHIT ######################################
 
-# updating:
+# updating poetry itself:
 
 poetry self update
 
@@ -43,4 +45,4 @@ curl -sSL https://install.python-poetry.org | python3 - --uninstall
 
 # poetry default executable path:
 
-# ~/.poetry/bin/
+# ~/.local/bin/poetry
