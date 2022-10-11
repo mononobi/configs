@@ -1,0 +1,3 @@
+# this library is needed to be able to set some gsettings configs.
+
+sudo apt install dbus-x11
