@@ -1,0 +1,3 @@
+# blueman is a bluetooth manager app.
+
+sudo apt-get install blueman

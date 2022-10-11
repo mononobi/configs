@@ -1,0 +1,3 @@
+# cpu-x is an alternate tool for cpu-z on linux.
+
+sudo apt-get install cpu-x
