@@ -1,0 +1,9 @@
+# if you've set your account to auto-login and want to prevent asking for keyring
+# password, you can do the following. but bear in mind that this is a security
+# issue to disable keyring password requirement.
+
+# DISABLE KEYRING PASSWORD:
+
+# open the 'Passwords and Keys' app and write click on 'Login' and click on 'Change password'.
+# input the current password and hit enter.
+# now leave both new password fields empty and hit enter.
