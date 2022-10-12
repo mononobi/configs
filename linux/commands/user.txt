@@ -55,4 +55,4 @@ getent group | cut -d: -f1
 
 # create a group:
 
-groupadd GROUP_NAME
+sudo groupadd GROUP_NAME
