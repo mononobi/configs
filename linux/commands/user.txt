@@ -52,3 +52,7 @@ getent group GROUP_NAME
 less /etc/group
 getent group
 getent group | cut -d: -f1
+
+# create a group:
+
+groupadd GROUP_NAME
