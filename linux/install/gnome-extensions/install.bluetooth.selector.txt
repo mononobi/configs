@@ -1,2 +1,8 @@
 # go to 'https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/'
 # page and toggle the install icon.
+
+# recommended settings:
+
+# keep the menu open after toggling the connection: on
+# show battery value: on
+# show battery icon: on
