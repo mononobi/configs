@@ -1,0 +1,21 @@
+# if you want to use any of these icons for any app, do the following:
+
+# copy the icon into this path:
+
+sudo cp ICON_FILE /usr/share/pixmaps
+
+# find the shortcut (.desktop) file of the app, it is likely in one of these locations:
+
+/usr/share/applications
+~/.local/share/applications
+/var/lib/flatpak/exports/share/applications
+~/.gnome/apps
+~/.local/share/flatpak/exports/share/applications
+
+# open the file and change the value of 'Icon' key and set it to
+# the new icon name without file extension. for example:
+
+Icon=regex101
+
+# now reload the ui and the app icon would be changed.
+# reload the ui by holding 'Alt + F2' and writing 'r' and then hitting 'Enter'.
