@@ -1,6 +1,10 @@
 # poetry is a python package and dependency manager.
 # it's an alternative to pipenv and others.
 
+# IMPORTANT: first install the dependencies, otherwise poetry installation will fail:
+
+sudo apt-get install python3-venv
+
 # installation:
 
 curl -sSL https://install.python-poetry.org | python3 -
