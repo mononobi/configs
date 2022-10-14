@@ -1,0 +1,5 @@
+###################### IMPORTANT (DO NOT INSTALL THIS APP) ######################
+
+# proton vpn app for linux is a total garbage. it always crashes, and it could
+# also fuck up your entire network connection even after uninstallation.
+# DO NOT INSTALL IT.
