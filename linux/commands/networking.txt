@@ -1,0 +1,12 @@
+# restart network:
+
+sudo nmcli networking off
+sudo nmcli networking on
+
+# list all network interfaces:
+
+sudo nmcli connection show
+
+# remove a network interface by its UUID from previous command (interfaces list):
+
+sudo nmcli connection delete UUID
