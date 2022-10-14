@@ -16,4 +16,4 @@ sudo apt-get update
 sudo apt-get install protonvpn
 
 # you should create an account or login if you already have one.
-# enjoy the free web without mollas of iran.
+# enjoy the free web without mullas of iran.
