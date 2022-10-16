@@ -1,0 +1,3 @@
+# install plex desktop client (you can access plex using browser if you want):
+
+flatpak install flathub tv.plex.PlexDesktop
