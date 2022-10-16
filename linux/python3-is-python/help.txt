@@ -1,0 +1,9 @@
+# if you don't need to install python2 on your system and also want to prevent some
+# apps raising errors when they're accessing python. you can do the following to let all
+# apps which are accessing python get access to python3 instead:
+
+# execute this command:
+
+ln -s /usr/bin/python3 ~/.local/bin/python
+
+# now you can type python in the terminal and python3 shell will come up.
