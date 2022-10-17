@@ -9,32 +9,6 @@ sudo apt-get install python3-venv
 
 curl -sSL https://install.python-poetry.org | python3 -
 
-###################################### REMOVE THESE SHIT ######################################
-# add this to the end of '~/.profile' file if it is not already there:
-
-######################## PUT BELOW LINES AT THE END OF THE FILE ########################
-
-# set PATH so it includes poetry's bin if it exists
-if [ -d "$HOME/.poetry/bin" ] ; then
-    PATH="$HOME/.poetry/bin:$PATH"
-fi
-
-######################## PUT ABOVE LINES AT THE END OF THE FILE ########################
-
-# remove this line from '~/.profile' file if it's there:
-
-######################## REMOVE BELOW LINE AT THE END OF THE FILE ########################
-
-export PATH="$HOME/.poetry/bin:$PATH"
-
-######################## REMOVE ABOVE LINE AT THE END OF THE FILE ########################
-
-# also add this to the final lines of '~/.bashrc' file where 'PATH' is defined.
-# append this to the end of 'PATH' line:
-
-# :~/.poetry/bin
-###################################### REMOVE THESE SHIT ######################################
-
 # updating poetry itself:
 
 poetry self update
