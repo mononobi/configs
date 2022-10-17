@@ -24,4 +24,4 @@ sudo chown -R :share_group /home/share
 
 sudo chmod -R 2770 /home/share
 
-# now all users must logout and login again to see the share folder.
+# now all users must logout and login again to access the share folder.
