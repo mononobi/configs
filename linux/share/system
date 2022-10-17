@@ -1,0 +1,27 @@
+# to create a shared folder where all users on the same machine
+# can access and modify, do the following:
+
+# create a folder in '/home':
+
+sudo mkdir /home/share
+
+# create a group for all users who you want to give access to the share folder:
+
+sudo addgroup share_group
+
+# add each user into the newly created group:
+
+sudo adduser USER_NAME share_group
+
+# now copy all the initial files and folders into the share folder.
+
+# execute this to make the share group the group owner of the share folder:
+
+sudo chown -R :share_group /home/share
+
+# execute this to make all current and future contents of share folder
+# accessible by the owner and the share group:
+
+sudo chmod -R 2770 /home/share
+
+# now all users must logout and login again to see the share folder.
