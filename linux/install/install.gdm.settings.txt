@@ -1,0 +1,10 @@
+# this app provides a way to customize login screen on gnome-based distros.
+
+# NOTE: you should be using 'gdm' as desktop manager to be able
+# to use this app (it's the default desktop manager on ubuntu).
+
+# the app is currently only available as a flatpak on debian-based distros.
+
+# install using flatpak:
+
+flatpak install flathub io.github.realmazharhussain.GdmSettings
