@@ -34,3 +34,7 @@ threads=VALUE
 6 core + 6 thread -> threads=5
 8 core + 0 thread -> threads=6
 8 core + 8 thread -> threads=7
+
+# note that these values are for when you've set 'Preset' to 'slow'. if you choose higher
+# speeds for 'Preset', you may have to reduce the thread count to get the same amount
+# of cpu utilization.
