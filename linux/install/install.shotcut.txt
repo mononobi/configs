@@ -1,0 +1,5 @@
+# shotcut is a video editor with ability to increase video quality and noise reduction.
+
+# install using flatpak:
+
+flatpak install flathub org.shotcut.Shotcut
