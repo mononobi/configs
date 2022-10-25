@@ -1,17 +1,20 @@
-# if you want to use a profile on windows, comment these
-# lines inside the profile except the first line:
+# if you want to use a profile on non-linux systems, comment these
+# lines inside the profile:
 
-# for clients that do not use systemd-resolved to manage DNS.
-script-security 2
+######### FIRST #########
+
 ; up /etc/openvpn/update-resolv-conf
 ; down /etc/openvpn/update-resolv-conf
 
-# for clients that use systemd-resolved for DNS resolution.
-; script-security 2
+######### SECOND #########
+
 ; up /etc/openvpn/update-systemd-resolved
 ; down /etc/openvpn/update-systemd-resolved
 ; down-pre
 ; dhcp-option DOMAIN-ROUTE .
+
+# to use a profile on linux systems, one of these two
+# must be uncommented (usually the first one will work).
 
 #################################################################################################
 
