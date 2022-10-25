@@ -13,3 +13,13 @@ ssh -i key_file remote_user@remote_server
 # connect to server using password and bypassing local keys, if any.
 
 ssh -o PreferredAuthentications=password remote_user@remote_server
+
+########################################################################################
+
+# create a socks proxy using ssh connection to a remote server:
+
+ssh -f -N -D local_port_no remote_user@remote_server
+
+# note that terminal should be kept open.
+
+########################################################################################
