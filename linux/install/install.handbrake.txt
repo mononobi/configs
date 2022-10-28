@@ -29,11 +29,11 @@ threads=VALUE
 2 core (2 thread)  -> threads=1
 2 core (4 thread)  -> threads=2
 4 core (4 thread)  -> threads=2
-4 core (8 thread)  -> threads=6
-6 core (6 thread)  -> threads=4
-6 core (12 thread) -> threads=10
-8 core (8 thread)  -> threads=6
-8 core (16 thread) -> threads=14
+4 core (8 thread)  -> threads=5
+6 core (6 thread)  -> threads=3
+6 core (12 thread) -> threads=7
+8 core (8 thread)  -> threads=5
+8 core (16 thread) -> threads=10
 
 # note that these values are for when you've set 'Preset' to 'slow'. if you choose higher
 # speeds for 'Preset', you may have to reduce the thread count to get the same amount
