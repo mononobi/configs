@@ -1,0 +1,28 @@
+# to run a command in the background which is detached from the shell, execute this:
+
+nohup COMMAND &
+
+# for example:
+
+nohup python script.py &
+
+# this will execute the command in the background, and you can close the shell
+# without the command being stopped. the output of the command will be saved in
+# a file named 'nohup.out' in the current directory.
+
+# to find the process of the running background command, execute this:
+
+ps -aux | grep COMMAND_NAME
+
+# for example:
+
+ps -aux | grep python
+
+# to kill a background command, execute this after you have
+# found its process id from above command:
+
+kill -9 PROCESS_ID
+
+# for example:
+
+kill -9 56532
