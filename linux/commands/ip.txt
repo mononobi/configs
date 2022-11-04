@@ -18,6 +18,19 @@ ip -6 addr show scope global
 
 nslookup DOMAIN
 
-for example:
+# for example:
 
 nslookup google.com
+
+# show default gateway and subnet (both commands are similar):
+
+ip r
+ip route
+
+# example output if the public ip is '185.248.110.166':
+
+default via 185.248.110.1 dev eth0 onlink
+185.248.110.0/24 dev eth0 proto kernel scope link src 185.248.110.166
+
+# the first line shows default gateway for 'eth0' (185.248.110.1).
+# the second line shows subnet for 'eth0' (185.248.110.0/24).
