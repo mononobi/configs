@@ -1,0 +1,9 @@
+# install using apt (RECOMMENDED):
+
+# download the latest version of the app from here:
+
+https://www.microsoft.com/en-us/microsoft-teams/download-app
+
+# execute this to install:
+
+sudo apt install ./DOWNLOADED_FILE.deb
