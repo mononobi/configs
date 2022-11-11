@@ -5,3 +5,20 @@ sudo dpkg --configure -a
 # get list of installed apt packages:
 
 sudo apt list --installed
+
+# CHANGE REPO SERVER (FOR EXAMPLE FROM REGIONAL TO MAIN SERVER):
+
+# execute this to open the file:
+
+sudo nano /etc/apt/sources.list
+
+# remove the region part from all the urls inside the file.
+# for example if this is a url:
+# http://us.archive.ubuntu.com/ubuntu
+
+# remove the 'us.' from it, so it should become this:
+# http://archive.ubuntu.com/ubuntu
+
+# after you've changed all the urls, execute this command to update the cache:
+
+sudo apt-get update
