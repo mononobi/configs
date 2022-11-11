@@ -1,7 +1,8 @@
 ###################### IMPORTANT (DO NOT INSTALL PROTONVPN APPS) ######################
 
-# proton vpn apps for linux (GUI, CLI) are a total garbage. they always crash, and
-# they also fuck up your entire network connection even after uninstallation.
+# proton vpn apps for linux (GUI, CLI, COMMUNITY CLI) are a total garbage. they
+# always crash, and they also fuck up your entire network connection even after
+# uninstallation.
 # DO NOT INSTALL THEM.
 
 # you can use their openvpn configuration files and connect using openvpn instead.
