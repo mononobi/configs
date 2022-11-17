@@ -34,3 +34,11 @@ default via 185.248.110.1 dev eth0 onlink
 
 # the first line shows default gateway for 'eth0' (185.248.110.1).
 # the second line shows subnet for 'eth0' (185.248.110.0/24).
+
+# getting your system's current public ip (including vpn):
+
+curl checkip.amazonaws.com
+curl ifconfig.me
+curl icanhazip.com
+curl ipecho.net/plain
+curl ifconfig.co
