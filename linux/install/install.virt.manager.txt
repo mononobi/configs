@@ -19,3 +19,26 @@ sudo usermod -aG libvirt USER_NAME
 sudo usermod -aG kvm USER_NAME
 
 # you need to restart the pc for this change to take effect.
+
+######################### CONFIGS FOR INSTALLING WINDOWS 11 GUEST #########################
+
+############################ HYPERVISOR ############################
+# Chipset: Q35
+# Firmware: UEFI x86_64: /usr/share/OVMF/OVMF_CODE_4M.secboot.fd
+
+############################ DISPLAY ############################
+# Type: Spice server
+# Listen type: Address
+# Port: Auto
+
+############################ VIDEO ############################
+# Model: Virtio
+
+############################ TPM ############################
+# Type: Emulated
+# Model: TIS
+# Version: 2.0
+
+############################ NOTE ############################
+# You should also add the virtio libs '.iso' file as a SATA disk to install
+# dependencies after booting into windows.
