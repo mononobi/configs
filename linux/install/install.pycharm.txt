@@ -33,4 +33,24 @@ Nginx Configuration (meanmail)
 EnvFile (Borys Pierov)
 Settings Repository (JetBrains)
 
-########################################################
+################# SYNC IDE SETTINGS #################
+
+# to be able to synchronize your IDE settings, you can create a github
+# repository (preferably private). then you should install the 'Settings Repository'
+# plugin. then from the file menu select 'Manage IDE Settings -> Settings Repository...'.
+# then add the url of your new repository (use https url, not ssh) and then click on
+# one of these options based on what you want to do:
+
+# OVERWRITE REMOTE:
+# if you have just created a settings repository and want to initialize it with your
+# current local settings.
+
+# OVERWRITE LOCAL:
+# if you have installed a new IDE and you want to get all the settings from a remote
+# repository which has been already initialized.
+
+# MERGE:
+# if you want to synchronize your current local settings with remote settings
+# on the repository which has been already initialized.
+
+#####################################################
