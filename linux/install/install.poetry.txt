@@ -24,3 +24,11 @@ curl -sSL https://install.python-poetry.org | python3 - --uninstall
 # poetry default executable path:
 
 # ~/.local/bin/poetry
+
+# to add dependencies using command line, execute this when you are in an active virtual env:
+
+poetry add DEPENDENCY_NAME
+
+# for example:
+
+poetry add Pillow
