@@ -669,9 +669,9 @@ sudo systemctl start openvpn-server@server.N.service
 
 # check for the server to be up on different ports:
 
-netstat -lpan | grep :PORT
+sudo netstat -lpan | grep :PORT
 
 # for example:
 
-netstat -lpan | grep :1194
-netstat -lpan | grep :443
+sudo netstat -lpan | grep :1194
+sudo netstat -lpan | grep :443
