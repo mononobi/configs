@@ -38,7 +38,7 @@
     "theme": "3",
     "traffic_loop_interval": 500,
     "user_agent": "Nekoray/1.0 (Prefer Clash Format)",
-    "vpn_hide_console": false,
+    "vpn_hide_console": true,
     "vpn_impl": 0,
     "vpn_ipv6": false,
     "vpn_mtu": 9000,

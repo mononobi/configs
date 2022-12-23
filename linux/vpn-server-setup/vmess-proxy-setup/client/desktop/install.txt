@@ -17,6 +17,7 @@
 ################# Preferences -> VPN Settings #################
 
 # Strict Route: on
+# Hide Console: on (Windows Only)
 
 ################# Preferences -> Basic Settings -> Common #################
 
