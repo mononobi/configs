@@ -87,6 +87,9 @@ scp server/files/docker-compose.yml USER_NAME@EXTERNAL:~/proxy
 # you can also edit the 'config.json' file to add more users to it or remove
 # some of already defined users. each user will need a separate UUID.
 
+# you should also edit the 'config.json' file and replace 'VPN_SERVER_PUBLIC_IP'
+# with the EXTERNAL server's public ip address in dns section.
+
 # you can create UUID on this website:
 # https://www.uuidgenerator.net/version4
 
