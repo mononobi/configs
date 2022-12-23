@@ -1,0 +1,157 @@
+# this guide will show you how to create a vmess server and an internal proxy
+# to be able to access the free world internet when you live inside a country
+# with a totalitarian regime like china or iran which the free internet is
+# heavily blocked and normal vpn setups do not work.
+
+# for this setup you need two servers:
+
+# 1. a server inside your country where internet is blocked for users but this
+#    server must have access to the outside internet. we call this server 'INTERNAL'
+#    in this guide.
+
+# 2. a server outside your country in the free world where internet is accessible
+#    for all human beings. we call this server 'EXTERNAL' in this guide.
+
+# all operations in this file must be done using a non-root user which is in sudoers list.
+# to add a user into sudoers list, execute below command as root on both servers:
+
+sudo adduser USER_NAME sudo
+
+# note that you can secure both your servers by following the
+# guide at the final part of this file:
+# linux/key-management/ssh.key.for.any.server.txt
+
+# install netstat on both servers:
+
+sudo apt install net-tools
+
+# install ufw on both servers:
+
+sudo apt-get install ufw
+
+# install authbind only on INTERNAL server to be able to perform ssh
+# tunneling on port 80 without root access:
+
+sudo apt-get install authbind
+
+# execute these commands to create and configure required
+# port 80 file for authbind on INTERNAL server:
+
+sudo touch /etc/authbind/byport/80
+sudo chmod 755 /etc/authbind/byport/80
+sudo chown USER_NAME:USER_NAME /etc/authbind/byport/80
+
+# install docker and docker-compose according to these files only on EXTERNAL server:
+# linux/install/docker/install.docker.txt
+# linux/install/docker/install.docker.compose.txt
+
+# both servers should not have anything up on port 80. if nginx is installed
+# you should remove it or change its port from 80 to another port.
+
+# check port 80 is free with this command on both servers:
+
+sudo netstat -ano -p tcp | grep 80
+
+# remove nginx with these commands on both servers if port 80 is busy with nginx:
+
+sudo apt-get remove nginx
+sudo apt autoremove
+
+# update both INTERNAL and EXTERNAL servers to the latest version:
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get full-upgrade
+
+# reboot each server after update is done:
+
+sudo reboot
+
+# make sure both servers have a correct time set by executing this on both:
+
+date
+
+# create this directory on the EXTERNAL server:
+
+mkdir ~/proxy
+
+# execute these commands on your local machine to copy these files
+# into the newly created directory on the EXTERNAL server:
+
+scp server/files/config.json USER_NAME@EXTERNAL:~/proxy
+scp server/files/docker-compose.yml USER_NAME@EXTERNAL:~/proxy
+
+# you should change the value of 'id' of already defined users in
+# 'config.json' file with a new UUID for each user.
+
+# you can also edit the 'config.json' file to add more users to it or remove
+# some of already defined users. each user will need a separate UUID.
+
+# you can create UUID on this website:
+# https://www.uuidgenerator.net/version4
+
+# execute these commands on EXTERNAL server to run the v2ray service:
+
+cd ~/proxy
+docker-compose up -d
+
+# execute this to check if container is up:
+
+docker ps
+
+# execute this to check if port 80 is assigned to v2ray:
+
+sudo netstat -ano -p tcp | grep 80
+
+# note that you may only see the tcp6 port 80 after the above
+# command, that's ok and v2ray is up.
+
+# execute these commands on both servers:
+
+sudo ufw allow OpenSSH
+sudo ufw allow 80
+sudo ufw enable
+
+# now consider INTERNAL server as your local machine and EXTERNAL server as remote server.
+# then create a pair of private and public keys, put the public key on EXTERNAL server
+# and put both keys on INTERNAL server.
+# you can check the below file to guide you through creating keys:
+# linux/key-management/ssh.key.for.any.server.txt
+
+# it is highly recommended to create the keys on INTERNAL server itself to prevent
+# it from leaking during transmission from your local machine to INTERNAL server.
+
+# it is highly recommended to set a really strong password when generating the key pair.
+# because you want to put it on INTERNAL server. and also make sure that you only use
+# this key for connecting to EXTERNAL server and never use it for anything else.
+# this way even if your INTERNAL server provider spies on you, they only can access
+# the EXTERNAL server not all your other servers.
+
+# now test to check if you can ssh from INTERNAL to EXTERNAL server using the
+# generated keys. execute this on INTERNAL server:
+
+ssh -i PRIVATE_KEY_PATH USER_NAME@EXTERNAL
+
+# if the connection was successful, execute this on INTERNAL server:
+
+authbind --deep ssh -f -N -i PRIVATE_KEY_PATH -o GatewayPorts=true -L 80:0.0.0.0:80 USER_NAME@EXTERNAL
+
+# now both servers are ready, and you can configure your clients according
+# to the 'clients' directory guide.
+
+# it may be required that you restart the INTERNAL server once a day to get a fresh
+# ssh tunnel, because ssh tunnel may get exhausted and connection speeds get reduced.
+
+# for this you need to first reboot the INTERNAL server by executing this:
+
+sudo reboot
+
+# after the server is up again, execute this on INTERNAL server to create the ssh tunnel:
+
+authbind --deep ssh -f -N -i PRIVATE_KEY_PATH -o GatewayPorts=true -L 80:0.0.0.0:80 USER_NAME@EXTERNAL
+
+# note that with this configuration, you can point your clients to either connect
+# to INTERNAL server or to connect directly to EXTERNAL server. but connecting to EXTERNAL
+# server usually gives you better connection speeds because there is no ssh tunnel in between.
+# but if you are in a country where you can not access the free internet, you have to point
+# your clients to INTERNAL server.

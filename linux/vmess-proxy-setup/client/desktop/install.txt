@@ -1,0 +1,28 @@
+# download the desktop app for your system from this page:
+# https://github.com/MatsuriDayo/nekoray/releases
+
+# extract the downloaded file and click on the executable or launcher to start the app.
+# after opening the app, configure these values in the app settings:
+
+################# Preferences -> Routing Settings #################
+
+# Sniffing Mode: The sniffing result is used for routing
+# Outbound Domain Strategy: UseIPv4
+# Remote DNS: https://8.8.8.8/dns-query
+# Direct DNS: https://223.5.5.5/dns-query
+# Enable DNS Routing: off
+# Domain Strategy: AsIs
+# Direct--IP: geoip:ir
+
+################# Preferences -> VPN Settings #################
+
+# Strict Route: on
+
+###################################################################
+
+# you can also copy the app settings files provided here into their
+# location in the app directory.
+# for this, copy these files into these locations:
+
+# desktop/files/configs/nekoray.json -> APP_DIRECTORY/config/groups
+# desktop/files/configs/Default -> APP_DIRECTORY/config/routes

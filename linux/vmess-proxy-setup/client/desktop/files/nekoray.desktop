@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Nekoray
+Exec=/home/mono/.nekoray/launcher
+Terminal=false
+Type=Application
+Icon=/home/mono/.nekoray/nekoray.png
+StartupWMClass=Nekoray

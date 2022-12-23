@@ -1,0 +1,11 @@
+# Android:
+# https://play.google.com/store/apps/details?id=moe.matsuri.lite&hl=en&gl=US&pli=1
+
+# iOS:
+# https://apps.apple.com/us/app/shadowlink-shadowsocks-vpn/id1439686518
+
+# after installing the app on your phone, import your profiles by scanning the
+# QR code or copying the link from desktop app.
+
+# on desktop app, right click on each profile you want to share and select:
+# Share -> QR Code and link
