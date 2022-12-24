@@ -1,13 +1,20 @@
 # use these dns addresses in network settings instead of automatic dns.
 # you can also set these in each web browser separately:
 
-# dns over http (encrypted):
+############ DNS OVER HTTP (ENCRYPTED, RECOMMENDED FOR VPN APP OR BROWSER) ############
+
+# all DoH servers are blocked by mullas regime, so you should use them with VPN.
+# if your vpn app supports DoH configuration and also can tunnel dns queries through
+# vpn, you can set them in your vpn app.
+# if your vpn app does not support them or cannot tunnel dns queries through vpn, you
+# can set them in your web browser dns configs, but still you need to have a VPN connection
+# for them to work.
 
 https://8.8.8.8/dns-query
 https://223.5.5.5/dns-query
 https://dns.google/dns-query
 
-# cisco open dns (recommended):
+############ CISCO OPEN DNS (RECOMMENDED FOR SYSTEM DNS CONFIG AS FALLBACK FOR DoH) ############
 
 ####### IPv4 #######
 208.67.222.222
@@ -17,7 +24,7 @@ https://dns.google/dns-query
 2620:119:35::35
 2620:119:53::53
 
-# google:
+############ GOOGLE ############
 
 ####### IPv4 #######
 8.8.8.8
@@ -27,7 +34,7 @@ https://dns.google/dns-query
 2001:4860:4860::8888
 2001:4860:4860::8844
 
-# cloudflare:
+############ CLOUDFLARE ############
 
 ####### IPv4 #######
 1.1.1.1
@@ -37,7 +44,7 @@ https://dns.google/dns-query
 2606:4700:4700::1111
 2606:4700:4700::1001
 
-# cloudflare for mobile:
+############ CLOUDFLARE FOR MOBILE ############
 
 one.one.one.one
 1dot1dot1dot1.cloudflare-dns.com
