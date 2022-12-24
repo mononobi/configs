@@ -46,6 +46,9 @@ sudo ufw allow from 192.168.0.0/16
 
 # allow incoming connections from private network (ex. docker, nekoray and ...):
 
+# note that only ips from 172.16.0.0 to 172.31.255.255 are private and because of
+# that we should set subnet to /12 to only include this range of ips.
+
 sudo ufw allow from 172.16.0.0/12
 
 # block outgoing connections to AisaTech dns servers:
