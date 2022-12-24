@@ -1,0 +1,8 @@
+# to make a file protected (immutable) in a way that no user (including root)
+# can edit, delete, rename or move it, execute this:
+
+sudo chattr +i FILE_NAME
+
+# to make an already protected (immutable) file a normal (mutable) file again, execute this:
+
+sudo chattr -i FILE_NAME

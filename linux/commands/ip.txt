@@ -37,8 +37,16 @@ default via 185.248.110.1 dev eth0 onlink
 
 # getting your system's current public ip (including vpn):
 
+curl ifconfig.co
 curl checkip.amazonaws.com
 curl ifconfig.me
 curl icanhazip.com
 curl ipecho.net/plain
-curl ifconfig.co
+
+# get ip address of a domain using a specific dns resolver:
+
+dig @DNS_RESOLVER_IP DOMAIN
+
+for example:
+
+dig @8.8.8.8 google.com
