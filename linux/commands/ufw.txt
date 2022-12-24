@@ -1,0 +1,87 @@
+# show the status of firewall:
+
+sudo ufw status
+
+# disable firewall:
+
+sudo ufw disable
+
+# enable firewall:
+
+sudo ufw enable
+
+# deny outgoing connection to ip or subnet:
+
+sudo ufw deny out from any to IP_OR_SUBNET
+
+# deny incoming connection from ip or subnet:
+
+sudo ufw deny from IP_OR_SUBNET
+
+# allow incoming connection from ip or subnet:
+
+sudo ufw allow from IP_OR_SUBNET
+
+# show list of defined rules with their number:
+
+sudo ufw status numbered
+
+# delete a defined rule with its number from the above command:
+
+sudo ufw delete RULE_NUMBER
+
+####################### RECOMMENDED RULES FOR LOCAL MACHINE #######################
+
+# deny all incoming connections which don't match any specific rule:
+
+sudo ufw default deny incoming
+
+# allow all outgoing connections which don't match any specific rule:
+
+sudo ufw default allow outgoing
+
+# allow incoming connections from local network (LAN):
+
+sudo ufw allow from 192.168.0.0/16
+
+# allow incoming connections from private network (ex. docker, nekoray and ...):
+
+sudo ufw allow from 172.16.0.0/12
+
+# block outgoing connections to AisaTech dns servers:
+
+sudo ufw deny out from any to 2a06:5484::113
+sudo ufw deny out from any to 2a06:5484::114
+
+####################### RECOMMENDED RULES FOR DIFFERENT SERVERS #######################
+
+# deny all incoming connections which don't match any specific rule:
+
+sudo ufw default deny incoming
+
+# allow all outgoing connections which don't match any specific rule:
+
+sudo ufw default allow outgoing
+
+# allow incoming ssh connection to server (both are the same):
+
+sudo ufw allow OpenSSH
+sudo ufw allow 22
+
+# allow incoming connections to http port (both are the same):
+
+sudo ufw allow http
+sudo ufw allow 80
+
+# allow incoming connections to https port (both are the same):
+
+sudo ufw allow https
+sudo ufw allow 443
+
+# allow incoming connections to openvpn default tcp port:
+
+sudo ufw allow 443/tcp
+
+# allow incoming connections to openvpn default udp port:
+
+sudo ufw allow 1194/udp
