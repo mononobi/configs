@@ -18,8 +18,23 @@ ssh -o PreferredAuthentications=password remote_user@remote_server
 
 # create a socks proxy using ssh connection to a remote server:
 
+# the first command has some limitations and can only be used on a local machine
+# and terminal should be kept open:
+
 ssh -f -N -D local_port_no remote_user@remote_server
 
-# note that terminal should be kept open.
+# the second command is more universal and can be used on both local and remote
+# machines and terminal could be closed:
+
+ssh -f -N -i private_key_path -o GatewayPorts=true -L 5000:0.0.0.0:5000 remote_user@remote_server
+
+# note that if you want to bind to ports below 1024 (ex. 80) you should either execute
+# this command as root which will force you to also enable root login on remote machine:
+
+sudo ssh -f -N -i private_key_path -o GatewayPorts=true -L 80:0.0.0.0:80 root@remote_server
+
+# or you can use authbind which allows you to bind to ports below 1024 without root:
+
+authbind --deep ssh -f -N -i private_key_path -o GatewayPorts=true -L 80:0.0.0.0:80 remote_user@remote_server
 
 ########################################################################################

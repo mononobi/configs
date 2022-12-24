@@ -1,0 +1,10 @@
+# authbind allows you to perform commands which will bind to ports
+# below 1024 without root access.
+
+sudo apt-get install authbind
+
+# example usage:
+
+authbind --deep COMMAND
+
+authbind --deep ssh -f -N -i private_key_path -o GatewayPorts=true -L 80:0.0.0.0:80 remote_user@remote_server
