@@ -31,3 +31,37 @@
 
 # desktop/files/configs/nekoray.json -> APP_DIRECTORY/config/groups
 # desktop/files/configs/Default -> APP_DIRECTORY/config/routes
+
+########################### LINUX ONLY ###########################
+
+# to create an app icon for nekoray on linux, do the following:
+
+# stop the vpn and proxy if they are already connected and close the app from the tray.
+# move the app folder into your home directory and make it hidden:
+
+mv nekoray ~/.nekoray
+
+# modify the 'nekoray.desktop' file and set your username instead of
+# 'mono' in 'Icon' and 'Exec' values.
+# copy the modified file into shortcuts location:
+
+cp nekoray.desktop ~/.local/share/applications
+
+# now reset the ui this way:
+# press Alt and F2, then input r in the form and hit enter.
+# now the app icon is shown on applications list.
+
+# IMPORTANT NOTE ONLY ON LINUX:
+
+# the nekoray linux app has a bug which leads to remote dns queries not going through the
+# vpn tunnel, and as DoH servers are already blocked in iran, it always falls back to system
+# dns which is not encrypted and prevents many blocked sites from opening because mullahs
+# read all dns queries and drop them if they are for a blocked site.
+# to overcome this, you should set DoH in your browsers, this way all dns queries will go
+# through the vpn tunnel and everything works and your dns queries will not be exposed to
+# mullahs. in each browser you want, set this as dns:
+
+https://8.8.8.8/dns-query
+
+# this problem is not available on windows or android apps. so all remote dns
+# queries on those platforms will go through vpn tunnel by default.

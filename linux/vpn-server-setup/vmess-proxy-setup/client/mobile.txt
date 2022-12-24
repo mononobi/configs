@@ -9,3 +9,26 @@
 
 # on desktop app, right click on each profile you want to share and select:
 # Share -> QR Code and link
+
+# after opening the app, configure these values in the app settings:
+
+########################## Settings ##########################
+
+# Remote DNS: https://8.8.8.8/dns-query
+# Direct DNS: https://223.5.5.5/dns-query
+# Enable DNS Routing: on
+# Show Direct Speed: on
+# Always Show Address: on
+# Domain Resolution Strategy: AsIs
+# Bypass Lan: on
+# Enable Traffic Sniffing: on
+
+########################## Route ##########################
+
+# edit the route 'IP rule for China' and set these values:
+
+# Route Name: IP rule for Iran
+# ip: geoip:ir
+# outbound: Bypass
+
+# now enable this rule in rules list.
