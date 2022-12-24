@@ -1,6 +1,6 @@
 ############################### IPv4 SUBNETTING ###############################
 
-# for IPv4 subnetting is defined like this:
+# IPv4 subnetting is defined like this:
 
 192.168.1.0/24
 
@@ -29,7 +29,7 @@
 
 # note that these ipv6 values are fictional and only for clarification.
 
-# for IPv6 subnetting is defined like this:
+# IPv6 subnetting is defined like this:
 
 AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64
 
