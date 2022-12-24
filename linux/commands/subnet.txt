@@ -1,0 +1,67 @@
+############################### IPv4 SUBNETTING ###############################
+
+# for IPv4 subnetting is defined like this:
+
+192.168.1.0/24
+
+# this includes all ips from 192.168.1.0 to 192.168.1.254
+
+# each part of IPv4 address is 8 bits. and the subnet part defines
+# how many bits of an IPv4 address are constant from left to right.
+
+# examples:
+
+# 192.0.0.0/8 -> this includes ips from 192.0.0.0 to 192.254.254.254
+# /8 means that the first part is constant.
+
+# 192.168.0.0/16 -> this includes ips from 192.168.0.0 to 192.168.254.254
+# /16 means that the first and second parts are constant.
+
+# 192.168.1.0/24 -> this includes ips from 192.168.1.0 to 192.168.1.254
+# /24 means that the first and second and third parts are constant.
+
+# 192.168.1.10/32 -> this only includes a single ip 192.168.1.10
+# /32 means that all parts are constant.
+
+# so the subnet part is always one of /8 or /16 or /24 or /32
+
+############################### IPv6 SUBNETTING ###############################
+
+# note that these ipv6 values are fictional and only for clarification.
+
+# for IPv6 subnetting is defined like this:
+
+AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64
+
+# this includes all ips from AAAA:BBBB:CCCC:0126:0000:0000:0000:0000 to AAAA:BBBB:CCCC:0126:FFFF:FFFF:FFFF:FFFF
+
+# each part of IPv6 address is 16 bits. and the subnet part defines
+# how many bits of an IPv6 address are constant from left to right.
+
+# examples:
+
+# AAAA:0000:0000:0000:0000:0000:0000:0000/16 -> this includes ips from AAAA:0000:0000:0000:0000:0000:0000:0000 to AAAA:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF
+# /16 means that the first part is constant.
+
+# AAAA:BBBB:0000:0000:0000:0000:0000:0000/32 -> this includes ips from AAAA:BBBB:0000:0000:0000:0000:0000:0000 to AAAA:BBBB:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF
+# /32 means that the first and second parts are constant.
+
+# AAAA:BBBB:CCCC:0000:0000:0000:0000:0000/48 -> this includes ips from AAAA:BBBB:CCCC:0000:0000:0000:0000:0000 to AAAA:BBBB:CCCC:FFFF:FFFF:FFFF:FFFF:FFFF
+# /48 means that the first and second and third parts are constant.
+
+# AAAA:BBBB:CCCC:DDDD:0000:0000:0000:0000/64 -> this includes ips from AAAA:BBBB:CCCC:DDDD:0000:0000:0000:0000 to AAAA:BBBB:CCCC:DDDD:FFFF:FFFF:FFFF:FFFF
+# /64 means that the first and second and third and fourth parts are constant.
+
+# AAAA:BBBB:CCCC:DDDD:EEEE:0000:0000:0000/80 -> this includes ips from AAAA:BBBB:CCCC:DDDD:EEEE:0000:0000:0000 to AAAA:BBBB:CCCC:DDDD:EEEE:FFFF:FFFF:FFFF
+# /80 means that the first and second and third and fourth and fifth parts are constant.
+
+# AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:0000:0000/96 -> this includes ips from AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:0000:0000 to AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:FFFF:FFFF
+# /96 means that the first and second and third and fourth and fifth and sixth parts are constant.
+
+# AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:HHHH:0000/112 -> this includes ips from AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:HHHH:0000 to AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:HHHH:FFFF
+# /112 means that the first and second and third and fourth and fifth and sixth and seventh parts are constant.
+
+# AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:HHHH:IIII/128 -> this only includes a single ip AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:HHHH:IIII
+# /128 means that all parts are constant.
+
+# so the subnet part is always one of /16 or /32 or /48 or /64 or /80 or /96 or /112 or /128
