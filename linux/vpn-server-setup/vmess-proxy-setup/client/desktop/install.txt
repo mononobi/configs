@@ -32,6 +32,31 @@
 # desktop/files/configs/nekoray.json -> APP_DIRECTORY/config/groups
 # desktop/files/configs/Default -> APP_DIRECTORY/config/routes
 
+########################### CREATE PROFILES ######################
+
+# to create profiles to connect to INTERNAL or EXTERNAL servers, do the following:
+
+# in the app, go to this menu:
+# Server -> New profile
+
+# input these values in the form:
+
+# Type: VMess
+# Name: a name for your profile
+# Address: the INTERNAL or EXTERNAL server ip
+# Port: 80 (if you have not changed port configuration on your server)
+# UUID: the UUID of one of the clients which you have defined in your 'config.json' on the server
+# Security: chacha20-poly1305
+# Network: ws
+# Path: /graphql
+
+# leave other values unchanged and save the profile.
+
+# to connect to server:
+
+# right click on one of your profiles and select start.
+# now from the top menu select 'VPN Mode' or 'System Proxy'.
+
 ########################### LINUX ONLY ###########################
 
 # to create an app icon for nekoray on linux, do the following:
