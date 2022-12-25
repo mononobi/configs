@@ -18,8 +18,7 @@ ssh -o PreferredAuthentications=password remote_user@remote_server
 
 # create a socks proxy using ssh connection to a remote server:
 
-# the first command has some limitations and can only be used on a local machine
-# and terminal should be kept open:
+# the first command has some limitations and terminal should be kept open:
 
 ssh -f -N -D local_port_no remote_user@remote_server
 

@@ -4,26 +4,27 @@
 
 192.168.1.0/24
 
-# this includes all ips from 192.168.1.0 to 192.168.1.254
+# this includes all ips from 192.168.1.0 to 192.168.1.255
 
 # each part of IPv4 address is 8 bits. and the subnet part defines
 # how many bits of an IPv4 address are constant from left to right.
 
 # examples:
 
-# 192.0.0.0/8 -> this includes ips from 192.0.0.0 to 192.254.254.254
+# 192.0.0.0/8 -> this includes ips from 192.0.0.0 to 192.255.255.255
 # /8 means that the first part is constant.
 
-# 192.168.0.0/16 -> this includes ips from 192.168.0.0 to 192.168.254.254
+# 192.168.0.0/16 -> this includes ips from 192.168.0.0 to 192.168.255.255
 # /16 means that the first and second parts are constant.
 
-# 192.168.1.0/24 -> this includes ips from 192.168.1.0 to 192.168.1.254
+# 192.168.1.0/24 -> this includes ips from 192.168.1.0 to 192.168.1.255
 # /24 means that the first and second and third parts are constant.
 
 # 192.168.1.10/32 -> this only includes a single ip 192.168.1.10
 # /32 means that all parts are constant.
 
-# so the subnet part is always one of /8 or /16 or /24 or /32
+# so the subnet part is mostly one of /8 or /16 or /24 or /32
+# subnet part may also be another values from /0 to /32 but its concept is more complicated.
 
 ############################### IPv6 SUBNETTING ###############################
 
@@ -64,4 +65,19 @@ AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64
 # AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:HHHH:IIII/128 -> this only includes a single ip AAAA:BBBB:CCCC:DDDD:EEEE:GGGG:HHHH:IIII
 # /128 means that all parts are constant.
 
-# so the subnet part is always one of /16 or /32 or /48 or /64 or /80 or /96 or /112 or /128
+# so the subnet part is mostly one of /16 or /32 or /48 or /64 or /80 or /96 or /112 or /128
+# subnet part may also be another values from /0 to /128 but its concept is more complicated.
+
+############################### ABOUT PRIVATE IPv4 ###############################
+
+# these subnets are defined as private ip addresses and are not available on public internet:
+
+# 192.168.0.0/16 -> LAN
+# ranging from 192.168.0.0 to 192.168.255.255
+
+# 172.16.0.0/12 -> Private Network (ex. docker, tun and ...)
+# ranging from 172.16.0.0 to 172.31.255.255
+
+# 127.0.0.0/8 -> localhost (loopback)
+# ranging from 127.0.0.0 to 127.255.255.255
+# each device has its own localhost and no other device can access another device's localhost.
