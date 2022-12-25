@@ -81,3 +81,5 @@ AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64
 # 127.0.0.0/8 -> localhost (loopback)
 # ranging from 127.0.0.0 to 127.255.255.255
 # each device has its own localhost and no other device can access another device's localhost.
+# for example if you run a docker container in your pc, the localhost of your pc and the
+# localhost inside the container are different and cannot see each other.
