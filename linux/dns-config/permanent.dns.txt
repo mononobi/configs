@@ -8,7 +8,7 @@ sudo systemctl status resolvconf.service
 # adding new dns servers:
 sudo vi /etc/resolvconf/resolv.conf.d/head
 
-# add new dns servers into file and save it.
+# add new dns servers into the file and save it.
 # nameserver ip1
 # nameserver ip2
 
