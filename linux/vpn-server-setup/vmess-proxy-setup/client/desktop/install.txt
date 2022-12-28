@@ -10,9 +10,34 @@
 # Outbound Domain Strategy: UseIPv4
 # Remote DNS: https://8.8.8.8/dns-query
 # Direct DNS: https://223.5.5.5/dns-query
-# Enable DNS Routing: on
+# Enable DNS Routing: off
 # Domain Strategy: AsIs
-# Direct--IP: geoip:ir
+
+# click on 'Custom (global)' button on this form and copy and replace
+# the below json config into it and then click on 'Format JSON' and save the data:
+
+############### JSON ###############
+
+{
+    "rules": [
+        {
+            "ip": [
+                "geoip:ir",
+                "192.168.0.0/16",
+                "172.16.0.0/12"
+            ],
+            "outboundTag": "direct",
+            "type": "field"
+        },
+        {
+            "network": "tcp,udp",
+            "outboundTag": "proxy",
+            "type": "field"
+        }
+    ]
+}
+
+############### JSON ###############
 
 ################# Preferences -> VPN Settings #################
 
@@ -22,6 +47,9 @@
 ################# Preferences -> Basic Settings -> Common #################
 
 # HTTP Listen Port Enable: on
+# Test URL: https://www.google.com
+# Concurrent: 1
+# Loglevel: none
 
 ###################################################################
 
@@ -76,17 +104,34 @@ cp nekoray.desktop ~/.local/share/applications
 # press Alt and F2, then input r in the form and hit enter.
 # now the app icon is shown on applications list.
 
-# IMPORTANT NOTE ONLY ON LINUX:
+# IMPORTANT BUG (OR BEHAVIOR) ONLY ON LINUX:
 
 # the nekoray linux app has a bug which leads to remote dns queries not going through the
 # vpn tunnel, and as DoH servers are already blocked in iran, it always falls back to system
 # dns which is not encrypted and prevents many blocked sites from opening because mullahs
 # read all dns queries and drop them if they are for a blocked site.
-# to overcome this, you should set DoH in your browsers, this way all dns queries will go
-# through the vpn tunnel and everything works and your dns queries will not be exposed to
+# to overcome this, you have two options:
+
+# OPTION 1 (RECOMMENDED):
+
+# set permanent dns servers in 'resolve.conf' file using the guide available
+# in 'linux/dns-config/permanent.dns.txt' file.
+# this way all system dns queries would also go through vpn tunnel.
+# note that if you edit the 'resolve.conf' file manually, on each reboot the dns servers
+# will reset to default. so follow the guide carefully.
+
+# OPTION 2:
+
+# set DoH server in your browser dns config, this way all dns queries will go through
+# the vpn tunnel and everything works and your dns queries will not be exposed to
 # mullahs. in each browser you want, set this as dns:
 
 https://8.8.8.8/dns-query
 
-# this problem is not available on windows or android apps. so all remote dns
+# if you choose option 2, in some browsers (chrome, chromium and ...) you can not access
+# the internet if vpn is off. because all DoH servers are blocked by mullahs and these
+# browsers do not fall back to legacy dns if secure dns is enabled. but firefox will
+# fall back to legacy dns if secure dns is not reachable.
+
+# this bug is not available on windows or android apps. so all remote dns
 # queries on those platforms will go through vpn tunnel by default.
