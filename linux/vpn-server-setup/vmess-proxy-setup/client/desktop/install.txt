@@ -53,12 +53,11 @@
 
 ###################################################################
 
-# you can also copy the app settings files provided here into their
-# location in the app directory.
-# for this, copy these files into these locations:
+# you can also copy the app setting file provided here into its
+# location in the app directory. for this, copy this file into
+# this location:
 
 # desktop/files/configs/nekoray.json -> APP_DIRECTORY/config/groups
-# desktop/files/configs/Default -> APP_DIRECTORY/config/routes
 
 ########################### CREATE PROFILES ######################
 
@@ -78,12 +77,16 @@
 # Network: ws
 # Path: /graphql
 
-# leave other values unchanged and save the profile.
+# leave other fields unchanged and save the profile.
 
 # to connect to server:
 
 # right click on one of your profiles and select start.
 # now from the top menu select 'VPN Mode' or 'System Proxy'.
+
+# note that if you choose 'System Proxy', some apps may not route through the proxy and
+# you have to configure those apps manually. but 'VPN Mode' will route all apps through
+# proxy automatically.
 
 ########################### LINUX ONLY ###########################
 
@@ -116,7 +119,7 @@ cp nekoray.desktop ~/.local/share/applications
 
 # set permanent dns servers in 'resolve.conf' file using the guide available
 # in 'linux/dns-config/permanent.dns.txt' file.
-# this way all system dns queries would also go through vpn tunnel.
+# this way all system dns queries would go through the vpn tunnel.
 # note that if you edit the 'resolve.conf' file manually, on each reboot the dns servers
 # will reset to default. so follow the guide carefully.
 
