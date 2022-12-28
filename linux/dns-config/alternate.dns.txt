@@ -1,4 +1,4 @@
-# use these dns addresses in network settings instead of automatic dns.
+# use these dns addresses in network settings and turn off automatic dns.
 # you can also set these in each web browser separately:
 
 ############ DNS OVER HTTP (ENCRYPTED, RECOMMENDED FOR VPN APP OR BROWSER) ############
@@ -10,11 +10,13 @@
 # can set them in your web browser dns configs, but still you need to have a VPN connection
 # for them to work.
 
+#### GOOGLE ####
+
 https://8.8.8.8/dns-query
 https://223.5.5.5/dns-query
 https://dns.google/dns-query
 
-############ CISCO OPEN DNS (RECOMMENDED FOR SYSTEM DNS CONFIG AS FALLBACK FOR DoH) ############
+############ CISCO OPENDNS (RECOMMENDED FOR SYSTEM DNS CONFIG AS FALLBACK) ############
 
 ####### IPv4 #######
 208.67.222.222
@@ -24,7 +26,7 @@ https://dns.google/dns-query
 2620:119:35::35
 2620:119:53::53
 
-############ GOOGLE ############
+############ GOOGLE (RECOMMENDED FOR PERMANENT SYSTEM DNS) ############
 
 ####### IPv4 #######
 8.8.8.8

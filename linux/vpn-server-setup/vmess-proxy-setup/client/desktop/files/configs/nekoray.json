@@ -29,7 +29,7 @@
     "remote_dns": "https://8.8.8.8/dns-query",
     "skip_cert": false,
     "sniffing_mode": 1,
-    "spmode": 0,
+    "spmode": 2,
     "sub_clear": false,
     "sub_insecure": false,
     "sub_use_proxy": false,

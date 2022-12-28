@@ -124,13 +124,13 @@ cp nekoray.desktop ~/.local/share/applications
 # will reset to default. so follow the guide carefully. you can set these three
 # dns servers as permanent nameservers:
 
-nameserver 208.67.222.222
-nameserver 208.67.220.220
-nameserver 2620:119:35::35
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+nameserver 2001:4860:4860::8888
 
 # OPTION 2:
 
-# set DoH server in your browser dns config, this way all dns queries will go through
+# set a DoH server in your browser dns config, this way all dns queries will go through
 # the vpn tunnel and everything works and your dns queries will not be exposed to
 # mullahs. in each browser you want, set this as dns:
 
@@ -138,8 +138,8 @@ https://8.8.8.8/dns-query
 
 # if you choose the option 2, in some browsers (chrome, chromium and ...) you can not access
 # the internet if vpn is off. because all DoH servers are blocked by mullahs and these
-# browsers do not fall back to legacy dns if secure dns is enabled. but firefox will
-# fall back to legacy dns if secure dns is not reachable.
+# browsers do not fall back to system dns if secure dns is enabled. but firefox will
+# fall back to system dns if secure dns is not reachable.
 
-# this bug is not available on windows or android apps. so all remote dns
+# this bug is not available on windows and android apps. so all remote dns
 # queries on those platforms will go through vpn tunnel by default.

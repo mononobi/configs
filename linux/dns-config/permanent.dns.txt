@@ -5,15 +5,25 @@ sudo systemctl start resolvconf.service
 sudo systemctl enable resolvconf.service
 sudo systemctl status resolvconf.service
 
-# adding new dns servers:
-sudo vi /etc/resolvconf/resolv.conf.d/head
+# opening the file to add new dns servers:
 
-# add new dns servers into the file and save it.
-# nameserver ip1
-# nameserver ip2
+sudo nano /etc/resolvconf/resolv.conf.d/head
 
-# restart service
+# add new dns servers into the file and save it:
+
+# nameserver IPv4-1
+# nameserver IPv4-2
+# nameserver IPv6
+
+# restart the service:
+
 sudo systemctl restart resolvconf.service
 
-# check new dns servers are written to file:
-sudo less /etc/resolv.conf
+# update the 'resolve.conf' file and enable future updates:
+
+sudo resolvconf --enable-updates
+sudo resolvconf -u
+
+# check new dns servers are written to 'resolve.conf' file:
+
+sudo cat /etc/resolv.conf
