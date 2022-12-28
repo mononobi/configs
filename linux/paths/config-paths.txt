@@ -7,6 +7,10 @@
 
 /etc/resolv.conf
 
+# dns server switch config:
+
+/etc/nsswitch.conf
+
 # host names:
 
 /etc/hosts

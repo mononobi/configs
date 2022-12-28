@@ -3,3 +3,7 @@ sudo apt-get upgrade -y
 sudo apt autoremove -y
 sudo flatpak update -y
 sudo snap refresh
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+sudo systemctl stop apache2.service
+sudo systemctl disable apache2.service

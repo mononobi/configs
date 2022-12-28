@@ -5,7 +5,7 @@ sudo systemctl start resolvconf.service
 sudo systemctl enable resolvconf.service
 sudo systemctl status resolvconf.service
 
-# opening the file to add new dns servers:
+# open this file to add new dns servers:
 
 sudo nano /etc/resolvconf/resolv.conf.d/head
 
@@ -14,6 +14,8 @@ sudo nano /etc/resolvconf/resolv.conf.d/head
 # nameserver IPv4-1
 # nameserver IPv4-2
 # nameserver IPv6
+
+# note that the maximum number of servers is 3 and the rest will be ignored.
 
 # restart the service:
 
@@ -27,3 +29,67 @@ sudo resolvconf -u
 # check new dns servers are written to 'resolve.conf' file:
 
 sudo cat /etc/resolv.conf
+
+############################ PREVENTING DNS LEAKS ############################
+
+# you should also disable 'systemd-resolved' service to prevent dns leaks.
+# 'systemd-resolved' has an issue which sends dns queries to '127.0.0.53' even when you
+# have configured remote dns servers in '/etc/resolv.conf' file, and those dns queries
+# won't go through some vpn tunnels and interfaces (ex. nekoray).
+
+# to stop and disable it, execute this:
+
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+
+# each time 'systemd-resolved' gets updated, it may be enabled again.
+# so you should disable it afterward.
+
+# after disabling it, the '127.0.0.53' ip would not listen on port 53 anymore.
+# but disabling 'systemd-resolved' will not cause any apps to fail, because no app directly
+# uses it. in most cases there is a config file for an app or a platform (ex. flatpak)
+# which tries all available dns resolvers and if 'systemd-resolved' fails,
+# another resolver would be used (ex. /etc/resolv.conf).
+
+# after disabling 'systemd-resolved' you should also check '/etc/nsswitch.conf' file:
+
+sudo nano /etc/nsswitch.conf
+
+# if the 'files' line has 'resolve' in it, you should remove 'resolve' from it.
+
+# for example:
+
+# files mdns4_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns mymachines
+
+# you should remove 'resolve' and '[!UNAVAIL=return]' and the line should become like this:
+
+# files mdns4_minimal [NOTFOUND=return] dns mymachines
+
+# note that by disabling 'systemd-resolved', the dns servers which are set in
+# network manager gui, will never be used.
+
+############################ TEST TO SEE WHETHER IT WORKS ############################
+
+# connect to your vpn or proxy which you trust as a vpn which has no dns leaks.
+
+# open a wireshark capture window on the connected interface (wired or wireless).
+# apply this filter in filter box and hit enter:
+# udp.port == 53
+
+# now execute these commands one by one and see if any dns queries related to these
+# commands goes through the default gateway or not.
+# if you are connected to a vpn or proxy, no dns queries should go out through default
+# gateway and all of them must go through vpn tunnel or interface.
+
+curl google.com
+dig yahoo.com
+ping youtube.com
+
+# if you have flatpak installed, also test this command, because flatpak also
+# tries 'systemd-resolved' for dns queries which leads to dns leak:
+
+flatpak run --share=network --devel --command=python3 org.freedesktop.Platform/x86_64/21.08 -c 'import socket; print(socket.gethostbyname_ex("github.com"))'
+
+# if any of the above commands were sending dns queries through wired or wireless interface
+# and not through the vpn or proxy interface, it means that you have to go through all the
+# changes which had been mentioned above to find the issue.
