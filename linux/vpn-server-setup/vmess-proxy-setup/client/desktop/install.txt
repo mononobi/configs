@@ -124,9 +124,9 @@ cp nekoray.desktop ~/.local/share/applications
 # will reset to default. so follow the guide carefully. you can set these three
 # dns servers as permanent nameservers:
 
-208.67.222.222
-208.67.220.220
-2620:119:35::35
+nameserver 208.67.222.222
+nameserver 208.67.220.220
+nameserver 2620:119:35::35
 
 # OPTION 2:
 
