@@ -1,0 +1,35 @@
+# note that following this guide, will not prevent your system from dns leaking when
+# using a vpn. if you want zero dns leaks, follow the 'permanent.dns.secure.txt'
+# file instead.
+
+sudo apt update
+sudo apt install resolvconf
+
+sudo systemctl start resolvconf.service
+sudo systemctl enable resolvconf.service
+sudo systemctl status resolvconf.service
+
+# open this file to add new dns servers:
+
+sudo nano /etc/resolvconf/resolv.conf.d/head
+
+# add new dns servers into the file and save it:
+
+# nameserver IPv4-1
+# nameserver IPv4-2
+# nameserver IPv6
+
+# note that the maximum number of dns servers is 3 and the rest will be ignored.
+
+# restart the service:
+
+sudo systemctl restart resolvconf.service
+
+# update the 'resolv.conf' file and enable future updates:
+
+sudo resolvconf --enable-updates
+sudo resolvconf -u
+
+# check new dns servers are written to 'resolv.conf' file:
+
+sudo cat /etc/resolv.conf

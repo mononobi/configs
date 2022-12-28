@@ -1,38 +1,10 @@
-sudo apt update
-sudo apt install resolvconf
+# following this guide, will prevent your system from any kind of dns leaking when using a vpn.
 
-sudo systemctl start resolvconf.service
-sudo systemctl enable resolvconf.service
-sudo systemctl status resolvconf.service
+# if you have 'resolvconf' installed, remove it:
 
-# open this file to add new dns servers:
+sudo apt remove resolvconf
 
-sudo nano /etc/resolvconf/resolv.conf.d/head
-
-# add new dns servers into the file and save it:
-
-# nameserver IPv4-1
-# nameserver IPv4-2
-# nameserver IPv6
-
-# note that the maximum number of servers is 3 and the rest will be ignored.
-
-# restart the service:
-
-sudo systemctl restart resolvconf.service
-
-# update the 'resolve.conf' file and enable future updates:
-
-sudo resolvconf --enable-updates
-sudo resolvconf -u
-
-# check new dns servers are written to 'resolve.conf' file:
-
-sudo cat /etc/resolv.conf
-
-############################ PREVENTING DNS LEAKS ############################
-
-# you should also disable 'systemd-resolved' service to prevent dns leaks.
+# you should disable 'systemd-resolved' service to prevent dns leaks.
 # 'systemd-resolved' has an issue which sends dns queries to '127.0.0.53' even when you
 # have configured remote dns servers in '/etc/resolv.conf' file, and those dns queries
 # won't go through some vpn tunnels and interfaces (ex. nekoray).
@@ -42,8 +14,12 @@ sudo cat /etc/resolv.conf
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
 
-# each time 'systemd-resolved' gets updated, it may be enabled again.
-# so you should disable it afterward.
+# now reboot the system for changes to take effect:
+
+sudo reboot
+
+# each time 'systemd-resolved' gets updated, it may get enabled again.
+# so you should disable it afterwards.
 
 # after disabling it, the '127.0.0.53' ip would not listen on port 53 anymore.
 # but disabling 'systemd-resolved' will not cause any apps to fail, because no app directly
@@ -68,6 +44,26 @@ sudo nano /etc/nsswitch.conf
 # note that by disabling 'systemd-resolved', the dns servers which are set in
 # network manager gui, will never be used.
 
+# remove the old 'resolv.conf' file:
+
+sudo rm /etc/resolv.conf
+
+# create a new file:
+
+sudo touch /etc/resolv.conf
+
+# open the newly created file:
+
+sudo nano /etc/resolv.conf
+
+# add new dns servers:
+
+# nameserver IPv4-1
+# nameserver IPv4-2
+# nameserver IPv6
+
+# note that the maximum number of dns servers is 3 and the rest will be ignored.
+
 ############################ TEST TO SEE WHETHER IT WORKS ############################
 
 # connect to your vpn or proxy which you trust as a vpn which has no dns leaks.
@@ -81,14 +77,14 @@ sudo nano /etc/nsswitch.conf
 # if you are connected to a vpn or proxy, no dns queries should go out through default
 # gateway and all of them must go through vpn tunnel or interface.
 
-curl google.com
+curl github.com
 dig yahoo.com
 ping youtube.com
 
 # if you have flatpak installed, also test this command, because flatpak also
 # tries 'systemd-resolved' for dns queries which leads to dns leak:
 
-flatpak run --share=network --devel --command=python3 org.freedesktop.Platform/x86_64/21.08 -c 'import socket; print(socket.gethostbyname_ex("github.com"))'
+flatpak run --share=network --devel --command=python3 org.freedesktop.Platform/x86_64/21.08 -c 'import socket; print(socket.gethostbyname_ex("google.com"))'
 
 # if any of the above commands were sending dns queries through wired or wireless interface
 # and not through the vpn or proxy interface, it means that you have to go through all the

@@ -117,11 +117,11 @@ cp nekoray.desktop ~/.local/share/applications
 
 # OPTION 1 (RECOMMENDED):
 
-# set permanent dns servers in 'resolve.conf' file using the guide available
-# in 'linux/dns-config/permanent.dns.txt' file.
+# set permanent dns servers in 'resolv.conf' file using the guide available
+# in 'linux/dns-config/permanent.dns.secure.txt' file.
 # this way all system dns queries would go through the vpn tunnel.
-# note that if you edit the 'resolve.conf' file manually, on each reboot the dns servers
-# will reset to default. so follow the guide carefully. you can set these three
+# note that if you just edit the 'resolv.conf' file manually, on each reboot the dns
+# servers will reset to default. so follow the guide carefully. you can set these three
 # dns servers as permanent nameservers:
 
 nameserver 8.8.8.8

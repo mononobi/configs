@@ -3,7 +3,7 @@
 
 ############ DNS OVER HTTP (ENCRYPTED, RECOMMENDED FOR VPN APP OR BROWSER) ############
 
-# all DoH servers are blocked by mullas regime, so you should use them with VPN.
+# all DoH servers are blocked by mullahs regime, so you should use them with VPN.
 # if your vpn app supports DoH configuration and also can tunnel dns queries through
 # vpn, you can set them in your vpn app.
 # if your vpn app does not support them or cannot tunnel dns queries through vpn, you
