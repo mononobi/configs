@@ -85,8 +85,10 @@
 # now from the top menu select 'VPN Mode' or 'System Proxy'.
 
 # note that if you choose 'System Proxy', some apps may not route through the proxy and
-# you have to configure those apps manually. but 'VPN Mode' will route all apps through
-# proxy automatically.
+# you have to configure those apps manually. there also would be some dns leaks which can
+# not be fixed in 'Proxy Mode'. but 'VPN Mode' will route all apps through
+# proxy automatically and if configured correctly using the following guide, it would
+# have zero dns leaks.
 
 ########################### LINUX ONLY ###########################
 
