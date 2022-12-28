@@ -14,16 +14,22 @@ ssh -i key_file remote_user@remote_server
 
 ssh -o PreferredAuthentications=password remote_user@remote_server
 
-########################################################################################
+########################## LOCAL PORT FORWARDING ##########################
 
-# create a socks proxy using ssh connection to a remote server:
+# note that the client could either be your local machine or another server.
+# this command should be executed on the machine which is defined as client.
+
+# create an ssh tunnel using ssh connection to a remote server:
 
 # the first command has some limitations and terminal should be kept open:
 
 ssh -f -N -D local_port_no remote_user@remote_server
 
-# the second command is more universal and can be used on both local and remote
-# machines and terminal could be closed:
+# the second command is more universal and runs in the background:
+
+ssh -f -N -i private_key_path -o GatewayPorts=true -L local_port_no:remote_address:remote_port_no remote_user@remote_server
+
+for example:
 
 ssh -f -N -i private_key_path -o GatewayPorts=true -L 5000:0.0.0.0:5000 remote_user@remote_server
 
@@ -36,4 +42,21 @@ sudo ssh -f -N -i private_key_path -o GatewayPorts=true -L 80:0.0.0.0:80 root@re
 
 authbind --deep ssh -f -N -i private_key_path -o GatewayPorts=true -L 80:0.0.0.0:80 remote_user@remote_server
 
-########################################################################################
+########################## REMOTE PORT FORWARDING ##########################
+
+# note that the client could either be your local machine or another server.
+# this command should be executed on the machine which is defined as client.
+
+ssh -f -N -i private_key_path -o GatewayPorts=true -R remote_port_no:local_address:local_port_no remote_user@remote_server
+
+########################## NOTE ##########################
+
+# local port forwarding is useful when:
+# 1. you want to access internet on your local machine through a remote server.
+#    for example if your local internet is blocked.
+# 2. you want to access to some ports on remote server from your local machine without having
+#    to expose those server ports on the internet. (much like a corporate vpn)
+
+# remote port forwarding is useful when:
+# 1. you want to expose a port from your local machine on the public internet without
+#    having to buy a static ip and configuring your router for port forwarding.
