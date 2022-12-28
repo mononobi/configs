@@ -131,7 +131,7 @@ cp nekoray.desktop ~/.local/share/applications
 
 https://8.8.8.8/dns-query
 
-# if you choose option 2, in some browsers (chrome, chromium and ...) you can not access
+# if you choose the option 2, in some browsers (chrome, chromium and ...) you can not access
 # the internet if vpn is off. because all DoH servers are blocked by mullahs and these
 # browsers do not fall back to legacy dns if secure dns is enabled. but firefox will
 # fall back to legacy dns if secure dns is not reachable.
