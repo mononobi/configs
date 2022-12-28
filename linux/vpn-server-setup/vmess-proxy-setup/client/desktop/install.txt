@@ -121,7 +121,12 @@ cp nekoray.desktop ~/.local/share/applications
 # in 'linux/dns-config/permanent.dns.txt' file.
 # this way all system dns queries would go through the vpn tunnel.
 # note that if you edit the 'resolve.conf' file manually, on each reboot the dns servers
-# will reset to default. so follow the guide carefully.
+# will reset to default. so follow the guide carefully. you can set these three
+# dns servers as permanent nameservers:
+
+208.67.222.222
+208.67.220.220
+2620:119:35::35
 
 # OPTION 2:
 
