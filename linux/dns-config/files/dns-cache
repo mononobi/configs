@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Description: clears dnsmasq cache when tun0 or nekoray-tun gets connected.
+
+# only perform command if dnsmasq is installed and enabled.
+if [ -f "/usr/sbin/dnsmasq" ] && systemctl --quiet is-enabled dnsmasq ; then
+    if [ $IFACE = "tun0" ] || [ $IFACE = "nekoray-tun" ] ; then
+        systemctl restart dnsmasq
+    fi
+fi

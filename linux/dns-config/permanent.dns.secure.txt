@@ -117,9 +117,16 @@ sudo systemctl status dnsmasq
 # this command to invalidate all cached dns responses. because when you were not
 # connected to vpn, many dns responses may well be spoofed by the mullahs and
 # then cached. so some websites may not open despite you've connected to vpn.
-# the 'dns-reset' command handles this if you use it:
+# the 'dns-reset' command handles this if you use it.
+# you can also reset it manually:
 
 sudo systemctl restart dnsmasq
+
+# you can also copy this file into 'if-up.d' folder to automatically clear dns
+# cache whenever a vpn connects through 'tun0' or 'nekoray-tun' tunnels:
+
+sudo cp files/dns-cache /etc/network/if-up.d
+sudo chmod 755 /etc/network/if-up.d/dns-cache
 
 ######################## TEST WHETHER THE DNS CACHE IS WORKING ########################
 
