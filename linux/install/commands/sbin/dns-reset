@@ -1,1 +1,5 @@
-echo PASSWORD | sudo -S systemctl restart dnsmasq
+echo PASSWORD | sudo -S systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+sudo systemctl stop dnsmasq
+sudo systemctl start dnsmasq
+sudo systemctl enable dnsmasq
