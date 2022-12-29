@@ -1,4 +1,8 @@
-# following this guide, will prevent your system from any kind of dns leaking when using a vpn.
+# following this guide, will prevent your system from any kind of dns leaks when using a vpn.
+
+# dnsmasq is a lightweight dns caching server which speeds up page loading.
+# it is way more convenient and stable than 'systemd-resolved' which is default on ubuntu.
+# and also it does not create dns leaks when accepts dns queries on local address.
 
 # if you have 'resolvconf' installed, remove it:
 
@@ -7,9 +11,10 @@ sudo apt remove resolvconf
 # you should disable 'systemd-resolved' service to prevent dns leaks.
 # 'systemd-resolved' has an issue which sends dns queries to '127.0.0.53' even when you
 # have configured remote dns servers in '/etc/resolv.conf' file, and those dns queries
-# won't go through some vpn tunnels and interfaces (ex. nekoray).
+# which are sent to '127.0.0.53' won't go through some vpn tunnels and
+# interfaces (ex. nekoray), and go out through default gateway instead.
 
-# to stop and disable it, execute this:
+# disable 'systemd-resolved' if it is installed:
 
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
@@ -20,12 +25,16 @@ sudo reboot
 
 # each time 'systemd-resolved' gets updated, it may get enabled again.
 # so you should disable it afterwards.
+# the 'pc-update' command handles this if you use it.
 
-# after disabling it, the '127.0.0.53' ip would not listen on port 53 anymore.
-# but disabling 'systemd-resolved' will not cause any apps to fail, because no app directly
-# uses it. in most cases there is a config file for an app or a platform (ex. flatpak)
-# which tries all available dns resolvers and if 'systemd-resolved' fails,
-# another resolver would be used (ex. /etc/resolv.conf).
+# after disabling 'systemd-resolved' and not replacing it with any other service, the
+# '127.0.0.53' ip would not listen on port 53 anymore. but disabling 'systemd-resolved'
+# will not cause any apps to fail, because no app directly uses it. in most cases there is
+# a config file for an app or a platform (ex. flatpak) which tries all available dns resolvers
+# and if 'systemd-resolved' fails, another resolver would be used (ex. /etc/resolv.conf).
+
+# but we will run 'dnsmasq' on the same ip and port for total compatibility even for
+# apps which may have wrongfully used 'systemd-resolved' listen address directly.
 
 # after disabling 'systemd-resolved' you should also check '/etc/nsswitch.conf' file:
 
@@ -56,24 +65,89 @@ sudo touch /etc/resolv.conf
 
 sudo nano /etc/resolv.conf
 
-# add new dns servers:
+# add new dns servers. note that the first nameserver should always point
+# to where you want to run dnsmasq:
 
+# nameserver 127.0.0.53
 # nameserver IPv4-1
 # nameserver IPv4-2
-# nameserver IPv6
+# nameserver IPv6-1
+# nameserver IPv6-2
 
-# note that the maximum number of dns servers is 3 and the rest will be ignored.
+# note that there is no limit for nameservers with dnsmasq, and you can add as many as
+# you want. dnsmasq will use servers based on their availability.
 
-############################ TEST TO SEE WHETHER IT WORKS ############################
+# install dnsmasq:
 
-# connect to your vpn or proxy which you trust as a vpn which has no dns leaks.
+sudo apt-get install dnsmasq
+
+# open the configuration file:
+
+sudo nano /etc/dnsmasq.conf
+
+# add these values into the file and save it:
+
+listen-address=127.0.0.53
+port=53
+no-ping
+cache-size=5000
+max-cache-ttl=3600
+min-cache-ttl=3600
+
+# you can change these values if you prefer something else.
+# the max value for 'max-cache-ttl' and 'min-cache-ttl' is 3600 seconds.
+# the max value for 'cache-size' is 10000 records.
+# default cache timeout depends on the dns provider but in most cases it is
+# between 1 and 5 minutes. if you live in a hostile country (Iran, China and ...)
+# with aggressive dns spoofing and bandwidth throttling, increasing the dns cache timeout
+# will help you surf the web more conveniently.
+
+# execute this to enable and start dnsmasq:
+
+sudo systemctl enable dnsmasq
+sudo systemctl start dnsmasq
+
+# you can execute this to see the status of dnsmasq service:
+
+sudo systemctl status dnsmasq
+
+######################## IMPORTANT NOTE ########################
+
+# after you connect to a vpn, you should always restart the dnsmasq service with
+# this command to invalidate all cached dns responses. because when you were not
+# connected to vpn, many dns responses may well be spoofed by the mullahs and
+# then cached. so some websites may not open despite you've connected to vpn.
+# the 'dns-reset' command handles this if you use it:
+
+sudo systemctl restart dnsmasq
+
+######################## TEST WHETHER THE DNS CACHE IS WORKING ########################
+
+# execute each of these commands multiple times. for each command, the first call may go
+# to dns provider, so it may have a latency greater than zero (depending on your
+# internet speed), but the consecutive calls should all have zero or near zero latency
+# because they would come from the cache:
+
+dig google.com
+dig facebook.com
+dig yahoo.com
+dig github.com
+
+######################## TEST WHETHER THERE IS ANY DNS LEAKS ########################
+
+# connect to your vpn or proxy.
+
+# restart dnsmasq to invalidate cached values:
+
+sudo systemctl restart dnsmasq
 
 # open a wireshark capture window on the connected interface (wired or wireless).
 # apply this filter in filter box and hit enter:
 # udp.port == 53
 
 # now execute these commands one by one and see if any dns queries related to these
-# commands goes through the default gateway or not.
+# commands goes through the default gateway or not (excluding those 'ICMP' requests
+# which are unreachable).
 # if you are connected to a vpn or proxy, no dns queries should go out through default
 # gateway and all of them must go through vpn tunnel or interface.
 
