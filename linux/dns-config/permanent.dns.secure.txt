@@ -128,7 +128,7 @@ sudo systemctl restart dnsmasq
 sudo cp files/dns-cache /etc/network/if-up.d
 sudo chmod 755 /etc/network/if-up.d/dns-cache
 
-######################## TEST WHETHER THE DNS CACHE IS WORKING ########################
+######################## TEST WHETHER DNS CACHE IS WORKING ########################
 
 # execute each of these commands multiple times. for each command, the first call may go
 # to dns provider, so it may have a latency greater than zero (depending on your
@@ -139,6 +139,16 @@ dig google.com
 dig facebook.com
 dig yahoo.com
 dig github.com
+
+################# TEST WHETHER DNS CACHE GETS RESET AFTER VPN CONNECTION #################
+
+# this test is only valid if you have copied 'dns-cache' file into 'if-up.d' directory.
+# execute this command without vpn connection to persist response in cache. then connect
+# to vpn and execute it again. it should get the result from the dns provider because
+# the cache should be reset after vpn connection. you can tell whether it has got the result
+# from dns provider if the latency is not zero.
+
+dig amazon.com
 
 ######################## TEST WHETHER THERE IS ANY DNS LEAKS ########################
 
