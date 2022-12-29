@@ -56,6 +56,20 @@ sudo ufw allow from 172.16.0.0/12
 sudo ufw deny out from any to 2a06:5484::113
 sudo ufw deny out from any to 2a06:5484::114
 
+# block outgoing connections to microsoft internet connectivity check (www.msftncsi.com):
+
+sudo ufw deny out from any to 2.16.106.91
+sudo ufw deny out from any to 2.16.106.89
+
+# block outgoing connections to GitHub status check (alive.github.com):
+
+sudo ufw deny out from any to 140.82.112.25
+sudo ufw deny out from any to 140.82.112.26
+sudo ufw deny out from any to 140.82.113.25
+sudo ufw deny out from any to 140.82.113.26
+sudo ufw deny out from any to 140.82.114.25
+sudo ufw deny out from any to 140.82.114.26
+
 ####################### RECOMMENDED RULES FOR DIFFERENT SERVERS #######################
 
 # deny all incoming connections which don't match any specific rule:
