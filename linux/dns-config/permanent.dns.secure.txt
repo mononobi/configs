@@ -98,7 +98,6 @@ dns-forward-max=15
 neg-ttl=600
 dns-loop-detect
 
-
 # you can change these values if you prefer something else.
 # the max value for 'max-cache-ttl' and 'min-cache-ttl' is 3600 seconds.
 # the max value for 'cache-size' is 10000 records.
