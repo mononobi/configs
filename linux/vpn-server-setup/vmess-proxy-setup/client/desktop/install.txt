@@ -90,7 +90,7 @@
 # proxy automatically and if configured correctly using the following guide, it would
 # have zero dns leaks.
 
-# if you choose 'Proxy Mode', add these values into 'Ignore Hosts' field
+# if you choose 'System Proxy', add these values into 'Ignore Hosts' field
 # of system proxy settings to be able to access local and private networks:
 
 # localhost, 127.0.0.0/8, ::1, 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8
