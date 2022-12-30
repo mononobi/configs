@@ -95,7 +95,7 @@ cache-size=5000
 max-cache-ttl=3600
 min-cache-ttl=3600
 dns-forward-max=15
-neg-ttl=600
+neg-ttl=60
 dns-loop-detect
 
 # you can change these values if you prefer something else.
