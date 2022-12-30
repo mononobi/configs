@@ -51,6 +51,10 @@ sudo ufw allow from 192.168.0.0/16
 
 sudo ufw allow from 172.16.0.0/12
 
+# allow incoming connections from private network (ex. tun and ...)
+
+sudo ufw allow from 10.0.0.0/8
+
 # block outgoing connections to AisaTech dns servers:
 
 sudo ufw deny out from any to 2a06:5484::113
