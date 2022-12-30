@@ -92,8 +92,8 @@ port=53
 cache-size=5000
 max-cache-ttl=3600
 min-cache-ttl=3600
-neg-ttl=20
-dns-forward-max=20
+neg-ttl=5
+dns-forward-max=25
 no-ping
 strict-order
 dns-loop-detect
