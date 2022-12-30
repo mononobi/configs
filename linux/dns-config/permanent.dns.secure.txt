@@ -75,7 +75,7 @@ sudo nano /etc/resolv.conf
 # nameserver IPv6-2
 
 # note that there is no limit for nameservers with dnsmasq, and you can add as many as
-# you want. dnsmasq will use servers based on their availability.
+# you want. dnsmasq will use servers based on their order.
 
 # install dnsmasq:
 
@@ -90,9 +90,14 @@ sudo nano /etc/dnsmasq.conf
 listen-address=127.0.0.53
 port=53
 no-ping
+strict-order
 cache-size=5000
 max-cache-ttl=3600
 min-cache-ttl=3600
+dns-forward-max=15
+neg-ttl=600
+dns-loop-detect
+
 
 # you can change these values if you prefer something else.
 # the max value for 'max-cache-ttl' and 'min-cache-ttl' is 3600 seconds.
@@ -101,6 +106,11 @@ min-cache-ttl=3600
 # between 1 and 5 minutes. if you live in a hostile country (Iran, China and ...)
 # with aggressive dns spoofing and bandwidth throttling, increasing the dns cache timeout
 # will help you surf the web more conveniently.
+# note that 'neg-ttl' and 'dns-forward-max' are critical to prevent some abusive apps
+# flooding the dnsmasq with requests when dns queries fail. these apps are including but
+# not limited to NordVPN, ExpressVPN, Plex Media Server and ...
+# where these apps are blocked (.ex Iran) they send continuous dns queries and eat system
+# and bandwidth resources.
 
 # execute this to enable and start dnsmasq:
 
