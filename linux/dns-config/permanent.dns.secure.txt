@@ -89,27 +89,41 @@ sudo nano /etc/dnsmasq.conf
 
 listen-address=127.0.0.53
 port=53
-no-ping
-strict-order
 cache-size=5000
 max-cache-ttl=3600
 min-cache-ttl=3600
-dns-forward-max=15
-neg-ttl=60
+neg-ttl=20
+dns-forward-max=20
+no-ping
+strict-order
 dns-loop-detect
 
-# you can change these values if you prefer something else.
+# you can change these values if you prefer something else but consider these notes:
+
 # the max value for 'max-cache-ttl' and 'min-cache-ttl' is 3600 seconds.
-# the max value for 'cache-size' is 10000 records.
 # default cache timeout depends on the dns provider but in most cases it is
 # between 1 and 5 minutes. if you live in a hostile country (Iran, China and ...)
 # with aggressive dns spoofing and bandwidth throttling, increasing the dns cache timeout
 # will help you surf the web more conveniently.
-# note that 'neg-ttl' and 'dns-forward-max' are critical to prevent some abusive apps
-# flooding the dnsmasq with requests when dns queries fail. these apps are including but
-# not limited to NordVPN, ExpressVPN, Plex Media Server and ...
-# where these apps are blocked (.ex Iran) they send continuous dns queries and eat system
-# and bandwidth resources.
+
+# the max value for 'cache-size' is 10000 records.
+
+# 'neg-ttl' is cache timeout in seconds for 'not found' dns queries. it is better to
+# set a value greater than 0 for it to prevent requesting the same domain rapidly
+# after failure because failure only happens when all nameservers have been tested once.
+
+# 'dns-forward-max' indicates the limit for the maximum concurrent dns queries which can
+# be sent out. its default value is 150, but it's better to set a much lower value for
+# it to prevent dsn request flooding.
+
+# 'strict-order' will tell dnsmasq to use available nameservers in the order of
+# their appearance in 'resolv.conf' file.
+
+# 'dns-loop-detect' is telling dnsmasq not to use those nameservers which are directly or
+# indirectly using the address where dnsmasq itself is up.
+# note that this option should always be available. otherwise when a request comes to
+# dnsmasq it might select its own address from the available nameservers and that would
+# create a loop which could also be infinite if 'strict-order' is also set.
 
 # execute this to enable and start dnsmasq:
 
