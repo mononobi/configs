@@ -9,10 +9,9 @@
 sudo apt remove resolvconf
 
 # you should disable 'systemd-resolved' service to prevent dns leaks.
-# 'systemd-resolved' has an issue which sends dns queries to '127.0.0.53' even when you
-# have configured remote dns servers in '/etc/resolv.conf' file, and those dns queries
-# which are sent to '127.0.0.53' won't go through some vpn tunnels and
-# interfaces (ex. nekoray), and go out through default gateway instead.
+# 'systemd-resolved' has an issue which bypasses iptables defined in system and sends
+# dns queries out directly on default gateway and none of them can reach to vpn interface
+# (ex. nekoray-tun), this will cause lots of dns leaks.
 
 # disable 'systemd-resolved' if it is installed:
 
@@ -210,3 +209,5 @@ dig +short chaos txt misses.bind
 dig +short chaos txt evictions.bind
 dig +short chaos txt auth.bind
 dig +short chaos txt servers.bind
+
+# you can copy the provided 'dns-stats' into
