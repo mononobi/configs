@@ -225,7 +225,7 @@ dig +short chaos txt servers.bind
 # as caching is enabled, whenever a cache miss occurs, the request would go to remote
 # servers. so as a formula we almost have this:
 
-cache misses = sum(success count of each remote server)
+# cache misses = sum(success count of each remote server)
 
 # so in the above example the cache miss count is 12 (10 + 2).
 
