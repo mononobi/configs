@@ -92,8 +92,7 @@ port=53
 cache-size=5000
 max-cache-ttl=3600
 min-cache-ttl=3600
-neg-ttl=5
-dns-forward-max=25
+dns-forward-max=50
 no-ping
 strict-order
 dns-loop-detect
@@ -108,13 +107,9 @@ dns-loop-detect
 
 # the max value for 'cache-size' is 10000 records.
 
-# 'neg-ttl' is cache timeout in seconds for 'not found' dns queries. it is better to
-# set a value greater than 0 for it to prevent requesting the same domain rapidly
-# after failure because failure only happens when all nameservers have been tested once.
-
 # 'dns-forward-max' indicates the limit for the maximum concurrent dns queries which can
-# be sent out. its default value is 150, but it's better to set a much lower value for
-# it to prevent dsn request flooding.
+# be sent out. its default value is 150, but it's better to set a lower value for it to
+# prevent dsn request flooding.
 
 # 'strict-order' will tell dnsmasq to use available nameservers in the order of
 # their appearance in 'resolv.conf' file.
