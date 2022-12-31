@@ -209,5 +209,3 @@ dig +short chaos txt misses.bind
 dig +short chaos txt evictions.bind
 dig +short chaos txt auth.bind
 dig +short chaos txt servers.bind
-
-# you can copy the provided 'dns-stats' into
