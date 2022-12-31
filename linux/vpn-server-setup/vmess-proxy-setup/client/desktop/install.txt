@@ -116,10 +116,13 @@ cp nekoray.desktop ~/.local/share/applications
 
 # IMPORTANT BUG (OR BEHAVIOR) ONLY ON LINUX:
 
-# the nekoray linux app has a bug which leads to remote dns queries not going through the
-# vpn tunnel, and as DoH servers are already blocked in iran, it always falls back to system
-# dns which is not encrypted and prevents many blocked sites from opening because mullahs
-# read all dns queries and drop them if they are for a blocked site.
+# if you use 'systemd-resolved' as dns resolver on your system, you should be aware
+# that it has a very odd bug (behavior) which bypasses the iptables defined in system and
+# sends dns queries out directly on the default gateway, causing that none of them reach
+# to vpn interface (ex. nekoray-tun) to be tunneled through proxy and that will create
+# lots of dns leaks. which that is because the nekoray linux app itself has another bug which
+# leads to remote dns queries fail most of the time, so it falls back to system dns which
+# is 'systemd-resolved' with its own bug.
 # to overcome this, you have two options:
 
 # OPTION 1 (RECOMMENDED):

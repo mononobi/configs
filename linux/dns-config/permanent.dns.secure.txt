@@ -198,3 +198,15 @@ flatpak run --share=network --devel --command=python3 org.freedesktop.Platform/x
 # if any of the above commands were sending dns queries through wired or wireless interface
 # and not through the vpn or proxy interface, it means that you have to go through all the
 # changes which had been mentioned above to find the issue.
+
+############################ STATISTICS OF DNS CACHE ############################
+
+# to see different statistics of dnsmasq cache, execute each one of these commands:
+
+dig +short chaos txt cachesize.bind
+dig +short chaos txt insertions.bind
+dig +short chaos txt hits.bind
+dig +short chaos txt misses.bind
+dig +short chaos txt evictions.bind
+dig +short chaos txt auth.bind
+dig +short chaos txt servers.bind
