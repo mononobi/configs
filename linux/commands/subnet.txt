@@ -90,6 +90,6 @@ AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64
 ################################## SYSTEM PROXY ##################################
 
 # when you're using a system proxy, you can add these values into 'Ignore Hosts'
-# field to be able to access local and private networks directly and bypassing proxy:
+# field to be able to access local and private networks:
 
 # localhost, 127.0.0.0/8, ::1, 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8
