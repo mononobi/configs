@@ -209,3 +209,26 @@ dig +short chaos txt misses.bind
 dig +short chaos txt evictions.bind
 dig +short chaos txt auth.bind
 dig +short chaos txt servers.bind
+
+# note that these commands would also increase cache hits count.
+
+# the 'servers.bind' command returns all local and remote dns servers and reports two
+# numbers for each remote server. the first number is the number of successful queries
+# and the second one is the number of failed queries to that server, in this form:
+
+# SERVER_IP SUCCESS_COUNT FAILED_COUNT
+
+# for example:
+
+# "127.0.0.53#53 0 0" "8.8.8.8#53 10 1" "8.8.4.4#53 1 0"
+
+# as caching is enabled, whenever a cache miss occurs, the request would go to remote
+# servers. so as a formula we almost have this:
+
+cache misses = sum(success count of each remote server)
+
+# so in the above example the cache miss count is 11 (10 + 1).
+
+# you can copy this file into 'sbin' to be able to see cache stats with a single command:
+
+cp files/dns-stats ~/.local/sbin

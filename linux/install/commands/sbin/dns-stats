@@ -1,0 +1,5 @@
+echo "CAPACITY: $(dig +short chaos txt cachesize.bind)"
+echo "ITEMS: $(dig +short chaos txt insertions.bind)"
+echo "HITS: $(dig +short chaos txt hits.bind)"
+echo "MISSES: $(dig +short chaos txt misses.bind)"
+echo "SERVERS: $(dig +short chaos txt servers.bind)"
