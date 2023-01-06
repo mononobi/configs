@@ -55,7 +55,7 @@ sudo ufw allow from 172.16.0.0/12
 
 sudo ufw allow from 10.0.0.0/8
 
-# block outgoing connections to AisaTech dns servers:
+# block outgoing connections to AsiaTech dns servers:
 
 sudo ufw deny out from any to 2a06:5484::113
 sudo ufw deny out from any to 2a06:5484::114
