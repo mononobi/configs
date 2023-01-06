@@ -67,11 +67,19 @@ sudo nano /etc/resolv.conf
 # add new dns servers. note that the first nameserver should always point
 # to where you want to run dnsmasq:
 
-# nameserver 127.0.0.53
-# nameserver IPv4-1
-# nameserver IPv4-2
-# nameserver IPv6-1
-# nameserver IPv6-2
+nameserver 127.0.0.53
+nameserver IPv4-1
+nameserver IPv4-2
+nameserver IPv6-1
+nameserver IPv6-2
+
+# for example these nameservers:
+
+nameserver 127.0.0.53
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+nameserver 2001:4860:4860::8888
+nameserver 2001:4860:4860::8844
 
 # note that there is no limit for nameservers with dnsmasq, and you can add as many as
 # you want. dnsmasq will use servers based on their order.
