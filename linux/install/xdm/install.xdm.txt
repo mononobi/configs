@@ -1,0 +1,35 @@
+# download the latest version from 'https://xtremedownloadmanager.com/'.
+# extract the downloaded archive and go into the extracted directory.
+
+# execute these commands:
+
+sudo chmod 777 install.sh
+sudo ./install.sh
+
+########## INTEGRATION FOR FIREFOX ##########
+
+# go to firefox add-ones page and search for xdm.
+# its url is this as of now:
+
+# https://addons.mozilla.org/en-US/firefox/addon/xdm-browser-monitor/
+
+# install the xdm add-on and also enable it in 'Private Mode'.
+
+########## INTEGRATION FOR GOOGLE CHROME (AND OTHER CHROMIUM BASED BROWSERS) ##########
+
+# the xdm extension is no longer available on chrome web store.
+# you have to install the extension locally.
+
+# for this, do the following:
+
+# 1. copy the 'files/chrome-extension.zip' file into a permanent location and extract it.
+# 2. on chrome, go to 'Settings -> Extensions' and enable 'Developer mode'.
+# 3. click on 'Load unpacked' button on top menu bar and select the root folder of the
+#    extension which you've just extracted. note that you should select the folder in-which
+#    the 'manifest.json' file is located.
+# 4. after the extension has been installed successfully, go to extension details and
+#    enable 'Allow in Incognito' and disable 'Collect errors'.
+
+# IMPORTANT NOTE:
+# you should keep the extension folder intact and do not move or rename it. otherwise it
+# will be removed from chrome, and you should repeat the above steps to reinstall it.
