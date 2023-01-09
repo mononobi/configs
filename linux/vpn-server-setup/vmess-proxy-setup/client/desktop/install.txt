@@ -132,7 +132,7 @@ cp nekoray.desktop ~/.local/share/applications
 # in 'linux/dns-config/permanent.dns.secure.txt' file.
 # this way all system dns queries would go through the vpn tunnel.
 # note that if you just edit the 'resolv.conf' file manually, on each reboot the dns
-# servers will reset to default. so follow the guide carefully. you can set these three
+# servers will reset to default. so follow the guide carefully. you can set these
 # dns servers as permanent nameservers:
 
 nameserver 8.8.8.8
