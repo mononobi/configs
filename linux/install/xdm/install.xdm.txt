@@ -22,8 +22,9 @@ sudo ./install.sh
 
 # for this, do the following:
 
-# 1. copy the 'files/chrome-extension.zip' file into a permanent location and extract it.
-# 2. on chrome, go to 'Settings -> Extensions' and enable 'Developer mode'.
+# 1. copy the 'files/chrome-extension-random-id.zip' file into a permanent
+#    location and extract it (ex. ~/.config/xdm-chrome-extension).
+# 2. on chrome, go to 'Settings -> Extensions' menu and enable 'Developer mode'.
 # 3. click on 'Load unpacked' button on top menu bar and select the root folder of the
 #    extension which you've just extracted. note that you should select the folder in-which
 #    the 'manifest.json' file is located.
@@ -33,3 +34,16 @@ sudo ./install.sh
 # IMPORTANT NOTE:
 # you should keep the extension folder intact and do not move or rename it. otherwise it
 # will be removed from chrome, and you should repeat the above steps to reinstall it.
+
+# CLARIFICATION:
+# the difference between 'chrome-extension-original.zip' and 'chrome-extension-random-id.zip'
+# files is that the 'chrome-extension-original.zip' file has the 'key' in its
+# 'manifest.json' file and uses the original id of xdm extension from chrome web-store.
+# the 'chrome-extension-random-id.zip' file has its 'key' removed from 'manifest.json' file
+# and each time you install it on chrome, it assigns a new id to it.
+# the problem with the 'chrome-extension-original.zip' file is that if you have already
+# installed xdm extension from chrome web-store on any of your devices before it has been
+# removed from web-store, and it has got synced to your other devices, if you
+# try to load it locally with the same id, chrome will silently remove it without
+# giving you any errors. so you can not install it with the same id.
+# because of that the 'chrome-extension-random-id.zip' file is provided.
