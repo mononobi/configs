@@ -2,6 +2,10 @@
 
 flatpak install flathub org.telegram.desktop
 
+# execute this to let telegram access your home directory:
+
+sudo flatpak override --filesystem=home org.telegram.desktop
+
 # you can also install using snap, but it's not recommended at all as
 # it has a terrible performance:
 
