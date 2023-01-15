@@ -8,7 +8,7 @@ sudo ./install.sh
 
 ########## INTEGRATION FOR FIREFOX ##########
 
-# go to firefox add-ones page and search for xdm.
+# go to firefox add-ons page and search for xdm.
 # its url is this as of now:
 
 # https://addons.mozilla.org/en-US/firefox/addon/xdm-browser-monitor/
