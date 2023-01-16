@@ -2,7 +2,7 @@
 
 flatpak install flathub org.telegram.desktop
 
-# execute this to let telegram access your home directory:
+# execute this to let telegram access your home directory (to be able to share or save files):
 
 sudo flatpak override --filesystem=home org.telegram.desktop
 
