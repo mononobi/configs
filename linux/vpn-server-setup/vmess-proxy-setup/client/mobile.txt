@@ -14,9 +14,9 @@
 
 ########################## Settings ##########################
 
-# Remote DNS: https://8.8.8.8/dns-query
-# Direct DNS: https://223.5.5.5/dns-query
-# Enable DNS Routing: on
+# Remote DNS: 8.8.8.8
+# Direct DNS: 208.67.222.222
+# Enable DNS Routing: off
 # Show Direct Speed: on
 # Always Show Address: on
 # Domain Resolution Strategy: AsIs
