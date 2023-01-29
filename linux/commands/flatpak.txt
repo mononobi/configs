@@ -1,7 +1,3 @@
-# get the list of installed flatpak packages:
-
-flatpak list
-
 # if you encountered errors while installing apps, execute these commands:
 
 flatpak update --appstream
@@ -37,3 +33,19 @@ sudo flatpak repair
 # app data will be saved in:
 
 ~/.var/app
+
+# get the list of installed flatpak packages and runtimes:
+
+flatpak list
+
+# or this, to search for specific names:
+
+flatpak list | grep -i NAME
+
+# for example:
+
+flatpak list | grep -i nvidia
+
+# to remove unused flatpak runtimes, execute this:
+
+flatpak uninstall --unused
