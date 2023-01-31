@@ -1,0 +1,3 @@
+# this is a NES (Micro, Famicom) emulator. it also has support for some other retro consoles:
+
+sudo apt install higan

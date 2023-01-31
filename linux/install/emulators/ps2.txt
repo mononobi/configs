@@ -1,0 +1,12 @@
+# to get PS2 emulator, visit this website and download the latest
+# nightly build for your system:
+
+# https://pcsx2.net
+
+# make the emulator file executable:
+
+sudo chmod a+x FILE_NAME
+
+# after running the emulator, extract and load the PS2 BIOS and start gaming.
+
+# files/ps2.bios.zip

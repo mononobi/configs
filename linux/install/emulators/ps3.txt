@@ -1,0 +1,15 @@
+# to get PS3 emulator, visit this website and download the latest
+# build for your system:
+
+# https://rpcs3.net/download
+
+# download the latest PS3 firmware from this link:
+
+# https://www.playstation.com/en-us/support/hardware/ps3/system-software/
+
+# make the emulator file executable:
+
+sudo chmod a+x FILE_NAME
+
+# after running the emulator, install the downloaded firmware and start gaming:
+# File > Install Firmware
