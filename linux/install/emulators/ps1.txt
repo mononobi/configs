@@ -1,3 +1,7 @@
 # this is a PS1 (PSX) emulator:
 
 sudo apt install pcsxr
+
+# NOTE:
+# the app has a bug which cannot be used if more than a single joystick is connected.
+# so you can only use a single joystick.
