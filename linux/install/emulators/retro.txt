@@ -5,7 +5,7 @@
 # WonderSwan
 # GameBoy (Color)
 # GameBoy Advance
-# Nintendo Entertainment System
+# Nintendo Entertainment System (Micro)
 # Super Nintendo Entertainment System/Super Famicom
 # Virtual Boy
 # PC Engine/TurboGrafx 16 (CD)
