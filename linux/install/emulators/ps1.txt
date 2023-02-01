@@ -1,7 +1,7 @@
 # this is a PS1 (PSX) emulator:
 
-sudo apt install pcsxr
+flatpak install flathub org.duckstation.DuckStation
 
-# NOTE:
-# the app has a bug which cannot be used if more than a single joystick is connected.
-# so you can only use a single joystick.
+# after installing, copy and extract PS1 BIOS files into application's bios directory.
+# 'Settings -> BIOS -> BIOS Directory'
+# files/ps1.bios.zip

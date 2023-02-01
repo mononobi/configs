@@ -1,0 +1,39 @@
+# this app can emulate many retro consoles:
+
+# Atari Lynx
+# Neo Geo Pocket (Color)
+# WonderSwan
+# GameBoy (Color)
+# GameBoy Advance
+# Nintendo Entertainment System
+# Super Nintendo Entertainment System/Super Famicom
+# Virtual Boy
+# PC Engine/TurboGrafx 16 (CD)
+# SuperGrafx
+# PC-FX
+# Sega Game Gear
+# Sega Genesis/Megadrive
+# Sega Master System
+# Sega Saturn (experimental, x86_64 only)
+# Sony PlayStation
+
+# install:
+
+flatpak install flathub com.github.AmatCoder.mednaffe
+
+# to be able to load your games into the app, you should give access to the games folders.
+# you can execute this command once for each folder you want to give access to:
+
+sudo flatpak override --filesystem=PATH_TO_GAMES_FOLDER com.github.AmatCoder.mednaffe
+
+# for example:
+
+sudo flatpak override --filesystem="/mnt/archives/Applications/Games/Emulator Games/NES" com.github.AmatCoder.mednaffe
+sudo flatpak override --filesystem="/mnt/archives/Applications/Games/Emulator Games/MegaDrive" com.github.AmatCoder.mednaffe
+
+# IMPORTANT:
+# if you have no sound coming out from games, you should try different sound
+# drivers in the settings:
+# 'Global Settings -> Sound -> Driver'
+# try different drivers to see which one will work.
+# on ubuntu the 'sdl' driver works.

@@ -1,12 +1,7 @@
-# to get PS2 emulator, visit this website and download the latest
-# nightly build for your system:
+# this is a PS2 emulator:
 
-# https://pcsx2.net
+flatpak install flathub net.pcsx2.PCSX2
 
-# make the emulator file executable:
-
-sudo chmod a+x FILE_NAME
-
-# after running the emulator, extract and load the PS2 BIOS and start gaming.
-
+# after installing, copy and extract PS2 BIOS files into application's bios directory.
+# 'Settings -> BIOS -> BIOS Directory'
 # files/ps2.bios.zip
