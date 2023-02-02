@@ -1,0 +1,22 @@
+# vulkan-tools is a tool for inspecting vulkan information.
+# you need to have a vulkan enabled gpu to be able to use it.
+
+# installation:
+
+sudo apt install vulkan-tools
+
+# get info on installed vulkan instance (including vulkan and mesa versions):
+
+vulkaninfo
+
+# to check whether vulkan backend is enabled on chrome, type this in the url bar:
+
+chrome://gpu
+
+# if your gpu supports vulkan, you can enable vulkan in chrome browser as graphics
+# backed by typing this in the url bar and setting it to 'Enabled':
+
+chrome://flags/#enable-vulkan
+
+# if your gpu supports vulkan but chrome crashed after enabling vulkan backend, it
+# could be because the mesa driver version on your system is outdated.
