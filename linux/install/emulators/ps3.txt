@@ -1,3 +1,22 @@
 # this is a PS3 emulator:
 
 flatpak install flathub net.rpcs3.RPCS3
+
+# you should download PS3 firmware from Sony, and then install it inside the app.
+# get the firmware from this link:
+
+# https://www.playstation.com/en-us/support/hardware/ps3/system-software/
+
+# after app installation has been complete, install the downloaded firmware
+# from 'File -> Install Firmware' menu.
+
+# all game folders must be in a common parent folder and each game folder should be named
+# only to the full region id of that game.
+# for example BLES02242.
+
+# inside each game folder, there should be these subdirectories:
+# PS3_GAME
+# PS3_UPDATE (optional)
+
+# inside each game folder, there should be this file:
+# PS3_DISC.SFB
