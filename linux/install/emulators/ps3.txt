@@ -1,0 +1,3 @@
+# this is a PS3 emulator:
+
+flatpak install flathub net.rpcs3.RPCS3

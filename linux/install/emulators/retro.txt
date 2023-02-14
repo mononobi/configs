@@ -28,8 +28,8 @@ sudo flatpak override --filesystem=PATH_TO_GAMES_FOLDER com.github.AmatCoder.med
 
 # for example:
 
-sudo flatpak override --filesystem="/mnt/archives/Applications/Games/Emulator Games/NES" com.github.AmatCoder.mednaffe
-sudo flatpak override --filesystem="/mnt/archives/Applications/Games/Emulator Games/MegaDrive" com.github.AmatCoder.mednaffe
+sudo flatpak override --filesystem="/mnt/archives/Applications/Games/Emulator Games/Nintendo NES" com.github.AmatCoder.mednaffe
+sudo flatpak override --filesystem="/mnt/archives/Applications/Games/Emulator Games/SEGA" com.github.AmatCoder.mednaffe
 
 # IMPORTANT:
 # if you have no sound coming out from games, you should try different sound
