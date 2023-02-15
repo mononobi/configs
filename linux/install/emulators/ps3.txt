@@ -26,4 +26,4 @@ flatpak install flathub net.rpcs3.RPCS3
 # PS3_DISC.SFB
 
 # when you want to add games into emulator app, you should select game title
-# folders in-which region id folder is resided.
+# folders in-which region id folder is located.
