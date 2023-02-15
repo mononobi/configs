@@ -13,7 +13,9 @@ flatpak install flathub net.rpcs3.RPCS3
 # each game should be in the following folder structure to work:
 
 # Game Title -> Region ID -> PS3_GAME, PS3_UPDATE, PS3_DISC.SFB
+
 # for example:
+
 # WRC 5 -> BLES02242 -> PS3_GAME, PS3_UPDATE, PS3_DISC.SFB
 
 # inside the region id folder, there should be these subdirectories:
