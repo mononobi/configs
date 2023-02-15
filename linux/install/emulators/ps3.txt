@@ -7,7 +7,7 @@ flatpak install flathub net.rpcs3.RPCS3
 
 # https://www.playstation.com/en-us/support/hardware/ps3/system-software/
 
-# after app installation has been complete, install the downloaded firmware
+# after app installation has been finished, install the downloaded firmware
 # from 'File -> Install Firmware' menu.
 
 # all game folders must be in a common parent folder and each game folder should be named
