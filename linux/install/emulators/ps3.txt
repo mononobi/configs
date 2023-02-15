@@ -10,13 +10,18 @@ flatpak install flathub net.rpcs3.RPCS3
 # after app installation has been finished, install the downloaded firmware
 # from 'File -> Install Firmware' menu.
 
-# all game folders must be in a common parent folder and each game folder should be named
-# only to the full region id of that game.
-# for example BLES02242.
+# each game should be in the following folder structure to work:
 
-# inside each game folder, there should be these subdirectories:
+# Game Title -> Region ID -> PS3_GAME, PS3_UPDATE, PS3_DISC.SFB
+# for example:
+# WRC 5 -> BLES02242 -> PS3_GAME, PS3_UPDATE, PS3_DISC.SFB
+
+# inside the region id folder, there should be these subdirectories:
 # PS3_GAME
 # PS3_UPDATE (optional)
 
-# inside each game folder, there should be this file:
+# inside the region id folder, there should be this file:
 # PS3_DISC.SFB
+
+# when you want to add games into emulator app, you should select game title
+# folders in-which region id folder is resided.
