@@ -3,3 +3,7 @@
 
 sudo apt update
 sudo apt install p7zip-full p7zip-rar
+
+# if the archive manager can not open an archive, try this command to extract it using terminal:
+
+7z e ARCHIVE_FILE_NAME
