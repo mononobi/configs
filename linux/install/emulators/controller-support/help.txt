@@ -1,0 +1,18 @@
+# to add native support for PS3 or PS4 controllers to all playstation
+# emulators, copy the related file with this command:
+
+# for PS3 controller:
+
+sudo cp 99-ds3-controllers.rules /etc/udev/rules.d/
+
+# for PS4 controller:
+
+sudo cp 99-ds4-controllers.rules /etc/udev/rules.d/
+
+# then execute this:
+
+sudo udevadm control --reload-rules
+
+# now disconnect and then reconnect the controller.
+
+# now in each emulator app, go to controller settings and choose the related controller.
