@@ -2,6 +2,7 @@ echo PASSWORD | sudo -S apt-get update
 sudo apt-get upgrade -y
 sudo apt autoremove -y
 sudo flatpak update -y
+sudo flatpak uninstall --unused -y
 sudo snap refresh
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
