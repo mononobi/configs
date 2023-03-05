@@ -1,4 +1,4 @@
-# to add native support for PS3 or PS4 controllers to all playstation
+# to add native support for PS3, PS4 or PS5 controllers to all playstation
 # emulators, copy the related file with this command:
 
 # for PS3 controller:
@@ -8,6 +8,10 @@ sudo cp 99-ds3-controllers.rules /etc/udev/rules.d/
 # for PS4 controller:
 
 sudo cp 99-ds4-controllers.rules /etc/udev/rules.d/
+
+# for PS5 controller:
+
+sudo cp 99-dualsense-controllers.rules /etc/udev/rules.d/
 
 # then execute this:
 
