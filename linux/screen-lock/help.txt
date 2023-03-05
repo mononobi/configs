@@ -1,0 +1,27 @@
+# there is an issue on ubuntu with gnome (and may be other distros) that when you
+# lock the screen, the screen turns off but the monitor does not completely turn off
+# and the backlight remains active. to solve this issue, there are two options:
+
+# Option 1:
+
+gdbus monitor -y -d org.freedesktop.login1 | grep "'LockedHint': <true>"
+
+# Option 2 (NOT RECOMMENDED):
+
+# this option only fixes the issue if you lock the screen manually using the 'Super + L' combo.
+# to fix the issue on all scenarios use the option 1.
+
+# install this if it's not already:
+
+sudo apt install gnome-screensaver
+
+# go to system settings:
+# Settings -> Keyboard -> Keyboard Shortcuts -> View and Customize Shortcuts -> Custom Shortcuts
+
+# click on add (+) button and fill these fields:
+
+# Name: Lock screen
+# Command: bash -c "gnome-screensaver-command -l; sleep 0.5; xset dpms force off"
+# Shortcut: Super + L
+
+# now whenever you lock the screen using 'Super + L' the monitor would be completely tuned off.
