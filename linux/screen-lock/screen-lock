@@ -1,0 +1,12 @@
+gdbus monitor -y -d org.freedesktop.login1 | grep --line-buffered "'LockedHint': <true>" | \
+(
+    while true; do
+        read IS_LOCKED
+        if [ "$IS_LOCKED" != "" ]
+        then
+          echo "SCREEN LOCKED"
+          sleep 0.5
+          xset dpms force off
+        fi
+    done
+)

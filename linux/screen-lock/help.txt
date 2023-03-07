@@ -4,7 +4,17 @@
 
 # Option 1:
 
-gdbus monitor -y -d org.freedesktop.login1 | grep "'LockedHint': <true>"
+# this option will fix the issue on all scenarios including locking the screen using
+# the menu, using the 'Super + L' combo and also automatic screen lock by the system.
+
+# execute this to make the file executable:
+
+sudo chmod 775 screen-lock
+
+# add the file into startup apps and restart your pc.
+
+# after restarting the system, whenever you lock the screen manually or system does
+# it automatically, the monitor would be completely tuned off.
 
 # Option 2 (NOT RECOMMENDED):
 
