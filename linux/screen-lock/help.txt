@@ -14,7 +14,7 @@ sudo chmod 775 screen-lock
 # add the file into startup apps and restart your pc.
 
 # after restarting the system, whenever you lock the screen manually or system does
-# it automatically, the monitor would be completely tuned off.
+# it automatically, the monitor would be completely turned off.
 
 # Option 2 (NOT RECOMMENDED):
 
@@ -34,4 +34,4 @@ sudo apt install gnome-screensaver
 # Command: bash -c "gnome-screensaver-command -l; sleep 0.5; xset dpms force off"
 # Shortcut: Super + L
 
-# now whenever you lock the screen using 'Super + L' the monitor would be completely tuned off.
+# now whenever you lock the screen using 'Super + L' the monitor would be completely turned off.
