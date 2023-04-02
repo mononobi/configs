@@ -1,0 +1,22 @@
+{
+  "exclude": [
+    "**/node_modules/*",
+    "**/.gitlab/*",
+    "**/.husky/*",
+    "**/parcel-cache/*",
+    "**/ci/*",
+    "**/dist/*",
+    "**/patches/*",
+    "**/assets/*",
+    "**/public/*",
+    "node_modules",
+    ".gitlab",
+    ".husky",
+    "parcel-cache",
+    "ci",
+    "patches",
+    "assets",
+    "public",
+    "dist"
+  ]
+}
