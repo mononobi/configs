@@ -13,3 +13,11 @@ sudo apt-get install dbeaver-ce
 flatpak install flathub io.dbeaver.DBeaverCommunity
 
 # you can import 'dbeaver.dark.epf' file into your installed app to set a dark theme.
+
+################### NOTE ON APP NOT GETTING UPDATED THOUGH APT ###################
+
+# if you have installed the app using apt and at some point the app has got stuck to
+# an old version, you can download the latest '.deb' file and install it using this command:
+
+sudo dpkg -i ./DOWNLOADED_FILE.deb
+sudo apt-get install -f
