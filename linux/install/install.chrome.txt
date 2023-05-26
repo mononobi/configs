@@ -1,3 +1,11 @@
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i ./google-chrome*.deb
 sudo apt-get install -f
+
+############### NOTE FOR CHROME NOT RENDERING UI OR WEBPAGES ###############
+
+# if after some updates to your os, google chrome failed to render its own UI
+# or websites, you should close the app and delete these two folders to fix the issue:
+
+# ~/.config/google-chrome/Default/GPUCache
+# ~/.config/google-chrome/Guest Profile/GPUCache
