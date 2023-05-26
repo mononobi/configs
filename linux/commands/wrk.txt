@@ -14,8 +14,10 @@ wrk -t 2 -c 2 -d 10 -s data.lua https://example.com/api/users/1/
 # '-s' specifies a file to read the request info from it, for non-get
 # requests, this file is mandatory.
 
-############## 'data.lua' file structure ##############
+##################### 'data.lua' file structure #####################
 
 wrk.method = "PUT"
 wrk.body = '{"input1": "2020-01-26T00:00:00+08:00", "input2": 100}'
 wrk.headers["Content-Type"] = "application/json"
+
+#####################################################################
