@@ -1,7 +1,21 @@
-# make a request to a server:
+# make a request to a server (GET):
 
-wrk -t 8 -c 80 https://example.com/api/users
+wrk -t 2 -c 2 -d 10 https://example.com/api/users/
 
-# you should replace the above url 'https://example.com/api/users' with your server url.
+# make a request to a server (NON-GET):
+
+wrk -t 2 -c 2 -d 10 -s data.lua https://example.com/api/users/1/
+
+# you should replace the above urls with your service url.
+
+# '-d' specifies the duration of the test in seconds.
 # '-t' specifies the threads count.
 # '-c' specifies how many connections should be kept open and reused.
+# '-s' specifies a file to read the request info from it, for non-get
+# requests, this file is mandatory.
+
+############## 'data.lua' file structure ##############
+
+wrk.method = "PUT"
+wrk.body = '{"input1": "2020-01-26T00:00:00+08:00", "input2": 100}'
+wrk.headers["Content-Type"] = "application/json"
