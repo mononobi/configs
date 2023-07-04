@@ -1,0 +1,18 @@
+# to use a curl command with token, use this template:
+
+curl -s SERVICE_ENDPOINT -H "Accept: application/json" -H "Authorization: Bearer TOKEN"
+
+# for example:
+
+curl -s https://example.com/api/info -H "Accept: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9DeyJpZCI6NSwibmFtZSI6Ik1vbm8gT"
+
+# to measure the execution time of a curl command, use this template:
+
+curl -w "@curl-time.txt" -o /dev/null -s SERVICE_ENDPOINT -H "Accept: application/json" -H "Authorization: Bearer TOKEN"
+
+# for example:
+
+curl -w "@curl-time.txt" -o /dev/null -s https://example.com/api/info -H "Accept: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9DeyJpZCI6NSwibmFtZSI6Ik1vbm8gT"
+
+# note that you should either copy the 'curl-time.txt' file to where you want to
+# execute the command or use the absolute path of the file.
