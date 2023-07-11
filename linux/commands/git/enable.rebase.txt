@@ -1,0 +1,10 @@
+# if you want to rebase a branch onto another branch, and you cannot do it
+# using IDE due to an error saying that you have divergent branches.
+# execute this in the terminal of the current project:
+
+git config pull.rebase true
+
+# after that try to rebase using IDE.
+# when rebase is finished, execute this to change the behavior to its default:
+
+git config pull.rebase false
