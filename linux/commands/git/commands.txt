@@ -19,7 +19,7 @@ git config --global user.name "NAME"                                    [set use
 # you could also change the remote url in '.git/config' file inside your project.
 
 # you could also add the below lines in '.git/config' file inside your project
-# to change the user name and email per repo:
+# to change the user's name and email per repo:
 ############################################################
 [user]
 	email = EMAIL_ADDRESS
