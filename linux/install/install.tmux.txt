@@ -1,0 +1,26 @@
+# tmux is a tool which lets you run a command in the background
+# and attach to it later for monitoring.
+
+# install:
+
+sudo apt install tmux
+
+# create a session for a command:
+
+tmux new-session -d -s "SESSION_NAME" /opt/my_script.sh
+
+# attach to an already running command:
+
+tmux attach-session -t SESSION_NAME
+
+# when attached to a session, to detach it, do this:
+
+# Ctrl + B and then D
+
+# to end a command, first attach to it and then do this:
+
+# Ctrl + C
+
+# list all active sessions:
+
+tmux ls
