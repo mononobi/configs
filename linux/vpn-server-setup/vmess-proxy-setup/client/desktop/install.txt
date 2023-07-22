@@ -1,4 +1,5 @@
-# download the desktop app for your system from this page:
+# download the latest desktop app for your system from
+# this page (for Linux, I prefer the zip version):
 # https://github.com/MatsuriDayo/nekoray/releases
 
 # extract the downloaded file and click on the executable or launcher to start the app.
