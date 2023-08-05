@@ -1,3 +1,6 @@
+# INSTALL BLUEMAN AT YOUR OWN RISK, IT DOES NOT WORK CORRECTLY AFTER A FEW UPDATES.
+# IT WILL ALSO REMOVE YOUR GNOME DESKTOP IF YOU UNINSTALL IT.
+
 # blueman is a bluetooth manager app.
 
 sudo apt-get install blueman

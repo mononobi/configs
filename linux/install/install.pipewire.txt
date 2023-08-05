@@ -1,4 +1,5 @@
-# install pipewire AT YOUR OWN RISK, it does not work correctly after a few updates.
+# INSTALL PIPEWIRE AT YOUR OWN RISK, IT DOES NOT WORK CORRECTLY AFTER A FEW UPDATES.
+# IT WILL ALSO REMOVE YOUR GNOME DESKTOP IF YOU UNINSTALL IT.
 
 # PipeWire is an audio server which has better quality than PulseAudio
 # which is the default on ubuntu and most other distros.
