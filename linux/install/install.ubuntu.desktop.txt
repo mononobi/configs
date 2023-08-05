@@ -1,0 +1,3 @@
+# if your UI has disappeared after an update, execute this to reinstall the gnome desktop:
+
+sudo apt-get install --reinstall ubuntu-desktop
