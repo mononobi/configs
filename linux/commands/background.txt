@@ -1,3 +1,6 @@
+# recommended way is to use tmux.
+# nohup has some issues and sometimes the process stops after closing the shell.
+
 # to run a command in the background which is detached from the shell, execute this:
 
 nohup COMMAND &
