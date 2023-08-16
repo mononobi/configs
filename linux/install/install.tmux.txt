@@ -9,6 +9,8 @@ sudo apt install tmux
 
 tmux new-session -d -s "SESSION_NAME" /opt/my_script.sh
 
+# NOTE: script path must be provided as an absolute path, otherwise it won't work.
+
 # attach to an already running command:
 
 tmux attach-session -t SESSION_NAME
@@ -24,3 +26,7 @@ tmux attach-session -t SESSION_NAME
 # list all active sessions:
 
 tmux ls
+
+# kill all active sessions:
+
+tmux kill-server
