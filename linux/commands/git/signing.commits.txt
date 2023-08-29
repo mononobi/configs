@@ -1,0 +1,25 @@
+# to sign your git commits you should first create a pair of public/private GPG keys
+# and set the public key on your accounts on GitHub or Gitlab.
+
+# to create a GPG key follow the guide in this file:
+
+linux/key-management/generate.gpg.key.txt
+
+# after creating the key and setting the public key on your GitHub or GuitLab
+# accounts execute these commands to enable git commit signing on your system:
+
+# tell the git to use this key for commit signing globally (RECOMMENDED):
+
+git config --global user.signingkey KEY_ID
+
+# tell the git to use this key for commit signing per repository:
+
+git config user.signingkey KEY_ID
+
+# enable auto commit signing globally (RECOMMENDED):
+
+git config --global commit.gpgsign true
+
+# enable auto commit signing per repository:
+
+git config commit.gpgsign true
