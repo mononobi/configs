@@ -26,16 +26,22 @@ snap info pycharm-community
 
 ################ RECOMMENDED PLUGINS ################
 
-.env files support (Adel F)
+.env files support (JetBrains)
 Docker (JetBrains)
 Ini (JetBrains)
 Nginx Configuration (meanmail)
-EnvFile (Borys Pierov)
-Settings Repository (JetBrains)
 
-################# SYNC IDE SETTINGS #################
+################ NO LONGER NEEDED PLUGINS ################
 
-# to be able to synchronize your IDE settings, you can create a github
+EnvFile (Borys Pierov):
+It is supported by the IDE now.
+
+Settings Repository (JetBrains):
+Deprecated and does not work anymore. but the settings sync by the IDE is free to use now.
+
+################ SYNC IDE SETTINGS ################
+
+# to be able to synchronize your IDE settings, you can create a GitHub
 # repository (preferably private). then you should install the 'Settings Repository'
 # plugin. then from the file menu select 'Manage IDE Settings -> Settings Repository...'.
 # then add the url of your new repository (use https url, not ssh) and then click on
