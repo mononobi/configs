@@ -1,3 +1,5 @@
+#################### UBUNTU <= 22.04 ####################
+
 # to disable swap on your system, execute:
 
 sudo swapoff -v /swapfile
@@ -15,6 +17,28 @@ sudo nano /etc/fstab
 # delete the actual swapfile:
 
 sudo rm /swapfile
+
+#################### UBUNTU > 22.04 ####################
+
+# to disable swap on your system, execute:
+
+sudo swapoff -v /swap.img
+
+# open the '/etc/fstab' file:
+
+sudo nano /etc/fstab
+
+# remove or comment the following line
+
+/swap.img	none	swap	sw	0	0
+
+# save the file.
+
+# delete the actual swap.img:
+
+sudo rm /swap.img
+
+#################### CONTINUE ON BOTH ####################
 
 # execute this command to see if swap is disabled, it should have no output:
 

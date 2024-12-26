@@ -6,6 +6,8 @@ sudo swapon --show
 # instructions in 'disable-swap.txt' file then follow below commands.
 # if the above command has no output, you can continue below.
 
+#################### UBUNTU <= 22.04 ####################
+
 # create a swap file at root:
 
 sudo fallocate -l 5G /swapfile
@@ -46,6 +48,51 @@ sudo nano /etc/fstab
 /swapfile   none   swap   sw   0   0
 
 # save the file.
+
+#################### UBUNTU > 22.04 ####################
+
+# create a swap file at root:
+
+sudo fallocate -l 5G /swap.img
+
+# 5G will tell the command to create a 5 GB swap.img.
+
+# if the 'fallocate' command is not available, use this command instead:
+
+sudo dd if=/dev/zero of=/swap.img bs=1024 count=5242880
+
+# note that: bs * count = swap_file_size_in_bytes
+# so in this example: 1024 * 5242880 = 5368709120 Bytes (5GB)
+
+# you can change 5G according to your needs. but consider these as a rule of thumb:
+
+- systems with less than 2 GB RAM -> 2 times the amount of RAM.
+- systems with 2 to 8 GB RAM -> the same size as the amount of RAM.
+- systems with more than 8 GB RAM -> at least 4 GB of swap.
+
+# set the permissions for created swap.img:
+
+sudo chmod 600 /swap.img
+
+# setup a linux swap area:
+
+sudo mkswap /swap.img
+
+# activate the swap:
+
+sudo swapon /swap.img
+
+# to make swap changes persistent, open '/etc/fstab' file:
+
+sudo nano /etc/fstab
+
+# add the following line into it:
+
+/swap.img   none   swap   sw   0   0
+
+# save the file.
+
+#################### CONTINUE ON BOTH ####################
 
 # check if the swap is activated:
 
