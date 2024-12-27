@@ -1,7 +1,8 @@
 # the best match for theming is:
 
 # Applications:
-# Graphite-dark-compact
+# Yaru-blue-dark (Gnome > 40)
+# Graphite-dark-compact (Gnome = 40)
 
 # Cursor:
 # DMZ-White
