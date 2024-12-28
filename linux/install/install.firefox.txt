@@ -1,8 +1,8 @@
-# INSTALL ON UBUNTU <= 21.10:
+############### INSTALL ON UBUNTU <= 21.10 ###############
 
 sudo apt-get install firefox
 
-# INSTALL ON UBUNTU >= 22.04:
+############### INSTALL ON UBUNTU >= 22.04 ###############
 
 # remove the snap version if you have it:
 
@@ -45,11 +45,11 @@ sudo apt-get update && sudo apt-get install firefox
 
 https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions-recommended
 
-# INSTALL USING FLATPAK (HAS SOME ISSUES):
+############### INSTALL USING FLATPAK (HAS SOME ISSUES) ###############
 
 flatpak install flathub org.mozilla.firefox
 
-# AFTER INSTALLATION:
+############### AFTER INSTALLATION ###############
 
 # open firefox and type this into url bar and hit enter:
 

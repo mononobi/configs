@@ -1,6 +1,6 @@
 # fuse is required to support app images.
 
-# Ubuntu <= 21.10
+################# Ubuntu <= 21.10 #################
 
 sudo apt install fuse libfuse2
 sudo modprobe fuse
@@ -9,7 +9,7 @@ sudo groupadd fuse
 user="$(whoami)"
 sudo usermod -a -G fuse $user
 
-# Ubuntu >= 22.04
+################# Ubuntu >= 22.04 #################
 
 sudo add-apt-repository universe
 sudo apt install libfuse2

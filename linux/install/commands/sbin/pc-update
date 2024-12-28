@@ -4,6 +4,7 @@ sudo apt autoremove -y
 sudo flatpak update -y
 sudo flatpak uninstall --unused -y
 sudo snap refresh
+################ remove the below lines if you wanna use any of these services ################
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
 sudo systemctl stop apache2.service

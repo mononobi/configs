@@ -1,12 +1,14 @@
-# install on ubuntu 18 or above:
+############### install on ubuntu 18 or above ###############
 
 sudo apt install flatpak
 
-# install on older ubuntu systems:
+############### install on older ubuntu systems ###############
 
 sudo add-apt-repository ppa:flatpak/stable
 sudo apt update
 sudo apt install flatpak
+
+############### continue on both ###############
 
 # execute this to add flathub repository:
 
