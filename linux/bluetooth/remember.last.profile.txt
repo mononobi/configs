@@ -1,3 +1,6 @@
+# NOTE:
+# from ubuntu 24.04 this is not required anymore and will work by default as pipewire is in use.
+
 # this guide will configure pulse-audio to remember the last profile in-use with bluetooth device.
 
 # open the '/etc/pulse/default.pa' file:

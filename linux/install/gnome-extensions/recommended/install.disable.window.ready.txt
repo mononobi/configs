@@ -1,0 +1,3 @@
+# go to 'https://extensions.gnome.org/extension/2182/noannoyance/' (Gnome <= 42)
+# or to 'https://extensions.gnome.org/extension/6385/steal-my-focus-window/' (Gnome >= 45)
+# page and toggle the install icon.

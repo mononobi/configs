@@ -1,0 +1,7 @@
+# enable and configure these system extensions:
+
+- Desktop Icons NG (DING)
+- System Monitor
+- Ubuntu AppIndicators
+- Ubuntu Dock
+- Ubuntu Tiling Assistant

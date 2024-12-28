@@ -1,4 +1,7 @@
-# go to 'https://extensions.gnome.org/extension/104/netspeed/'
+# newer gnome versions have a system extension that does exactly the same thing.
+# it is called 'System Monitor' in the extensions list.
+
+# go to 'https://extensions.gnome.org/extension/104/netspeed/' (Gnome <= 42)
 # page and toggle the install icon.
 
 # recommended settings:
