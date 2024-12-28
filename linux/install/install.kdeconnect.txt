@@ -1,1 +1,6 @@
 sudo apt install kdeconnect
+
+# to run kdeconnect-indicator on startup, add a new entry in `Startup Applications` app
+# and set the command to:
+
+/usr/bin/kdeconnect-indicator
