@@ -3,8 +3,24 @@
 # NOTE: you should be using 'gdm' as desktop manager to be able
 # to use this app (it's the default desktop manager on ubuntu).
 
-# the app is currently only available as a flatpak on debian-based distros.
+########### UBUNTU 22.04 ###########
+
+# the app is currently only available as a flatpak.
 
 # install using flatpak:
 
 flatpak install flathub io.github.realmazharhussain.GdmSettings
+
+########### UBUNTU >= 24.04 ###########
+
+# install using apt:
+
+sudo apt install gdm-settings libglib2.0-dev-bin
+
+# the link to the online guide:
+
+https://ubuntuhandbook.org/index.php/2022/04/login-screen-background-ubuntu-22-04/
+
+# the link to the github repository:
+
+https://github.com/gdm-settings/gdm-settings
