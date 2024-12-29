@@ -1,3 +1,6 @@
+# NOTE:
+# this will only work on ubuntu 22.04 and older.
+
 # python2
 pip install pipenv                  [install pipenv]
 

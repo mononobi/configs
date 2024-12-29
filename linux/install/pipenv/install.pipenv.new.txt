@@ -1,3 +1,6 @@
+# NOTE:
+# this will work on any ubuntu version.
+
 # install virtualenv:
 
 sudo apt-get install virtualenv

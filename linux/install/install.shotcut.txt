@@ -1,4 +1,4 @@
-# shotcut is a video editor with ability to increase video quality and noise reduction.
+# shotcut is a video editor with the ability to increase video quality and noise reduction.
 
 # install using flatpak:
 
