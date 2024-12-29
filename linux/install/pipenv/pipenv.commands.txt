@@ -1,0 +1,27 @@
+- pipenv shell --python 3.7           [create env for first time and activate it]
+- pipenv shell                        [activate already created env]
+- pipenv lock                         [lock all installed requirements]
+- pipenv install --ignore-pipfile     [install just packages requirements and not dev-packages in new env from Pipfile.lock] [use this in production]
+- pipenv install                      [install all packages and dev-packages requirements in new env from Pipfile] [this may break in production]
+- pipenv install --dev                [install just packages requirements and not dev-packages]
+- pipenv check                        [check for security vulnerabilities in env]
+- pipenv run <command>                [run a command in env without activating the env shell]
+- pipenv uninstall [dependency]       [uninstall the specified dependency from env]
+- pipenv uninstall --all              [uninstall ALL dependencies from env]
+- pipenv uninstall --all-dev          [uninstall ALL DEVELOPMENT dependencies from env]
+- pipenv --venv                       [see the physical location of current env]
+- pipenv install -r requirements.txt  [install requirements from requirements.txt of virtualenv] [for compatibility]
+- pipenv install -r dev-requirements.txt --dev  [install requirements from requirements.txt of virtualenv as dev] [for compatibility]
+- pipenv lock -r > requirements.txt   [lock requirements into old-style requirements.txt] [for compatibility]
+- pipenv lock -r -d > dev-requirements.txt      [lock dev requirements into old-style requirements.txt] [for compatibility]
+- pipenv sync                         [install or update all dependencies from pipfile.lock]
+- pipenv --rm                         [remove the current env]
+
+==============================================================================================
+pipenv supports the automatic loading of environmental variables when a .env file exists in the top-level directory. 
+That way, when you 'pipenv shell' to open the virtual environment, it loads your environmental variables from the file. 
+The .env file just contains key-value pairs:
+
+SOME_ENV_CONFIG=some_value
+SOME_OTHER_ENV_CONFIG=some_other_value
+==============================================================================================

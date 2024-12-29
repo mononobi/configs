@@ -4,7 +4,7 @@ pip install pipenv                  [install pipenv]
 # python3
 pip3 install pipenv                 [install pipenv]
 
-# ============================================================================================================================================
+# ==============================================================================================
 # pipenv supports the automatic loading of environmental variables when a .env file exists
 # in the top-level directory. That way, when you 'pipenv shell' to open the virtual
 # environment, it loads your environmental variables from the file. The .env file
@@ -12,7 +12,7 @@ pip3 install pipenv                 [install pipenv]
 
 # SOME_ENV_CONFIG=some_value
 # SOME_OTHER_ENV_CONFIG=some_other_value
-# ============================================================================================================================================
+# ==============================================================================================
 
 # NOTE1: you should not install pipenv using apt-get.
 # NOTE2: you should not install virtualenv using pip.
@@ -39,6 +39,6 @@ sudo apt remove python3-virtualenv
 sudo apt-get install virtualenv
 
 # then install pipenv as non-root user:
-pip install pipenv
+pip3 install pipenv
 
-# ============================================================================================================================================
+# ==============================================================================================

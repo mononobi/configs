@@ -13,8 +13,8 @@ sudo apt install libreoffice
 
 # to enable right to left languages:
 # open one of libreoffice apps and go to
-# Tools -> Options -> Language Settings -> Languages
+# Tools -> Options -> Language and Locales -> General
 # and then check 'Complex text layout' and choose your right to left language.
 # then restart the app and go to
-# Tools -> Options -> Language Settings -> Complex Text Layout
+# Tools -> Options -> Language and Locales -> Complex Text Layout
 # and then select 'Numerals' as 'Context'.

@@ -5,3 +5,5 @@ sudo apt install python3.7
 python3.7 --version
 sudo apt-get install python3-pip
 pip3 --version
+sudo apt-get install python3.7-dev
+sudo apt-get install python3.7-full
