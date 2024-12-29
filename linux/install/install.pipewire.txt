@@ -1,3 +1,6 @@
+# NOTE:
+# from ubuntu 24.04 pipewire is in use by default and there is no need to this.
+
 # INSTALL PIPEWIRE AT YOUR OWN RISK, IT DOES NOT WORK CORRECTLY AFTER A FEW UPDATES.
 # IT WILL ALSO REMOVE YOUR GNOME DESKTOP IF YOU UNINSTALL IT.
 
