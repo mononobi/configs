@@ -1,0 +1,8 @@
+virtualenv --python=python3.7 env   [create environment]
+source env/bin/activate             [activate env]
+
+# Set up a new project with a single application:
+
+sudo ufw allow 8000                 [port number of server]
+pip install -r requirements.txt     [install needed requirements]
+pip freeze > requirements.txt       [freeze requirements]
