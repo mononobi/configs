@@ -3,7 +3,7 @@
 if [ ! -f "/usr/lib/uwsgi/plugins/python310_plugin.so" ]
 then
     echo "Installing uwsgi's python3.10 plugin."
-    apt install python3.10-dev python3-distutils python3.10-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre3-dev libssl-dev zlib1g-dev
+    apt install python3.10-dev python3.10-distutils uwsgi uwsgi-src uuid-dev libcap-dev libpcre2-dev libpcre3-dev libssl-dev zlib1g-dev
     export PYTHON=python3.10
     uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python310"
     mv python310_plugin.so /usr/lib/uwsgi/plugins/python310_plugin.so
