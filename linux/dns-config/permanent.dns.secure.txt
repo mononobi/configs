@@ -5,6 +5,8 @@
 # first time by visiting a URL provided by them when your Internet connection
 # is not yet established.
 
+# following this guide, will prevent your system from any kind of dns leaks when using a vpn.
+
 # dnsmasq is a lightweight dns caching server which speeds up page loading.
 # it is way more convenient and stable than 'systemd-resolved' which is default on ubuntu.
 # and also it does not create dns leaks when accepts dns queries on local address.
