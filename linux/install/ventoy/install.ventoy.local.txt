@@ -1,0 +1,47 @@
+# NOTE:
+# this will install Ventoy in the user's local path, so each user will need to
+# have their own installation, but if you reinstall the OS, the installation will
+# be preserved as long as you have '/home' mounted on a separate partition.
+
+# ventoy is a cross-platform usb multiboot creator.
+# it works on windows and linux and can create bootables for windows and linux.
+
+# first, head over to 'https://github.com/ventoy/Ventoy/releases'
+# and download the latest version.
+
+# execute this command to extract the downloaded file:
+
+tar -xf ventoy-X.Y.Z-linux.tar.gz
+
+# execute this command to make a directory for ventoy:
+
+mkdir ~/.local/share/ventoy
+
+# copy the extracted directory into created directory:
+
+cp -r ventoy-X.Y.Z ~/.local/share/ventoy
+
+# rename the copied directory:
+
+mv ~/.local/share/ventoy/ventoy-X.Y.Z ~/.local/share/ventoy/ventoy-current
+
+# open the 'files/ventoy.desktop' file and replace 'USER_NAME' with the actual username.
+
+# copy the modified 'files/ventoy.desktop' file into '~/.local/share/applications':
+
+cp files/ventoy.desktop ~/.local/share/applications
+
+# copy the 'files/ventoy.png' icon image into '~/.local/share/icons':
+
+cp files/ventoy.png ~/.local/share/icons
+
+# execute this to make the app file executable:
+
+sudo chmod 755 ~/.local/share/ventoy/ventoy-current/VentoyGUI.x86_64
+
+# press 'Alt + F2' and input 'r' and hit 'Enter' to reload the shell.
+# now the app should be visible on your application menu.
+
+# if you want to update the ventoy app, you only need to download the
+# newer version and then extract it into '~/.local/share/ventoy/ventoy-current'
+# and make the '~/.local/share/ventoy/ventoy-current/VentoyGUI.x86_64' file executable.

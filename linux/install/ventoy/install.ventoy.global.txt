@@ -1,3 +1,8 @@
+# NOTE:
+# this will install Ventoy in a global path so that all available/future users
+# can use the same installation, but if you reinstall the OS, the installation
+# will be removed.
+
 # ventoy is a cross-platform usb multiboot creator.
 # it works on windows and linux and can create bootables for windows and linux.
 
@@ -20,9 +25,16 @@ sudo cp -r ventoy-X.Y.Z /opt/ventoy/
 
 sudo mv /opt/ventoy/ventoy-X.Y.Z /opt/ventoy/ventoy-current
 
-# copy the 'files/ventoy.desktop' file into '~/.local/share/applications':
+# open the 'files/ventoy.desktop' file and replace the line which starts with 'Exec'
+# with 'Exec=/opt/ventoy/ventoy-current/VentoyGUI.x86_64'.
 
-cp files/ventoy.desktop ~/.local/share/applications
+# copy the modified 'files/ventoy.desktop' file into '/usr/share/applications':
+
+sudo cp files/ventoy.desktop /usr/share/applications
+
+# execute this to change the access level of the copied file:
+
+sudo chmod 644 /usr/share/applications/ventoy.desktop
 
 # copy the 'files/ventoy.png' icon image into '/usr/share/pixmaps':
 
