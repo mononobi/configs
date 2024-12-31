@@ -1,0 +1,11 @@
+# this extension adds a mic mute/unmute toggle to the top panel.
+
+# go to 'https://extensions.gnome.org/extension/1113/nothing-to-say/'
+# page and toggle the install icon.
+
+# recommended settings:
+
+# Keybindings: <Ctrl>F9
+# Top bar icon: Always
+# OSD notification: checked
+# Sound notification: checked
