@@ -1,0 +1,5 @@
+# This is the GNOME implementation of kdeconnect and has much
+# better integration than kdeconnect on the GNOME shell.
+
+# go to 'https://extensions.gnome.org/extension/1319/gsconnect/'
+# page and toggle the install icon.

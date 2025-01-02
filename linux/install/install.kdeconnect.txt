@@ -1,6 +1,15 @@
+# if you're using gnome shell, it is recommended to install 'gsconnect' gnome
+# extension instead.
+
 sudo apt install kdeconnect
 
 # to run kdeconnect-indicator on startup, add a new entry in `Startup Applications` app
 # and set the command to:
 
 /usr/bin/kdeconnect-indicator
+
+########## to remove kdeconnect and its dependencies, execute these commands:
+
+sudo killall kdeconnectd
+sudo apt-get remove kdeconnect
+sudo apt-get autoremove
