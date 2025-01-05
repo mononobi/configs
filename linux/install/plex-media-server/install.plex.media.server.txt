@@ -81,7 +81,9 @@ sudo systemctl start plexmediaserver
 
 sudo ufw allow 32400
 
-# add all client ips which want to connect to server in plex network settings.
+# add all client IPs which want to connect to the server in plex 'Network' settings.
+# for example if your default gateway is '192.168.178.1', add these to the allowed IPs:
+# localhost, 127.0.0.1, 192.168.178.0/24
 
 # DEFAULT PATHS:
 
