@@ -5,6 +5,8 @@
 sudo blkid
 
 # then replace the fstab file in /etc/fstab
-# the 'fstab.sample' file should be changed according to your partitions.
-# the 'fstab.ntfs' file shows how to mount ntfs partitions.
-# the 'fstab' file is the file to be merged with available file.
+# the 'samples/fstab.sample' file should be changed according to your partitions.
+# the 'samples/fstab.ntfs' file shows how to mount ntfs partitions.
+# the 'samples/fstab.with.external.hdd' shows how to mount an external hdd
+# on '/mnt' instead of '/media/user_name'.
+# the 'fstab' file is the file to be merged with available file and is the most recent file.
