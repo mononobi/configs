@@ -2,6 +2,20 @@
 
 flatpak install flathub com.getpostman.Postman
 
+######## IN CASE OF ERROR RELATED TO CERTIFICATES ########
+
+# if postman crashes when clicking on its icon and does not open at all, run
+# this to see the error:
+
+flatpak run com.getpostman.Postman
+
+# if the error is related to certificates not being found, execute these commands:
+
+cd ~/.var/app/com.getpostman.Postman/config/Postman/proxy
+openssl req -subj '/C=US/CN=Postman Proxy' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout postman-proxy-ca.key -out postman-proxy-ca.crt
+
+# now the app should start without any issues.
+
 # you can also install using snap, but it's not recommended at all as
 # it has a terrible performance:
 
