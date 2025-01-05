@@ -1,5 +1,6 @@
 # NOTE:
 # change 'mono' to your own username in this guide.
+# change '/mnt/plex/' to your own root path for custom plex data store.
 
 # you should download the plex media server from here:
 # https://www.plex.tv/media-server-downloads/
@@ -28,9 +29,12 @@ sudo dpkg -L plexmediaserver
 
 # open the above file and uncomment the last line of it.
 
-# then run the below commands:
+############ RUN THE BELOW COMMAND IF YOU ARE NOT ON UBUNTU 20+ OR DEBIAN 10+ ############
 
 wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo tee /etc/apt/trusted.gpg.d/plexmediaserver.asc
+
+############ RUN THE ABOVE COMMAND IF YOU ARE NOT ON UBUNTU 20+ OR DEBIAN 10+ ############
+
 sudo apt update
 
 # now plex media server will be updated through normal os updates.
@@ -42,24 +46,27 @@ sudo apt update
 
 sudo systemctl stop plexmediaserver
 
+# we assume that the root path that we want to store plex data in, is as follows:
+
+/mnt/plex/
+
 # if it is your initial installation, and you don't have any metadata yet, create these folders:
 
-mkdir -p /home/mono/.plexmediaserver/plexmediaserver/Library/Application Support
-mkdir /home/mono/.plexmediaserver/tmp
-mkdir /home/mono/.plexmediaserver/db-backup
+mkdir -p /mnt/plex/Plex/plexmediaserver/Library/'Application Support'
+mkdir /mnt/plex/Plex/tmp
 
 # note that if you already have those folders, your user must be the owner of those
 # folders, if it's not, execute these commands:
 
-sudo chown -R mono:mono /home/mono/.plexmediaserver
-sudo chmod -R 775 /home/mono/.plexmediaserver
+sudo chown -R mono:mono /mnt/plex/Plex
+sudo chmod -R 775 /mnt/plex/Plex
 
 # delete the default metadata folder:
 
 sudo rm -r /var/lib/plexmediaserver
 
 # copy the 'override.conf' file into this location with these commands
-# (change 'mono' to your own username in the file):
+# (change 'mono' and '/mnt/plex' to your own username and root path in the file):
 
 sudo mkdir -p /etc/systemd/system/plexmediaserver.service.d
 sudo cp override.conf /etc/systemd/system/plexmediaserver.service.d
@@ -70,7 +77,10 @@ sudo systemctl daemon-reload
 sudo systemctl enable plexmediaserver
 sudo systemctl start plexmediaserver
 
-# allow 32400 port in ufw.
+# allow the 32400 port in ufw:
+
+sudo ufw allow 32400
+
 # add all client ips which want to connect to server in plex network settings.
 
 # DEFAULT PATHS:
