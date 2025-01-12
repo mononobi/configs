@@ -1,0 +1,9 @@
+# thonny is a beginner-friendly python IDE.
+
+# install using flatpak (recommended):
+
+flatpak install org.thonny.Thonny
+
+# install using apt (not recommended as it has a bit older version):
+
+sudo apt install thonny
