@@ -16,6 +16,8 @@ openssl req -subj '/C=US/CN=Postman Proxy' -new -newkey rsa:2048 -sha256 -days 3
 
 # now the app should start without any issues.
 
+##########################################################
+
 # you can also install using snap, but it's not recommended at all as
 # it has a terrible performance:
 
