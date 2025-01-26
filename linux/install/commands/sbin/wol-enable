@@ -1,0 +1,1 @@
+echo PASSWORD | sudo -S ethtool -s eno1 wol g

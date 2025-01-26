@@ -1,0 +1,60 @@
+# to enable wake on lan, you should enable it on bios, router and the operating system.
+
+####################### 1. ENABLE ON BIOS #######################
+
+# go to your pc bios and to the 'APM configuration' menu and
+# enable 'Wake on LAN' or 'Wake on PCIe'.
+
+####################### 2. ENABLE ON ROUTER #######################
+
+# go to your router's admin page and select your pc from the networks list
+# and check 'Wake on LAN' setting.
+
+####################### 3. ENABLE ON OPERATING SYSTEM #######################
+
+# in this guide we assume that our network interface is 'eno1'.
+# you should replace it with your actual network interface name.
+
+# execute this to get the name of your network interface:
+
+ifconfig
+
+# execute this command for your network interface:
+
+sudo ethtool eno1
+
+# you should see something like this:
+
+# Supports Wake-on: pumbg
+# Wake-on: g
+
+# the letter 'g' on each line specifies that wol is available and enabled.
+# first line tells that wake on lan is supported.
+# second line tells that wake on lan is enabled.
+
+# if you had this on the second line:
+
+# Wake-on: d
+
+# it means that wake on lan is not enabled, and you should enable it.
+
+# execute this to enable wake on lan:
+
+sudo ethtool -s eno1 wol g
+
+# this configuration is not permanent and wake on lan will be disabled every
+# time you restart your pc. to make it permanent, copy these 2 files into
+# '~/.local/sbin' and also add a startup application entry in 'Startup Applications'
+# and point it to the first file:
+
+# linux/install/commands/sbin/wol-enable
+# linux/install/commands/sbin/wol-status
+
+# you should replace the 'PASSWORD' with your own password in the files.
+
+# every time you turn on your pc, wake on lan will get enabled automatically.
+
+# you can use any of these apps on android to turn your pc on from your mobile phone:
+
+https://play.google.com/store/apps/details?id=com.bitklog.wolon&hl=en
+https://play.google.com/store/apps/details?id=co.uk.mrwebb.wakeonlan&hl=en
