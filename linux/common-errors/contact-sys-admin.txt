@@ -1,0 +1,22 @@
+# if after booting you are faced with a white background page that
+# says "Oh no! Something has gone wrong", this could be due to an update
+# that has not been fully applied because Ubuntu has deferred or held back updates.
+# to fix this problem, first press this key combination on the error page to open
+# the terminal:
+
+# CTRL + ALT + F6
+
+# other possible combinations on different systems:
+
+# CTRL + ALT + F3
+# CTRL + SHIFT + F4
+
+# login to your account on the terminal.
+
+# execute these commands:
+
+sudo apt-get update && sudo apt-get dist-upgrade
+sudo apt-get clean && sudo apt-get autoremove
+sudo reboot
+
+# now the problem is probably fixed.
