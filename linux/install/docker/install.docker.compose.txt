@@ -1,10 +1,20 @@
-# manual installation is recommended as you can get the latest version:
+################################## BEST APPROACH (RECOMMENDED) ##################################
 
-sudo curl -L https://github.com/docker/compose/releases/download/v2.32.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+# if you have followed the recommended installation approach from `install.docker.txt` file,
+# `docker compose` has been already installed and accessible using `docker compose` command.
+# with that approach you'll get both docker and docker compose with the latest versions
+# and also with automatic updates through the regular system updates.
+
+############## MANUAL INSTALLATION (BETTER THAN BELLOW BECAUSE OF LATEST VERSION) ##############
+
+# with this approach you'll get the latest version but without automatic updates.
+# for the latest version with automatic updates, follow the `best approach` above.
+
+sudo curl -L https://github.com/docker/compose/releases/download/v2.35.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
-# apt installation is not recommended because it has an old version:
+################## APT INSTALLATION (NOT RECOMMENDED BECAUSE OF OLD VERSIONS) ##################
 
 sudo apt-get install docker-compose
 docker-compose --version
