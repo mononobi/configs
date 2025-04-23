@@ -24,12 +24,15 @@ sudo snap install pycharm-community --classic --channel=latest/stable
 snap info pycharm-professional
 snap info pycharm-community
 
-################ RECOMMENDED PLUGINS ################
+################ RECOMMENDED PLUGINS (NEED TO BE INSTALLED) ################
+
+Nginx Configuration (meanmail)
+
+################ RECOMMENDED PLUGINS (BUNDLED) ################
 
 .env files support (JetBrains)
 Docker (JetBrains)
 Ini (JetBrains)
-Nginx Configuration (meanmail)
 
 ################ NO LONGER NEEDED PLUGINS ################
 
