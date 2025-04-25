@@ -2,3 +2,6 @@ sudo add-apt-repository ppa:dotnet/backports
 sudo apt-get update && sudo apt-get install -y dotnet-sdk-9.0
 sudo apt-get update && sudo apt-get install -y aspnetcore-runtime-9.0
 sudo apt-get install -y dotnet-runtime-9.0
+
+sudo dotnet dev-certs https --trust
+sudo dotnet workload install maui-android
