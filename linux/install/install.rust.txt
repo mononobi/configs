@@ -1,0 +1,22 @@
+# run in the terminal:
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# check the installation (opening a new terminal is needed):
+
+rustc --version
+
+# update the installation:
+
+rustup update
+
+# uninstalling:
+
+rustup self uninstall
+
+# the rust and toolchain installation paths are:
+# ~/.rustup
+# ~/.cargo
+
+# more info is available at:
+# https://www.rust-lang.org/tools/install
