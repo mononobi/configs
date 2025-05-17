@@ -6,6 +6,10 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 rustc --version
 
+# install the standard library:
+
+rustup component add rust-src
+
 # update the installation:
 
 rustup update
