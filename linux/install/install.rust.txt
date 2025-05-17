@@ -24,3 +24,8 @@ rustup self uninstall
 
 # more info is available at:
 # https://www.rust-lang.org/tools/install
+
+# useful subcommands:
+
+- cargo expand: shows the result of macro expansion for a crate or a specific module.
+  installation: cargo install cargo-expand
