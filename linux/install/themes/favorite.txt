@@ -3,7 +3,7 @@
 
 # Applications:
 # Yaru-blue-dark (Gnome > 40)
-# Yaru-olive-dark (Gnome > 40)
+# Yaru-viridian-dark (Gnome > 40)
 # Graphite-dark-compact (Gnome = 40)
 
 # Cursor:
@@ -15,7 +15,7 @@
 
 # Shell:
 # Yaru-blue-dark (Gnome > 40)
-# Yaru-olive-dark (Gnome > 40)
+# Yaru-viridian-dark (Gnome > 40)
 # Material-Originals-Shell-40-Blue-Dark (Gnome = 40)
 
 # Login:
