@@ -27,7 +27,13 @@
 
 =================================================================================
 
-# Important note:
-# After setting these values on Tweaks app, you should never open the
+# Important Notes:
+
+# after setting these values on Tweaks app, you should never open the
 # "Appearance" tab on Ubuntu settings, otherwise these settings will be reverted
 # back to default, and you have to do it again.
+
+# in the Tweaks app, the full name of the icon packs may not be visible, to see
+# the full name of the currently selected pack, execute this in a terminal:
+
+gsettings get org.gnome.desktop.interface icon-theme
