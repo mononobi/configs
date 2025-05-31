@@ -1,3 +1,4 @@
+# you can configure these in Tweaks (Gnome Tweaks) app.
 # the best match for theming is:
 
 # Applications:
