@@ -1,4 +1,4 @@
-# install using JetBrains Toolbox app (RECOMMENDED):
+############ install using JetBrains Toolbox app (RECOMMENDED) ############
 
 # install the dependencies found in 'install.fuse.appimage.txt' file.
 
@@ -14,7 +14,7 @@ tar -xf DOWNLOADED_ARCHIVE.tar.gz
 
 # now toolbox app is installed. open it from apps menu or taskbar and install pycharm from it.
 
-# install using snap (NOT RECOMMENDED):
+############ install using snap (NOT RECOMMENDED) ############
 
 sudo snap install pycharm-professional --classic --channel=latest/stable
 sudo snap install pycharm-community --classic --channel=latest/stable
@@ -42,7 +42,7 @@ It is supported by the IDE now.
 Settings Repository (JetBrains):
 Deprecated and does not work anymore. but the settings sync by the IDE is free to use now.
 
-################ SYNC IDE SETTINGS ################
+################ SYNC IDE SETTINGS (NO LONGER NEEDED) ################
 
 # to be able to synchronize your IDE settings, you can create a GitHub
 # repository (preferably private). then you should install the 'Settings Repository'
@@ -62,4 +62,4 @@ Deprecated and does not work anymore. but the settings sync by the IDE is free t
 # if you want to synchronize your current local settings with remote settings
 # on the repository which has been already initialized.
 
-#####################################################
+######################################################################

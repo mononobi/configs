@@ -13,3 +13,4 @@ sudo usermod -a -G fuse $user
 
 sudo add-apt-repository universe
 sudo apt install libfuse2
+sudo apt-get install libxi6 libxrender1 libxtst6 mesa-utils libfontconfig libgtk-3-bin tar dbus-user-session
