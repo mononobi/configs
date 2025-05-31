@@ -15,9 +15,19 @@
 # Yaru-blue-dark (Gnome > 40)
 # Material-Originals-Shell-40-Blue-Dark (Gnome = 40)
 
+# Login:
+# image: abstract-blur.jpg
+
+# File Explorer Icon Size (From 1 to 5):
+# 3 out of 5 (The middle size)
+
 # Grub:
 # theme: tela
 # icon: color
 
-# Login:
-# image: abstract-blur.jpg
+=================================================================================
+
+# Important note:
+# After setting these values on Tweaks app, you should never open the
+# "Appearance" tab on Ubuntu settings, otherwise these settings will be reverted
+# back to default, and you have to do it again.
