@@ -1,4 +1,4 @@
-############ install using JetBrains Toolbox app (RECOMMENDED) ############
+############ Install Using JetBrains Toolbox App (RECOMMENDED) ############
 
 # install the dependencies found in 'install.fuse.appimage.txt' file.
 
@@ -14,7 +14,7 @@ tar -xf DOWNLOADED_ARCHIVE.tar.gz
 
 # now toolbox app is installed. open it from apps menu or taskbar and install pycharm from it.
 
-############ install using snap (NOT RECOMMENDED) ############
+############ Install Using Snap (NOT RECOMMENDED) ############
 
 sudo snap install pycharm-professional --classic --channel=latest/stable
 sudo snap install pycharm-community --classic --channel=latest/stable
@@ -24,7 +24,27 @@ sudo snap install pycharm-community --classic --channel=latest/stable
 snap info pycharm-professional
 snap info pycharm-community
 
-################ RECOMMENDED PLUGINS (NEED TO BE INSTALLED) ################
+################ Increase Inotify File Watch Limit for The IDE ################
+
+cd /etc/sysctl.d
+sudo touch idea.conf
+sudo nano idea.conf
+
+# in the opened file, write this and save the file:
+
+fs.inotify.max_user_watches = 2097152
+
+# execute this to apply the changes:
+
+sudo sysctl -p --system
+
+# restart the IDE for the changes to take effect.
+
+# see the current inotify file watch limit:
+
+sysctl fs.inotify.max_user_watches
+
+################ RECOMMENDED PLUGINS (NEEDED TO BE INSTALLED) ################
 
 Nginx Configuration (meanmail)
 
