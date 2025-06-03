@@ -1,3 +1,5 @@
+# Note: this extension is no longer needed from Ubuntu 24.04
+
 # go to 'https://extensions.gnome.org/extension/4099/no-overview/'
 # page and toggle the install icon.
 

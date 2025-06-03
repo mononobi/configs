@@ -9,25 +9,24 @@
 
 # recommended settings to enable (disable others):
 
-#### VOLUME MIXER TAB:
-# Show current audio output selection
+######################## Widgets Tab ########################
 
-#### NOTI & MEDIA TAB:
-# Media controls widget
-# Compact mode
-# Notification Widget
+#### Media Widget -> On
+# All check-boxes -> On
+
+#### Notifications Widget -> On
+# Use native controls -> Off
+# All other check-boxes -> On
 # Max height: 438
-# Position: Bottom
-# Attach to QS panel
-# Auto hide
 
-#### QUICK TOGGLES TAB:
-# DND Quick Toggle
+#### Weather Widget -> Off
 
-#### OTHER TAB:
-# Fix Weather Widget Overflow
-# Remove Notifications On Date Menu
-# Remove Media Control On Date Menu
+#### Volume Mixer Widget -> Off
+
+######################## Toggles Tab ########################
+
+# DND Quick Toggle -> On
+# Unsafe Mode Quick Toggle -> Off
 
 #################################################################################
 
