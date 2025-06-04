@@ -1,7 +1,40 @@
 # enable and configure these system extensions:
 
-- Desktop Icons NG (DING)
-- System Monitor
-- Ubuntu AppIndicators
-- Ubuntu Dock
-- Ubuntu Tiling Assistant
+# NOTE:
+# all of these might not be available when you install the OS, but after installing all
+# other custom extensions and restarting the system, they will show up as system extensions.
+
+############### Desktop Icons NG (DING) ###############
+- Size for the desktop icons: Small
+- Show the personal folder in the desktop: Off
+- Show the trash icon in the desktop: On
+- Show external drives in the desktop: Off
+- Show network drives in the desktop: Off
+- New icons alignment: Top-left corner
+
+
+############### System Monitor ###############
+- Ucheck "Swap" by right-clicking on the tool
+
+############### Ubuntu Dock ###############
+### Position and size Tab:
+- Show on all monitors: On
+- Position on screen: Bottom
+- Panel mode: extend to the screen edge: On
+- Icon size limit: 36px
+- Fixed icon size: scroll to reveal other icons: On
+
+### Launchers Tab:
+- Show open windows' previews: Off
+- Show trash can: Off
+- Show volumes and devices: Off
+
+### Appearance Tab:
+- Shrink the dash: On
+- Show overview on startup: Off
+- Customize opacity: Fixed
+- Opacity: 65%
+
+############### Ubuntu AppIndicators ###############
+
+############### Ubuntu Tiling Assistant ###############
