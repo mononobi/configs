@@ -20,6 +20,7 @@
 
 # Login:
 # image: abstract-blur.jpg
+# image: tony-webster-blur.jpg
 
 # File Explorer Icon Size (From 1 to 5):
 # 3 out of 5 (The middle size)
