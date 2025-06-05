@@ -1,8 +1,8 @@
-# method 1: install from software repository:
+######################### method 1: install from software repository:
 
 sudo apt-get install ffmpeg
 
-# method 2: compile latest version from source (recommended):
+######################### method 2: compile latest version from source (recommended):
 
 sudo apt-get install libopus-dev libmp3lame-dev libfdk-aac-dev libvpx-dev libx264-dev yasm libass-dev libtheora-dev libvorbis-dev mercurial cmake build-essential
 
