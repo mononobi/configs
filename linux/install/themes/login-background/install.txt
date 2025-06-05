@@ -1,3 +1,7 @@
+# NOTE:
+# This no longer works on ubuntu 22.04 and later.
+# Use the guide in 'install.gdm.settings.txt' file for current ubuntu versions.
+
 # install dependencies:
 
 sudo apt-get install libglib2.0-dev-bin
