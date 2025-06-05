@@ -31,6 +31,6 @@ XDG_DATA_DIRS DEFAULT=/usr/local/share:/usr/share:/var/lib/flatpak/exports/share
 sudo apt install gnome-software-plugin-flatpak
 
 # NOTE:
-# to disable annoying notifications of flatpak software application, do the following:
-# go to this place: 'Settings -> Notifications -> Software'
+# to disable annoying notifications of flatpak 'Software' application, do the following:
+# go to: 'Settings -> Apps -> Software'
 # and turn the 'Notifications' toggle off.
