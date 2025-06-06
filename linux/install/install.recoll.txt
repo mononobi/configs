@@ -1,3 +1,5 @@
+# recoll is a document content and name search with a powerful UI.
+
 sudo add-apt-repository ppa:recoll-backports/recoll-1.15-on
 sudo apt-get update
 sudo apt-get install recoll
