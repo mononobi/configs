@@ -7,5 +7,5 @@
 
 # now you can type python in the terminal and python3 shell will come up.
 
-# NOTE: the script points to python3.9, but you can change it to point to any
+# NOTE: the script points to python3.13, but you can change it to point to any
 # installed python version you'd like to.
