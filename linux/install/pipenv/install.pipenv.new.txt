@@ -8,6 +8,8 @@ sudo apt-get install virtualenv
 # then install pipenv using any version of python which is
 # not included in your distro by default (ex. 3.9):
 
-python3.9 -m pip install --user pipenv
+python3.13 -m pip install --user pipenv
 
-# ==============================================================================================
+# upgrade pip
+
+python3.13 -m pip install --upgrade pip
