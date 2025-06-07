@@ -1,0 +1,2 @@
+# SSD drive
+/dev/disk/by-uuid/aef4f263-5b82-4f32-8acc-65424f582633 /mnt/archives auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=Archives 0 0
