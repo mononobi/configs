@@ -1,0 +1,15 @@
+# GPU general short info:
+
+lspci | grep -i vga
+
+# detailed GPU memory size info (RECOMMENDED):
+
+glxinfo | grep -i "video memory"
+
+# GPU memory size info:
+
+sudo dmesg | grep -i vram
+
+# detailed AMD GPU info:
+
+sudo dmesg | grep -i amdgpu
