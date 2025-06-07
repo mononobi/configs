@@ -9,3 +9,8 @@ sudo bash nodesource_setup.sh
 sudo apt install nodejs
 node -v
 npm -v
+
+# NOTE:
+# If you have already installed an older version of node using this script, you can just update
+# the version number in the `curl` line and execute the same script again to update the node
+# installation to a new version.
