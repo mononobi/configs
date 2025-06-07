@@ -1,0 +1,16 @@
+# If you have a CPU with integrated graphics, to set the amount of system
+# RAM that would be dedicated to the GPU, you can do the following:
+
+- Enter the BIOS by pressing 'DEL' or 'F2' on startup.
+- In the BIOS search for "UMA Frame Buffer Size", "VRAM Size" or something similar
+  and set the amount of RAM you want to be dedicated to GPU.
+- Save and reboot to the system.
+
+# Recommended amount of RAM to be dedicated to GPU is 25% of available system RAM:
+
+# More than 64GB of RAM -> 16GB of GPU RAM
+# 32GB of RAM -> 8GB of GPU RAM
+# 16GB of RAM -> 4GB of GPU RAM
+# 8GB of RAM -> 2GB of GPU RAM
+# 4GB of RAM -> 1GB of GPU RAM
+# 2GB of RAM -> 0.5GB of GPU RAM
