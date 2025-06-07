@@ -1,9 +1,10 @@
 # this installation method is the recommended way:
 
 # update the version to the newest stable version if available.
+# note that even version numbers are those with LTS support (ex. 22, 24, ...) and are preferred.
 
 cd ~
-curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
+curl -sL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
 sudo apt install nodejs
 node -v
