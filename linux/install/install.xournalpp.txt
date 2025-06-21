@@ -1,0 +1,3 @@
+# Xournalpp is an app to edit PDF files, add/remove/move pages, add annotations, add signatures, ...
+
+sudo apt install xournalpp
