@@ -1,1 +1,7 @@
+# install using flatpak (recommended - latest version):
+
+flatpak install flathub org.gimp.GIMP
+
+# install using apt (not recommended - old version):
+
 sudo apt-get install gimp
