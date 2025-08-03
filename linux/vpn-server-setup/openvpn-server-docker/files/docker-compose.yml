@@ -1,0 +1,21 @@
+services:
+  openvpn-as:
+    image: openvpn/openvpn-as
+    container_name: openvpn-as-server
+    restart: unless-stopped
+    ports:
+      # Admin Web UI:
+      - "943:943"
+      # Client Web UI (also for client profile downloads):
+      - "9443:9443"
+      # OpenVPN TCP tunnel:
+      - "443:443/tcp"
+      # OpenVPN UDP tunnel (recommended for performance):
+      - "1194:1194/udp"
+    volumes:
+      # This is where your configuration will be stored permanently.
+      # for example: '/opt/openvpn-as/config:/openvpn/etc'
+      - /opt/openvpn-as/config:/openvpn/etc
+    cap_add:
+      # Required for the VPN server to manipulate network interfaces.
+      - NET_ADMIN

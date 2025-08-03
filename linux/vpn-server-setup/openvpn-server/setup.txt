@@ -194,7 +194,7 @@ push "dhcp-option DNS 208.67.220.220"
 
 ######################################## the above configs may break the connection, if they did so, reverse them to default ########################################
 
-######################################## the below configs are optional and it is best to leave them on default values if there is no need for change ########################################
+######################################## the below configs are optional, and it is best to leave them on default values if there is no need for change ########################################
 
 # optional configs, leave them on default if there is no need for change.
 # if you do switch the protocol to TCP, you will also need to change the
@@ -210,7 +210,7 @@ port 1194
 proto udp
 explicit-exit-notify 1
 
-######################################## the above configs are optional and it is best to leave them on default values if there is no need for change ########################################
+######################################## the above configs are optional, and it is best to leave them on default values if there is no need for change ########################################
 
 # replace "server.crt" and "server.key" with what ever name
 # that you used as CA instance name. we used "vpn-server-ca" in this document.
@@ -219,20 +219,14 @@ explicit-exit-notify 1
 cert vpn-server-ca.crt
 key vpn-server-ca.key
 
-# now open the following file and edit it as described.
+# now execute the following commands:
 
-sudo nano /etc/sysctl.conf
+echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
+echo "net.netfilter.nf_conntrack_tcp_be_liberal=1" | sudo tee -a /etc/sysctl.conf
 
-# now find 'net.ipv4.ip_forward=1' line and uncomment it.
+# if your server has public or local (link) ipv6, also execute this:
 
-net.ipv4.ip_forward=1
-
-# if your server has public or local (link) ipv6, find 'net.ipv6.conf.all.forwarding=1' line
-# and uncomment it.
-
-net.ipv6.conf.all.forwarding=1
-
-# then save and close the file.
+echo "net.ipv6.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf
 
 # then execute the following command to reload and see the changed config.
 
