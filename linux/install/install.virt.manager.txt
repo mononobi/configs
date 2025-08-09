@@ -60,3 +60,5 @@ sudo usermod -aG kvm USER_NAME
 ############################ NOTE ############################
 # You should also add the virtio libs '.iso' file as a SATA disk to install
 # dependencies after booting into windows.
+# You can download it here:
+# https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
