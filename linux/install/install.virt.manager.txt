@@ -20,6 +20,24 @@ sudo usermod -aG kvm USER_NAME
 
 # you need to restart the pc for this change to take effect.
 
+################ CONFIGS TO USE THE CORRECT RESOLUTION ON ANY GUEST ################
+
+############################ DISPLAY ############################
+# Type: Spice server
+# Listen type: None
+# OpenGL: Enabled
+
+############################ VIDEO ############################
+# Model: Virtio
+# 3D Acceleration: Enabled
+
+############################ NOTE ############################
+# In the main virt-manager window for your running VM, go
+# to the "View" menu -> "Scale Display" and check these two options:
+
+# "Always"
+# "Auto resize VM with window"
+
 ######################### CONFIGS FOR INSTALLING WINDOWS 11 GUEST #########################
 
 ############################ HYPERVISOR ############################
