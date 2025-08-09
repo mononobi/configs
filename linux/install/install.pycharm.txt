@@ -1,5 +1,28 @@
 ############ Install Using JetBrains Toolbox App (RECOMMENDED) ############
 
+# go to 'https://www.jetbrains.com/toolbox-app/' page and download the latest linux version.
+
+# extract the downloaded file with this command:
+
+tar -xf DOWNLOADED_ARCHIVE.tar.gz
+
+# move the entire folder into a permanent location like:
+
+~/.local/share/jetbrains-toolbox-setup
+
+# to start the application, open a terminal, cd into the directory and type:
+
+./bin/jetbrains-toolbox
+
+# this will initialize various Toolbox application files in the application directory:
+# ~/.local/share/JetBrains/Toolbox
+
+# it may show an error at the end, you can ignore it and close the terminal.
+
+# now open the toolbox app from the ubuntu app launcher menu.
+
+############ Install Using JetBrains Toolbox App (OLD VERSIONS) ############
+
 # install the dependencies found in 'install.fuse.appimage.txt' file.
 
 # go to 'https://www.jetbrains.com/toolbox-app/' page and download the latest linux version.
