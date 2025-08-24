@@ -1,3 +1,9 @@
 # cpu-x is an alternate tool for cpu-z on linux.
 
+# install using apt (NOT LATEST VERSION)
+
 sudo apt-get install cpu-x
+
+# install using flatpak (LATEST VERSION BUT NO DARK MODE SUPPORT):
+
+flatpak install flathub io.github.thetumultuousunicornofdarkness.cpu-x
