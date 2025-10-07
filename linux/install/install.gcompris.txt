@@ -1,0 +1,3 @@
+# GCompris is a kids educational app.
+
+flatpak install flathub org.kde.gcompris
