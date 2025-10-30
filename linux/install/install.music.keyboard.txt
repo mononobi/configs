@@ -1,0 +1,3 @@
+# It is a music keyboard simulator for kids.
+
+flatpak install flathub org.sugarlabs.MusicKeyboard
