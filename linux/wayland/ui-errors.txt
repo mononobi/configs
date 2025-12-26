@@ -1,0 +1,19 @@
+# If you faced a UI crash on Wayland, try one of these commands to fix the issue
+# as the X11 command (Alt + F2 + r) does not work on Wayland:
+
+# If the mouse still works:
+
+- Super + L: to lock the screen and log back in.
+
+# If the mouse does not work but keyboard works:
+
+- Ctrl + Alt + F3 (or F4/F5): This opens a text-only terminal.
+- Login with username and password.
+- Run this command: killall -HUP gnome-shell
+- If did not go back to GUI, run this: Ctrl + Alt + F2
+
+# The "Emergency" reboot when neither the mouse nor the keyboard works (REISUB):
+
+- Hold Alt + SysRq (Print Screen).
+- While holding them, slowly type R E I S U B
+- This will safely unmount your drives and reboot the PC

@@ -1,0 +1,2 @@
+# On recent Ubuntu versions (24.04 and up) Wayland is much better than X11 especially
+# with ADM GPUs.
