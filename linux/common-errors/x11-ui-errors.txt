@@ -1,0 +1,4 @@
+# If you faced a UI glitch or unresponsiveness, try this:
+
+- Alt + F2: Opens the run command window
+- r: Resets the UI

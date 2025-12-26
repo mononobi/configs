@@ -1,5 +1,9 @@
-# If you faced a UI crash on Wayland, try one of these commands to fix the issue
-# as the X11 command (Alt + F2 + r) does not work on Wayland:
+# If you faced a UI crash or unresponsiveness on Wayland, try one of the following commands
+# to fix the issue.
+
+# Important:
+# Never execute (Alt + F2 + r) on Wayland because the Display Server and the UI
+# are the same process. If that process (GNOME Shell) dies or restarts, your whole session dies.
 
 # If the mouse still works:
 
