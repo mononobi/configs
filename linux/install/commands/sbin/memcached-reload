@@ -1,1 +1,3 @@
+#!/bin/bash
+
 echo PASSWORD | sudo -S systemctl restart memcached

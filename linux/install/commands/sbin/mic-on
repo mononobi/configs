@@ -1,1 +1,3 @@
+#!/bin/bash
+
 pactl set-card-profile bluez_card.64_A2_F9_FE_EB_39 headset-head-unit-msbc

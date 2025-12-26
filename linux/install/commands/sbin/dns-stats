@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "CAPACITY: $(dig +short chaos txt cachesize.bind)"
 echo "ITEMS: $(dig +short chaos txt insertions.bind)"
 echo "HITS: $(dig +short chaos txt hits.bind)"

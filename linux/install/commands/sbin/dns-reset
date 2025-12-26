@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo PASSWORD | sudo -S systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
 sudo systemctl stop dnsmasq
