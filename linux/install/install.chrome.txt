@@ -2,6 +2,12 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i ./google-chrome*.deb
 sudo apt-get install -f
 
+############### NOTE FOR CHROME SHOWING WHITE BANNER ON VIDEO PLAYERS ###############
+
+# If you are using Wayland and you see a white banner on video players on different
+# websites (YouTube, Netflix, ...) when playing a video, you need to follow the fix
+# provided in "wayland/chrome.wayland.issues.md" file.
+
 ############### NOTE FOR CHROME NOT RENDERING UI OR WEBPAGES ###############
 
 # If after some updates to the OS, Google Chrome failed to render its own UI
@@ -9,9 +15,3 @@ sudo apt-get install -f
 
 # ~/.config/google-chrome/Default/GPUCache
 # ~/.config/google-chrome/Guest Profile/GPUCache
-
-############### NOTE FOR CHROME SHOWING WHITE BANNER ON VIDEO PLAYERS ###############
-
-# If you are using Wayland and you see a white banner on video players on different
-# websites (YouTube, Netflix, ...) when playing a video, you need to follow the fix
-# provided in "fix.wayland.issue.md" file.

@@ -61,3 +61,7 @@ layers.acceleration.force-enabled
 gfx.webrender.all
 
 # note that if these changes made an issue to your usage experience, revert them back to false.
+
+############### NOTE ON WAYLAND ###############
+
+# If you use Wayland, refer to "wayland/firefox.wayland.issues.md" file for more details.
