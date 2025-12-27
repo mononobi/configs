@@ -4,8 +4,14 @@ sudo apt-get install -f
 
 ############### NOTE FOR CHROME NOT RENDERING UI OR WEBPAGES ###############
 
-# if after some updates to your os, google chrome failed to render its own UI
+# If after some updates to the OS, Google Chrome failed to render its own UI
 # or websites, you should close the app and delete these two folders to fix the issue:
 
 # ~/.config/google-chrome/Default/GPUCache
 # ~/.config/google-chrome/Guest Profile/GPUCache
+
+############### NOTE FOR CHROME SHOWING WHITE BANNER ON VIDEO PLAYERS ###############
+
+# If you are using Wayland and you see a white banner on video players on different
+# websites (YouTube, Netflix, ...) when playing a video, you need to follow the fix
+# provided in "fix.wayland.issue.md" file.
