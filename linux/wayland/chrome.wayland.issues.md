@@ -7,6 +7,16 @@ white screen where the video should be (YouTube, Plex, Netflix, etc.), even thou
 audio plays correctly. This is caused by a conflict between Chrome's GPU compositing and 
 the AMD Wayland driver.
 
+## Important Note Before Continuing
+
+The above issue is almost certainly caused by enabling `Vulkan` flag, so just disable this
+flag and check if the issue is solved. 
+Generally, it is much better not to modify any of the Chrome flags and just use the default setup.
+
+If disabling the `Vulkan` flag did not solve the issue, continue reading.
+
+## The Solution (GPU Decoding + CPU Compositing)
+
 This guide uses `dpkg-divert` to permanently inject the `--disable-gpu-compositing` flag into 
 all Chrome instances on Ubuntu. This fix survives `apt` updates and applies to all Web Apps 
 (Netflix, YouTube, etc.) and system shortcuts.
