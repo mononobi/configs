@@ -85,6 +85,17 @@ sudo ufw allow 32400
 # for example if your default gateway is '192.168.178.1', add these to the allowed IPs:
 # localhost, 127.0.0.1, 192.168.178.0/24
 
+# PERFORMANCE IMPROVEMENT:
+
+# If the system on which the Plex server is running has 8GB or more RAM, do this to
+# make transcoding temp data be stored on RAM for fast data access:
+
+# Go to Plex web interface.
+# Go to Settings -> Transcoder.
+# Set these two values:
+# Transcoder temporary directory -> /dev/shm/plex
+# Downloads temporary directory -> /mnt/plex/Plex/tmp/downloads
+
 # DEFAULT PATHS:
 
 # plex media server default metadata and index folder is:
