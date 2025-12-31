@@ -1,0 +1,57 @@
+# These tools let you stress-test the CPU and monitor the temperatures in real-time.
+
+# Install the tools:
+
+sudo apt install s-tui stress
+
+# To ensure you can see the motherboard and CPU temperatures, you
+# need to scan the hardware sensors (On modern systems it is usually not
+# needed and will not find anything)
+
+sudo sensors-detect
+
+# Answer with default (just hit Enter) to all the questions.
+# At the end, if it asks to add modules to /etc/modules, type yes.
+
+# Run this command if the previous one did not succeed because your system is a modern system:
+
+sensors
+
+# It should output values for different sensors.
+# Only if `sensors` command did not produce output, try these commands:
+
+sudo modprobe nct6775
+sensors
+
+# If the second `sensors` command did not produce anything, you cannot use this stress test.
+# If it produced valid output, you can continue.
+
+# Run the monitoring tool:
+
+sudo s-tui
+
+# If `s-tui` shows a temperature graph, you are successful.
+
+# To start the stress test, use the arrow keys to navigate to the "Stress" option in the left
+# sidebar and press Space (or click it if mouse support is active).
+
+########################## METRICS TO LOOK FOR ##########################
+
+# Frequency: Should stay steady at roughly close to max (depending on boost). It should not
+# drop suddenly to 400MHz or 800MHz (that indicates thermal throttling).
+
+# Temperature: The CPU is designed to run hot. Seeing 85°C or even 90°C is normal under
+# 100% synthetic load.
+
+# System Stability: Let it run for 10 minutes. If the screen doesn't go blank, the VRMs are
+# doing their job.
+
+# CPU Temperature: Tctl / Tccd1 / CPU / Tdie
+# VRM Temperature: Composite / Motherboard / Temp1 / temp2 / nct6798
+# iGPU Temperature: Edge
+# RAM Temperature: Spd*
+
+# If you see a temperature that starts low (e.g., 40°C) and very slowly climbs to
+# 50-60°C and stays there, that is the VRM. If it shoots up instantly to 100°C+, that's a problem.
+
+# Once done, just press `q` to quit `s-tui`.
