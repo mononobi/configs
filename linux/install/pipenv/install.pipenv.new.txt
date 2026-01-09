@@ -1,5 +1,5 @@
 # NOTE:
-# this will work on any ubuntu version.
+# this will only work on ubuntu 24.04 and newer.
 
 # install virtualenv:
 
