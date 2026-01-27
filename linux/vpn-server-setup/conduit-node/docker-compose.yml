@@ -1,0 +1,17 @@
+services:
+  conduit:
+    # Build from the current directory (.)
+    build: .
+
+    container_name: conduit
+    restart: unless-stopped
+    network_mode: host
+
+    # Pass arguments to the entrypoint defined in Dockerfile
+    # 1 GB RAM + 1 CPU core ~= 75 Users
+    # For each extra RAM and CPU core ~= 150 Users per RAM + CPU core
+    # The bandwidth unit is megabits per second (Mbps)
+    command: start --max-clients 75 --bandwidth 8
+
+    volumes:
+      - ./data:/app/data
