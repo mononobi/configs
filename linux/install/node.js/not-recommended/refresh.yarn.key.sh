@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# IMPORTANT:
+# This is the legacy way of doing it and might not work.
+
 # if you have already installed yarn and the yarn key has been expired
 # and you faced errors during apt update, execute this to get the new key.
 
