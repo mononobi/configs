@@ -39,6 +39,13 @@ sudo usermod -aG kvm USER_NAME
 # "Always"
 # "Auto resize VM with window"
 
+############################ DEPENDENCY ############################
+
+# On Non-Ubuntu Linux guests you need to install these packages:
+
+sudo apt update
+sudo apt install spice-vdagent qemu-guest-agent
+
 ###########################################################################################
 ######################### CONFIGS FOR INSTALLING WINDOWS 11 GUEST #########################
 
