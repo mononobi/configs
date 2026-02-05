@@ -41,7 +41,7 @@ echo -e " \033[1;33m      📜 STARTING LIVE LOG STREAM (Press Ctrl+C to exit)  
 echo -e " \033[1;33m------------------------------------------------------------ \033[0m"
 echo ""
 
-sleep 10
+sleep 6
 
 # 4. Stream the logs
 # The -f flag keeps it open. We also tail the last 25 lines to give context immediately.
