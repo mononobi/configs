@@ -1,0 +1,18 @@
+Shared for all users:
+
+/usr/local/bin/
+
+# These commands should be run on each script:
+
+sudo chown root:root /usr/local/bin/script_name
+sudo chmod 755 /usr/local/bin/script_name
+
+============================================
+
+User specific:
+
+~/.local/bin
+
+# This command should be run on each script:
+
+sudo chmod +x ~/.local/bin/script_name
