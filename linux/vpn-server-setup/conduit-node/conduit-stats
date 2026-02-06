@@ -21,7 +21,10 @@ calculate_daily_connections() {
     DAILY_CONNECTIONS=0
   fi
   echo -e "Peak connections on $target_date:  \033[1;32m$DAILY_CONNECTIONS\033[0m"
+  TOTAL_PEAK_CONNECTIONS=$((TOTAL_PEAK_CONNECTIONS + DAILY_CONNECTIONS))
 }
+
+TOTAL_PEAK_CONNECTIONS=0
 
 echo ""
 echo -e " \033[1;34m------------------------------------------------------------ \033[0m"
@@ -34,6 +37,12 @@ for i in $(seq 0 13); do
   TARGET_DATE=$(date -d "$i days ago" +%Y-%m-%d)
   calculate_daily_connections "$TARGET_DATE"
 done
+
+echo ""
+echo -e " \033[1;35m------------------------------------------------------------ \033[0m"
+echo -e " \033[1;35m      📈 TOTAL PEAK CONNECTIONS (Last 14 Days): \033[1;32m$TOTAL_PEAK_CONNECTIONS\033[0m \033[1;35m       \033[0m"
+echo -e " \033[1;35m------------------------------------------------------------ \033[0m"
+echo ""
 
 echo ""
 echo -e " \033[1;33m------------------------------------------------------------ \033[0m"
