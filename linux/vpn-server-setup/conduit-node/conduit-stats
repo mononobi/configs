@@ -13,6 +13,27 @@ echo ""
 # Formatted to be readable
 docker stats conduit --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}"
 
+CONFIG_LINE_RAW=$(docker logs conduit 2>/dev/null | grep "Starting Psiphon Conduit (Max Clients:" | head -n 1)
+if [ -n "$CONFIG_LINE_RAW" ]; then
+  CONFIG_DISPLAY=$(echo "$CONFIG_LINE_RAW" | sed -E 's/.*(Max Clients: [0-9]+, Bandwidth: [0-9]+ Mbps).*/\1/' | sed -E "s/([0-9]+)/\x1b[1;32m\1\x1b[0m/g")
+  echo ""
+  echo -e " \033[1;34m------------------------------------------------------------ \033[0m"
+  echo -e " \033[1;34m      ⚙️  CONDUIT CONFIGURATION               \033[0m"
+  echo -e " \033[1;34m------------------------------------------------------------ \033[0m"
+  echo -e "  $CONFIG_DISPLAY"
+  echo ""
+fi
+
+CURRENT_CONNECTIONS=$(docker logs conduit 2>/dev/null | grep "Connected: " | tail -n 1 | awk '{print $8}')
+if [ -z "$CURRENT_CONNECTIONS" ]; then
+  CURRENT_CONNECTIONS=0
+fi
+echo ""
+echo -e " \033[1;34m------------------------------------------------------------ \033[0m"
+echo -e " \033[1;34m      ⚡ CURRENT CONNECTIONS: \033[1;32m$CURRENT_CONNECTIONS\033[0m \033[1;34m       \033[0m"
+echo -e " \033[1;34m------------------------------------------------------------ \033[0m"
+echo ""
+
 # Function to calculate daily connections
 calculate_daily_connections() {
   local target_date=$1
