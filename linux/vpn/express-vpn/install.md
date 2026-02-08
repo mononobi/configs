@@ -25,3 +25,13 @@ Open the app and login using an **Activation Code** or a **User & Password**.
 > Full Installation Guide For The GUI App: [App for Linux](https://www.expressvpn.com/support/vpn-setup/app-for-linux/)
 
 > Full Installation Guide For The CLI App: [App for Linux CLI](https://www.expressvpn.com/support/vpn-setup/app-for-linux-cli/)
+
+## Uninstall
+To uninstall the ExpressVPN app, run the following commands:
+
+```bash
+sudo /opt/expressvpn/bin/expressvpn-uninstall.sh
+sudo rm -r /opt/expressvpn
+```
+
+> Also remove the **ExpressVPN** entry from the **Startup Applications**
