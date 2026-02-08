@@ -92,7 +92,7 @@ Go to the **Ubuntu Settings**:
   - **Dock:**
     - **Icon Size:** 42
 
->IMPORTANT: After configuring the themes, never open the **Appearance** menu
+> IMPORTANT: After configuring the themes, never open the **Appearance** menu
 > on the **Ubuntu Settings** window, otherwise all styling settings will be reset
 > to their default values and you have to reconfigure.
 
