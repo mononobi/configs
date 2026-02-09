@@ -130,3 +130,17 @@ sudo rm -r /usr/share/themes/Orchis*
 rm -r ~/.icons/Tela*
 sudo rm -r /usr/share/icons/Tela*
 ```
+
+### Suggested Combinations of Themes and Icons
+
+> PC: Non-floating Panel
+- **Theme:** Orchis-Dark
+- **Icons:** Tela-dark
+
+> Mini PC: Floating Panel
+- **Theme:** Orchis-Green-Dark
+- **Icons:** Tela-manjaro-dark
+
+> Laptop: Floating Panel
+- **Theme:** TBD
+- **Icons:** TBD
