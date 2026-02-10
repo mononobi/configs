@@ -21,13 +21,15 @@
 - Show on all monitors: On
 - Position on screen: Bottom
 - Panel mode: extend to the screen edge: On
-- Icon size limit: 36px
 - Fixed icon size: scroll to reveal other icons: On
 
 ### Launchers Tab:
-- Show open windows' previews: Off
+- Show open windows' previews: On
 - Show trash can: Off
 - Show volumes and devices: Off
+
+### Behavior Tab:
+- Click action: Show window previews
 
 ### Appearance Tab:
 - Shrink the dash: On
