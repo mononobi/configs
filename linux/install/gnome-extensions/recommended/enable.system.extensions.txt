@@ -12,9 +12,8 @@
 - Show network drives in the desktop: Off
 - New icons alignment: Top-left corner
 
-
 ############### System Monitor ###############
-- Ucheck "Swap" by right-clicking on the tool
+- Uncheck "Swap" by right-clicking on the tool
 
 ############### Ubuntu Dock ###############
 ### Position and size Tab:
@@ -29,7 +28,11 @@
 - Show volumes and devices: Off
 
 ### Behavior Tab:
-- Click action: Show window previews
+- Click action: Minimize or show previews
+- Click action customization:
+  - Shift + Click: Launch new instance
+  - MiddleClick: Minimize window
+  - Shift + MiddleClick: Minimize window
 
 ### Appearance Tab:
 - Shrink the dash: On
