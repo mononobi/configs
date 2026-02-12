@@ -5,7 +5,7 @@
 
 # recommended settings:
 
-# Keybindings: <Ctrl>F9
+# Keybindings: <Ctrl>F9 (Or any key which has the mute sound icon)
 # Top bar icon: Always
 # OSD notification: checked
 # Sound notification: checked

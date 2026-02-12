@@ -1,3 +1,8 @@
+################################# IMPORTANT #################################
+# Run these commands with caution, they are not recommended on the recent
+# Ubuntu versions (>= 22.04)
+#############################################################################
+
 # run these commands both as root and non-root:
 
 # hide home icon from desktop:

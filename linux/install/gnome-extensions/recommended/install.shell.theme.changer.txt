@@ -12,4 +12,4 @@
 # extract downloaded files and put the top folder in:
 # '~/.themes'
 
-# now open 'Gnome Tweaks' and change icons and shell in 'Appearance' tab.
+# now open 'Tweaks' app and change icons and shell in 'Appearance' tab.
