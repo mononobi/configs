@@ -1,4 +1,9 @@
-## ExpressVPN Installation
+## Important
+
+The ExpressVPN Linux app has some issues that could be annoying.
+If you want a stable connection to ExpressVPN, refer to the `express-open-vpn.md` guide.
+
+## ExpressVPN Installation (GUI App)
 
 ### Step 1
 Download the universal installer from your account page for Linux devices.
