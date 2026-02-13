@@ -27,7 +27,14 @@ TA_KEY_PATH="$REAL_HOME/.expressvpn/keys/ta.key"
 usage() {
     echo "Usage:"
     echo "  Interactive Mode: $0"
-    echo "  Silent Mode:      $0 -s <ovpn_file> <profile_name> <username> <password>"
+    echo "  Silent Mode:      $0 -s -f <ovpn_file> -n <profile_name> -u <username> -p <password>"
+    echo ""
+    echo "Flags:"
+    echo "  -f <path>     Path to .ovpn file"
+    echo "  -n <name>     Profile name"
+    echo "  -u <user>     VPN username"
+    echo "  -p <pass>     VPN password"
+    echo "  -s            Silent mode (requires all other flags)"
     exit 1
 }
 
@@ -44,17 +51,58 @@ PROFILE_NAME=""
 VPN_USER=""
 VPN_PASS=""
 
-if [[ "$1" == "-s" || "$1" == "--silent" ]]; then
-    MODE="silent"
-    shift
-    if [ "$#" -ne 4 ]; then
-        echo "Error: Silent mode requires exactly 4 arguments."
+# Parse flag-based arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -s)
+            MODE="silent"
+            shift
+            ;;
+        -f)
+            if [[ -z "$2" ]]; then
+                echo "Error: -f flag requires a value."
+                usage
+            fi
+            OVPN_FILE="$2"
+            shift 2
+            ;;
+        -n)
+            if [[ -z "$2" ]]; then
+                echo "Error: -n flag requires a value."
+                usage
+            fi
+            PROFILE_NAME="$2"
+            shift 2
+            ;;
+        -u)
+            if [[ -z "$2" ]]; then
+                echo "Error: -u flag requires a value."
+                usage
+            fi
+            VPN_USER="$2"
+            shift 2
+            ;;
+        -p)
+            if [[ -z "$2" ]]; then
+                echo "Error: -p flag requires a value."
+                usage
+            fi
+            VPN_PASS="$2"
+            shift 2
+            ;;
+        *)
+            echo "Error: Unknown flag '$1'"
+            usage
+            ;;
+    esac
+done
+
+# Validate input based on mode
+if [[ "$MODE" == "silent" ]]; then
+    if [[ -z "$OVPN_FILE" || -z "$PROFILE_NAME" || -z "$VPN_USER" || -z "$VPN_PASS" ]]; then
+        echo "Error: Silent mode requires all flags: -f, -n, -u, -p"
         usage
     fi
-    OVPN_FILE="$1"
-    PROFILE_NAME="$2"
-    VPN_USER="$3"
-    VPN_PASS="$4"
 
     if [[ ! -f "$OVPN_FILE" ]]; then
         echo "Error: The OVPN file '$OVPN_FILE' does not exist."
