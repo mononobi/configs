@@ -4,14 +4,23 @@ This guide will show you how to set up ExpressVPN using OpenVPN profiles in Ubun
 A full guide is also available at 
 [Manual Config for Linux Ubuntu with OpenVPN](https://www.expressvpn.com/support/vpn-setup/manual-config-for-linux-ubuntu-with-openvpn/).
 
-### Step 1: Download The OpenVPN Profiles and Credentials
+### Step 1: Create The Directories
+
+Run the following commands to create the required directories:
+
+```bash
+mkdir -p ~/.expressvpn/profiles
+mkdir -p ~/.expressvpn/keys
+```
+
+### Step 2: Download The OpenVPN Profiles and Credentials
 
 Go to the [ExpressVPN Manual Setup](https://portal.expressvpn.com/setup#manual):
 
 - Copy the `Username` and `Password` that are shown there.
 - Download profiles (**.ovpn**) for the servers that you want to be able to connect to.
 
-### Step 2: Download The VPN Keys and Certificates
+### Step 3: Download The VPN Keys and Certificates
 
 Go to the [Account](https://www.expressvpn.com/support/vpn-setup/manual-config-for-linux-ubuntu-with-openvpn/#account)
 section and download the [Zip File](https://s23429.pcdn.co/wp-content/uploads/2015/11/my_expressvpn_keys-1.zip)
@@ -20,18 +29,28 @@ containing the VPN keys and certificates.
 > Note: The link to the **Zip File** might change in the future, you can find the current 
 > link on the above **Account** section.
 
-### Step 3: Extract The Downloaded OpenVPN Profiles and The Keys File
+### Step 4: Extract The Downloaded OpenVPN Profiles and The Keys File
 
 Extract all the downloaded files.
 
-### Step 4: Open The VPN Settings and Import a Profile
+Copy the profiles to the created directory:
+```bash
+cp *.ovpn ~/.expressvpn/profiles
+```
+
+Copy the key files to the created directory:
+```bash
+cp *.crt *.key ~/.expressvpn/keys
+```
+
+### Step 5: Open The VPN Settings and Import a Profile
 
 Go to the following location and select one of the profiles (**.ovpn**) you have already 
 downloaded on the **Step 1**:
 
 > Ubuntu Settings → Network → VPN → **+** → Import from file...
 
-### Step 5: Configure The Profile
+### Step 6: Configure The Profile
 
 On the opened window, set these settings on different tabs:
 
@@ -80,3 +99,21 @@ Click on the **Advanced** button on the same tab:
 > to enable **Data compression**. But enabling any of these settings will cause the VPN
 > connection to fail. Other than that, enabling data compression is considered a security
 > risk and should be avoided.
+
+### Adding Profiles Using Command Line
+
+Instead of manually adding every profile using the Ubuntu VPN settings, you can run the
+`openvpn-add` script for each profile to be added automatically.
+
+> Note: Modify the **TA_KEY_PATH** in the script to point to the location where you have saved
+> the `ta.key` file if needed.
+
+Make the script executable:
+```bash
+chmod +x openvpn-add
+```
+
+Run the script:
+```bash
+./openvpn-add
+```

@@ -1,0 +1,142 @@
+#!/bin/bash
+
+# ==========================================
+# 1. SELF-ELEVATION & USER DETECTION
+# ==========================================
+
+# If not running as root, re-run self with sudo
+if [ "$EUID" -ne 0 ]; then
+    exec sudo "$0" "$@"
+fi
+
+# Detect the real user (SUDO_USER is set when running via sudo)
+REAL_USER=${SUDO_USER:-$USER}
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+
+# ==========================================
+# 2. CONFIGURATION
+# ==========================================
+
+# Path to the key file (Must be absolute)
+TA_KEY_PATH="$REAL_HOME/.expressvpn/keys/ta.key"
+
+# ==========================================
+# 3. INPUT PARSING
+# ==========================================
+
+usage() {
+    echo "Usage:"
+    echo "  Interactive Mode: $0"
+    echo "  Silent Mode:      $0 -s <ovpn_file> <profile_name> <username> <password>"
+    exit 1
+}
+
+# Check if the ta.key file exists
+if [[ ! -f "$TA_KEY_PATH" ]]; then
+    echo "Error: The ta.key file was not found at: $TA_KEY_PATH"
+    echo "Please ensure the file exists or edit 'TA_KEY_PATH' inside this script."
+    exit 1
+fi
+
+MODE="interactive"
+OVPN_FILE=""
+PROFILE_NAME=""
+VPN_USER=""
+VPN_PASS=""
+
+if [[ "$1" == "-s" || "$1" == "--silent" ]]; then
+    MODE="silent"
+    shift
+    if [ "$#" -ne 4 ]; then
+        echo "Error: Silent mode requires exactly 4 arguments."
+        usage
+    fi
+    OVPN_FILE="$1"
+    PROFILE_NAME="$2"
+    VPN_USER="$3"
+    VPN_PASS="$4"
+
+    if [[ ! -f "$OVPN_FILE" ]]; then
+        echo "Error: The OVPN file '$OVPN_FILE' does not exist."
+        exit 1
+    fi
+else
+    # Interactive Mode
+    echo "=== ExpressVPN Profile Setup (User: $REAL_USER) ==="
+
+    while [[ -z "$OVPN_FILE" ]]; do
+        read -e -p "Enter path to .ovpn file: " INPUT_FILE
+        INPUT_FILE="${INPUT_FILE/#\~/$REAL_HOME}"
+        if [[ -f "$INPUT_FILE" ]]; then
+            OVPN_FILE="$INPUT_FILE"
+        else
+            echo "Error: File not found. Please try again."
+        fi
+    done
+
+    while [[ -z "$PROFILE_NAME" ]]; do
+        read -p "Enter Profile Name (e.g., Exp-London): " PROFILE_NAME
+    done
+
+    while [[ -z "$VPN_USER" ]]; do
+        read -p "Enter VPN Username: " VPN_USER
+    done
+
+    while [[ -z "$VPN_PASS" ]]; do
+        read -p "Enter VPN Password: " VPN_PASS
+        echo ""
+    done
+fi
+
+# ==========================================
+# 4. EXECUTION
+# ==========================================
+
+echo "------------------------------------------------"
+echo "Configuring '$PROFILE_NAME'..."
+echo "------------------------------------------------"
+
+# 1. Import the OVPN file directly
+import_out=$(nmcli connection import type openvpn file "$OVPN_FILE" 2>&1)
+
+if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to import OVPN file."
+    echo "Details: $import_out"
+    exit 1
+fi
+
+# Extract the temporary connection name
+TEMP_NAME=$(basename "$OVPN_FILE" .ovpn)
+
+# 2. Rename the connection
+nmcli connection modify "$TEMP_NAME" connection.id "$PROFILE_NAME"
+
+# 3. Clean up the import defaults
+# We explicitly remove 'ta' and 'ta-dir' (the internal names) just in case
+# the import set them to something weird (like a temp blob).
+nmcli connection modify "$PROFILE_NAME" -vpn.data ta
+nmcli connection modify "$PROFILE_NAME" -vpn.data ta-dir
+
+# 4. Apply New Flags
+# NOTE: We now use 'ta' and 'ta-dir' which map correctly to the GUI fields.
+nmcli connection modify "$PROFILE_NAME" \
+    connection.permissions "" \
+    ipv4.dns-priority -1 \
+    +vpn.data "port=1195, \
+               comp-lzo=no, \
+               tun-mtu=1500, \
+               fragment=1300, \
+               mssfix=yes, \
+               remote-random=yes, \
+               cipher=AES-256-GCM, \
+               auth=SHA-512, \
+               ta=$TA_KEY_PATH, \
+               ta-dir=1, \
+               username=$VPN_USER, \
+               password-flags=0"
+
+# 5. Inject Password
+nmcli connection modify "$PROFILE_NAME" \
+    vpn.secrets "password=$VPN_PASS"
+
+echo "Success! VPN Profile '$PROFILE_NAME' created with correct Key File."
