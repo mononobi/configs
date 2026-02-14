@@ -106,6 +106,15 @@ if [[ ! -d "$PROFILE_DIR" ]]; then
     exit 1
 fi
 
+# Find all .ovpn files in the directory
+OVPN_FILES=($(find "$PROFILE_DIR" -maxdepth 1 -name "*.ovpn" -type f | sort))
+
+# Check if any files were found
+if [[ ${#OVPN_FILES[@]} -eq 0 ]]; then
+    echo "No .ovpn files found in: $PROFILE_DIR"
+    exit 1
+fi
+
 # ==========================================
 # 4. USERNAME & PASSWORD INPUT
 # ==========================================
@@ -129,15 +138,6 @@ fi
 # ==========================================
 # 5. FIND AND PROCESS .OVPN FILES
 # ==========================================
-
-# Find all .ovpn files in the directory
-OVPN_FILES=($(find "$PROFILE_DIR" -maxdepth 1 -name "*.ovpn" -type f | sort))
-
-# Check if any files were found
-if [[ ${#OVPN_FILES[@]} -eq 0 ]]; then
-    echo "No .ovpn files found in: $PROFILE_DIR"
-    exit 1
-fi
 
 echo "=================================================="
 echo "Found ${#OVPN_FILES[@]} .ovpn file(s) to process"
