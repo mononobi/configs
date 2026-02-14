@@ -75,3 +75,28 @@ sudo systemctl stop openvpn-startup.service
 ```bash
 sudo journalctl -u openvpn-startup.service -n 50
 ```
+
+## Use Short Commands To Enable/Disable Auto-Connect
+
+Make the scripts executable:
+```bash
+chmod +x ./scripts/openvpn-startup-enable
+chmod +x ./scripts/openvpn-startup-disable
+```
+
+Copy the both scripts into the local `bin` folder to be able
+to run them as a command from anywhere:
+```bash
+cp ./scripts/openvpn-startup-enable ~/.local/bin/
+cp ./scripts/openvpn-startup-disable ~/.local/bin/
+```
+
+Run this command to enable auto-connect:
+```bash
+openvpn-startup-enable
+```
+
+Run this command to disable auto-connect:
+```bash
+openvpn-startup-disable
+```

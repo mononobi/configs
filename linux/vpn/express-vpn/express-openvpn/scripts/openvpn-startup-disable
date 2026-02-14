@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo systemctl disable openvpn-startup.service
+sudo systemctl stop openvpn-startup.service
