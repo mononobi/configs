@@ -17,7 +17,7 @@ mkdir -p ~/.expressvpn/keys
 
 Go to the [ExpressVPN Manual Setup](https://portal.expressvpn.com/setup#manual):
 
-- Copy the `Username` and `Password` that are shown there.
+- Copy the `Username` and `Password` that are shown there and put them in a `credentials.txt` file.
 - Download profiles (**.ovpn**) for the servers that you want to be able to connect to.
 
 ### Step 3: Download The VPN Keys and Certificates
@@ -41,6 +41,19 @@ cp *.ovpn ~/.expressvpn/profiles
 Copy the key files to the created directory:
 ```bash
 cp *.crt *.key ~/.expressvpn/keys
+```
+
+Move the `credentials.txt` file to the created directory and 
+make it accessible only by the root user:
+```bash
+mv credentials.txt ~/.expressvpn/
+sudo chown root:root ~/.expressvpn/credentials.txt
+sudo chmod 600 ~/.expressvpn/credentials.txt
+```
+
+To see the credentials when you want to add profiles, run this:
+```bash
+sudo cat ~/.expressvpn/credentials.txt
 ```
 
 ### Step 5: Open The VPN Settings and Import a Profile
