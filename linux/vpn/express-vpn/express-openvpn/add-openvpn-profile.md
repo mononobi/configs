@@ -103,17 +103,30 @@ Click on the **Advanced** button on the same tab:
 ### Adding Profiles Using Command Line
 
 Instead of manually adding every profile using the Ubuntu VPN settings, you can run the
-`openvpn-add` script for each profile to be added automatically.
+`openvpn-add` and `openvpn-bulk-add` scripts to add profiles automatically.
 
-> Note: Modify the **TA_KEY_PATH** in the script to point to the location where you have saved
-> the `ta.key` file if needed.
+> Note: Modify the **TA_KEY_PATH** in the `openvpn-add` script to point to the location 
+> where you have saved the `ta.key` file if needed.
 
-Make the script executable:
+Make the scripts executable:
 ```bash
 chmod +x openvpn-add
+chmod +x openvpn-bulk-add
 ```
 
-Run the script:
+Run this script to add a single profile:
 ```bash
 ./openvpn-add
 ```
+
+Run this script to add multiple profiles:
+```bash
+./openvpn-bulk-add
+```
+
+> Notes: 
+> - Do not run the scripts as root user (**sudo**). Run as normal user.
+> - After adding each profile using the scripts, the VPN won't connect. To fix this, you need 
+> to edit that profile and go to the **Identity Tab** and add an arbitrary space in the name 
+> field and remove it just for the **Apply** button to get enabled and then click on 
+> the **Apply** button. Now the VPN can be used without issues.

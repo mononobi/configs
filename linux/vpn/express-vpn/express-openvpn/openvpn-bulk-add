@@ -1,0 +1,215 @@
+#!/bin/bash
+
+# ==========================================
+# OpenVPN Bulk Add Script
+# ==========================================
+# Processes multiple .ovpn files and adds them
+# as VPN profiles using openvpn-add script.
+
+# ==========================================
+# 1. SELF-ELEVATION & USER DETECTION
+# ==========================================
+
+# If not running as root, re-run self with sudo
+if [ "$EUID" -ne 0 ]; then
+    exec sudo "$0" "$@"
+fi
+
+# Detect the real user (SUDO_USER is set when running via sudo)
+REAL_USER=${SUDO_USER:-$USER}
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+
+# ==========================================
+# 2. CONFIGURATION
+# ==========================================
+
+DEFAULT_PROFILE_DIR="$REAL_HOME/.expressvpn/profiles"
+OPENVPN_ADD_SCRIPT="./openvpn-add"
+
+# ==========================================
+# 3. INPUT PARSING
+# ==========================================
+
+usage() {
+    echo "Usage:"
+    echo "  Interactive Mode: $0"
+    echo "  With Flags:       $0 [-u <username>] [-p <password>] [-d <directory>]"
+    echo ""
+    echo "Flags:"
+    echo "  -u <user>     VPN username"
+    echo "  -p <pass>     VPN password"
+    echo "  -d <dir>      Directory containing .ovpn files"
+    echo ""
+    echo "Notes:"
+    echo "  - If -d is not provided, the script checks for .ovpn files in:"
+    echo "    $DEFAULT_PROFILE_DIR"
+    echo "  - If no files exist there, you will be prompted to provide a directory."
+    echo "  - Profile names will be requested interactively for each .ovpn file."
+    exit 1
+}
+
+# Initialize variables
+VPN_USER=""
+VPN_PASS=""
+PROFILE_DIR=""
+
+# Parse flag-based arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -u)
+            if [[ -z "$2" ]]; then
+                echo "Error: -u flag requires a value."
+                usage
+            fi
+            VPN_USER="$2"
+            shift 2
+            ;;
+        -p)
+            if [[ -z "$2" ]]; then
+                echo "Error: -p flag requires a value."
+                usage
+            fi
+            VPN_PASS="$2"
+            shift 2
+            ;;
+        -d)
+            if [[ -z "$2" ]]; then
+                echo "Error: -d flag requires a value."
+                usage
+            fi
+            PROFILE_DIR="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            echo "Error: Unknown flag '$1'"
+            usage
+            ;;
+    esac
+done
+
+# ==========================================
+# 4. DIRECTORY VALIDATION & SELECTION
+# ==========================================
+
+# If -d was not provided, check if default directory has .ovpn files
+if [[ -z "$PROFILE_DIR" ]]; then
+    if [[ -d "$DEFAULT_PROFILE_DIR" ]] && find "$DEFAULT_PROFILE_DIR" -maxdepth 1 -name "*.ovpn" -type f | grep -q .; then
+        PROFILE_DIR="$DEFAULT_PROFILE_DIR"
+        echo "Using default profile directory: $PROFILE_DIR"
+    else
+        # Prompt user for directory
+        while [[ -z "$PROFILE_DIR" ]]; do
+            read -e -p "Enter directory containing .ovpn files: " INPUT_DIR
+            INPUT_DIR="${INPUT_DIR/#\~/$REAL_HOME}"
+            if [[ -d "$INPUT_DIR" ]]; then
+                PROFILE_DIR="$INPUT_DIR"
+            else
+                echo "Error: Directory not found. Please try again."
+            fi
+        done
+    fi
+fi
+
+# Verify directory exists
+if [[ ! -d "$PROFILE_DIR" ]]; then
+    echo "Error: Directory '$PROFILE_DIR' does not exist."
+    exit 1
+fi
+
+# ==========================================
+# 5. USERNAME & PASSWORD INPUT
+# ==========================================
+
+# Prompt for username if not provided
+if [[ -z "$VPN_USER" ]]; then
+    read -p "Enter VPN Username: " VPN_USER
+fi
+
+# Prompt for password if not provided
+if [[ -z "$VPN_PASS" ]]; then
+    read -p "Enter VPN Password: " VPN_PASS
+fi
+
+# Validate inputs
+if [[ -z "$VPN_USER" || -z "$VPN_PASS" ]]; then
+    echo "Error: VPN username and password are required."
+    exit 1
+fi
+
+# ==========================================
+# 6. FIND AND PROCESS .OVPN FILES
+# ==========================================
+
+# Create "added" subdirectory if it doesn't exist
+ADDED_DIR="$PROFILE_DIR/added"
+mkdir -p "$ADDED_DIR"
+
+# Find all .ovpn files in the directory
+OVPN_FILES=($(find "$PROFILE_DIR" -maxdepth 1 -name "*.ovpn" -type f | sort))
+
+# Check if any files were found
+if [[ ${#OVPN_FILES[@]} -eq 0 ]]; then
+    echo "No .ovpn files found in: $PROFILE_DIR"
+    exit 1
+fi
+
+echo "=================================================="
+echo "Found ${#OVPN_FILES[@]} .ovpn file(s) to process"
+echo "=================================================="
+echo ""
+
+# Process each file
+FILE_COUNT=0
+SUCCESS_COUNT=0
+FAILED_COUNT=0
+
+for OVPN_FILE in "${OVPN_FILES[@]}"; do
+    FILE_COUNT=$((FILE_COUNT + 1))
+    FILE_NAME=$(basename "$OVPN_FILE")
+
+    echo ""
+    echo "[$FILE_COUNT/${#OVPN_FILES[@]}] Processing: $FILE_NAME"
+    echo "---"
+
+    # Prompt for profile name
+    PROFILE_NAME=""
+    while [[ -z "$PROFILE_NAME" ]]; do
+        read -p "  Enter profile name for this file: " PROFILE_NAME
+    done
+
+    # Call openvpn-add script with silent mode
+    echo "  Adding profile..."
+    if sudo "$OPENVPN_ADD_SCRIPT" -s -f "$OVPN_FILE" -n "$PROFILE_NAME" -u "$VPN_USER" -p "$VPN_PASS"; then
+        # Move the processed file to the "added" subdirectory
+        mv "$OVPN_FILE" "$ADDED_DIR/"
+        echo "  ✓ Profile added successfully and file moved to added/ folder"
+        SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+    else
+        echo "  ✗ Failed to add profile for $FILE_NAME"
+        FAILED_COUNT=$((FAILED_COUNT + 1))
+    fi
+done
+
+# ==========================================
+# 7. SUMMARY
+# ==========================================
+
+echo ""
+echo "=================================================="
+echo "Bulk Add Complete!"
+echo "=================================================="
+echo "Total files processed: $FILE_COUNT"
+echo "Successfully added:   $SUCCESS_COUNT"
+echo "Failed:               $FAILED_COUNT"
+echo "Added files location: $ADDED_DIR"
+echo "=================================================="
+
+# Exit with success if at least one profile was added
+if [[ $SUCCESS_COUNT -gt 0 ]]; then
+    exit 0
+else
+    exit 1
+fi
