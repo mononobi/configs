@@ -168,7 +168,7 @@ nmcli connection modify "$PROFILE_NAME" \
                ta=$TA_KEY_PATH, \
                ta-dir=1, \
                username=$VPN_USER, \
-               password-flags=1"  # 0 = store for all users | 1 = store for current user
+               password-flags=0"  # 0 = store for all users | 1 = store for current user
 
 # 5. Inject Password
 nmcli connection modify "$PROFILE_NAME" \
