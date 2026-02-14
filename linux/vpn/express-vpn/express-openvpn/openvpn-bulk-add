@@ -130,10 +130,6 @@ fi
 # 5. FIND AND PROCESS .OVPN FILES
 # ==========================================
 
-# Create "added" subdirectory if it doesn't exist
-ADDED_DIR="$PROFILE_DIR/added"
-mkdir -p "$ADDED_DIR"
-
 # Find all .ovpn files in the directory
 OVPN_FILES=($(find "$PROFILE_DIR" -maxdepth 1 -name "*.ovpn" -type f | sort))
 
@@ -152,6 +148,10 @@ echo ""
 FILE_COUNT=0
 SUCCESS_COUNT=0
 FAILED_COUNT=0
+
+# Create "added" subdirectory if it doesn't exist
+ADDED_DIR="$PROFILE_DIR/added"
+mkdir -p "$ADDED_DIR"
 
 for OVPN_FILE in "${OVPN_FILES[@]}"; do
     FILE_COUNT=$((FILE_COUNT + 1))
