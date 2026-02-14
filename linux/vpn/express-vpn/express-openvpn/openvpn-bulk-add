@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 # ==========================================
 # OpenVPN Bulk Add Script
 # ==========================================
@@ -18,20 +20,26 @@ OPENVPN_ADD_SCRIPT="openvpn-add"
 # ==========================================
 
 usage() {
+    echo ""
+    echo -e "\033[1;36m============================================================\033[0m"
+    echo -e "\033[1;32m      📦  EXPRESSVPN BULK PROFILE ADD                \033[0m"
+    echo -e "\033[1;36m============================================================\033[0m"
+    echo ""
     echo "Usage:"
     echo "  Interactive Mode: $0"
     echo "  With Flags:       $0 [-u <username>] [-p <password>] [-d <directory>]"
     echo ""
-    echo "Flags:"
+    echo -e "\033[1;34mFlags:\033[0m"
     echo "  -u <user>     VPN username"
     echo "  -p <pass>     VPN password"
     echo "  -d <dir>      Directory containing .ovpn files"
     echo ""
-    echo "Notes:"
+    echo -e "\033[1;34mNotes:\033[0m"
     echo "  - If -d is not provided, the script checks for .ovpn files in:"
     echo "    $DEFAULT_PROFILE_DIR"
     echo "  - If no files exist there, you will be prompted to provide a directory."
     echo "  - Profile names will be requested interactively for each .ovpn file."
+    echo ""
     exit 1
 }
 
@@ -45,7 +53,7 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         -u)
             if [[ -z "$2" ]]; then
-                echo "Error: -u flag requires a value."
+                echo -e "\033[1;31m❌  Error: -u flag requires a value.\033[0m"
                 usage
             fi
             VPN_USER="$2"
@@ -53,7 +61,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -p)
             if [[ -z "$2" ]]; then
-                echo "Error: -p flag requires a value."
+                echo -e "\033[1;31m❌  Error: -p flag requires a value.\033[0m"
                 usage
             fi
             VPN_PASS="$2"
@@ -61,7 +69,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -d)
             if [[ -z "$2" ]]; then
-                echo "Error: -d flag requires a value."
+                echo -e "\033[1;31m❌  Error: -d flag requires a value.\033[0m"
                 usage
             fi
             PROFILE_DIR="$2"
@@ -71,7 +79,7 @@ while [[ $# -gt 0 ]]; do
             usage
             ;;
         *)
-            echo "Error: Unknown flag '$1'"
+            echo -e "\033[1;31m❌  Error: Unknown flag '$1'\033[0m"
             usage
             ;;
     esac
@@ -85,7 +93,7 @@ done
 if [[ -z "$PROFILE_DIR" ]]; then
     if [[ -d "$DEFAULT_PROFILE_DIR" ]] && find "$DEFAULT_PROFILE_DIR" -maxdepth 1 -name "*.ovpn" -type f | grep -q .; then
         PROFILE_DIR="$DEFAULT_PROFILE_DIR"
-        echo "Using default profile directory: $PROFILE_DIR"
+        echo -e "\033[1;32mℹ️  Using default profile directory: $PROFILE_DIR\033[0m"
     else
         # Prompt user for directory
         while [[ -z "$PROFILE_DIR" ]]; do
@@ -94,7 +102,7 @@ if [[ -z "$PROFILE_DIR" ]]; then
             if [[ -d "$INPUT_DIR" ]]; then
                 PROFILE_DIR="$INPUT_DIR"
             else
-                echo "Error: Directory not found. Please try again."
+                echo -e "\033[1;31m❌  Error: Directory not found. Please try again.\033[0m"
             fi
         done
     fi
@@ -102,7 +110,7 @@ fi
 
 # Verify directory exists
 if [[ ! -d "$PROFILE_DIR" ]]; then
-    echo "Error: Directory '$PROFILE_DIR' does not exist."
+    echo -e "\033[1;31m❌  Error: Directory '$PROFILE_DIR' does not exist.\033[0m"
     exit 1
 fi
 
@@ -111,7 +119,7 @@ OVPN_FILES=($(find "$PROFILE_DIR" -maxdepth 1 -name "*.ovpn" -type f | sort))
 
 # Check if any files were found
 if [[ ${#OVPN_FILES[@]} -eq 0 ]]; then
-    echo "No .ovpn files found in: $PROFILE_DIR"
+    echo -e "\033[1;31m❌  No .ovpn files found in: $PROFILE_DIR\033[0m"
     exit 1
 fi
 
@@ -121,17 +129,17 @@ fi
 
 # Prompt for username if not provided
 if [[ -z "$VPN_USER" ]]; then
-    read -p "Enter VPN Username: " VPN_USER
+    read -p "  👤  Enter VPN Username: " VPN_USER
 fi
 
 # Prompt for password if not provided
 if [[ -z "$VPN_PASS" ]]; then
-    read -p "Enter VPN Password: " VPN_PASS
+    read -p "  🔑  Enter VPN Password: " VPN_PASS
 fi
 
 # Validate inputs
 if [[ -z "$VPN_USER" || -z "$VPN_PASS" ]]; then
-    echo "Error: VPN username and password are required."
+    echo -e "\033[1;31m❌  Error: VPN username and password are required.\033[0m"
     exit 1
 fi
 
@@ -139,9 +147,12 @@ fi
 # 5. FIND AND PROCESS .OVPN FILES
 # ==========================================
 
-echo "=================================================="
+echo ""
+echo -e "\033[1;36m============================================================\033[0m"
+echo -e "\033[1;32m      📊  BULK ADD PROGRESS                           \033[0m"
+echo -e "\033[1;36m============================================================\033[0m"
+echo ""
 echo "Found ${#OVPN_FILES[@]} .ovpn file(s) to process"
-echo "=================================================="
 echo ""
 
 # Process each file
@@ -158,13 +169,13 @@ for OVPN_FILE in "${OVPN_FILES[@]}"; do
     FILE_NAME=$(basename "$OVPN_FILE")
 
     echo ""
-    echo "[$FILE_COUNT/${#OVPN_FILES[@]}] Processing: $FILE_NAME"
-    echo "---"
+    echo -e " \033[1;34m[$FILE_COUNT/${#OVPN_FILES[@]}] Processing: $FILE_NAME\033[0m"
+    echo -e " \033[1;34m---\033[0m"
 
     # Prompt for profile name
     PROFILE_NAME=""
     while [[ -z "$PROFILE_NAME" ]]; do
-        read -p "  Enter profile name for this file: " PROFILE_NAME
+        read -p "  📝  Enter profile name for this file: " PROFILE_NAME
     done
 
     # Call openvpn-add script with silent mode
@@ -172,10 +183,10 @@ for OVPN_FILE in "${OVPN_FILES[@]}"; do
     if "$OPENVPN_ADD_SCRIPT" -s -f "$OVPN_FILE" -n "$PROFILE_NAME" -u "$VPN_USER" -p "$VPN_PASS"; then
         # Move the processed file to the "added" subdirectory
         mv "$OVPN_FILE" "$ADDED_DIR/"
-        echo "  ✓ Profile added successfully and file moved to added/ folder"
+        echo -e "  \033[1;32m✓ Profile added successfully and file moved to added/ folder\033[0m"
         SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
     else
-        echo "  ✗ Failed to add profile for $FILE_NAME"
+        echo -e "  \033[1;31m✗ Failed to add profile for $FILE_NAME\033[0m"
         FAILED_COUNT=$((FAILED_COUNT + 1))
     fi
 done
@@ -185,14 +196,15 @@ done
 # ==========================================
 
 echo ""
-echo "=================================================="
-echo "Bulk Add Complete!"
-echo "=================================================="
-echo "Total files processed: $FILE_COUNT"
-echo "Successfully added:   $SUCCESS_COUNT"
-echo "Failed:               $FAILED_COUNT"
-echo "Added files location: $ADDED_DIR"
-echo "=================================================="
+echo -e "\033[1;36m============================================================\033[0m"
+echo -e "\033[1;32m      ✓  BULK ADD COMPLETE!                            \033[0m"
+echo -e "\033[1;36m============================================================\033[0m"
+echo ""
+echo -e "  Total files processed:  \033[1;34m$FILE_COUNT\033[0m"
+echo -e "  Successfully added:     \033[1;32m$SUCCESS_COUNT\033[0m"
+echo -e "  Failed:                 \033[1;31m$FAILED_COUNT\033[0m"
+echo -e "  Added files location:   \033[1;33m$ADDED_DIR\033[0m"
+echo ""
 
 # Exit with success if at least one profile was added
 if [[ $SUCCESS_COUNT -gt 0 ]]; then
