@@ -73,7 +73,7 @@ On the opened window, set these settings on different tabs:
 
 #### Identity Tab:
 
-- **Name:** A name to recognize the profile (e.g. `Exp-London`, `Exp-DE`)
+- **Name:** A name to recognize the profile (e.g. `Exp-London`, `Exp-Estonia`)
 - **Type:** `Password with Certificates (TLS)`
 - **Username:** Put the username you got on the **Step 1**
 - **Password:** Put the password you got on the **Step 1**
@@ -139,7 +139,7 @@ Run this command to add a single profile:
 openvpn-add
 ```
 
-Run this command to add multiple profiles:
+Run this command to add multiple profiles from a directory:
 ```bash
 openvpn-bulk-add
 ```
