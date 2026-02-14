@@ -110,18 +110,25 @@ Instead of manually adding every profile using the Ubuntu VPN settings, you can 
 
 Make the scripts executable:
 ```bash
-chmod +x openvpn-add
-chmod +x openvpn-bulk-add
+chmod +x ./scripts/openvpn-add
+chmod +x ./scripts/openvpn-bulk-add
 ```
 
-Run this script to add a single profile:
+Copy the both scripts into the local `bin` folder to be able 
+to run them as a command from anywhere:
 ```bash
-./openvpn-add
+cp ./scripts/openvpn-add ~/.local/bin/
+cp ./scripts/openvpn-bulk-add ~/.local/bin/
 ```
 
-Run this script to add multiple profiles:
+Run this command to add a single profile:
 ```bash
-./openvpn-bulk-add
+openvpn-add
+```
+
+Run this command to add multiple profiles:
+```bash
+openvpn-bulk-add
 ```
 
 > Notes: 
