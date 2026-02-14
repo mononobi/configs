@@ -12,23 +12,32 @@ TA_KEY_PATH="$HOME/.expressvpn/keys/ta.key"
 # ==========================================
 
 usage() {
+    echo ""
+    echo -e "\033[1;36m============================================================\033[0m"
+    echo -e "\033[1;32m      🔐  EXPRESSVPN PROFILE SETUP                  \033[0m"
+    echo -e "\033[1;36m============================================================\033[0m"
+    echo ""
     echo "Usage:"
     echo "  Interactive Mode: $0"
     echo "  Silent Mode:      $0 -s -f <ovpn_file> -n <profile_name> -u <username> -p <password>"
     echo ""
-    echo "Flags:"
+    echo -e "\033[1;34mFlags:\033[0m"
     echo "  -f <path>     Path to .ovpn file"
     echo "  -n <name>     Profile name"
     echo "  -u <user>     VPN username"
     echo "  -p <pass>     VPN password"
     echo "  -s            Silent mode (requires all other flags)"
+    echo ""
     exit 1
 }
 
 # Check if the ta.key file exists
 if [[ ! -f "$TA_KEY_PATH" ]]; then
-    echo "Error: The ta.key file was not found at: $TA_KEY_PATH"
-    echo "Please ensure the file exists or edit 'TA_KEY_PATH' inside this script."
+    echo ""
+    echo -e "\033[1;31m❌  Error: ta.key not found\033[0m"
+    echo -e "  Expected location: \033[1;33m$TA_KEY_PATH\033[0m"
+    echo "  Please ensure the file exists or edit 'TA_KEY_PATH' inside this script."
+    echo ""
     exit 1
 fi
 
@@ -47,7 +56,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -f)
             if [[ -z "$2" ]]; then
-                echo "Error: -f flag requires a value."
+                echo -e "\033[1;31m❌  Error: -f flag requires a value.\033[0m"
                 usage
             fi
             OVPN_FILE="$2"
@@ -55,7 +64,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -n)
             if [[ -z "$2" ]]; then
-                echo "Error: -n flag requires a value."
+                echo -e "\033[1;31m❌  Error: -n flag requires a value.\033[0m"
                 usage
             fi
             PROFILE_NAME="$2"
@@ -63,7 +72,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -u)
             if [[ -z "$2" ]]; then
-                echo "Error: -u flag requires a value."
+                echo -e "\033[1;31m❌  Error: -u flag requires a value.\033[0m"
                 usage
             fi
             VPN_USER="$2"
@@ -71,14 +80,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         -p)
             if [[ -z "$2" ]]; then
-                echo "Error: -p flag requires a value."
+                echo -e "\033[1;31m❌  Error: -p flag requires a value.\033[0m"
                 usage
             fi
             VPN_PASS="$2"
             shift 2
             ;;
         *)
-            echo "Error: Unknown flag '$1'"
+            echo -e "\033[1;31m❌  Error: Unknown flag '$1'\033[0m"
             usage
             ;;
     esac
@@ -87,38 +96,43 @@ done
 # Validate input based on mode
 if [[ "$MODE" == "silent" ]]; then
     if [[ -z "$OVPN_FILE" || -z "$PROFILE_NAME" || -z "$VPN_USER" || -z "$VPN_PASS" ]]; then
-        echo "Error: Silent mode requires all flags: -f, -n, -u, -p"
+        echo -e "\033[1;31m❌  Error: Silent mode requires all flags: -f, -n, -u, -p\033[0m"
         usage
     fi
 
     if [[ ! -f "$OVPN_FILE" ]]; then
-        echo "Error: The OVPN file '$OVPN_FILE' does not exist."
+        echo -e "\033[1;31m❌  Error: The OVPN file '$OVPN_FILE' does not exist.\033[0m"
         exit 1
     fi
 else
     # Interactive Mode
-    echo "=== ExpressVPN Profile Setup (User: $USER) ==="
+    clear
+    echo ""
+    echo -e "\033[1;36m============================================================\033[0m"
+    echo -e "\033[1;32m      🔐  EXPRESSVPN PROFILE SETUP                  \033[0m"
+    echo -e "\033[1;36m============================================================\033[0m"
+    echo ""
 
     while [[ -z "$OVPN_FILE" ]]; do
-        read -e -p "Enter path to .ovpn file: " INPUT_FILE
+        read -e -p "  📄  Enter path to .ovpn file: " INPUT_FILE
         INPUT_FILE="${INPUT_FILE/#\~/$HOME}"
         if [[ -f "$INPUT_FILE" ]]; then
             OVPN_FILE="$INPUT_FILE"
         else
-            echo "Error: File not found. Please try again."
+            echo -e "\033[1;31m  ❌  Error: File not found. Please try again.\033[0m"
         fi
     done
 
     while [[ -z "$PROFILE_NAME" ]]; do
-        read -p "Enter Profile Name (e.g., Exp-London): " PROFILE_NAME
+        read -p "  🏷️  Enter Profile Name (e.g., Exp-London): " PROFILE_NAME
     done
 
     while [[ -z "$VPN_USER" ]]; do
-        read -p "Enter VPN Username: " VPN_USER
+        read -p "  👤  Enter VPN Username: " VPN_USER
     done
 
     while [[ -z "$VPN_PASS" ]]; do
-        read -p "Enter VPN Password: " VPN_PASS
+        read -p "  🔑  Enter VPN Password: " VPN_PASS
         echo ""
     done
 fi
@@ -127,15 +141,19 @@ fi
 # 3. EXECUTION
 # ==========================================
 
-echo "------------------------------------------------"
-echo "Configuring '$PROFILE_NAME'..."
-echo "------------------------------------------------"
+echo ""
+echo -e " \033[1;34m============================================================ \033[0m"
+echo -e " \033[1;34m      ⚙️  CONFIGURING PROFILE                      \033[0m"
+echo -e " \033[1;34m============================================================ \033[0m"
+echo ""
+echo -e "  Profile Name:  \033[1;32m$PROFILE_NAME\033[0m"
+echo ""
 
 # 1. Import the OVPN file directly
 import_out=$(nmcli connection import type openvpn file "$OVPN_FILE" 2>&1)
 
 if [[ $? -ne 0 ]]; then
-    echo "Error: Failed to import OVPN file."
+    echo -e "\033[1;31m❌  Error: Failed to import OVPN file.\033[0m"
     echo "Details: $import_out"
     exit 1
 fi
@@ -174,4 +192,5 @@ nmcli connection modify "$PROFILE_NAME" \
 nmcli connection modify "$PROFILE_NAME" \
     vpn.secrets "password=$VPN_PASS"
 
-echo "Success! VPN Profile '$PROFILE_NAME' created with correct Key File."
+echo -e " \033[1;32m✓ Success! VPN Profile '$PROFILE_NAME' created with correct Key File.\033[0m"
+echo ""
