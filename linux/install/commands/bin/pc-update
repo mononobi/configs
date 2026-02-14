@@ -1,14 +1,22 @@
 #!/bin/bash
 
-echo PASSWORD | sudo -S apt-get update
+sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt autoremove -y
 sudo flatpak update -y
 sudo flatpak uninstall --unused -y
 sudo snap refresh
 sudo systemctl daemon-reload
-################ remove the below lines if you want to use any of these services ################
-sudo systemctl stop systemd-resolved
-sudo systemctl disable systemd-resolved
-sudo systemctl stop apache2.service
-sudo systemctl disable apache2.service
+
+########## Uncomment the below commands if you want to disable any of these services ##########
+
+# Disable apache service not to conflict with nginx port (Recommended).
+
+#sudo systemctl stop apache2.service
+#sudo systemctl disable apache2.service
+
+# Disable systemd-resolved service only if you want to use another
+# DNS resolver service such as dnsmasq (Not recommended).
+
+#sudo systemctl stop systemd-resolved
+#sudo systemctl disable systemd-resolved
