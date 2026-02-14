@@ -7,27 +7,14 @@
 # as VPN profiles using openvpn-add script.
 
 # ==========================================
-# 1. SELF-ELEVATION & USER DETECTION
+# 1. CONFIGURATION
 # ==========================================
 
-# If not running as root, re-run self with sudo
-if [ "$EUID" -ne 0 ]; then
-    exec sudo "$0" "$@"
-fi
-
-# Detect the real user (SUDO_USER is set when running via sudo)
-REAL_USER=${SUDO_USER:-$USER}
-REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+DEFAULT_PROFILE_DIR="$HOME/.expressvpn/profiles"
+OPENVPN_ADD_SCRIPT="openvpn-add"
 
 # ==========================================
-# 2. CONFIGURATION
-# ==========================================
-
-DEFAULT_PROFILE_DIR="$REAL_HOME/.expressvpn/profiles"
-OPENVPN_ADD_SCRIPT="./openvpn-add"
-
-# ==========================================
-# 3. INPUT PARSING
+# 2. INPUT PARSING
 # ==========================================
 
 usage() {
@@ -91,7 +78,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ==========================================
-# 4. DIRECTORY VALIDATION & SELECTION
+# 3. DIRECTORY VALIDATION & SELECTION
 # ==========================================
 
 # If -d was not provided, check if default directory has .ovpn files
@@ -103,7 +90,7 @@ if [[ -z "$PROFILE_DIR" ]]; then
         # Prompt user for directory
         while [[ -z "$PROFILE_DIR" ]]; do
             read -e -p "Enter directory containing .ovpn files: " INPUT_DIR
-            INPUT_DIR="${INPUT_DIR/#\~/$REAL_HOME}"
+            INPUT_DIR="${INPUT_DIR/#\~/$HOME}"
             if [[ -d "$INPUT_DIR" ]]; then
                 PROFILE_DIR="$INPUT_DIR"
             else
@@ -120,7 +107,7 @@ if [[ ! -d "$PROFILE_DIR" ]]; then
 fi
 
 # ==========================================
-# 5. USERNAME & PASSWORD INPUT
+# 4. USERNAME & PASSWORD INPUT
 # ==========================================
 
 # Prompt for username if not provided
@@ -140,7 +127,7 @@ if [[ -z "$VPN_USER" || -z "$VPN_PASS" ]]; then
 fi
 
 # ==========================================
-# 6. FIND AND PROCESS .OVPN FILES
+# 5. FIND AND PROCESS .OVPN FILES
 # ==========================================
 
 # Create "added" subdirectory if it doesn't exist
@@ -182,7 +169,7 @@ for OVPN_FILE in "${OVPN_FILES[@]}"; do
 
     # Call openvpn-add script with silent mode
     echo "  Adding profile..."
-    if sudo "$OPENVPN_ADD_SCRIPT" -s -f "$OVPN_FILE" -n "$PROFILE_NAME" -u "$VPN_USER" -p "$VPN_PASS"; then
+    if "$OPENVPN_ADD_SCRIPT" -s -f "$OVPN_FILE" -n "$PROFILE_NAME" -u "$VPN_USER" -p "$VPN_PASS"; then
         # Move the processed file to the "added" subdirectory
         mv "$OVPN_FILE" "$ADDED_DIR/"
         echo "  ✓ Profile added successfully and file moved to added/ folder"
@@ -194,7 +181,7 @@ for OVPN_FILE in "${OVPN_FILES[@]}"; do
 done
 
 # ==========================================
-# 7. SUMMARY
+# 6. SUMMARY
 # ==========================================
 
 echo ""
