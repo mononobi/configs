@@ -155,24 +155,24 @@ to avoid locking yourself out of the server.*
     sudo touch /etc/ssh/sshd_config.d/999_sshd_config_secure.conf
     sudo nano /etc/ssh/sshd_config.d/999_sshd_config_secure.conf
     ```
-    
-    > Important:
-    > - Keep the file name starting with `999_` to ensure it is loaded after any other 
-    >   possibly present SSH configuration files, allowing it to override less secure settings.
-    > - Remove any existing `*.conf` files under `/etc/ssh/sshd_config.d/`. Some
-    >   Cloud providers (e.g., AWS) may have default SSH configurations that could override 
-    >   your settings. Ensure that only your secure configuration file is present in the directory.
 
-    After editing and saving the file, run this:
-    ```bash
-    sudo systemctl daemon-reload
-    sudo systemctl restart ssh
-    sudo systemctl reload ssh
-    sudo systemctl restart ssh.socket
-    ```
+    **Important:**
+      - Keep the file name starting with `999_` to ensure it is loaded after any other possibly 
+        present SSH configuration files, allowing it to override less secure settings.
+      - Remove any existing `*.conf` files under `/etc/ssh/sshd_config.d/`. Some cloud providers 
+        (e.g., AWS) may have default SSH configurations that could override your settings. 
+        Ensure that only your secure configuration file is present in the directory.
 
-    *Now you should not be able to make an SSH connection to the server 
-    using the username and password or the root user.*
+     After editing and saving the file, run this:
+     ```bash
+     sudo systemctl daemon-reload
+     sudo systemctl restart ssh
+     sudo systemctl reload ssh
+     sudo systemctl restart ssh.socket
+     ```
+
+     *Now you should not be able to make an SSH connection to the server 
+     using the username and password or the root user.*
 
 ## 6. SSH Key Best Practices
 
