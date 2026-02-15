@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo gpg --decrypt ~/.bitwarden/master-password.gpg
