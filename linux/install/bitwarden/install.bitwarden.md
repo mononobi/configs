@@ -30,7 +30,7 @@ openssl rand -base64 50 | head -c 50; echo
 
 > Important: This password is your master password, meaning that it is not only used
 > to log you in to your account, it is also used as the encryption key to encrypt
-> every credential you store in Bitwarden. So it needs to be strong so that even if Bitwarden
+> the access key to your Bitwarden vault. So it needs to be strong so that even if Bitwarden
 > servers got compromised and the stored credentials were stolen, the attacker cannot
 > easily find out the encryption key (the master password) and decrypt the stored credentials.
 
@@ -88,6 +88,7 @@ rm ~/.bitwarden/master-password
 
 ```bash
 cp bitwarden-unlock ~/.local/bin/
+chmod +x ~/.local/bin/bitwarden-unlock
 ```
 
 Run this command in the terminal from anywhere to unlock the master password GPG file:
@@ -166,5 +167,9 @@ With this setup, to log in to different apps, you mostly need:
 - **Android App:** `Fingerprint`
 - **Desktop App:** `PIN`
 
-> Note: Every few weeks, you may need your `Master Password` on these platforms to log in, but
+> Note: 
+> - Every few weeks, you may need your `Master Password` on these platforms to log in, but
 > not every day.
+> - By choosing a strong `Master Password`, your saved credentials on Bitwarden are
+> secured by a hard to crack encryption key while you can conveniently log in to
+> different apps using `PIN`, `Passkey`, or `Fingerprint`.

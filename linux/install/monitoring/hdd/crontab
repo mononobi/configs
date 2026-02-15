@@ -1,0 +1,20 @@
+# --- STORAGE DRIVE MONITORING ---
+
+# --- NVMe: Samsung 990 ---
+# Short Test: 4th of every month at 21:00
+0 21 4 * * /usr/sbin/smartctl -t short /dev/nvme0
+
+# --- SSD: Samsung 870 ---
+# Short Test: 4th of every month at 21:05 (Staggered)
+5 21 4 * * /usr/sbin/smartctl -t short /dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNJ0R524883Y
+
+# --- HDDs: Toshiba ---
+# Short Test: Weekly on Sundays at 21:10
+10 21 * * 0 /usr/sbin/smartctl -t short /dev/disk/by-id/ata-TOSHIBA_MG09ACA18TE_62X0A10RFJDH
+10 21 * * 0 /usr/sbin/smartctl -t short /dev/disk/by-id/ata-TOSHIBA_MG09ACA18TE_94G0A0T8FJDH
+
+# Long Test: 3rd of Jan, May, Sep at 21:00
+0 21 3 1,5,9 * /usr/sbin/smartctl -t long /dev/disk/by-id/ata-TOSHIBA_MG09ACA18TE_62X0A10RFJDH
+
+# Long Test: 5th of Jan, May, Sep at 21:00
+0 21 5 1,5,9 * /usr/sbin/smartctl -t long /dev/disk/by-id/ata-TOSHIBA_MG09ACA18TE_94G0A0T8FJDH
