@@ -66,7 +66,13 @@ Run these commands to limit the access to the GPG file to the root user (**sudo*
 ```bash
 sudo chown root:root ~/.bitwarden/master-password.gpg
 sudo chmod 600 ~/.bitwarden/master-password.gpg
+sudo chown root:root ~/.bitwarden
+sudo chmod 755 ~/.bitwarden
 ```
+
+> Now the file is encrypted and only the root user can read it. A regular user
+> cannot read, write, delete, copy, or move the GPG file. This also applies to
+> the `~/.bitwarden` directory.
 
 Run this command to see you master password by decrypting the GPG file:
 ```bash
@@ -76,12 +82,13 @@ sudo gpg --decrypt ~/.bitwarden/master-password.gpg
 If you were successful to decrypt the GPG file, go ahead and delete the 
 original `master-password` file (**not the GPG file**):
 ```bash
-rm ~/.bitwarden/master-password
+sudo rm ~/.bitwarden/master-password
 ```
 
 > Important: The `master-password.gpg` file is your only gate to log in to you bitwarden account.
 > Keep multiple copies of it on different drives and mediums. Since it is both encrypted and also
 > limited to the root user, it is safe to have multiple copies of it in different places.
+> Make sure to apply the same set of permissions to all copies of the GPG file as mentioned above.
 
 > Note: You can copy the `bitwarden-unlock` script into the local `bin` folder to
 > be able to unlock the GPG file by a single command from anywhere.
