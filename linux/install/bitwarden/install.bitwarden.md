@@ -145,7 +145,7 @@ master password. Then go to the settings:
 > Settings -> Account Security:
 - **Unlock with PIN:** `On`
   - **Require master password on browser restart:** `Off` (You mostly log in using your PIN or passkey)
-- **Session timeout:** `On system lock`
+- **Session timeout:** `On browser restart`
 - **Timeout action:** `Lock`
 
 ### Configure The Android App:
