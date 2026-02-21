@@ -37,7 +37,6 @@ openssl rand -base64 50 | head -c 50; echo
 > Note: The master password is only used when you are logged out of your account. For every-day
 > use where you are already logged in to your account, you will use another password called
 > `PIN` to unlock the app and see your saved credentials.
-> 
 
 ### Secure The Master Password
 
