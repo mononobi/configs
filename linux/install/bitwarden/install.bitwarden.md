@@ -50,10 +50,6 @@ Copy the master password you generated into the `bitwarden-info` file.
 You can also add other information about your account in this file such as the email address 
 you used to create the account, and any other relevant information.
 
-> Important: Never store any information about your Bitwarden account into the Bitwarden
-> vault itself. For these kinds of information (i.e. master password, app PINs, etc.)
-> always use the `bitwarden-info` local file.
-
 Run this command to encrypt the `bitwarden-info` file with a memorable but still strong password.
 ```bash
 sudo gpg --symmetric --cipher-algo AES256 ~/.bitwarden/bitwarden-info
@@ -137,7 +133,7 @@ master password. Then go to the settings:
 - **Timeout action:** `Lock`
 
 > Master Password Tab:
-- **Login with passkey:** `New passkey` (To enable passwordless login on the web)
+- **Log in with passkey:** `Off`
 
 > Two-Step Login Tab:
 - **Email:** `Active`
@@ -153,7 +149,7 @@ master password. Then go to the settings:
 
 > Settings -> Account Security:
 - **Unlock with PIN:** `On`
-  - **Require master password on browser restart:** `Off` (You mostly log in using your PIN or passkey)
+  - **Require master password on browser restart:** `Off` (You mostly log in using your PIN)
 - **Session timeout:** `On browser restart`
 - **Timeout action:** `Lock`
 
@@ -174,12 +170,12 @@ master password. Then go to the settings:
 - **Clear clipboard:** `5 minutes`
 - **Allow screen capture:** `Off`
 
-### Final Note
+### Summary
 
 With this setup, to log in to different apps, you mostly need:
 
-- **Website:** `Passkey`
-- **Browser Extension:** `PIN`, `Passkey`
+- **Website:** `Master Password`
+- **Browser Extension:** `PIN`
 - **Android App:** `Fingerprint`
 - **Desktop App:** `PIN`
 
@@ -188,4 +184,124 @@ With this setup, to log in to different apps, you mostly need:
 > not every day.
 > - By choosing a strong `Master Password`, your saved credentials on Bitwarden are
 > secured by a hard to crack encryption key while you can conveniently log in to
-> different apps using `PIN`, `Passkey`, or `Fingerprint`.
+> different apps using `PIN` or `Fingerprint`.
+
+### Set Bitwarden as the Only Password Manager & Autofill Provider:
+This will set Bitwarden as the only password manager and autofill provider on your system.
+This includes the passwords, payment methods, addresses, and passkeys autosave and autofill 
+features.
+
+#### Android:
+> Settings → Passwords, passkeys & accounts
+- **Preferred service:** `Bitwarden`
+- **Additional services:** `Off`
+
+#### Chrome on Android:
+> Settings → Google Password Manager → Settings (Gear Icon)
+- **Offer to save passwords:** `Off`
+- **Automatically create a passkey to sign in faster:** `Off`
+- **Auto Sign-in:** `Off`
+
+> Settings → Payment methods
+- **Save and fill payment methods:** `Off`
+
+> Settings → Addresses and more
+- **Save and fill addresses:** `Off`
+
+> Settings → Autofill services
+- **Autofill using another service:** `On`
+
+#### Firefox on Android:
+> Settings → Passwords
+- **Save passwords:** `Never Save`
+- **Autofill in Firefox:** `Off`
+- **Autofill in other apps:** `Off`
+
+> Settings → Autofill
+- **Save and fill addresses:** `Off`
+- **Save and fill payment methods:** `Off`
+
+#### Bitwarden App on Android:
+> Settings → Autofill
+- **Autofill services:** `On`
+- **Use Chrome autofill integration:** `On`
+- **Ask to add item:** `Off` (It can be left `On`, however, because there is an annoying behavior
+  where Bitwarden will ask to add credentials for some apps which already have credentials saved 
+  in Bitwarden, it is better to turn this off to avoid the annoyance of these popups)
+
+  > Note: To make autofill also available for the apps (not just the browser), you need
+  > to add the Android app URI into the list of `Autofill options (Websites)` in the entry 
+  > of that app in the Bitwarden vault.
+  > For example, for the Twitter app, you also need to add both `androidapp://com.twitter.android` 
+  > and `com.twitter.android` into the list. 
+  > You can find the app URI by going to the app's page on the Play Store and looking for 
+  > the `id` parameter in the URL. For example, for Twitter, the URL is 
+  > `https://play.google.com/store/apps/details?id=com.twitter.android&hl=en`, so the app URI 
+  > is `com.twitter.android`.
+
+#### Chrome on Desktop:
+> Settings → Autofill and passwords → Google Password Manager → Settings (Gear Icon)
+- **Offer to save passwords and passkeys:** `Off`
+- **Sign in automatically:** `Off`
+
+> Settings → Autofill and passwords → Payment methods
+- **Save and fill payment methods:** `Off`
+
+> Settings → Autofill and passwords → Addresses and more
+- **Save and fill addresses:** `Off`
+
+> Settings → Autofill and passwords → Enhanced autofill
+- **Enhanced autofill:** `Off`
+
+#### Firefox on Desktop:
+> Settings → Privacy & Security → Passwords
+- **Ask to save passwords:** `Off`
+
+> Settings → Privacy & Security → Payment methods
+- **Save and autofill payment info**:** `Off`
+
+> Settings → Privacy & Security → Addresses and more
+- **Save and autofill addresses:** `Off`
+
+#### Browser Extension (Chrome & Firefox):
+> Settings → Autofill
+- **Show autofill suggestions on form fields:** `On`
+- **Display identities as suggestions:** `On`
+- **Display cards as suggestions:** `On`
+- **Make Bitwarden your default password manager:** `OFF`
+
+> Important:
+> **DO NOT** turn on the `Make Bitwarden your default password manager` option in the 
+> browser extension settings because it will cause some issues with the autofill 
+> feature of the extension. It is better to keep this option off and just rely on 
+> the browser's built-in autofill management to set Bitwarden as the default password 
+> manager as explained in the previous sections.
+
+> Settings → Notifications
+- **Ask to save and use passkeys:** `On`
+- **Ask to add login:** `On`
+- **Ask to update existing login:** `On`
+
+### Important Note:
+
+- Never store any information about your Bitwarden account into the Bitwarden vault itself. 
+  For these kinds of information (i.e. master password, app PINs, etc.) always use 
+  the `bitwarden-info` local file and encrypt it with GPG as explained in the steps above.
+- **DO NOT** create a passkey for your Bitwarden account not to compromise the security of 
+  your account.
+- If you do want to absolutely create a passkey for your Bitwarden account, make sure to store 
+  the passkey in a secure place `outside` Bitwarden (e.g. Google Password Manager, ...).
+
+### A Rare Bug With Passkeys on Wayland:
+
+#### The Bug:
+
+When a website asks for a passkey, the Bitwarden popup window might instantly close or lose 
+focus before you can click "Save" or "Authenticate".
+
+#### The Fix:
+
+If this happens, click the "Pop Out" button (the little square with an arrow) in the top-right 
+corner of the Bitwarden extension menu before you click "Log in with Passkey" on the website. 
+This forces Bitwarden into its own dedicated Wayland window, ensuring the passkey handshake 
+completes perfectly.
