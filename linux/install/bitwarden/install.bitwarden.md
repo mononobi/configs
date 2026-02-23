@@ -282,6 +282,10 @@ features.
 - **Ask to add login:** `On`
 - **Ask to update existing login:** `On`
 
+> Note: To use the autofill feature in `Incognito mode` or `Private Windows` as well, 
+> you need to allow the Bitwarden extension to run in these modes from the browser's 
+> extension management page.
+
 ### Important Note:
 
 - Never store any information about your Bitwarden account into the Bitwarden vault itself. 
