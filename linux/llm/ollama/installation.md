@@ -39,6 +39,11 @@ docker compose down
 ip addr show
 ```
 
+### Create Account
+
+Navigate to the Ollama Web UI at `http://localhost:3000` and follow the instructions to
+create an account.
+
 ### Add AI Models
 
 Models that can be run with 32 GB of RAM and an iGPU:
@@ -51,12 +56,7 @@ Models that can be run with 32 GB of RAM and an iGPU:
     - `qwen2.5-coder:7b`: `Faster`
     - `qwen3-coder:30b`: `Slower`
 
-### Configure Ollama
-
-Navigate to the Ollama Web UI at `http://localhost:3000` and follow the instructions to
-create an account.
-
-#### Modify Important Settings
+### Important Settings
 
 > **Settings -> Admin Settings:**
 
