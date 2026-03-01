@@ -54,7 +54,14 @@ Models that can be run with 32 GB of RAM and an iGPU:
 
 - **Code Generation:**
     - `qwen2.5-coder:7b`: `Faster`
-    - `qwen3-coder:30b`: `Slower`
+
+### Delete AI Models
+
+To delete a model go to this path:
+
+> **Settings -> Models -> Manage (Button) -> Delete a model**
+
+Then select the model you want to delete and click the `Delete Model` button.
 
 ### Important Settings
 
@@ -79,3 +86,10 @@ Models that can be run with 32 GB of RAM and an iGPU:
 > **Interface:**
 - **Voice Mode Custom Prompt:** `On`
 - **All Other Options:** `Off`
+
+### Mobile App
+
+Install the `Conduit: OpenWebUI Client` app on your mobile device and connect it to your
+Ollama server using the API URL (Using the LAN IP).
+
+**Play Store:** [Conduit: OpenWebUI Client](https://play.google.com/store/apps/details?id=app.cogwheel.conduit)
