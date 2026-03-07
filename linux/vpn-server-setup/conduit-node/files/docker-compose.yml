@@ -4,6 +4,8 @@ services:
     container_name: conduit
     restart: unless-stopped
     network_mode: host
+    # This forces the container to run as your primary user
+    user: "1000:1000"
     command: start --max-common-clients 75 --bandwidth 8 --data-dir /app/data
     # This is the magic label that invites Watchtower in to update this container
     labels:
