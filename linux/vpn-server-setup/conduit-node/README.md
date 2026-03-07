@@ -1,26 +1,16 @@
 ## Conduit Node
 
-Make a copy of both `docker-compose.yml` and `Dockerfile` files under `~/.conduit-node` directory:
+Make a copy of both `docker-compose.yml` and `prometheus.yml` files
+under `~/.conduit-node` directory:
 
 ```bash
-mkdir ~/.conduit-node
-cp docker-compose.yml Dockerfile ~/.conduit-node
+mkdir -p ~/.conduit-node
+cp docker-compose.yml prometheus.yml ~/.conduit-node
 ```
-
-### Dockerfile
-
-Change the link on this line:
-
-```dockerfile
-RUN wget -O conduit https://github.com/Psiphon-Inc/conduit/releases/download/release-cli-1.1.0/conduit-linux-amd64
-```
-
-And point it to the latest stable version from 
-[Psiphon Official GitHub](https://github.com/Psiphon-Inc/conduit/releases)
 
 ### Docker-Compose
 
-Based on the RAM size and CPU core count, customize the `--max-clients` value.
+Based on the RAM size and CPU core count, customize the `--max-common-clients` value.
 
 > NOTE: 
 > 
@@ -36,7 +26,7 @@ Based on your internet connection speed, customize the `--bandwidth` value.
 
 ```bash
 cd ~/.conduit-node
-docker-compose up -d --build
+docker-compose up -d
 ```
 
 ### View Logs
@@ -57,3 +47,29 @@ docker stats conduit
 cd ~/.conduit-node
 docker-compose stop
 ```
+
+### Access the Grafana Dashboard and Prometheus Raw Data Running Locally:
+
+- `Grafana`: `http://localhost:3030` `(Username: admin, Password: admin)`
+- `Prometheus Raw Data`: `http://localhost:9091`
+
+### Access the Grafana Dashboard and Prometheus Raw Data Running on a Remote Server:
+
+To access the Grafana dashboard and Prometheus raw data on a remote server, you can use SSH
+tunneling to forward the ports from the remote server to your local machine:
+
+```bash
+ssh -L 3031:localhost:3030 -L 9092:localhost:9091 remote_user@server_ip
+```
+
+If you have setup SSH key to access the server, you can use the following command instead:
+
+```bash
+ssh -L 3031:localhost:3030 -L 9092:localhost:9091 ssh-server-alias
+```
+
+Keep the terminal open while you want to access the Grafana dashboard and Prometheus raw data.
+Open the following URLs in your local browser:
+
+- `Grafana`: `http://localhost:3031` `(Username: admin, Password: admin)`
+- `Prometheus Raw Data`: `http://localhost:9092`

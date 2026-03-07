@@ -27,7 +27,7 @@ docker compose down
 ### Ollama URLs
 
 - Ollama API: `http://localhost:11434`
-- Ollama Web UI: `http://localhost:3000`
+- Ollama Web UI: `http://localhost:3020`
 
 > Note:
 > Instead of using `localhost`, you can also use your machine's LAN IP address to access
@@ -41,7 +41,7 @@ ip addr show
 
 ### Create Account
 
-Navigate to the Ollama Web UI at `http://localhost:3000` and follow the instructions to
+Navigate to the Ollama Web UI at `http://localhost:3020` and follow the instructions to
 create an account.
 
 ### Add AI Models

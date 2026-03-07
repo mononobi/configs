@@ -7,7 +7,10 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
-    # Since you don't have a dedicated Nvidia GPU, we omit the GPU deploy flags.
+    # This is the magic label that invites Watchtower in to update this container
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    # Since there is no dedicated GPU, we omit the GPU deploy flags.
     # Ollama will automatically default to highly optimized CPU inference.
 
   open-webui:
@@ -15,12 +18,15 @@ services:
     container_name: open-webui
     restart: unless-stopped
     ports:
-      - "3000:8080"
+      - "3020:8080"
     environment:
       # This tells the WebUI how to talk to the Ollama container on the same network
       - OLLAMA_BASE_URL=http://ollama:11434
     volumes:
       - open_webui_data:/app/backend/data
+    # This is the magic label that invites Watchtower in to update this container
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
       - ollama
 

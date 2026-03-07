@@ -1,0 +1,19 @@
+services:
+  watchtower:
+    image: nickfedor/watchtower
+    container_name: watchtower-master
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Europe/Berlin
+      # Remove the old images that are being updated to a new version
+      - WATCHTOWER_CLEANUP=true
+      # Only update the images that their containers have the opt-in label
+      - WATCHTOWER_LABEL_ENABLE=true
+      # Checks every 3 hours
+      - WATCHTOWER_POLL_INTERVAL=10800
+      # Gives containers 45 seconds to safely save state
+      - WATCHTOWER_TIMEOUT=45s
+      # Updates containers even if they are not running (they will be kept not running)
+      - WATCHTOWER_INCLUDE_STOPPED=true
