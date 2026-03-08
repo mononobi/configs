@@ -1,9 +1,11 @@
 {
-  "title": "Psiphon Conduit Node Stats",
+  "title": "Conduit Node Stats",
   "tags": ["conduit"],
   "timezone": "browser",
   "schemaVersion": 38,
-  "refresh": "15s",
+  "from": "now-24h",
+  "to": "now",
+  "refresh": "10s",
   "panels": [
     {
       "title": "Current Connected Users",
