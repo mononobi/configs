@@ -81,7 +81,6 @@ Open the following URLs in your local browser:
 - `Prometheus Targets`: `http://localhost:9091/targets`
 - `Grafana Datasource`: `http://host.docker.internal:9091`
 
-
 ### Final Note
 
 You can also use the `conduit-stats` command to see some basic stats about the Conduit node,
