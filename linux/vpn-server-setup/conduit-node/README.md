@@ -60,17 +60,42 @@ To access the Grafana dashboard and Prometheus on a remote server, you can use S
 tunneling to forward the ports from the remote server to your local machine:
 
 ```bash
-ssh -L 3031:localhost:3030 -L 9092:localhost:9091 remote_user@server_ip
+ssh -L 3031:localhost:3030 -L 9092:localhost:9091 remote_user@remote_server_ip
 ```
 
 If you have setup SSH key to access the server, you can use the following command instead:
 
 ```bash
-ssh -L 3031:localhost:3030 -L 9092:localhost:9091 ssh-server-alias
+ssh -L 3031:localhost:3030 -L 9092:localhost:9091 ssh_server_alias
 ```
 
+You can add the following configuration to your `~/.ssh/config` file to create an alias for
+the remote server and to automatically open the Grafana dashboard in your default browser when
+you connect:
+
+```text
+Host SSH_SERVER_ALIAS
+    HostName REMOTE_SERVER_IP
+    User REMOTE_USER
+    IdentityFile ~/.ssh/IDENTITY_FILE
+    IdentitiesOnly yes
+    LocalForward 3031 localhost:3030
+    LocalForward 9092 localhost:9091
+    PermitLocalCommand yes
+    LocalCommand xdg-open http://localhost:3031
+```
+
+Now you can simply open the Grafana dashboard using the alias:
+
+```bash
+ssh SSH_SERVER_ALIAS
+```
+
+The default browser will automatically open the Grafana dashboard at `http://localhost:3031`.
+
 Keep the terminal open while you want to access the Grafana dashboard and Prometheus.
-Open the following URLs in your local browser:
+
+You can also manually open the following URLs in your local browser after tunneling:
 
 - `Grafana`: `http://localhost:3031` `(Username: admin, Password: admin)`
 - `Prometheus`: `http://localhost:9092`

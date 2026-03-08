@@ -83,13 +83,16 @@ To avoid entering your passphrase every time you connect, add your private key t
     Host server-1
         HostName REMOTE_IP_1
         User REMOTE_USER_1
-        IdentityFile ~/.ssh/id_SOURCE_DEVICE_NAME
 
     # Profile for the Server-2
     Host server-2
         HostName REMOTE_IP_2
         User REMOTE_USER_2
+
+    # Profile for common configs
+    Host *
         IdentityFile ~/.ssh/id_SOURCE_DEVICE_NAME
+        IdentitiesOnly yes
     ```
 
     * Now, to connect to each server, instead of having to do this:
