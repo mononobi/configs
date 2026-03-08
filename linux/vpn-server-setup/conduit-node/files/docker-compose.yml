@@ -4,9 +4,8 @@ services:
     container_name: conduit
     restart: unless-stopped
     network_mode: host
-    # This forces the container to run as your primary user
     user: "1000:1000"
-    command: start --max-common-clients 75 --bandwidth 8 --data-dir /app/data
+    command: start --max-common-clients 150 --bandwidth 10 --data-dir /app/data --metrics-addr 127.0.0.1:9090
     # This is the magic label that invites Watchtower in to update this container
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
@@ -17,13 +16,13 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     restart: unless-stopped
-    # Allows Prometheus to talk to Conduit on the host network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    ports:
-      # Mapped to 9091 locally to avoid clashing with Conduit's default 9090 port
-      - "127.0.0.1:9091:9090"
-    # This is the magic label that invites Watchtower in to update this container
+    network_mode: host # On the host network alongside Conduit
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.listen-address=:9091' # Forces Prometheus to use 9091 to avoid clashing with Conduit
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
@@ -34,14 +33,20 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
+    # Move the bridge access here so Grafana can reach the newly hosted Prometheus
+    # Grafana will see Prometheus at http://host.docker.internal:9091
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
-      # Securely bound to localhost only
       - "127.0.0.1:3030:3000"
     # This is the magic label that invites Watchtower in to update this container
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana-provisioning/dashboards/default.yaml:/etc/grafana/provisioning/dashboards/default.yaml:ro
+      - ./grafana-provisioning/dashboards:/var/lib/grafana/dashboards:ro
+      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
 
 volumes:
   prometheus_data:

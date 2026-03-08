@@ -4,5 +4,4 @@ global:
 scrape_configs:
   - job_name: 'conduit'
     static_configs:
-      # Scrapes Conduit metrics via the docker host gateway
-      - targets: ['host.docker.internal:9090']
+      - targets: ['localhost:9090']

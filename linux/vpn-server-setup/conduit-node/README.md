@@ -1,11 +1,12 @@
 ## Conduit Node
 
-Make a copy of both `docker-compose.yml` and `prometheus.yml` files
-under `~/.conduit-node` directory:
+Execute these commands to copy the necessary files and directories to
+the `~/.conduit-node` directory from the `files` directory.
 
 ```bash
-mkdir -p ~/.conduit-node
+mkdir -p ~/.conduit-node/data
 cp docker-compose.yml prometheus.yml ~/.conduit-node
+cp -r grafana-provisioning ~/.conduit-node
 ```
 
 ### Docker-Compose

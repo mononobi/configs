@@ -1,0 +1,67 @@
+{
+  "title": "Psiphon Conduit Node Stats",
+  "tags": ["conduit"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "refresh": "15s",
+  "panels": [
+    {
+      "title": "Current Connected Users",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 4, "x": 0, "y": 0 },
+      "targets": [ { "expr": "conduit_connected_clients", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 80 } ] } } }
+    },
+    {
+      "title": "Peak Users (Last 14 Days)",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 4, "x": 4, "y": 0 },
+      "targets": [ { "expr": "max_over_time(conduit_connected_clients[14d])", "refId": "A" } ]
+    },
+    {
+      "title": "Total Downloaded",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 4, "x": 8, "y": 0 },
+      "targets": [ { "expr": "conduit_bytes_downloaded", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "title": "Total Uploaded",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 4, "x": 12, "y": 0 },
+      "targets": [ { "expr": "conduit_bytes_uploaded", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "title": "Application Load (Goroutines)",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 0 },
+      "targets": [ { "expr": "go_goroutines", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 10, "lineWidth": 2 } } }
+    },
+    {
+      "title": "Live Bandwidth Speeds",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "targets": [
+        { "expr": "rate(conduit_bytes_downloaded[5m])", "legendFormat": "Download Rate", "refId": "A" },
+        { "expr": "rate(conduit_bytes_uploaded[5m])", "legendFormat": "Upload Rate", "refId": "B" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "Bps", "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 20, "lineWidth": 2 } } }
+    },
+    {
+      "title": "Connection Trends (Historical)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "targets": [ { "expr": "conduit_connected_clients", "legendFormat": "Connected Clients", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 30, "lineWidth": 2 } } }
+    },
+    {
+      "title": "Conduit Memory Usage (Heap Alloc)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+      "targets": [ { "expr": "go_memstats_heap_alloc_bytes", "legendFormat": "Allocated Memory", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 20, "lineWidth": 2 } } }
+    }
+  ]
+}
