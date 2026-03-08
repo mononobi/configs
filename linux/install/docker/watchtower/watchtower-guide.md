@@ -58,5 +58,6 @@ environment:
   - WATCHTOWER_MONITOR_ONLY=true
   # Configure watchtower to check for updates on specific schedules (cron) instead of polling.
   # This is mutually exclusive with "WATCHTOWER_POLL_INTERVAL" config.
-  - WATCHTOWER_SCHEDULE=0 0 */4 * * *
+  # This example will check for updates every day at 1am.
+  - WATCHTOWER_SCHEDULE=0 0 1 * * *
 ```

@@ -81,6 +81,20 @@ Open the following URLs in your local browser:
 - `Prometheus Targets`: `http://localhost:9091/targets`
 - `Grafana Datasource`: `http://host.docker.internal:9091`
 
+### Firewall Rules
+
+Make sure these rules are defined in your firewall to allow access from Grafana to Prometheus
+and to allow access to the Grafana dashboard and Prometheus from your local machine:
+
+```bash
+# Allow access from Grafana to Prometheus in the Docker network
+sudo ufw allow from 172.16.0.0/12
+sudo ufw allow from 10.0.0.0/8
+# Allow access to Grafana dashboard and Prometheus from your local machine through SSH tunneling
+sudo ufw allow OpenSSH
+sudo ufw allow 22
+```
+
 ### Final Note
 
 You can also use the `conduit-stats` command to see some basic stats about the Conduit node,

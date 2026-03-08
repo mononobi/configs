@@ -13,6 +13,8 @@ services:
       - WATCHTOWER_LABEL_ENABLE=true
       # Checks every 3 hours
       - WATCHTOWER_POLL_INTERVAL=10800
+      # Only check for updates at 1:00 AM every day (mutually exclusive with WATCHTOWER_POLL_INTERVAL)
+      # - WATCHTOWER_SCHEDULE=0 0 1 * * *
       # Gives containers 45 seconds to safely save state
       - WATCHTOWER_TIMEOUT=45s
       # Updates containers even if they are not running (they will be kept not running)
