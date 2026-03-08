@@ -15,37 +15,65 @@
       "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null } ] } } }
     },
     {
-      "title": "Peak Users (Last 14 Days)",
+      "title": "Connecting Clients",
       "type": "stat",
       "gridPos": { "h": 6, "w": 4, "x": 4, "y": 0 },
-      "targets": [ { "expr": "max_over_time(conduit_connected_clients[14d])", "refId": "A" } ]
+      "targets": [ { "expr": "conduit_connecting_clients", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "orange", "value": null } ] } } }
+    },
+    {
+      "title": "Conduit Announcing",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 4, "x": 8, "y": 0 },
+      "targets": [ { "expr": "conduit_announcing", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "yellow", "value": null } ] } } }
+    },
+    {
+      "title": "Conduit Status",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 4, "x": 12, "y": 0 },
+      "targets": [ { "expr": "conduit_is_live", "refId": "A" } ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "Down" },
+                "1": { "text": "Live" }
+              }
+            }
+          ]
+        }
+      }
     },
     {
       "title": "Total Downloaded",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 4, "x": 8, "y": 0 },
+      "gridPos": { "h": 6, "w": 4, "x": 16, "y": 0 },
       "targets": [ { "expr": "conduit_bytes_downloaded", "refId": "A" } ],
       "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" } } }
     },
     {
       "title": "Total Uploaded",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 4, "x": 12, "y": 0 },
+      "gridPos": { "h": 6, "w": 4, "x": 20, "y": 0 },
       "targets": [ { "expr": "conduit_bytes_uploaded", "refId": "A" } ],
       "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" } } }
     },
     {
-      "title": "Application Load (Goroutines)",
-      "type": "timeseries",
-      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 0 },
-      "targets": [ { "expr": "go_goroutines", "refId": "A" } ],
-      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 10, "lineWidth": 2 } } }
+      "title": "Peak Users (Last 14 Days)",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 4, "x": 0, "y": 6 },
+      "targets": [ { "expr": "max_over_time(conduit_connected_clients[14d])", "refId": "A" } ]
     },
     {
       "title": "Daily Peak Users (Last 14 Days)",
       "type": "timeseries",
       "timeFrom": "14d",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 },
+      "gridPos": { "h": 8, "w": 20, "x": 4, "y": 6 },
       "targets": [
         {
           "expr": "max_over_time(conduit_connected_clients[1d])",
@@ -81,44 +109,16 @@
     {
       "title": "Conduit Memory Usage (Heap Alloc)",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 22 },
       "targets": [ { "expr": "go_memstats_heap_alloc_bytes", "legendFormat": "Allocated Memory", "refId": "A" } ],
       "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 20, "lineWidth": 2 } } }
     },
     {
-      "title": "Connecting Clients",
-      "type": "stat",
-      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 30 },
-      "targets": [ { "expr": "conduit_connecting_clients", "refId": "A" } ],
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "orange", "value": null } ] } } }
-    },
-    {
-      "title": "Conduit Announcing",
-      "type": "stat",
-      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 30 },
-      "targets": [ { "expr": "conduit_announcing", "refId": "A" } ],
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "yellow", "value": null } ] } } }
-    },
-    {
-      "title": "Conduit Status",
-      "type": "stat",
-      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 30 },
-      "targets": [ { "expr": "conduit_is_live", "refId": "A" } ],
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] },
-          "mappings": [
-            {
-              "type": "value",
-              "options": {
-                "0": { "text": "Down" },
-                "1": { "text": "Live" }
-              }
-            }
-          ]
-        }
-      }
+      "title": "Application Load (Goroutines)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 22 },
+      "targets": [ { "expr": "go_goroutines", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 10, "lineWidth": 2 } } }
     }
   ]
 }
