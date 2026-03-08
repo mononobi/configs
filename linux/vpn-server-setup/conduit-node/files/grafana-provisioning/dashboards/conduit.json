@@ -64,6 +64,19 @@
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
       "targets": [ { "expr": "go_memstats_heap_alloc_bytes", "legendFormat": "Allocated Memory", "refId": "A" } ],
       "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 20, "lineWidth": 2 } } }
+    },
+    {
+      "title": "Conduit Announcing",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 22 },
+      "targets": [ { "expr": "conduit_announcing", "refId": "A" } ]
+    },
+    {
+      "title": "Conduit Is Live",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 22 },
+      "targets": [ { "expr": "conduit_is_live", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] } } }
     }
   ]
 }
