@@ -42,9 +42,29 @@
       "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 10, "lineWidth": 2 } } }
     },
     {
+      "title": "Daily Peak Users (Last 14 Days)",
+      "type": "timeseries",
+      "timeFrom": "14d",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 },
+      "targets": [
+        {
+          "expr": "max_over_time(conduit_connected_clients[1d])",
+          "interval": "1d",
+          "legendFormat": "Daily Peak",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "drawStyle": "bars", "fillOpacity": 80, "lineWidth": 1 }
+        }
+      }
+    },
+    {
       "title": "Live Bandwidth Speeds",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
       "targets": [
         { "expr": "rate(conduit_bytes_downloaded[5m])", "legendFormat": "Download Rate", "refId": "A" },
         { "expr": "rate(conduit_bytes_uploaded[5m])", "legendFormat": "Upload Rate", "refId": "B" }
@@ -54,35 +74,35 @@
     {
       "title": "Connection Trends (Historical)",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
       "targets": [ { "expr": "conduit_connected_clients", "legendFormat": "Connected Clients", "refId": "A" } ],
       "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 30, "lineWidth": 2 } } }
     },
     {
       "title": "Conduit Memory Usage (Heap Alloc)",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
       "targets": [ { "expr": "go_memstats_heap_alloc_bytes", "legendFormat": "Allocated Memory", "refId": "A" } ],
       "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 20, "lineWidth": 2 } } }
     },
     {
       "title": "Connecting Clients",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 22 },
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 30 },
       "targets": [ { "expr": "conduit_connecting_clients", "refId": "A" } ],
       "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "orange", "value": null } ] } } }
     },
     {
       "title": "Conduit Announcing",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 22 },
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 30 },
       "targets": [ { "expr": "conduit_announcing", "refId": "A" } ],
       "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "yellow", "value": null } ] } } }
     },
     {
       "title": "Conduit Status",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 22 },
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 30 },
       "targets": [ { "expr": "conduit_is_live", "refId": "A" } ],
       "fieldConfig": {
         "defaults": {
