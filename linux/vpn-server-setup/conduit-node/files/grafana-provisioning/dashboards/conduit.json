@@ -66,16 +66,23 @@
       "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 20, "lineWidth": 2 } } }
     },
     {
+      "title": "Connecting Clients",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 22 },
+      "targets": [ { "expr": "conduit_connecting_clients", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "orange", "value": null } ] } } }
+    },
+    {
       "title": "Conduit Announcing",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 22 },
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 22 },
       "targets": [ { "expr": "conduit_announcing", "refId": "A" } ],
       "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "yellow", "value": null } ] } } }
     },
     {
       "title": "Conduit Status",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 22 },
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 22 },
       "targets": [ { "expr": "conduit_is_live", "refId": "A" } ],
       "fieldConfig": {
         "defaults": {
