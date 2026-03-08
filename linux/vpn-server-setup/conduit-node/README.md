@@ -80,3 +80,24 @@ Open the following URLs in your local browser:
 - `Prometheus Metrics`: `http://localhost:9091/metrics`
 - `Prometheus Targets`: `http://localhost:9091/targets`
 - `Grafana Datasource`: `http://host.docker.internal:9091`
+
+
+### Final Note
+
+You can also use the `conduit-stats` command to see some basic stats about the Conduit node,
+such as the number of connected clients, connection history, and CPU/RAM usage.
+This command is a wrapper around `docker stats` and `docker logs` to provide a more user-friendly
+output.
+
+#### Copy the `conduit-stats` script to your local bin directory and make it executable:
+
+```bash
+cp conduit-stats ~/.local/bin
+chmod +x ~/.local/bin/conduit-stats
+```
+
+#### Run the `conduit-stats` command to see the stats:
+
+```bash
+conduit-stats
+```
