@@ -12,7 +12,7 @@
       "type": "stat",
       "gridPos": { "h": 6, "w": 4, "x": 0, "y": 0 },
       "targets": [ { "expr": "conduit_connected_clients", "refId": "A" } ],
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 80 } ] } } }
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null } ] } } }
     },
     {
       "title": "Peak Users (Last 14 Days)",
@@ -69,14 +69,29 @@
       "title": "Conduit Announcing",
       "type": "stat",
       "gridPos": { "h": 6, "w": 12, "x": 0, "y": 22 },
-      "targets": [ { "expr": "conduit_announcing", "refId": "A" } ]
+      "targets": [ { "expr": "conduit_announcing", "refId": "A" } ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "yellow", "value": null } ] } } }
     },
     {
-      "title": "Conduit Is Live",
+      "title": "Conduit Status",
       "type": "stat",
       "gridPos": { "h": 6, "w": 12, "x": 12, "y": 22 },
       "targets": [ { "expr": "conduit_is_live", "refId": "A" } ],
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] } } }
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "Down" },
+                "1": { "text": "Live" }
+              }
+            }
+          ]
+        }
+      }
     }
   ]
 }
