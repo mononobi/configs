@@ -93,3 +93,9 @@ Install the `Conduit: OpenWebUI Client` app on your mobile device and connect it
 Ollama server using the API URL (Using the LAN IP).
 
 **Play Store:** [Conduit: OpenWebUI Client](https://play.google.com/store/apps/details?id=app.cogwheel.conduit)
+
+### IDE Extension
+
+Use `Continue.dev` as AI Assistant extension in `PyCharm` and `VSCode`.
+Copy the content of `continue.dev.config.yml` into `config.yml` of the
+extension to define your models.

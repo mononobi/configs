@@ -1,0 +1,31 @@
+name: Local Config
+version: 1.0.0
+schema: v1
+models:
+  - name: Qwen2.5-Coder 7B
+    provider: ollama
+    model: qwen2.5-coder:7b
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+      - embed
+  - name: Gemma2 9B
+    provider: ollama
+    model: gemma2:9b
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+      - embed
+  - name: Gemma3 12B
+    provider: ollama
+    model: gemma3:12b
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+      - embed
