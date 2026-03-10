@@ -6,7 +6,8 @@ your own machine. This guide will walk you through the installation process for 
 ### Install Ollama
 
 ```bash
-mkdir -p ~/.ollama
+mkdir -p ~/.ollama/ollama_data
+mkdir ~/.ollama/open_webui_data
 cp docker-compose.yml ~/.ollama/
 ```
 

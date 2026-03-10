@@ -3,10 +3,12 @@ services:
     image: ollama/ollama:latest
     container_name: ollama
     restart: unless-stopped
+    user: "1000:1000"
     ports:
       - "11434:11434"
     volumes:
-      - ollama_data:/root/.ollama
+      # Stores Large Language Models (LLMs) locally
+      - ./ollama_data:/root/.ollama
     # This is the magic label that invites Watchtower in to update this container
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
@@ -17,19 +19,17 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
     restart: unless-stopped
+    user: "1000:1000"
     ports:
       - "3020:8080"
     environment:
       # This tells the WebUI how to talk to the Ollama container on the same network
       - OLLAMA_BASE_URL=http://ollama:11434
     volumes:
-      - open_webui_data:/app/backend/data
+      # Stores Users, Chats, and Uploaded Documents locally
+      - ./open_webui_data:/app/backend/data
     # This is the magic label that invites Watchtower in to update this container
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     depends_on:
       - ollama
-
-volumes:
-  ollama_data:
-  open_webui_data:
