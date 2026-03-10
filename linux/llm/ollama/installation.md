@@ -70,7 +70,6 @@ Then select the model you want to delete and click the `Delete Model` button.
 
 > **Connections:**
 - **OpenAI API:** `Off`
-- **Integration - Google Drive:** `On`
 
 > **Models:** Click on each model and set the following options:
 - **Default Features:** `All Off`
@@ -78,6 +77,7 @@ Then select the model you want to delete and click the `Delete Model` button.
 
 > **Documents:**
 - **PDF Extract Images (OCR):** `On`
+- **Integration - Google Drive:** `On`
 
 > **Web Search:**
 - **Web Search:** `On`
