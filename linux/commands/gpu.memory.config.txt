@@ -16,3 +16,9 @@
 # 8GB of RAM -> 1GB of GPU RAM
 # 4GB of RAM -> 0.5GB of GPU RAM
 # 2GB of RAM -> 0.25GB of GPU RAM
+
+# Important Note:
+It is recommended to set this config to `Auto` or a small amount (e.g., 512MB) as the OS will
+handle the required GPU RAM and assign a relevant amount based on the workload. In the other hand
+dedicating a static amount of RAM to GPU can lead to performance issues where that dedicated
+RAM is needed for your system workload.
