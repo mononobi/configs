@@ -17,6 +17,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     network_mode: host # On the host network alongside Conduit
+    user: "1000:1000"
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -27,7 +28,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
+      - ./prometheus_data:/prometheus
 
   grafana:
     image: grafana/grafana:latest
@@ -39,15 +40,12 @@ services:
       - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:3030:3000"
+    user: "1000:1000"
     # This is the magic label that invites Watchtower in to update this container
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
-      - grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
       - ./grafana-provisioning/dashboards/default.yaml:/etc/grafana/provisioning/dashboards/default.yaml:ro
       - ./grafana-provisioning/dashboards:/var/lib/grafana/dashboards:ro
       - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
-
-volumes:
-  prometheus_data:
-  grafana_data:
