@@ -5,6 +5,9 @@ services:
     restart: unless-stopped
     ports:
       - "11434:11434"
+    environment:
+      # Sets global context to 32k tokens
+      - OLLAMA_CONTEXT_LENGTH=32768
     volumes:
       # Stores Large Language Models (LLMs) locally
       - ./ollama_data:/root/.ollama
