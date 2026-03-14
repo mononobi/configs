@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "ollama/qwen2.5-coder:7b",
+  "model": "ollama/qwen2.5-coder:14b",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -11,6 +11,9 @@
       "models": {
         "qwen2.5-coder:7b": {
           "name": "qwen2.5-coder:7b"
+        },
+        "qwen2.5-coder:14b": {
+          "name": "qwen2.5-coder:14b"
         },
         "gemma3:12b": {
           "name": "gemma3:12b"
