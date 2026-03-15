@@ -14,7 +14,7 @@ set-env:
 # Automatically generate a Git commit after every successful edit
 auto-commits: false
 
-# Look for a git repo
+# Look for a Git repo and add new files to it
 git: true
 
 # Respect your .gitignore (so it doesn't try to read massive directories)
