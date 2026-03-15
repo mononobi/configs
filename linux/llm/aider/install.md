@@ -75,5 +75,7 @@ When `Aider` is active, type `/` and you will see all the available commands.
 - **/diff**: If you want to see exactly what lines Aider just changed before you decide to
   undo, type this to see a standard terminal Git diff.
 
+ - **/run <command>**: It will run a command, it can apply fixes based on the command output.
+
 > Multiline mode is enabled by default. `Enter` adds a new line. To submit the prompt
 > use `Alt + Enter`.
