@@ -1,0 +1,28 @@
+# ---------------------------------------------------------
+# 1. Model & Connection Setup
+# ---------------------------------------------------------
+# Set the default model
+model: ollama_chat/qwen2.5-coder:14b
+
+# Inject the Ollama URL as an environment variable
+set-env:
+  - OLLAMA_API_BASE=http://127.0.0.1:11434
+
+# ---------------------------------------------------------
+# 2. Git & File Settings
+# ---------------------------------------------------------
+# Automatically generate a Git commit after every successful edit
+auto-commits: false
+
+# Look for a git repo
+git: true
+
+# Respect your .gitignore (so it doesn't try to read massive directories)
+gitignore: true
+
+# ---------------------------------------------------------
+# 3. UI & Terminal Settings
+# ---------------------------------------------------------
+# Format the output for dark mode terminals
+dark-mode: true
+stream: false

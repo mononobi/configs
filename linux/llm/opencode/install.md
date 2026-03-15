@@ -1,7 +1,11 @@
 # OpenCode
 
-OpenCode is an open source AI coding agent that can connect to various AI models including
-local and cloud-based models.
+OpenCode is an open source AI coding agent that can connect to various AI models, specifically
+cloud-based models.
+
+> **Important:**
+> OpenCode does not work very well with local models. It is great for cloud-based models, though.
+> For local models use the `Aider` tool.
 
 ## Installation
 
