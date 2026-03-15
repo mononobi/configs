@@ -26,3 +26,4 @@ gitignore: true
 # Format the output for dark mode terminals
 dark-mode: true
 stream: false
+multiline: true

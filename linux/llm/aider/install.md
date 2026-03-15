@@ -49,8 +49,31 @@ aider --upgrade
 When `Aider` is active, type `/` and you will see all the available commands.
 
 > For file names, you can use relative file names to project root, it also supports
-> wild-card names.
+> standard terminal wildcards.
 
-> Note: Aider creates a repo map of the entire project and its files, so it always has the
-> context awareness of the entire project. only add files/folders as context when you want
-> to give special focus on a given file.
+## Useful Commands:
+
+- **/add <filename>**: Adds a specific file to the chat. (e.g., /add app.py)
+
+- **/add <folder>/**: Adds all supported files within a specific directory.
+
+- **/add *.py**: You can use standard terminal wildcards to add multiple files of a specific type.
+
+- **/read-only <filename>**: Adds a file as read-only. (e.g., /read-only instructions.md)
+
+- **/read-only <folder>/**: Adds a whole directory as read-only context.
+
+- **/drop <filename>**: Removes a specific file from the active chat memory. (e.g., /drop app.py)
+
+- **/drop <folder>/**: Removes all previously added files from that specific folder.
+
+- **/reset**: Drops all files (both added and read) and completely wipes the chat history.
+
+- **/undo**: Instantly performs a git reset --hard to roll back your files exactly
+  to how they were before the model's last response.
+
+- **/diff**: If you want to see exactly what lines Aider just changed before you decide to
+  undo, type this to see a standard terminal Git diff.
+
+> Multiline mode is enabled by default. `Enter` adds a new line. To submit the prompt
+> use `Alt + Enter`.
