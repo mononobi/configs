@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "ollama/qwen2.5-coder:14b",
+  "model": "ollama/llama3.1:8b",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -9,6 +9,9 @@
         "baseURL": "http://localhost:11434/v1"
       },
       "models": {
+        "llama3.1:8b": {
+          "name": "llama3.1:8b"
+        },
         "qwen2.5-coder:7b": {
           "name": "qwen2.5-coder:7b"
         },

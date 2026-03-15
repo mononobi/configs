@@ -50,11 +50,12 @@ create an account.
 Models that can be run with 32 GB of RAM and an iGPU:
 
 - **General Purpose:**
-    - `gemma2:9b`: `Faster`
     - `gemma3:12b`: `Slower`
+    - `gemma2:9b`: `Faster`
 
 - **Code Generation:**
-    - `qwen2.5-coder:14b`: `Slower` but better tool calling support
+    - `llama3.1:8b`: `Faster` and better support for tool calling for agentic setups
+    - `qwen2.5-coder:14b`: `Slower`
     - `qwen2.5-coder:7b`: `Faster`
 
 ### Delete AI Models
