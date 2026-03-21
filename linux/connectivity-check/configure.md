@@ -9,7 +9,7 @@ there's a DNS routing glitch with your ISP, or the request timed out—GNOME ass
 you are stuck behind a public Wi-Fi login screen (like at a hotel or airport) and prompts 
 you to "Sign into network."
 
-To prevent false prompts, you can use a more reliable ping URL which relies on the response 
+To prevent false prompts, you can configure a more reliable ping URL which relies on the response 
 body rather than the exact status code.
 
 ### Reliable Ping URLs
