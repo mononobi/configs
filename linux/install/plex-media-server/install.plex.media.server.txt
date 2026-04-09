@@ -1,6 +1,6 @@
 # NOTE:
 # change 'mono' to your own username in this guide.
-# change '/mnt/plex/' to your own root path for custom plex data store.
+# change '/home/mono/.plex' to your own root path for custom plex data store.
 
 # you should download the plex media server from here:
 # https://www.plex.tv/media-server-downloads/
@@ -48,25 +48,25 @@ sudo systemctl stop plexmediaserver
 
 # we assume that the root path that we want to store plex data in, is as follows:
 
-/mnt/plex/
+/home/mono/.plex
 
 # if it is your initial installation, and you don't have any metadata yet, create these folders:
 
-mkdir -p /mnt/plex/Plex/plexmediaserver/Library/'Application Support'
-mkdir /mnt/plex/Plex/tmp
+mkdir -p /home/mono/.plex/plexmediaserver/Library/'Application Support'
+mkdir /home/mono/.plex/tmp
 
 # note that if you already have those folders, your user must be the owner of those
 # folders, if it's not, execute these commands:
 
-sudo chown -R mono:mono /mnt/plex/Plex
-sudo chmod -R 775 /mnt/plex/Plex
+sudo chown -R mono:mono /home/mono/.plex
+sudo chmod -R 775 /home/mono/.plex
 
 # delete the default metadata folder:
 
 sudo rm -r /var/lib/plexmediaserver
 
 # copy the 'override.conf' file into this location with these commands
-# (change 'mono' and '/mnt/plex' to your own username and root path in the file):
+# (change 'mono' and '/home/mono/.plex' to your own username and root path in the file):
 
 sudo mkdir -p /etc/systemd/system/plexmediaserver.service.d
 sudo cp override.conf /etc/systemd/system/plexmediaserver.service.d
@@ -94,7 +94,7 @@ sudo ufw allow 32400
 # Go to Settings -> Transcoder.
 # Set these two values:
 # Transcoder temporary directory -> /dev/shm/plex
-# Downloads temporary directory -> /mnt/plex/Plex/tmp/downloads
+# Downloads temporary directory -> /home/mono/.plex/tmp/downloads
 
 # DEFAULT PATHS:
 
