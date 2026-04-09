@@ -26,4 +26,3 @@
 /dev/disk/by-uuid/3de8c1f6-0adb-485a-8c73-ed6e6669b57c /mnt/video auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=Video 0 0
 /dev/disk/by-uuid/1683da14-56af-4ff1-aa1c-c10bf2355a92 /mnt/archives-1 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=Archives-1 0 0
 /dev/disk/by-uuid/1f3c7125-39d4-493d-96f4-860e7243d82b /mnt/archives-2 auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=Archives-2 0 0
-/dev/disk/by-uuid/d2d2471e-ca1f-4290-a19d-35adebde82f7 /mnt/plex auto nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=Plex 0 0
