@@ -63,7 +63,7 @@ tunneling to forward the ports from the remote server to your local machine:
 ssh -L 3031:localhost:3030 -L 9092:localhost:9091 remote_user@remote_server_ip
 ```
 
-If you have setup SSH key to access the server, you can use the following command instead:
+If you have set up SSH key to access the server, you can use the following command instead:
 
 ```bash
 ssh -L 3031:localhost:3030 -L 9092:localhost:9091 ssh_server_alias
@@ -120,7 +120,7 @@ sudo ufw allow OpenSSH
 sudo ufw allow 22
 ```
 
-### Final Note
+### Final Note (Not Recommended - See Below)
 
 You can also use the `conduit-stats` command to see some basic stats about the Conduit node,
 such as the number of connected clients, connection history, and CPU/RAM usage.
@@ -139,3 +139,6 @@ chmod +x ~/.local/bin/conduit-stats
 ```bash
 conduit-stats
 ```
+
+> NOTE: The `conduit-stats` command has not been maintained for a long time and may not work 
+> as expected. This is because the structure of Conduit logs changes with every new release.

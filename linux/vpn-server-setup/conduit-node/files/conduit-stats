@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Note: This command has not been maintained for a long time and may not work as expected
+# due to changes in the Conduit log structure. It may also cause performance issues
+# on systems with limited resources and large log sizes.
+# Use the Grafana + Prometheus setup for the best monitoring experience.
+
 # 1. Clear the screen for a fresh look
 clear
 
