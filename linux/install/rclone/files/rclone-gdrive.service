@@ -6,7 +6,9 @@ After=network-online.target
 [Service]
 Type=notify
 ExecStart=/usr/bin/rclone mount gdrive: %h/Google-Drive \
-  --vfs-cache-mode writes \
+  --vfs-cache-mode full \
+  --vfs-cache-max-age 24h \
+  --vfs-read-ahead 128M \
   --dir-cache-time 1h \
   --log-level INFO
 ExecStop=/bin/fusermount -u %h/Google-Drive
