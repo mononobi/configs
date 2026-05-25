@@ -34,6 +34,8 @@ sudo -v ; curl https://rclone.org/install.sh | sudo bash
    - Skip Scopes by clicking `Save and Continue`. 
    - On the `Audience` page, under `Test users`, click `Add Users`, type your own Google email 
      address, click `Add`, and click `Save and Continue`.
+   - On the same `Audience` page, under `Publishing status` click on `Publish` to set the app
+     environment to `Production` so that tokens are not expired every 7 days.
 5. Create Credentials:
    - On the left sidebar, click `Clients`. 
    - Click `+`, `Create client` at the top. 
