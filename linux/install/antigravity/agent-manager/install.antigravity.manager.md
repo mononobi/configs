@@ -38,3 +38,12 @@ Copy the app icon:
 ```bash
 cp files/antigravity.png ~/.local/share/icons/
 ```
+
+## Important
+
+If the app does not open after closing it, run this to kill the background process and 
+reopen the app:
+
+```bash
+killall antigravity
+```
