@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Antigravity Manager
+Comment=Standalone AI Agent Orchestrator
+Exec=/home/mono/.antigravity-manager/Antigravity-x64/antigravity --class=AntigravityManager %F
+Icon=antigravity
+Terminal=false
+StartupNotify=true
+Categories=Development;Programming;Utility;
+StartupWMClass=AntigravityManager
