@@ -72,3 +72,6 @@ sudo apt-get install -f
 sudo rm -rf /opt/Citrix/
 rm -rf ~/.ICAClient/
 ```
+
+> NOTE: Always run the Citrix app before trying to connect to the remote workspace through 
+> the web browser.
