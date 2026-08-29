@@ -41,6 +41,13 @@ sudo flatpak override --filesystem=/usr/share/icons/:ro
 ```
 
 ## 5. Apply the Theme to the Login Screen (GDM)
+Execute these commands to make sure these directories exist and owned by the `gdm` user:
+
+```bash
+sudo mkdir -p /var/lib/gdm3/.cache/dconf /var/lib/gdm3/.config/dconf
+sudo chown -R gdm:gdm /var/lib/gdm3/.cache /var/lib/gdm3/.config
+```
+
 To fix the login screen, you must temporarily open a communication bus for the hidden `gdm` 
 system user and inject the setting into its isolated database:
 
