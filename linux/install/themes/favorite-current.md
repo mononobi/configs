@@ -209,7 +209,7 @@ Set it to **3 out of 5** (The middle size) using the **Ctrl + Mouse Wheel**.
     - **Show Home Folder:** Off
 - **Dock:**
     - **Panel Mode:** On
-    - **Icon Size:** 44
+    - **Icon Size:** 40
     - **Show On:** All displays
     - **Position on Screen:** Bottom
     - **Configure Dock Behavior:**
@@ -219,11 +219,11 @@ Set it to **3 out of 5** (The middle size) using the **Ctrl + Mouse Wheel**.
 > Settings → Display Settings:
 - **Refresh Rate:** 120 Hz
 - **Fractional Scaling:** On
-- **Scale:** 150%
+- **Scale:** 166%
 
 > Tweaks → Fonts:
 - **Size:**
-    - **Scaling Factor:** 1.07
+    - **Scaling Factor:** 1.00
 
 > Tweaks → Windows:
 - **Click Actions:**

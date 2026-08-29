@@ -1,3 +1,8 @@
+# On Ubuntu 26.04 and later, this guide will not work and the cursor icon will not change.
+# To fix the issue on Ubuntu 26.04 and later, follow the "change-cursor.md" guide.
+
+############### Ubuntu <= 24.04
+
 # extract 'DMZ-White.zip' file and put the top folder in:
 # '~/.icons'
 
