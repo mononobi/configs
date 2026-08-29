@@ -15,7 +15,17 @@ Always read the system requirements to make sure your current Ubuntu version is 
 
 ```bash
 sudo apt update
-sudo apt install libsoup2.4-1 libwebkit2gtk-4.1-0 ca-certificates libsecret-1-0 libsecret-common libsecret-tools -y
+sudo apt install libsoup2.4-1 libwebkit2gtk-4.1-0 ca-certificates libsecret-1-0 libsecret-common libsecret-tools libopengl0 libmanette-0.2-0 -y
+```
+
+These libraries should be manually downloaded & installed:
+
+```bash
+cd ~/Downloads
+wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu74_74.2-1ubuntu3.1_amd64.deb
+wget http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb
+sudo dpkg -i libicu74_74.2-1ubuntu3.1_amd64.deb libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb
+rm libicu74_74.2-1ubuntu3.1_amd64.deb libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb
 ```
 
 > **Important:** Newer versions of Ubuntu (e.g. 26.04) ship with `libwebkit2gtk-4.1`, but 
@@ -32,7 +42,11 @@ sudo ln -s /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /opt/Citrix/I
 > what other dependencies might be missing.
 
 ```bash
+# This will launch the Citrix Workspace app and will show the exact error that is 
+# preventing it from opening.
 /opt/Citrix/ICAClient/selfservice
+
+# This will show a report on all required dependencies and whether they are installed or not.
 /opt/Citrix/ICAClient/util/workspacecheck.sh
 ```
 
