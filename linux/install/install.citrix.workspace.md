@@ -14,7 +14,26 @@ Always read the system requirements to make sure your current Ubuntu version is 
 ### Compatibility Installation (Only If Ubuntu Version Is Not Supported Yet)
 
 ```bash
-sudo apt install libsoup2.4-1 libwebkit2gtk-4.1-0 ca-certificates -y
+sudo apt update
+sudo apt install libsoup2.4-1 libwebkit2gtk-4.1-0 ca-certificates libsecret-1-0 libsecret-common libsecret-tools -y
+```
+
+> **Important:** Newer versions of Ubuntu (e.g. 26.04) ship with `libwebkit2gtk-4.1`, but 
+> Citrix Workspace specifically looks for the `4.0` library. You must create symbolic 
+> links to the `4.1` library so Citrix can find it. After installing the Citrix App, run:
+
+```bash
+sudo mkdir -p /opt/Citrix/ICAClient/gtk2/lib
+sudo ln -s /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 /opt/Citrix/ICAClient/gtk2/lib/libwebkit2gtk-4.0.so.37
+sudo ln -s /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /opt/Citrix/ICAClient/gtk2/lib/libjavascriptcoregtk-4.0.so.18
+```
+
+> If the app still does not launch, run one of these commands from the terminal to see 
+> what other dependencies might be missing.
+
+```bash
+/opt/Citrix/ICAClient/selfservice
+/opt/Citrix/ICAClient/util/workspacecheck.sh
 ```
 
 ### Citrix App Installation
