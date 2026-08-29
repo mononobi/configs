@@ -231,3 +231,8 @@ Set it to **3 out of 5** (The middle size) using the **Ctrl + Mouse Wheel**.
 
 > GDM Settings → Fonts:
 - **Scaling Factor:** 1.0
+
+> NOTE:
+> On `Ubuntu 26.04` and later, the cursor change through the `Tweaks` and `GDM-Settings` apps
+> will not work, to change the cursor, follow the guides 
+> in [Change Cursor](cursor/change-cursor.md) file.
