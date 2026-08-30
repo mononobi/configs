@@ -122,16 +122,19 @@ Set it to **3 out of 5** (The middle size) using the **Ctrl + Mouse Wheel**.
 ### Suggested Combinations of Themes and Icons (Tweaks and GDM Settings Apps)
 
 > **PC: Non-floating Panel**
+- **Accent Color:** Light Blue
 - **Cursor:** DMZ-White
 - **Themes:** Orchis-Dark
 - **Icons:** Tela-dark
 
 > **Mini PC: Floating Panel**
+- **Accent Color:** Dark Green
 - **Cursor:** DMZ-White
 - **Themes:** Orchis-Green-Dark
 - **Icons:** Tela-manjaro-dark
 
 > **Laptop: Floating Panel**
+- **Accent Color:** Dark Red
 - **Cursor:** DMZ-White
 - **Themes:** Orchis-Grey-Dark
 - **Icons:** Tela-dracula-dark
