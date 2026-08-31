@@ -15,6 +15,11 @@
 ############### System Monitor ###############
 - Uncheck "Swap" by right-clicking on the tool
 
+# NOTE:
+# On Ubuntu 26.04 and later, you need to install this for the extension to work:
+
+sudo apt install gnome-system-monitor
+
 ############### Ubuntu Dock ###############
 ### Position and size Tab:
 - Show on all monitors: On
