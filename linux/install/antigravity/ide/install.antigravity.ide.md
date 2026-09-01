@@ -1,7 +1,8 @@
-# Install Antigravity
+# Install Antigravity IDE
 
-This is the recommended approach for installing both the `Antigravity V2` and `Antigravity IDE` 
-with auto updates through apt.
+This will install the Antigravity IDE with the AI agent mode. 
+It is recommended to install the Antigravity Agent Manager instead to be able to use 
+it with your favorite IDE or without IDE.
 
 Open your terminal and run the following commands:
 
@@ -11,16 +12,9 @@ curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | sudo gpg -
 echo "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main" | sudo tee /etc/apt/sources.list.d/google_antigravity.list > /dev/null
 ```
 
-## Install Antigravity v2 Agent Manager (Recommended)
+Run the following commands to install the IDE:
 
 ```bash
 sudo apt update
 sudo apt install antigravity
-```
-
-## Install Antigravity IDE (Not Recommended)
-
-```bash
-sudo apt update
-sudo apt install antigravity-ide
 ```
