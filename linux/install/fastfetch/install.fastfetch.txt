@@ -1,0 +1,11 @@
+# Fastfetch is a maintained, fast, C-based system information tool (successor to Neofetch).
+# Available in Ubuntu 24.04+ default repositories or via official PPA for earlier releases.
+
+# Ubuntu 24.04+:
+sudo apt-get update
+sudo apt-get install -y fastfetch
+
+# Ubuntu <= 22.04:
+# sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+# sudo apt-get update
+# sudo apt-get install -y fastfetch

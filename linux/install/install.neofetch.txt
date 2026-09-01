@@ -1,3 +1,0 @@
-# neofetch is a tool which shows info of current os.
-
-sudo apt-get install neofetch
