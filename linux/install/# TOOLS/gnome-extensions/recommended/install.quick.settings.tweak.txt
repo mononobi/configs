@@ -1,13 +1,19 @@
-# this extension moves the notifications and media player controls to
+# This extension moves the notifications and media player controls to
 # the quick settings panel (right) from date panel (center).
 # it also adds the sound profile name on top of volume slider.
 # you can configure its settings after installation.
 
-# it only supports gnome >= 43.
-# go to 'https://extensions.gnome.org/extension/5446/quick-settings-tweaker/'
+########## 43 <= Gnome <= 48:
+# Go to 'https://extensions.gnome.org/extension/5446/quick-settings-tweaker/'
 # page and toggle the install icon.
 
-# recommended settings to enable (disable others):
+########## 48 <= Gnome <= 50:
+# Download the extension zip file from this link and follow the instructions to install it.
+# This is a community fork from the same extension which is modified to work with newer Gnome
+# versions:
+# https://github.com/jstockdale/quick-settings-tweaks/releases
+
+# Recommended settings to enable for both (disable others):
 
 ######################## Widgets Tab ########################
 
@@ -28,7 +34,8 @@
 # DND Quick Toggle -> On
 # Unsafe Mode Quick Toggle -> Off
 
-#################################################################################
+#################################################################################################
 
-# there is another somewhat similar extension here (I have not tested it):
+# There is another extension which only provides media player and sound profile related
+# tools (Not recommended):
 # https://extensions.gnome.org/extension/5940/quick-settings-audio-panel/
