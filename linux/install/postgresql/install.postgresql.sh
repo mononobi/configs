@@ -104,8 +104,7 @@ echo "[+] Installing postgresql-${PG_VERSION} and contrib..."
 sudo apt-get install -y "postgresql-${PG_VERSION}" "postgresql-contrib-${PG_VERSION}" "postgresql-client-${PG_VERSION}"
 
 # Install PostGIS for this PostgreSQL version if available
-echo "[+] Installing PostGIS extension packages..."
-sudo apt-get install -y "postgresql-${PG_VERSION}-postgis-3" "postgresql-${PG_VERSION}-postgis-3-scripts" postgis 2>/dev/null || sudo apt-get install -y postgis || true
+sudo apt-get install -y postgis "postgresql-${PG_VERSION}-postgis-3" "postgresql-${PG_VERSION}-postgis-3-scripts"
 
 # 5. Copy custom db.conf into conf.d directory if available
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

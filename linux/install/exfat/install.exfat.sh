@@ -34,7 +34,6 @@ done
 echo "[+] Starting installation/setup for exfat..."
 
 sudo apt-get update
-# On modern Ubuntu (20.04+), exfatprogs is the modern official tool
-sudo apt-get install -y exfatprogs || sudo apt-get install -y exfat-fuse exfat-utils
+sudo apt-get install -y exfat-fuse exfatprogs
 
 echo "[✓] exfat setup completed successfully!"

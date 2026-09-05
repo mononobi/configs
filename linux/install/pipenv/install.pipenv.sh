@@ -34,11 +34,10 @@ done
 echo "[+] Starting installation/setup for Pipenv..."
 
 sudo apt-get update
-sudo apt-get install -y python3-pip python3-venv pipx
+sudo apt-get install -y virtualenv pipx
 
 echo "[+] Installing pipenv via pipx..."
-pipx install pipenv || pip3 install --user pipenv
-
-pipenv --version || true
+pipx install pipenv
+pipx ensurepath
 
 echo "[✓] Pipenv setup completed successfully!"

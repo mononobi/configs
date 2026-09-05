@@ -33,6 +33,6 @@ done
 
 echo "[+] Starting installation/setup for pip-setuptools..."
 
-python3 -m pip install --upgrade pip setuptools wheel 2>/dev/null || python3 -m pip install --upgrade pip setuptools wheel --break-system-packages
+python3 -m pip install --upgrade pip setuptools wheel --break-system-packages
 
 echo "[✓] pip-setuptools setup completed successfully!"

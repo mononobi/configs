@@ -34,7 +34,7 @@ done
 echo "[+] Starting installation/setup for DBeaver CE..."
 
 sudo apt-get update
-sudo apt-get install -y ca-certificates curl gnupg openjdk-17-jre || sudo apt-get install -y default-jre
+sudo apt-get install -y ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://dbeaver.io/debs/dbeaver.gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/dbeaver.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/dbeaver.gpg

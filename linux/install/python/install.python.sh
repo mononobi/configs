@@ -64,10 +64,11 @@ TARGET_VERSIONS=()
 if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
     TARGET_VERSIONS=("${CUSTOM_VERSIONS[@]}")
 else
-    # Auto-detect highest available python3 minor version (at least 14)
-    MAX_MINOR=$(apt-cache search "^python3\.[0-9]+$" 2>/dev/null | awk "{print \$1}" | grep -Po "3\.\K[0-9]+" | sort -n | tail -1 || echo "14")
-    if (( MAX_MINOR < 14 )); then
-        MAX_MINOR=14
+    # Target versions from 3.8 up to at least 3.14 (or higher if newer exists)
+    MAX_MINOR=14
+    DETECTED_MAX=$(apt-cache search "^python3\.[0-9]+$" | awk '{print $1}' | grep -Po '3\.\K[0-9]+' | sort -n | tail -1)
+    if [[ -n "$DETECTED_MAX" ]] && (( DETECTED_MAX > MAX_MINOR )); then
+        MAX_MINOR="$DETECTED_MAX"
     fi
 
     for (( m=8; m<=MAX_MINOR; m++ )); do

@@ -34,7 +34,7 @@ done
 echo "[+] Starting installation/setup for XDM (Xtreme Download Manager)..."
 
 sudo apt-get update
-sudo apt-get install -y curl tar ca-certificates default-jre || sudo apt-get install -y openjdk-17-jre || true
+sudo apt-get install -y curl tar ca-certificates
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT

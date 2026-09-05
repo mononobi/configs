@@ -35,10 +35,11 @@ echo "[+] Starting installation/setup for etcher..."
 
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl gnupg
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://balena.io/etcher/static/etcher.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/balena-etcher.gpg > /dev/null
-echo "deb [signed-by=/etc/apt/keyrings/balena-etcher.gpg] https://deb.etcher.io stable etcher" | sudo tee /etc/apt/sources.list.d/balena-etcher.list
+
+echo "[+] Adding Balena Etcher repository via official Cloudsmith script..."
+curl -1sLf 'https://dl.cloudsmith.io/public/balena/etcher/setup.deb.sh' | sudo -E bash
+
 sudo apt-get update
-sudo apt-get install -y balena-etcher-electron || sudo apt-get install -y balena-etcher || true
+sudo apt-get install -y balena-etcher-electron
 
 echo "[✓] etcher setup completed successfully!"

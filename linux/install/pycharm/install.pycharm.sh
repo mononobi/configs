@@ -53,8 +53,12 @@ done
 echo "[+] Starting installation/setup for PyCharm (JetBrains Toolbox)..."
 
 sudo apt-get update
-sudo apt-get install -y curl tar ca-certificates
-sudo apt-get install -y libfuse2 || sudo apt-get install -y libfuse2t64 || true
+sudo apt-get install -y curl tar ca-certificates libfuse2
+
+# Configure inotify file watch limit for the IDE per guideline
+echo "[+] Configuring inotify file watch limit for JetBrains IDEs..."
+echo "fs.inotify.max_user_watches = 2097152" | sudo tee /etc/sysctl.d/idea.conf > /dev/null
+sudo sysctl -p --system > /dev/null 2>&1 || true
 
 # If URL is not provided, try to fetch automatically
 if [[ -z "$DOWNLOAD_URL" ]]; then

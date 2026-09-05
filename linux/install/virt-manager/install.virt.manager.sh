@@ -36,8 +36,8 @@ echo "[+] Starting installation/setup for virt-manager..."
 sudo apt-get update
 sudo apt-get install -y virt-manager qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils ovmf spice-vdagent
 sudo systemctl enable --now libvirtd
-sudo adduser "$USER" libvirt || sudo usermod -aG libvirt "$USER"
-sudo adduser "$USER" kvm || sudo usermod -aG kvm "$USER"
+sudo usermod -aG libvirt "$USER"
+sudo usermod -aG kvm "$USER"
 echo "[+] Virtualization packages installed. User $USER added to libvirt and kvm groups (re-login required)."
 
 echo "[✓] virt-manager setup completed successfully!"

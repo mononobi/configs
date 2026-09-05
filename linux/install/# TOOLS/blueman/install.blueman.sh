@@ -35,9 +35,5 @@ echo "[+] Starting installation/setup for blueman..."
 
 sudo apt-get update
 sudo apt-get install -y blueman
-# PulseAudio bluetooth module is only needed on older PulseAudio systems
-if ! command -v pipewire >/dev/null 2>&1; then
-    sudo apt-get install -y pulseaudio-module-bluetooth || true
-fi
 
 echo "[✓] blueman setup completed successfully!"

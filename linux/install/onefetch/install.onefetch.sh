@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Install and configure onefetch Git information tool
-# Note: Modernized for Ubuntu with best practices (direct GitHub binary / Cargo, no snap).
+# Note: Modernized for Ubuntu with best practices.
 
 set -euo pipefail
 
@@ -43,8 +43,7 @@ echo "[+] Fetching latest onefetch release from GitHub..."
 DOWNLOAD_URL=$(curl -fsSL https://api.github.com/repos/o2sh/onefetch/releases/latest | grep -Po '"browser_download_url":\s*"\K[^"]*linux-x86_64\.tar\.gz' | head -n 1 || true)
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
-    # Fallback to direct well-known pattern
-    DOWNLOAD_URL=$(curl -fsSL https://api.github.com/repos/o2sh/onefetch/releases/latest | grep -Po '"browser_download_url":\s*"\K[^"]*linux[^"]*\.tar\.gz' | head -n 1 || true)
+    DOWNLOAD_URL=$(curl -fsSL https://api.github.com/repos/o2sh/onefetch/releases/latest | grep -Po '"browser_download_url":\s*"\K[^"]*linux[^"]*\.tar\.gz' | head -n 1)
 fi
 
 if [[ -n "$DOWNLOAD_URL" ]]; then
@@ -52,16 +51,13 @@ if [[ -n "$DOWNLOAD_URL" ]]; then
     curl -fsSL "$DOWNLOAD_URL" -o "$TEMP_DIR/onefetch.tar.gz"
     tar -xzf "$TEMP_DIR/onefetch.tar.gz" -C "$TEMP_DIR"
     ONEFETCH_BIN=$(find "$TEMP_DIR" -type f -name "onefetch" | head -n 1)
-    if [[ -n "$ONEFETCH_BIN" ]]; then
-        sudo install -m 755 "$ONEFETCH_BIN" /usr/local/bin/onefetch
-        echo "[+] Installed onefetch to /usr/local/bin/onefetch"
-    fi
-elif command -v cargo >/dev/null 2>&1; then
-    echo "[+] Installing onefetch via Cargo..."
-    cargo install onefetch
+    sudo install -m 755 "$ONEFETCH_BIN" /usr/local/bin/onefetch
+    echo "[+] Installed onefetch to /usr/local/bin/onefetch"
 else
-    echo "[+] Installing onefetch via APT..."
-    sudo apt-get install -y onefetch || true
+    echo "[+] Installing onefetch via PPA..."
+    sudo add-apt-repository -y ppa:o2sh/onefetch
+    sudo apt-get update
+    sudo apt-get install -y onefetch
 fi
 
 echo "[✓] onefetch setup completed successfully!"

@@ -34,7 +34,7 @@ done
 echo "[+] Starting installation/setup for ebcli..."
 
 sudo apt-get update
-sudo apt-get install -y python3-pip pipx python3-venv
-pipx install awsebcli || pip3 install --user awsebcli
+sudo apt-get install -y build-essential zlib1g-dev libssl-dev libncurses-dev libffi-dev libsqlite3-dev libreadline-dev libbz2-dev pipx
+pipx install awsebcli
 
 echo "[✓] ebcli setup completed successfully!"

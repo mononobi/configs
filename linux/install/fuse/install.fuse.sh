@@ -33,7 +33,11 @@ done
 
 echo "[+] Starting installation/setup for fuse..."
 
+echo "[+] Adding universe repository..."
+sudo add-apt-repository -y universe
 sudo apt-get update
-sudo apt-get install -y libfuse2 || sudo apt-get install -y libfuse2t64 || true
+
+echo "[+] Installing FUSE and AppImage runtime libraries..."
+sudo apt-get install -y libfuse2 libxi6 libxrender1 libxtst6 mesa-utils libfontconfig libgtk-3-bin tar dbus-user-session
 
 echo "[✓] fuse setup completed successfully!"
