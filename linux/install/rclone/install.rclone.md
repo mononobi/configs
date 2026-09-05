@@ -79,7 +79,7 @@ Rclone configuration is complete, and you are ready to proceed to the next step.
 Create an empty folder in your home directory where the Drive will be mounted.
 
 ```bash
-mkdir ~/Google-Drive
+mkdir -p ~/Google-Drive
 ```
 
 ### Step 4: Create a Systemd Service for Auto-Mounting

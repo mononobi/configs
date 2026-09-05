@@ -34,13 +34,12 @@ done
 echo "[+] Starting installation/setup for jami..."
 
 sudo apt-get update
-sudo apt-get install -y gnupg dirmngr ca-certificates curl --no-install-recommends
+sudo apt-get install -y gnupg dirmngr ca-certificates curl lsb-release --no-install-recommends
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://dl.jami.net/jami-archive-keyring.gpg | sudo tee /etc/apt/keyrings/jami-archive-keyring.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/jami-archive-keyring.gpg
 
-# Detect distribution codename or fallback to latest LTS
-CODENAME=$(lsb_release -cs 2>/dev/null || echo "noble")
+CODENAME=$(lsb_release -cs)
 echo "deb [signed-by=/etc/apt/keyrings/jami-archive-keyring.gpg] https://dl.jami.net/nightly/ubuntu_${CODENAME}/ jami main" | sudo tee /etc/apt/sources.list.d/jami.list
 
 sudo apt-get update
