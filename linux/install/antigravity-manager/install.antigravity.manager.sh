@@ -68,6 +68,10 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
+    read -r -p "[?] Enter download URL for Antigravity Manager (.tar.gz): " DOWNLOAD_URL
+fi
+
+if [[ -z "$DOWNLOAD_URL" ]]; then
     echo "Error: Missing required download URL." >&2
     usage >&2
     exit 1

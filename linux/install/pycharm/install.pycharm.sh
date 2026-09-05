@@ -58,25 +58,22 @@ sudo apt-get install -y curl tar ca-certificates libfuse2
 # Configure inotify file watch limit for the IDE per guideline
 echo "[+] Configuring inotify file watch limit for JetBrains IDEs..."
 echo "fs.inotify.max_user_watches = 2097152" | sudo tee /etc/sysctl.d/idea.conf > /dev/null
-sudo sysctl -p --system > /dev/null 2>&1 || true
+sudo sysctl -p /etc/sysctl.d/idea.conf > /dev/null
 
 # If URL is not provided, try to fetch automatically
 if [[ -z "$DOWNLOAD_URL" ]]; then
     echo "[+] Fetching latest JetBrains Toolbox download link from JetBrains API..."
-    DOWNLOAD_URL=$(curl -fsSL "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release" | grep -Po ""linux":\{"link":"\K[^"]*" || true)
+    DOWNLOAD_URL=$(curl -fsSL "https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release" 2>/dev/null | grep -Po '"linux":\{"link":"\K[^"]*' || true)
 fi
 
-# If still not found, prompt if interactive
+# If still not found, prompt user
 if [[ -z "$DOWNLOAD_URL" ]]; then
-    if [[ -t 0 ]]; then
-        read -r -p "[?] Could not automatically find download URL. Please enter JetBrains Toolbox .tar.gz URL: " DOWNLOAD_URL
-    fi
+    echo "[!] Could not automatically find download URL from JetBrains API."
+    read -r -p "[?] Please enter JetBrains Toolbox .tar.gz URL: " DOWNLOAD_URL
 fi
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
-    echo "[!] Error: JetBrains Toolbox download URL could not be resolved."
-    echo "[!] Please obtain the .tar.gz URL from https://www.jetbrains.com/toolbox-app/ and run:"
-    echo "    $(basename "$0") --url <URL>"
+    echo "[!] Error: No download URL provided."
     exit 1
 fi
 

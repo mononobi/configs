@@ -89,10 +89,14 @@ else
         sudo apt-get update
         sudo apt-get install -y curl tar ca-certificates
 
-        LATEST_URL=$(curl -fsSL https://api.github.com/repos/ventoy/Ventoy/releases/latest | grep -Po '"browser_download_url":\s*"\K[^"]*linux\.tar\.gz' | head -n 1 || true)
+        LATEST_URL=$(curl -fsSL https://api.github.com/repos/ventoy/Ventoy/releases/latest 2>/dev/null | grep -Po '"browser_download_url":\s*"\K[^"]*linux\.tar\.gz' | head -n 1 || true)
         if [[ -z "$LATEST_URL" ]]; then
-            echo "[!] Could not automatically find latest download URL."
-            echo "    Please provide a URL with -u or download manually from https://github.com/ventoy/Ventoy/releases"
+            echo "[!] Could not automatically find latest download URL from GitHub."
+            read -r -p "[?] Please enter the direct download URL for Ventoy (linux.tar.gz): " LATEST_URL
+        fi
+
+        if [[ -z "$LATEST_URL" ]]; then
+            echo "[!] Error: No download URL provided."
             exit 1
         fi
         echo "[+] Downloading Ventoy from $LATEST_URL..."
