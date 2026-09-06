@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Description: Install and configure ufw
+# Description: Install and configure libreoffice
 # Note: Modernized for Ubuntu with best practices.
 
 set -euo pipefail
@@ -9,7 +9,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and initializes UFW (Uncomplicated Firewall) with secure default rules.
+  Installs and upgrades LibreOffice office suite to the latest fresh release via official LibreOffice PPA.
 
 Options:
   -h, --help    Show this help message and exit
@@ -31,13 +31,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "[+] Starting installation/setup for ufw..."
+echo "[-] Removing any existing default libreoffice installation..."
 
+sudo apt-get remove --purge libreoffice*
+sudo apt-get clean
+sudo apt-get autoremove
+
+echo "[+] Starting installation/setup for libreoffice..."
+
+sudo add-apt-repository -y ppa:libreoffice/ppa
 sudo apt-get update
-sudo apt-get install -y ufw
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw --force enable
-sudo ufw status verbose
+sudo apt-get install -y libreoffice libreoffice-gtk3
 
-echo "[✓] ufw setup completed successfully!"
+echo "[✓] libreoffice setup completed successfully!"
