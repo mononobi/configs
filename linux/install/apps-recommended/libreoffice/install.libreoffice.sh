@@ -33,9 +33,9 @@ done
 
 echo "[-] Removing any existing default libreoffice installation..."
 
-sudo apt-get remove --purge libreoffice*
+sudo apt-get remove --purge -y libreoffice*
 sudo apt-get clean
-sudo apt-get autoremove
+sudo apt-get autoremove -y
 
 echo "[+] Starting installation/setup for libreoffice..."
 
