@@ -26,14 +26,17 @@ DOWNLOAD_URL=""
 
 usage() {
     cat <<EOF
-Usage: $(basename "$0") [OPTIONS] <DOWNLOAD_URL>
+Usage: $(basename "$0") [OPTIONS] [DOWNLOAD_URL]
 
-Installs Antigravity Agent Manager from a provided download URL.
+Installs Antigravity Agent Manager (Antigravity v2).
+If DOWNLOAD_URL is omitted, the latest stable release is automatically detected.
 
 Arguments:
-  <DOWNLOAD_URL>    URL to download the Antigravity tarball (.tar.gz)
+  [DOWNLOAD_URL]    Optional direct URL to the Antigravity tarball (.tar.gz).
+                    If omitted, auto-detects from the official auto-updater service.
 
 Options:
+  -u, --url <URL>   Specify direct download URL for Antigravity .tar.gz
   -n, --dry-run     Run without modifying files or system state (no side effects)
   -h, --help        Display this help message and exit
 EOF
@@ -45,6 +48,10 @@ while [[ $# -gt 0 ]]; do
         -n|--dry-run)
             DRY_RUN=true
             shift
+            ;;
+        -u|--url)
+            DOWNLOAD_URL="$2"
+            shift 2
             ;;
         -h|--help)
             usage
@@ -66,6 +73,22 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Auto-detect latest Antigravity v2 release if not provided manually
+if [[ -z "$DOWNLOAD_URL" ]]; then
+    echo "[+] Auto-detecting latest Antigravity v2 download URL..."
+    MANIFEST_URL="https://antigravity-hub-auto-updater-974169037036.us-central1.run.app/manifest/latest-x64-linux.yml"
+    BASE_URL=$(curl -fsSL "$MANIFEST_URL" 2>/dev/null | grep -Po 'https://[^\s]+/linux-x64/' | head -n 1 || true)
+    if [[ -n "$BASE_URL" ]]; then
+        DOWNLOAD_URL="${BASE_URL}Antigravity.tar.gz"
+    fi
+fi
+
+# If auto-detection fails and still not set, ask user interactively
+if [[ -z "$DOWNLOAD_URL" ]]; then
+    echo "[!] Could not auto-detect download URL from official update service."
+    read -r -p "[?] Please enter direct download URL for Antigravity (.tar.gz): " DOWNLOAD_URL
+fi
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
     echo "Error: Missing required download URL." >&2
