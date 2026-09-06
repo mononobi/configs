@@ -87,6 +87,6 @@ EOF
 
 # 7. Update package indexes and install Firefox
 sudo apt-get update
-sudo apt-get install -y firefox
+sudo apt-get install -y --allow-downgrades firefox
 
 echo "[✓] Firefox (Official Mozilla DEB) setup completed successfully!"

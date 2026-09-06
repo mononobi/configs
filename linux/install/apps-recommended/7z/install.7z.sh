@@ -34,6 +34,6 @@ done
 echo "[+] Starting installation/setup for 7z..."
 
 sudo apt-get update
-sudo apt-get install -y p7zip-full p7zip-rar
+sudo apt-get install -y 7zip 7zip-rar
 
 echo "[✓] 7z setup completed successfully!"
