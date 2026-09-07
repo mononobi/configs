@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -12,6 +14,7 @@ Description:
   Installs TUXEDO Computers hardware control center, keyboard backlight, and driver utilities via official TUXEDO repository.
 
 Options:
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOF
 }
@@ -23,6 +26,10 @@ while [[ $# -gt 0 ]]; do
             show_help
             exit 0
             ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
             echo "Use -h or --help for usage information."
@@ -33,7 +40,9 @@ done
 
 echo "[+] Starting installation/setup for TUXEDO Control Center & Drivers..."
 
-sudo apt-get update
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    sudo apt-get update
+fi
 sudo apt-get install -y ca-certificates curl gnupg lsb-release
 
 sudo install -m 0755 -d /etc/apt/keyrings

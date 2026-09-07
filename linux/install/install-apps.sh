@@ -21,11 +21,13 @@ Arguments:
   category_folder   Directory containing application subfolders (e.g. apps-recommended, apps-extra)
 
 Options:
+  --no-update       Skip the upfront apt update before running batch installation
   -h, --help        Show this help message and exit
 EOHELP
 }
 
 TARGET_INPUT=""
+SKIP_UPDATE=false
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -33,6 +35,9 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
             ;;
         -*)
             echo "[!] Unknown option: $1" >&2
@@ -108,7 +113,7 @@ declare -a failed_messages=()
 
 current_log_file=""
 cleanup() {
-    [[ -n "$current_log_file" && -f "$current_log_file" ]] && rm -f "$current_log_file"
+    [[ -n "$current_log_file" && -f "$current_log_file" ]] && rm -f "$current_log_file" || true
 }
 trap cleanup EXIT
 
@@ -116,6 +121,11 @@ echo "==========================================================================
 echo " Starting Installation of Applications: ${category_name}"
 echo " Directory: ${TARGET_DIR}"
 echo "================================================================================"
+
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    echo "[+] Running apt update once before batch installation..."
+    sudo apt-get update
+fi
 
 for subfolder in "${TARGET_DIR}"/*/; do
     [[ -d "$subfolder" ]] || continue
@@ -148,7 +158,7 @@ for subfolder in "${TARGET_DIR}"/*/; do
         current_log_file="$(mktemp)"
 
         set +e
-        (cd "$subfolder" && ./"$script_name") 2>&1 | tee "$current_log_file"
+        (cd "$subfolder" && ./"$script_name" --no-update) 2>&1 | tee "$current_log_file"
         exit_code=${PIPESTATUS[0]}
         set -e
 

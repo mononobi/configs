@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -14,6 +16,7 @@ Description:
   so that official Mozilla packages are prioritized and Ubuntu Snap triggers are blocked.
 
 Options:
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOF
 }
@@ -24,6 +27,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"

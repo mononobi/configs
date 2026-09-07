@@ -7,6 +7,8 @@ set -euo pipefail
 PG_VERSION=""
 PG_PASSWORD="123"
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [VERSION]
@@ -22,6 +24,7 @@ Arguments:
 Options:
   -v, --version VER     Specify PostgreSQL major version
   -p, --password PASS   Set password for the postgres superuser (default: 123)
+  --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
 Examples:
@@ -37,6 +40,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         -v|--version)
             PG_VERSION="$2"
@@ -61,7 +68,9 @@ done
 echo "[+] Starting installation/setup for PostgreSQL..."
 
 # 1. Update system and install prerequisites
-sudo apt-get update
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    sudo apt-get update
+fi
 sudo apt-get -y upgrade
 sudo apt-get install -y wget ca-certificates curl gnupg lsb-release
 

@@ -6,6 +6,8 @@ set -euo pipefail
 
 DOWNLOAD_URL=""
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [DOWNLOAD_URL]
@@ -19,6 +21,7 @@ Arguments:
 
 Options:
   -u, --url URL         Specify direct download URL for JetBrains Toolbox (.tar.gz)
+  --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
 Examples:
@@ -33,6 +36,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         -u|--url)
             DOWNLOAD_URL="$2"
@@ -52,7 +59,9 @@ done
 
 echo "[+] Starting installation/setup for PyCharm (JetBrains Toolbox)..."
 
-sudo apt-get update
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    sudo apt-get update
+fi
 sudo apt-get install -y curl tar ca-certificates libfuse2
 
 # Configure inotify file watch limit for the IDE per guideline

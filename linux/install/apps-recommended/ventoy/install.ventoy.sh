@@ -7,6 +7,8 @@ set -euo pipefail
 ARCHIVE_PATH=""
 DOWNLOAD_URL=""
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [ARCHIVE_OR_URL]
@@ -23,6 +25,7 @@ Arguments:
 Options:
   -u, --url URL         Specify download URL
   -f, --file PATH       Specify local archive path
+  --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
 Examples:
@@ -37,6 +40,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         -u|--url)
             DOWNLOAD_URL="$2"
@@ -86,7 +93,9 @@ else
         TARBALL="$LOCAL_TAR"
     else
         echo "[+] Fetching latest Ventoy release URL from GitHub..."
-        sudo apt-get update
+        if [[ "$SKIP_UPDATE" != "true" ]]; then
+            sudo apt-get update
+        fi
         sudo apt-get install -y curl tar ca-certificates
 
         LATEST_URL=$(curl -fsSL https://api.github.com/repos/ventoy/Ventoy/releases/latest 2>/dev/null | grep -Po '"browser_download_url":\s*"\K[^"]*linux\.tar\.gz' | head -n 1 || true)

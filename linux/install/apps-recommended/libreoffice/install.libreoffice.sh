@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -12,6 +14,7 @@ Description:
   Installs and upgrades LibreOffice office suite to the latest fresh release via official LibreOffice PPA.
 
 Options:
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOF
 }
@@ -22,6 +25,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"

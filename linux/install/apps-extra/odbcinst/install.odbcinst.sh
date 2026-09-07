@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -15,6 +17,7 @@ Description:
   using modern GPG keyrings, and updates PATH in ~/.bashrc.
 
 Options:
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOF
 }
@@ -25,6 +28,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"
@@ -37,7 +44,9 @@ done
 echo "[+] Starting installation for Microsoft SQL Server ODBC Driver & Tools..."
 
 # 1. Update system and install essential prerequisites
-sudo apt-get update
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    sudo apt-get update
+fi
 sudo apt-get install -y curl ca-certificates gnupg lsb-release
 
 # 2. Detect host OS version and codename

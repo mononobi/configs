@@ -6,6 +6,8 @@ set -euo pipefail
 
 CUSTOM_VERSIONS=()
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [VERSIONS...]
@@ -20,6 +22,7 @@ Arguments:
                         Default: all versions from 3.8 up to the latest available (e.g. 3.14).
 
 Options:
+  --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
 Examples:
@@ -34,6 +37,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         [0-9]*)
             CUSTOM_VERSIONS+=("$1")
@@ -50,7 +57,9 @@ done
 echo "[+] Starting installation and plugin build for uWSGI..."
 
 # 1. Update system and add deadsnakes PPA if needed
-sudo apt-get update
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    sudo apt-get update
+fi
 sudo apt-get install -y software-properties-common ca-certificates curl build-essential
 
 # 2. Determine target versions (3.8 up to latest stable)

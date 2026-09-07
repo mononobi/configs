@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOHELP
 Usage: $(basename "$0") [OPTIONS]
@@ -13,6 +15,7 @@ Description:
   Disables extension version compatibility validation so extensions remain functional across GNOME releases.
 
 Options:
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOHELP
 }
@@ -23,6 +26,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"

@@ -6,6 +6,8 @@ set -euo pipefail
 
 NODE_MAJOR=""
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [VERSION]
@@ -19,6 +21,7 @@ Arguments:
 
 Options:
   -v, --version VER     Specify a custom Node.js major version (e.g. 24, 22, 20)
+  --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
 Examples:
@@ -33,6 +36,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         -v|--version)
             NODE_MAJOR="$2"
@@ -76,7 +83,9 @@ except Exception:
     echo "[+] Latest stable LTS version detected: Node.js v${NODE_MAJOR}.x"
 fi
 
-sudo apt-get update
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    sudo apt-get update
+fi
 sudo apt-get install -y ca-certificates curl gnupg
 
 # 1. Install NodeSource repository

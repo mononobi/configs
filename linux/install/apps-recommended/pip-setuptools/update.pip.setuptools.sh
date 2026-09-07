@@ -6,6 +6,8 @@ set -euo pipefail
 
 TARGET_PYTHON=""
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [PYTHON_VERSION_OR_PATH]
@@ -19,6 +21,7 @@ Arguments:
                           Default: automatically detects the highest installed non-system Python.
 
 Options:
+  --no-update             Skip apt update before installation
   -h, --help              Show this help message and exit
 EOF
 }
@@ -29,6 +32,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         -*)
             echo "Unknown option: $1"

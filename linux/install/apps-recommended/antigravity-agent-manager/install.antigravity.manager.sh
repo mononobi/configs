@@ -24,6 +24,8 @@ DESKTOP_PATH="${INSTALL_DIR}/Antigravity-x64/"
 DRY_RUN=false
 DOWNLOAD_URL=""
 
+SKIP_UPDATE=false
+
 usage() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [DOWNLOAD_URL]
@@ -38,6 +40,7 @@ Arguments:
 Options:
   -u, --url <URL>   Specify direct download URL for Antigravity .tar.gz
   -n, --dry-run     Run without modifying files or system state (no side effects)
+  --no-update       Skip apt update before installation
   -h, --help        Display this help message and exit
 EOF
 }
@@ -56,6 +59,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             usage
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         -*)
             echo "Error: Unknown option '$1'" >&2
