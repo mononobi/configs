@@ -54,6 +54,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+has_candidate() {
+    local candidate
+    candidate=$(apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2}')
+    [[ -n "$candidate" && "$candidate" != "(none)" ]]
+}
+
 echo "[+] Starting installation and plugin build for uWSGI..."
 
 # 1. Update system and add deadsnakes PPA if needed
@@ -90,17 +96,21 @@ for ver in "${TARGET_VERSIONS[@]}"; do
     PLUGIN_SO="/usr/lib/uwsgi/plugins/${PLUGIN_TAG}_plugin.so"
 
     if [[ ! -f "$PLUGIN_SO" ]]; then
+        if ! has_candidate "python${ver}-dev"; then
+            echo "[!] Skipping Python ${ver}: package 'python${ver}-dev' has no installation candidate."
+            continue
+        fi
+
         echo "[+] Installing build requirements for uwsgi ${PLUGIN_TAG} plugin (Python ${ver})..."
 
         DEPS=("python${ver}-dev" "uwsgi" "uwsgi-src" "uuid-dev" "libcap-dev" "libssl-dev" "zlib1g-dev")
 
-        if apt-cache show "python${ver}-distutils" >/dev/null 2>&1; then
+        if has_candidate "python${ver}-distutils"; then
             DEPS+=("python${ver}-distutils")
         fi
-        if apt-cache show "libpcre2-dev" >/dev/null 2>&1; then
+        if has_candidate "libpcre2-dev"; then
             DEPS+=("libpcre2-dev")
-        fi
-        if apt-cache show "libpcre3-dev" >/dev/null 2>&1; then
+        elif has_candidate "libpcre3-dev"; then
             DEPS+=("libpcre3-dev")
         fi
 
