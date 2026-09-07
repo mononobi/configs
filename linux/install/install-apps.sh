@@ -116,6 +116,7 @@ ignored_count=0
 failed_count=0
 skipped_count=0
 
+declare -a ignored_apps=()
 declare -a failed_apps=()
 declare -a failed_scripts=()
 declare -a failed_codes=()
@@ -164,6 +165,7 @@ for subfolder in "${TARGET_DIR}"/*/; do
     # Skip subfolders containing an 'ignore' marker file
     if [[ -f "${subfolder}ignore" ]]; then
         echo "[i] Skipping ignored application: ${app_name}"
+        ignored_apps+=("$app_name")
         ((ignored_count++)) || true
         continue
     fi
@@ -231,6 +233,17 @@ if [[ $skipped_count -gt 0 ]]; then
     echo "   - Skipped:          ${skipped_count} (no .sh script found)"
 fi
 echo "================================================================================"
+
+if [[ ${#ignored_apps[@]} -gt 0 ]]; then
+    echo ""
+    echo "================================================================================"
+    echo " Ignored Applications (${#ignored_apps[@]}):"
+    echo "================================================================================"
+    for app in "${ignored_apps[@]}"; do
+        echo "  [i] ${app}"
+    done
+    echo "================================================================================"
+fi
 
 if [[ $failed_count -gt 0 ]]; then
     echo ""
