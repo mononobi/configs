@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# Description: Shared utility library for application installers and batch runners
+# Note: Provides common functions like require_app for resolving inter-script dependencies.
+
+# Prevent multiple inclusions
+if [[ -n "${_INSTALL_UTILS_LOADED:-}" ]]; then
+    return 0 2>/dev/null || exit 0
+fi
+_INSTALL_UTILS_LOADED=1
+
+# Resolve the absolute path to linux/install/
+INSTALL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# require_app <app_name> [category] [extra_args...]
+#
+# Ensures that an application dependency script has been executed.
+# If category is omitted, searches 'apps-recommended' first, then 'apps-extra'.
+#
+# Examples:
+#   require_app "python" "apps-recommended"
+#   require_app "flatpak"
+require_app() {
+    local app_name="$1"
+    local category="${2:-}"
+    shift 2 2>/dev/null || shift 1 2>/dev/null || true
+    local extra_args=("$@")
+
+    local candidate_dirs=()
+    if [[ -n "$category" ]]; then
+        candidate_dirs=("${INSTALL_ROOT}/${category}/${app_name}")
+    else
+        candidate_dirs=(
+            "${INSTALL_ROOT}/apps-recommended/${app_name}"
+            "${INSTALL_ROOT}/apps-extra/${app_name}"
+        )
+    fi
+
+    local target_script=""
+    local target_dir=""
+    for dir in "${candidate_dirs[@]}"; do
+        if [[ -d "$dir" ]]; then
+            local found
+            found=$(find "$dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)
+            if [[ -n "$found" && -f "$found" ]]; then
+                target_script="$found"
+                target_dir="$dir"
+                break
+            fi
+        fi
+    done
+
+    if [[ -z "$target_script" ]]; then
+        echo "[!] Error: Dependency application '${app_name}' not found in candidate locations: ${candidate_dirs[*]}" >&2
+        return 1
+    fi
+
+    local script_name
+    script_name="$(basename "$target_script")"
+
+    echo "[+] Satisfying dependency: $(basename "$target_dir") (${script_name})..."
+    (cd "$target_dir" && ./"$script_name" --no-update "${extra_args[@]}")
+}
+
+export INSTALL_ROOT
+export -f require_app
