@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 SKIP_UPDATE=false
 
 show_help() {
@@ -43,10 +45,32 @@ echo "[+] Starting installation/setup for Rclone..."
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y curl fuse3 ca-certificates
+sudo apt-get install -y curl fuse3 ca-certificates unzip
+
+TEMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+echo "[+] Downloading official Rclone install script..."
+if ! curl -fsSL https://rclone.org/install.sh -o "$TEMP_DIR/rclone-install.sh"; then
+    echo "[!] Error: Failed to download Rclone installation script." >&2
+    exit 1
+fi
 
 echo "[+] Running official Rclone install script..."
-curl https://rclone.org/install.sh | sudo bash
+set +e
+sudo bash "$TEMP_DIR/rclone-install.sh"
+rclone_exit=$?
+set -e
+
+# Rclone official install script returns exit code 3 when the latest version is already installed
+if [[ $rclone_exit -ne 0 && $rclone_exit -ne 3 ]]; then
+    echo "[!] Error: Rclone installation failed with exit code: ${rclone_exit}" >&2
+    exit "$rclone_exit"
+fi
+
+if [[ $rclone_exit -eq 3 ]]; then
+    echo "[i] The latest version of Rclone is already installed and up to date."
+fi
 
 rclone version
 
@@ -55,7 +79,6 @@ echo "[+] Creating mount directory at $HOME/Google-Drive..."
 mkdir -p "$HOME/Google-Drive"
 
 # Copy systemd service file to user systemd directory (without enabling it)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 mkdir -p "$HOME/.config/systemd/user"
 
 if [[ -f "$SCRIPT_DIR/files/rclone-gdrive.service" ]]; then
