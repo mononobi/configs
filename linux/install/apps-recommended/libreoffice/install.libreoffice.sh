@@ -38,12 +38,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "[-] Removing any existing default libreoffice installation..."
-
-sudo apt-get remove --purge -y libreoffice*
-sudo apt-get clean
-sudo apt-get autoremove -y
-
 echo "[+] Starting installation/setup for libreoffice..."
 
 sudo add-apt-repository -y ppa:libreoffice/ppa
