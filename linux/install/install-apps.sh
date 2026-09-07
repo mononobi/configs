@@ -148,6 +148,9 @@ echo " Starting Installation of Applications: ${category_name}"
 echo " Directory: ${TARGET_DIR}"
 echo "================================================================================"
 
+# Ensure ~/.local/bin exists and is permanently added to PATH
+ensure_local_bin_in_path
+
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     echo "[+] Running apt update once before batch installation..."
     sudo apt-get update

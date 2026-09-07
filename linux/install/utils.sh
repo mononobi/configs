@@ -61,5 +61,48 @@ require_app() {
     (cd "$target_dir" && ./"$script_name" --no-update "${extra_args[@]}")
 }
 
+# ensure_local_bin_in_path
+#
+# Ensures ~/.local/bin exists, exports it to current process PATH,
+# and permanently adds it to ~/.bashrc (or ~/.zshrc) if not already present.
+ensure_local_bin_in_path() {
+    local local_bin="${HOME}/.local/bin"
+    mkdir -p "$local_bin"
+
+    if [[ ":${PATH}:" != *":${local_bin}:"* ]]; then
+        export PATH="${local_bin}:${PATH}"
+    fi
+
+    # Add to ~/.profile if not already present
+    local profile="${HOME}/.profile"
+    if [[ ! -f "$profile" ]] || ! grep -qs '\.local/bin' "$profile"; then
+        [[ -f "$profile" && -s "$profile" ]] && echo "" >> "$profile"
+        cat << 'EOF' >> "$profile"
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+EOF
+        echo "[+] Added ~/.local/bin to PATH in $profile"
+    fi
+
+    local target_rcs=()
+    [[ -f "${HOME}/.bashrc" ]] && target_rcs+=("${HOME}/.bashrc")
+    [[ -f "${HOME}/.zshrc" ]] && target_rcs+=("${HOME}/.zshrc")
+
+    # If neither rc file exists, default to ~/.bashrc
+    if [[ ${#target_rcs[@]} -eq 0 ]]; then
+        target_rcs=("${HOME}/.bashrc")
+    fi
+
+    for rc in "${target_rcs[@]}"; do
+        if [[ ! -f "$rc" ]] || ! grep -qs '\.local/bin' "$rc"; then
+            echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$rc"
+            echo "[+] Added ~/.local/bin to PATH in $rc"
+        fi
+    done
+}
+
 export INSTALL_ROOT
 export -f require_app
+export -f ensure_local_bin_in_path
