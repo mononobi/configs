@@ -43,7 +43,29 @@ echo "[+] Starting installation/setup for virt-manager..."
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y virt-manager qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils ovmf spice-vdagent
+has_candidate() {
+    local candidate
+    candidate=$(apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2}')
+    [[ -n "$candidate" && "$candidate" != "(none)" ]]
+}
+
+# Select concrete QEMU KVM package (in Ubuntu 24.04+, qemu-kvm is a virtual package provided by qemu-system-x86)
+ARCH=$(uname -m)
+case "$ARCH" in
+    x86_64)          QEMU_PKG="qemu-system-x86" ;;
+    aarch64|arm64)   QEMU_PKG="qemu-system-arm" ;;
+    *)               QEMU_PKG="qemu-system-x86" ;;
+esac
+
+if ! has_candidate "$QEMU_PKG"; then
+    if has_candidate "qemu-kvm"; then
+        QEMU_PKG="qemu-kvm"
+    elif has_candidate "qemu-system"; then
+        QEMU_PKG="qemu-system"
+    fi
+fi
+
+sudo apt-get install -y virt-manager "$QEMU_PKG" libvirt-daemon-system libvirt-clients bridge-utils ovmf spice-vdagent qemu-guest-agent
 sudo systemctl enable --now libvirtd
 sudo usermod -aG libvirt "$USER"
 sudo usermod -aG kvm "$USER"
