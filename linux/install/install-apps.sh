@@ -57,6 +57,15 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
+# Prevent running as root or via sudo to ensure apps are installed in the actual user's $HOME
+if [[ $EUID -eq 0 ]] || [[ -n "${SUDO_USER:-}" ]]; then
+    echo "[!] Error: Do not run $(basename "$0") as root or with sudo." >&2
+    echo "    Application installers configure local tools and user assets directly in \$HOME." >&2
+    echo "    Subscripts will automatically invoke sudo internally when root privileges are required." >&2
+    echo "    Please run as your regular user: $(basename "$0") ${TARGET_INPUT:-<category_folder>}" >&2
+    exit 1
+fi
+
 if [[ -z "$TARGET_INPUT" ]]; then
     echo "[!] Error: No target category directory specified." >&2
     echo "Usage: $(basename "$0") <category_folder> [OPTIONS]" >&2
