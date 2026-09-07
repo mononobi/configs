@@ -43,11 +43,13 @@ done
 echo "[+] Starting installation/setup for Firefox (Official Mozilla DEB)..."
 
 # 1. Remove Snap version if present
-if command -v snap >/dev/null 2>&1; then
-    echo "[+] Removing Firefox snap if installed..."
-    sudo snap remove --purge firefox 2>/dev/null || true
+if command -v snap >/dev/null 2>&1 && snap list firefox >/dev/null 2>&1; then
+    echo "[+] Snap version of Firefox detected. Removing..."
+    if sudo snap remove --purge firefox; then
+        echo "[+] Removing legacy snap wrapper binary at /usr/bin/firefox..."
+        sudo rm -f /usr/bin/firefox
+    fi
 fi
-sudo rm -f /usr/bin/firefox
 
 # 2. Clean up legacy mozillateam PPA and old pin files if present
 if grep -rq "mozillateam/ppa" /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null; then
