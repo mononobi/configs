@@ -57,8 +57,13 @@ require_app() {
     local script_name
     script_name="$(basename "$target_script")"
 
+    local update_args=()
+    if [[ "${SKIP_UPDATE:-false}" == "true" ]]; then
+        update_args=("--no-update")
+    fi
+
     echo "[+] Satisfying dependency: $(basename "$target_dir") (${script_name})..."
-    (cd "$target_dir" && ./"$script_name" --no-update "${extra_args[@]}")
+    (cd "$target_dir" && ./"$script_name" "${update_args[@]}" "${extra_args[@]}")
 }
 
 # ensure_local_bin_in_path

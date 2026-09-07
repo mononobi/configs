@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 SKIP_UPDATE=false
 
 show_help() {
@@ -41,12 +44,8 @@ done
 echo "[+] Starting installation for GIMP via Flatpak..."
 
 if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[+] Flatpak not found. Installing flatpak and adding flathub remote..."
-    if [[ "$SKIP_UPDATE" != "true" ]]; then
-        sudo apt-get update
-    fi
-    sudo apt-get install -y flatpak
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    echo "[!] Flatpak not found. Installing flatpak dependency..."
+    require_app "flatpak" "apps-recommended"
 fi
 
 echo "[+] Installing org.gimp.GIMP from Flathub..."
