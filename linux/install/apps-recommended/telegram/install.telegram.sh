@@ -50,6 +50,8 @@ fi
 
 echo "[+] Installing org.telegram.desktop from Flathub..."
 flatpak install -y flathub org.telegram.desktop
-flatpak override --filesystem=home org.telegram.desktop
+
+echo "[+] Configuring filesystem permissions for Telegram Desktop..."
+flatpak override --user --filesystem=home org.telegram.desktop
 
 echo "[✓] Telegram installation completed successfully!"
