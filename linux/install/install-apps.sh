@@ -122,10 +122,26 @@ declare -a failed_codes=()
 declare -a failed_messages=()
 
 current_log_file=""
+sudo_keepalive_pid=""
+
 cleanup() {
+    if [[ -n "$sudo_keepalive_pid" ]]; then
+        kill "$sudo_keepalive_pid" 2>/dev/null || true
+    fi
     [[ -n "$current_log_file" && -f "$current_log_file" ]] && rm -f "$current_log_file" || true
 }
-trap cleanup EXIT
+trap cleanup EXIT INT TERM
+
+echo "[+] Initializing sudo credentials..."
+sudo -v
+
+# Keep sudo timestamp updated in background every 60 seconds
+while true; do
+    sudo -n true
+    sleep 60
+    kill -0 "$$" 2>/dev/null || exit
+done < /dev/null > /dev/null 2>&1 &
+sudo_keepalive_pid=$!
 
 echo "================================================================================"
 echo " Starting Installation of Applications: ${category_name}"
