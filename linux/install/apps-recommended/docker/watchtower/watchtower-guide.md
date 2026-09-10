@@ -26,7 +26,7 @@ cd ~/.watchtower
 #### Start Watchtower using Docker Compose:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Configuration
