@@ -5,7 +5,7 @@ sudo hostnamectl set-hostname <NEW_HOST_NAME>
 ```
 
 Open this file and find the line starting with `127.0.1.1` (or your server's public/private IP) 
-and replace the old server name with your <NEW_HOST_NAME>. Save and exit.
+and replace the old server name with your `<NEW_HOST_NAME>`. Save and exit.
 
 ```bash
 sudo nano /etc/hosts
