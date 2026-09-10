@@ -1,4 +1,4 @@
-## Change Hostname
+## 1. Change Hostname
 
 ```bash
 sudo hostnamectl set-hostname <NEW_HOST_NAME>
@@ -27,7 +27,7 @@ To see the new hostname prompt immediately without dropping your connection, jus
 exec bash
 ```
 
-## Create a User & Add It To Sudoers
+## 2. Create a User & Add It To Sudoers
 
 ```bash
 sudo useradd -m -s /bin/bash mono
@@ -35,16 +35,16 @@ sudo passwd <NEW_PASSWORD>
 sudo usermod -aG sudo mono
 ```
 
-## Remove the Default User (e.g. ubuntu)
+## 3. Remove the Default User (e.g. ubuntu)
 
 ```bash
 sudo userdel -r ubuntu
 ```
 
-## Create SSH Key & Disable Password Login
+## 4. Create SSH Key & Disable Password Login
 
 [SSH Key Management](/linux/key-management/ssh-key-ed25519.md)
 
-## Enable & Configure Firewall
+## 5. Enable & Configure Firewall
 
 [UFW](/linux/commands/ufw.txt)
