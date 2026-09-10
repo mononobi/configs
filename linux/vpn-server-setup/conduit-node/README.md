@@ -5,6 +5,8 @@ the `~/.conduit-node` directory from the `files` directory.
 
 ```bash
 mkdir -p ~/.conduit-node/data
+mkdir -p ~/.conduit-node/grafana_data
+mkdir -p ~/.conduit-node/prometheus_data
 cp docker-compose.yml prometheus.yml ~/.conduit-node
 cp -r grafana-provisioning ~/.conduit-node
 ```
@@ -27,7 +29,7 @@ Based on your internet connection speed, customize the `--bandwidth` value.
 
 ```bash
 cd ~/.conduit-node
-docker-compose up -d
+docker compose up -d
 ```
 
 ### View Logs
@@ -46,7 +48,7 @@ docker stats conduit
 
 ```bash
 cd ~/.conduit-node
-docker-compose stop
+docker compose stop
 ```
 
 ### Access the Grafana Dashboard and Prometheus Locally:
