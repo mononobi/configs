@@ -31,7 +31,7 @@ exec bash
 
 ```bash
 sudo useradd -m -s /bin/bash mono
-sudo passwd <NEW_PASSWORD>
+sudo passwd mono
 sudo usermod -aG sudo mono
 ```
 
