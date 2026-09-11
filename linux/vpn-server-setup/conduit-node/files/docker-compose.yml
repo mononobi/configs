@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     network_mode: host
     user: "1000:1000"
-    command: start --max-common-clients 150 --bandwidth 10 --data-dir /app/data --metrics-addr 127.0.0.1:9090
+    command: start --max-common-clients 400 --bandwidth 8 --data-dir /app/data --metrics-addr 127.0.0.1:9090
     # This is the magic label that invites Watchtower in to update this container
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
