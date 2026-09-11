@@ -38,6 +38,7 @@ SERVER_APPS=(
     "syslog"
     "vim"
     "conduit-node"
+    "commands"
 )
 
 show_help() {
