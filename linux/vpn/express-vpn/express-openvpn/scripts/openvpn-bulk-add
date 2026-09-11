@@ -27,18 +27,19 @@ usage() {
     echo ""
     echo "Usage:"
     echo "  Interactive Mode: $0"
-    echo "  With Flags:       $0 [-u <username>] [-p <password>] [-d <directory>]"
+    echo "  With Flags:       $0 [-a] [-u <username>] [-p <password>] [-d <directory>]"
     echo ""
     echo -e "\033[1;34mFlags:\033[0m"
-    echo "  -u <user>     VPN username"
-    echo "  -p <pass>     VPN password"
-    echo "  -d <dir>      Directory containing .ovpn files"
+    echo "  -a, --auto-name  Use .ovpn filename (without extension) as profile name"
+    echo "  -u <user>        VPN username"
+    echo "  -p <pass>        VPN password"
+    echo "  -d <dir>         Directory containing .ovpn files"
     echo ""
     echo -e "\033[1;34mNotes:\033[0m"
     echo "  - If -d is not provided, the script checks for .ovpn files in:"
     echo "    $DEFAULT_PROFILE_DIR"
     echo "  - If no files exist there, you will be prompted to provide a directory."
-    echo "  - Profile names will be requested interactively for each .ovpn file."
+    echo "  - Profile names will default to the filename or can be entered interactively."
     echo ""
     exit 1
 }
@@ -47,10 +48,15 @@ usage() {
 VPN_USER=""
 VPN_PASS=""
 PROFILE_DIR=""
+AUTO_NAME=false
 
 # Parse flag-based arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        -a|--auto-name)
+            AUTO_NAME=true
+            shift
+            ;;
         -u)
             if [[ -z "$2" ]]; then
                 echo -e "\033[1;31m❌  Error: -u flag requires a value.\033[0m"
@@ -172,11 +178,15 @@ for OVPN_FILE in "${OVPN_FILES[@]}"; do
     echo -e " \033[1;34m[$FILE_COUNT/${#OVPN_FILES[@]}] Processing: $FILE_NAME\033[0m"
     echo -e " \033[1;34m---\033[0m"
 
-    # Prompt for profile name
-    PROFILE_NAME=""
-    while [[ -z "$PROFILE_NAME" ]]; do
-        read -p "  📝  Enter profile name for this file: " PROFILE_NAME
-    done
+    # Determine profile name
+    if [[ "$AUTO_NAME" == "true" ]]; then
+        PROFILE_NAME="${FILE_NAME%.ovpn}"
+        echo -e "  🏷️  Profile Name: \033[1;32m$PROFILE_NAME\033[0m"
+    else
+        default_name="${FILE_NAME%.ovpn}"
+        read -p "  📝  Enter profile name for this file [$default_name]: " input_name
+        PROFILE_NAME="${input_name:-$default_name}"
+    fi
 
     # Call openvpn-add script with silent mode
     echo "  Adding profile..."

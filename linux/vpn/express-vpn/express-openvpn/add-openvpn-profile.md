@@ -130,11 +130,14 @@ openvpn-add
 Run this command to add multiple profiles from a directory:
 ```bash
 openvpn-bulk-add
+# Or with auto-naming from filenames:
+openvpn-bulk-add -a
+```
+
+You can also run the all-in-one automated installer script:
+```bash
+./install.express.openvpn.sh
 ```
 
 > Notes: 
 > - Do not run the scripts as root user (**sudo**). Run as normal user.
-> - After adding each profile using the scripts, the VPN won't connect. To fix this, you need 
-> to edit that profile and go to the **Identity Tab** and add an arbitrary space in the name 
-> field and remove it just for the **Apply** button to get enabled and then click on 
-> the **Apply** button. Now the VPN can be used without issues.
