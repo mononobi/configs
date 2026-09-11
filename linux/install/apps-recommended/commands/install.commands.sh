@@ -77,10 +77,18 @@ fi
 
 echo "[+] Copying command files into ${DEST_DIR}..."
 installed_count=0
+skipped_count=0
 
 for src in "${file_entries[@]}"; do
     cmd_name="$(basename "$src")"
     dest="${DEST_DIR}/${cmd_name}"
+
+    # Skip if file or symlink already exists in target
+    if [[ -e "$dest" || -L "$dest" ]]; then
+        echo "  [-] Skipped: ${cmd_name} (already exists in ${DEST_DIR})"
+        skipped_count=$((skipped_count + 1))
+        continue
+    fi
 
     # Resolve real file if symlink
     if [[ -L "$src" ]]; then
@@ -103,5 +111,5 @@ done
 
 echo ""
 echo "================================================================================"
-echo "[✓] Successfully installed ${installed_count} command(s) into ${DEST_DIR}!"
+echo "[✓] Finished: ${installed_count} installed, ${skipped_count} skipped (already existed in ${DEST_DIR})"
 echo "================================================================================"
