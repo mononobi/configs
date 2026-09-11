@@ -1,7 +1,7 @@
 ## Conduit Node
 
 Execute these commands to copy the necessary files and directories to
-the `~/.conduit-node` directory from the `files` directory.
+the `~/.conduit-node` directory from the `files` directory:
 
 ```bash
 mkdir -p ~/.conduit-node/data
@@ -9,6 +9,12 @@ mkdir -p ~/.conduit-node/grafana_data
 mkdir -p ~/.conduit-node/prometheus_data
 cp docker-compose.yml prometheus.yml ~/.conduit-node
 cp -r grafana-provisioning ~/.conduit-node
+
+# Set container user to match your current host UID:GID in docker-compose.yml
+sed -i "s/1000:1000/$(id -u):$(id -g)/g" ~/.conduit-node/docker-compose.yml
+
+# Ensure user ownership of the directory and all files
+sudo chown -R $(id -u):$(id -g) ~/.conduit-node
 ```
 
 ### Docker-Compose
@@ -30,6 +36,9 @@ Based on your internet connection speed, customize the `--bandwidth` value.
 ```bash
 cd ~/.conduit-node
 docker compose up -d
+
+# Ensure user ownership after containers start
+sudo chown -R $(id -u):$(id -g) ~/.conduit-node
 ```
 
 ### View Logs
