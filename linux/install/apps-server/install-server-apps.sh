@@ -37,6 +37,7 @@ SERVER_APPS=(
     "speedtest"
     "syslog"
     "vim"
+    "conduit-node"
 )
 
 show_help() {
