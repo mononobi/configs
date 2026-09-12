@@ -122,28 +122,32 @@ install_gnome_extension() {
     local user_ext_dir="${HOME}/.local/share/gnome-shell/extensions/${uuid}"
     local sys_ext_dir="/usr/share/gnome-shell/extensions/${uuid}"
 
+    # If already installed, simply ensure it is enabled and exit
     if [[ -d "$user_ext_dir" || -d "$sys_ext_dir" ]]; then
         echo "    [✓] Extension already installed. Ensuring enabled..."
         gnome-extensions enable "${uuid}" 2>/dev/null || true
         return 0
     fi
 
-    # Ensure required helper apps
-    if [[ "${SKIP_UPDATE:-false}" == "true" ]]; then
-        require_app "curl" "apps-recommended" --no-update
-        require_app "python" "apps-recommended" --no-update
-        require_app "unzip" "apps-recommended" --no-update
-    else
-        require_app "curl" "apps-recommended"
-        require_app "python" "apps-recommended"
-        require_app "unzip" "apps-recommended"
+    # Ensure required helper apps if not already in PATH
+    local update_flag=()
+    [[ "${SKIP_UPDATE:-false}" == "true" ]] && update_flag=("--no-update")
+
+    if ! command -v curl >/dev/null 2>&1; then
+        require_app "curl" "apps-recommended" "${update_flag[@]}"
+    fi
+    if ! command -v python3 >/dev/null 2>&1; then
+        require_app "python" "apps-recommended" "${update_flag[@]}"
+    fi
+    if ! command -v unzip >/dev/null 2>&1; then
+        require_app "unzip" "apps-recommended" "${update_flag[@]}"
     fi
 
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
     shell_ver="${shell_ver:-46}"
 
-    echo "    Querying extensions.gnome.org for GNOME ${shell_ver} bundle..."
+    echo "    Resolving download URL for GNOME ${shell_ver} on extensions.gnome.org..."
     local download_url
     download_url="$(python3 -c "
 import urllib.request, json, sys
@@ -155,52 +159,72 @@ req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
 try:
     with urllib.request.urlopen(req, timeout=10) as resp:
         data = json.loads(resp.read().decode())
-        print('https://extensions.gnome.org' + data['download_url'])
+        dl = data.get('download_url')
+        if dl:
+            print('https://extensions.gnome.org' + dl)
 except Exception:
-    try:
-        url_fallback = f'https://extensions.gnome.org/extension-info/?uuid={uuid}'
-        req_fallback = urllib.request.Request(url_fallback, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_fallback, timeout=10) as resp2:
-            data2 = json.loads(resp2.read().decode())
-            print('https://extensions.gnome.org' + data2['download_url'])
-    except Exception:
-        pass
+    pass
 " "$uuid" "$shell_ver" 2>/dev/null || true)"
 
     if [[ -z "$download_url" ]]; then
-        echo "    [!] Warning: Could not resolve download URL for ${uuid}" >&2
-        return 1
+        echo "    [!] Warning: Could not resolve download URL for ${uuid}. Skipping." >&2
+        return 0
     fi
 
     local tmp_zip
     tmp_zip="$(mktemp --suffix=.zip)"
-    if curl -fsSL "$download_url" -o "$tmp_zip" 2>/dev/null; then
-        if command -v gnome-extensions >/dev/null 2>&1; then
-            gnome-extensions install -f "$tmp_zip" 2>/dev/null || {
-                mkdir -p "$user_ext_dir"
-                unzip -q -o "$tmp_zip" -d "$user_ext_dir"
-            }
-        else
-            mkdir -p "$user_ext_dir"
-            unzip -q -o "$tmp_zip" -d "$user_ext_dir"
-        fi
-        rm -f "$tmp_zip"
-
-        if [[ -d "${user_ext_dir}/schemas" ]]; then
-            glib-compile-schemas "${user_ext_dir}/schemas" 2>/dev/null || true
-        fi
-
-        # Ensure extension version validation is disabled so all extensions load cleanly
-        gsettings set org.gnome.shell disable-extension-version-validation true 2>/dev/null || true
-
-        gnome-extensions enable "${uuid}" 2>/dev/null || true
-        echo "    [✓] Successfully installed and enabled: ${name}"
-        return 0
-    else
+    echo "    Downloading extension bundle..."
+    if ! curl -fsSL "$download_url" -o "$tmp_zip" 2>/dev/null; then
         rm -f "$tmp_zip"
         echo "    [!] Error: Failed to download extension zip for ${uuid}" >&2
         return 1
     fi
+
+    # Check version compatibility from metadata.json inside the downloaded zip before installing to target dest
+    local compat_check
+    compat_check="$(python3 -c "
+import zipfile, json, sys
+
+zip_path = sys.argv[1]
+cur_ver = sys.argv[2]
+try:
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        meta = json.loads(zf.read('metadata.json').decode())
+        svers = meta.get('shell-version', [])
+        match = any(v == cur_ver or v.startswith(cur_ver + '.') for v in svers)
+        if match:
+            print('VALID')
+        else:
+            print('INVALID|' + ', '.join(svers))
+except Exception as e:
+    print('VALID')
+" "$tmp_zip" "$shell_ver" 2>/dev/null || echo "VALID")"
+
+    if [[ "$compat_check" == INVALID* ]]; then
+        local supported="${compat_check#INVALID|}"
+        echo "    [!] Warning: Downloaded bundle for ${name} (${uuid}) does NOT support current GNOME Shell version (${shell_ver})." >&2
+        echo "        Supported versions in downloaded metadata.json: [${supported}]. Skipping installation." >&2
+        rm -f "$tmp_zip"
+        return 0
+    fi
+
+    echo "    Metadata verified for GNOME ${shell_ver}. Installing to target destination..."
+    if command -v gnome-extensions >/dev/null 2>&1; then
+        gnome-extensions install -f "$tmp_zip" 2>/dev/null || {
+            mkdir -p "$user_ext_dir"
+            unzip -q -o "$tmp_zip" -d "$user_ext_dir"
+        }
+    else
+        mkdir -p "$user_ext_dir"
+        unzip -q -o "$tmp_zip" -d "$user_ext_dir"
+    fi
+    if [[ -d "${user_ext_dir}/schemas" ]]; then
+        glib-compile-schemas "${user_ext_dir}/schemas" 2>/dev/null || true
+    fi
+
+    gnome-extensions enable "${uuid}" 2>/dev/null || true
+    echo "    [✓] Successfully installed and enabled: ${name}"
+    return 0
 }
 
 export INSTALL_ROOT

@@ -54,7 +54,4 @@ fi
 echo "[+] Installing packages: gnome-shell-extension-manager, gnome-shell-extensions, chrome-gnome-shell..."
 sudo apt-get install -y gnome-shell-extension-manager gnome-shell-extensions chrome-gnome-shell
 
-echo "[+] Disabling extension version compatibility validation..."
-gsettings set org.gnome.shell disable-extension-version-validation true 2>/dev/null || true
-
 echo "[✓] GNOME Shell Extensions Activator setup completed successfully!"
