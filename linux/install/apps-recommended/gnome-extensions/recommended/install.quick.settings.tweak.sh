@@ -112,15 +112,62 @@ if ! curl -fsSL "$DOWNLOAD_URL" -o "$TMP_ZIP"; then
 fi
 
 configure_settings() {
-    if gsettings list-schemas | grep -q "org.gnome.shell.extensions.quick-settings-tweaks"; then
-        echo "[+] Configuring Quick Settings Tweaker settings..."
-        gsettings set org.gnome.shell.extensions.quick-settings-tweaks media-control-enabled true 2>/dev/null || true
-        gsettings set org.gnome.shell.extensions.quick-settings-tweaks notifications-enabled true 2>/dev/null || true
-        gsettings set org.gnome.shell.extensions.quick-settings-tweaks weather-enabled false 2>/dev/null || true
-        gsettings set org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-enabled false 2>/dev/null || true
-        gsettings set org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-enabled true 2>/dev/null || true
-        gsettings set org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-enabled false 2>/dev/null || true
+    local schema_dir=""
+    for d in \
+        "${USER_EXT_DIR}/schemas" \
+        "${HOME}/.local/share/gnome-shell/extensions/quick-settings-tweaks@qwreey/schemas" \
+        "${HOME}/.local/share/glib-2.0/schemas" \
+        "/usr/share/glib-2.0/schemas"; do
+        if [[ -f "${d}/org.gnome.shell.extensions.quick-settings-tweaks.gschema.xml" ]]; then
+            schema_dir="$d"
+            break
+        fi
+    done
+
+    local gset=(gsettings)
+    if [[ -n "$schema_dir" ]]; then
+        glib-compile-schemas "$schema_dir" 2>/dev/null || true
+        gset+=(--schemadir "$schema_dir")
     fi
+
+    if ! "${gset[@]}" list-keys org.gnome.shell.extensions.quick-settings-tweaks >/dev/null 2>&1; then
+        return 0
+    fi
+
+    echo "[+] Configuring Quick Settings Tweaker settings according to guide..."
+
+    # 1. Media Widget -> On, all check-boxes -> On
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-enabled true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-next-button true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-prev-button true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-contorl-show-pause-button true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-show-header true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-compact true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-enabled true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-round-clip-padding-adjustment-enabled true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-progress-enabled true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-remove-shadow true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks media-gradient-enabled true 2>/dev/null || true
+
+    # 2. Notifications Widget -> On, Native controls -> Off, all other check-boxes -> On, Max height: 438
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-enabled true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-use-native-controls false 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-show-header true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-compact true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-autohide true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-remove-shadow true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-show-scrollbar true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks notifications-max-height 438 2>/dev/null || true
+
+    # 3. Weather Widget -> Off
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks weather-enabled false 2>/dev/null || true
+
+    # 4. Volume Mixer Widget -> Off
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-enabled false 2>/dev/null || true
+
+    # 5. Toggles: DND Quick Toggle -> On, Unsafe Mode Quick Toggle -> Off
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-enabled true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-enabled false 2>/dev/null || true
 }
 
 # 1. Compare version of downloaded archive against installed copy
