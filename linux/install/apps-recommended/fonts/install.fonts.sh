@@ -1,0 +1,1 @@
+../../../fonts/install.fonts.sh
