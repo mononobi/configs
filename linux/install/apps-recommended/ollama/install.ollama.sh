@@ -1,0 +1,1 @@
+../../../llm/ollama/install.ollama.sh
