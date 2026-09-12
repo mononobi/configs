@@ -72,27 +72,28 @@ else
     echo "[✓] OpenVPN packages are installed."
 fi
 
-# 3. Create required directories
+# 3. Create required directories (clean up old added/ directory if re-running)
 EXPRESS_DIR="${HOME}/.expressvpn"
 PROFILES_DIR="${EXPRESS_DIR}/profiles"
 KEYS_DIR="${EXPRESS_DIR}/keys"
 BIN_DIR="${HOME}/.local/bin"
 
-echo "[+] Creating ExpressVPN directories..."
+echo "[+] Preparing ExpressVPN directories..."
+rm -rf "${PROFILES_DIR}/added"
 mkdir -p "$PROFILES_DIR"
 mkdir -p "$KEYS_DIR"
 
 # 4. Copy profiles and keys
 FILES_DIR="${SCRIPT_DIR}/files"
 echo "[+] Copying profile and key files..."
-cp "${FILES_DIR}/profiles/"*.ovpn "$PROFILES_DIR/"
-cp "${FILES_DIR}/keys/"* "$KEYS_DIR/"
+cp -f "${FILES_DIR}/profiles/"*.ovpn "$PROFILES_DIR/"
+cp -f "${FILES_DIR}/keys/"* "$KEYS_DIR/"
 
 # 5. Install scripts into ~/.local/bin
 SCRIPTS_DIR="${SCRIPT_DIR}/scripts"
 echo "[+] Installing CLI helper scripts into ${BIN_DIR}..."
-cp "${SCRIPTS_DIR}/openvpn-add" "$BIN_DIR/"
-cp "${SCRIPTS_DIR}/openvpn-bulk-add" "$BIN_DIR/"
+cp -f "${SCRIPTS_DIR}/openvpn-add" "$BIN_DIR/"
+cp -f "${SCRIPTS_DIR}/openvpn-bulk-add" "$BIN_DIR/"
 chmod +x "${BIN_DIR}/openvpn-add" "${BIN_DIR}/openvpn-bulk-add"
 
 # 6. Prompt for VPN Credentials (only interactive input)

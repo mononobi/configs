@@ -147,7 +147,16 @@ echo -e " \033[1;34m      ⚙️  CONFIGURING PROFILE                      \033[
 echo -e " \033[1;34m============================================================ \033[0m"
 echo ""
 echo -e "  Profile Name:  \033[1;32m$PROFILE_NAME\033[0m"
-echo ""
+# 0. Clean up existing connection if present to prevent duplicates in NetworkManager
+TEMP_NAME=$(basename "$OVPN_FILE" .ovpn)
+
+if nmcli connection show "$PROFILE_NAME" >/dev/null 2>&1; then
+    echo -e "  \033[1;33mℹ️  Replacing existing '$PROFILE_NAME' profile in NetworkManager...\033[0m"
+    nmcli connection delete "$PROFILE_NAME" >/dev/null 2>&1 || true
+fi
+if [[ "$TEMP_NAME" != "$PROFILE_NAME" ]] && nmcli connection show "$TEMP_NAME" >/dev/null 2>&1; then
+    nmcli connection delete "$TEMP_NAME" >/dev/null 2>&1 || true
+fi
 
 # 1. Import the OVPN file directly
 import_out=$(nmcli connection import type openvpn file "$OVPN_FILE" 2>&1)
@@ -157,9 +166,6 @@ if [[ $? -ne 0 ]]; then
     echo "Details: $import_out"
     exit 1
 fi
-
-# Extract the temporary connection name
-TEMP_NAME=$(basename "$OVPN_FILE" .ovpn)
 
 # 2. Rename the connection
 nmcli connection modify "$TEMP_NAME" connection.id "$PROFILE_NAME"
