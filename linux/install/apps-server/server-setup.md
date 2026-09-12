@@ -43,8 +43,8 @@ sudo userdel -r ubuntu
 
 ## 4. Create SSH Key & Disable Password Login:
 
-[SSH Key Management](/linux/key-management/ssh-key-ed25519.md)
+[SSH Key Management](../../key-management/ssh-key-ed25519.md)
 
 ## 5. Install Server Apps & Configurations:
 
-[install-server-apps](/linux/install/apps-server/install-server-apps.sh)
+[Install Server Apps](./install-server-apps.sh)
