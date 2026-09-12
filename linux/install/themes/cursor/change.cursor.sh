@@ -6,6 +6,7 @@ set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE=false
 RESTART_GDM=false
@@ -91,12 +92,19 @@ if [[ -f "${SCRIPT_DIR}/DMZ-White.zip" ]]; then
     fi
 fi
 
-# 4. Flatpak Override (if flatpak is installed)
-if command -v flatpak >/dev/null 2>&1; then
-    echo "[+] Configuring Flatpak filesystem permissions for icons..."
-    sudo flatpak override --filesystem=/usr/share/icons/:ro 2>/dev/null || true
-    echo "[✓] Flatpak icons override configured."
+# 4. Flatpak Override
+echo "[+] Ensuring Flatpak dependency is installed..."
+if ! command -v flatpak >/dev/null 2>&1; then
+    if [[ "$SKIP_UPDATE" == "true" ]]; then
+        require_app "flatpak" "apps-recommended" --no-update
+    else
+        require_app "flatpak" "apps-recommended"
+    fi
 fi
+
+echo "[+] Configuring Flatpak filesystem permissions for icons..."
+sudo flatpak override --filesystem=/usr/share/icons/:ro
+echo "[✓] Flatpak icons override configured."
 
 # 5. Apply to Login Screen (GDM)
 echo "[+] Configuring GDM login screen cursor..."

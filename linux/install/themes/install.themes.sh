@@ -6,6 +6,7 @@ set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+source "${SCRIPT_DIR}/../utils.sh"
 
 SYSTEM_TARGET=""
 SKIP_UPDATE=false
@@ -182,13 +183,14 @@ while true; do
 done < /dev/null > /dev/null 2>&1 &
 sudo_keepalive_pid=$!
 
-# Ensure git and curl are installed
-if ! command -v git >/dev/null 2>&1; then
-    echo "[+] Installing git..."
-    if [[ "$SKIP_UPDATE" != "true" ]]; then
-        sudo apt-get update
-    fi
-    sudo apt-get install -y git
+# Ensure required applications are installed via require_app
+echo "[+] Ensuring application dependencies (git, gnome-extensions) are installed..."
+if [[ "$SKIP_UPDATE" == "true" ]]; then
+    require_app "git" "apps-recommended" --no-update
+    require_app "gnome-extensions" "apps-recommended" --no-update
+else
+    require_app "git" "apps-recommended"
+    require_app "gnome-extensions" "apps-recommended"
 fi
 
 # -----------------------------------------------------------------------------
@@ -275,6 +277,7 @@ echo "[+] Step 6: Applying user desktop themes and icons..."
 gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
 gsettings set org.gnome.desktop.interface icon-theme "${ICON_NAME}"
 gsettings set org.gnome.desktop.interface gtk-theme "${THEME_NAME}"
+gnome-extensions enable "user-theme@gnome-shell-extensions.gcampax.github.com" 2>/dev/null || true
 if gsettings list-schemas | grep -q "org.gnome.shell.extensions.user-theme"; then
     gsettings set org.gnome.shell.extensions.user-theme name "${THEME_NAME}"
 fi
@@ -349,11 +352,6 @@ fi
 echo "[+] Configuring Window Behavior and Fonts..."
 gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.desktop.interface text-scaling-factor 1.0
-
-if [[ "$SYSTEM_TARGET" == "laptop" ]]; then
-    echo "[+] Enabling fractional scaling for laptop display..."
-    gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
-fi
 
 echo ""
 echo "================================================================================"
