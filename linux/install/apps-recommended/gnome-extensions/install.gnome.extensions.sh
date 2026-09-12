@@ -23,7 +23,7 @@ Description:
   Completely idempotent and safe to run repeatedly.
 
 Options:
-  --add-to-desktop  Install and enable 'Add to Desktop' extension (omitted by default)
+  --add-to-desktop  Install and enable desktop icon extensions (Add to Desktop, DING; omitted by default)
   --no-update       Skip apt update before installation
   -h, --help        Show this help message and exit
 EOF

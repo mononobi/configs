@@ -1,0 +1,12 @@
+# Desktop Icons NG (DING)
+
+https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/
+UUID: ding@rastersoft.com
+
+Configured settings:
+- Size for the desktop icons: Small
+- Show the personal folder in the desktop: Off
+- Show the trash icon in the desktop: On
+- Show external drives in the desktop: Off
+- Show network drives in the desktop: Off
+- New icons alignment: Top-left corner

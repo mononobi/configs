@@ -16,8 +16,6 @@ Usage: $(basename "$0") [OPTIONS]
 
 Description:
   Enables and configures built-in Ubuntu system extensions:
-    - Desktop Icons NG (DING)
-    - System Monitor
     - Ubuntu Dock
     - Ubuntu AppIndicators
     - Ubuntu Tiling Assistant
@@ -59,34 +57,13 @@ echo "==========================================================================
 echo " Enabling and Configuring System Extensions"
 echo "================================================================================"
 
-# Require prerequisite gnome-system-monitor for system-monitor extension
-echo "[+] Ensuring gnome-system-monitor application dependency is installed..."
-if [[ "$SKIP_UPDATE" == "true" ]]; then
-    require_app "gnome-system-monitor" "apps-recommended" --no-update
-else
-    require_app "gnome-system-monitor" "apps-recommended"
-fi
-
 for sys_ext in \
-    "ding@rastersoft.com" \
-    "system-monitor@gnome-shell-extensions.gcampax.github.com" \
     "ubuntu-dock@ubuntu.com" \
     "ubuntu-appindicators@ubuntu.com" \
     "tiling-assistant@ubuntu.com"; do
     echo "[+] Enabling system extension: ${sys_ext}..."
     gnome-extensions enable "$sys_ext" 2>/dev/null || true
 done
-
-# Configure Desktop Icons NG (DING)
-echo "[+] Applying Desktop Icons NG (DING) settings..."
-if gsettings list-schemas | grep -q "org.gnome.shell.extensions.ding"; then
-    gsettings set org.gnome.shell.extensions.ding icon-size 'small' 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.ding show-home false 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.ding show-trash true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.ding show-volumes false 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.ding show-network-volumes false 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.ding start-corner 'top-left' 2>/dev/null || true
-fi
 
 # Configure Ubuntu Dock
 echo "[+] Applying Ubuntu Dock settings..."
@@ -98,6 +75,13 @@ if gsettings list-schemas | grep -q "org.gnome.shell.extensions.dash-to-dock"; t
     gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false 2>/dev/null || true
     gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false 2>/dev/null || true
     gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'focus-or-previews' 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock shift-click-action 'launch' 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock middle-click-action 'minimize' 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock shift-middle-click-action 'minimize' 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock disable-overview-on-startup true 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED' 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.65 2>/dev/null || true
 fi
 
 echo "[✓] System extensions configured successfully!"

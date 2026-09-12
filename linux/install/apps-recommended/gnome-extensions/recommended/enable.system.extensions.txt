@@ -1,31 +1,15 @@
 # enable and configure these system extensions:
 
 # NOTE:
-# all of these might not be available when you install the OS, but after installing all
+# All of these might not be available immediately when you install the OS, but after installing all
 # other custom extensions and restarting the system, they will show up as system extensions.
-
-############### Desktop Icons NG (DING) ###############
-- Size for the desktop icons: Small
-- Show the personal folder in the desktop: Off
-- Show the trash icon in the desktop: On
-- Show external drives in the desktop: Off
-- Show network drives in the desktop: Off
-- New icons alignment: Top-left corner
-
-############### System Monitor ###############
-- Uncheck "Swap" by right-clicking on the tool
-
-# NOTE:
-# On Ubuntu 26.04 and later, you need to install this for the extension to work:
-
-sudo apt install gnome-system-monitor
 
 ############### Ubuntu Dock ###############
 ### Position and size Tab:
 - Show on all monitors: On
 - Position on screen: Bottom
 - Panel mode: extend to the screen edge: On
-- Fixed icon size: scroll to reveal other icons: On
+- Fixed icon size: scroll to reveal other icons: On (dash-max-icon-size: 40)
 
 ### Launchers Tab:
 - Show open windows' previews: On
@@ -46,5 +30,7 @@ sudo apt install gnome-system-monitor
 - Opacity: 65%
 
 ############### Ubuntu AppIndicators ###############
+- Enabled via enable.system.extensions.sh (ubuntu-appindicators@ubuntu.com)
 
 ############### Ubuntu Tiling Assistant ###############
+- Enabled via enable.system.extensions.sh (tiling-assistant@ubuntu.com)

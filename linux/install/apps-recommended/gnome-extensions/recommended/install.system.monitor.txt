@@ -1,0 +1,10 @@
+# System Monitor
+
+https://extensions.gnome.org/extension/6807/system-monitor/
+UUID: system-monitor@gnome-shell-extensions.gcampax.github.com
+
+Prerequisite application:
+sudo apt install gnome-system-monitor
+
+Settings:
+- Uncheck "Swap" by right-clicking on the tool (show-swap false)

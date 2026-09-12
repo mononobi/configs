@@ -29,13 +29,14 @@ Description:
     - Weather O'Clock (requires gnome-weather)
     - Disconnect WiFi
     - WiFi QR Code
-    - Add to Desktop (optional via --add-to-desktop)
-    - System Extensions (DING, Ubuntu Dock, System Monitor, AppIndicators, Tiling Assistant)
+    - System Monitor
+    - Add to Desktop & Desktop Icons NG (DING) (optional via --add-to-desktop)
+    - System Extensions (Ubuntu Dock, Ubuntu AppIndicators, Ubuntu Tiling Assistant)
 
   Completely idempotent and safe to run repeatedly.
 
 Options:
-  --add-to-desktop   Install and enable 'Add to Desktop' extension (omitted by default)
+  --add-to-desktop   Install and enable desktop icon extensions (Add to Desktop, DING; omitted by default)
   --no-update        Skip apt update before installing system packages
   -h, --help         Show this help message and exit
 EOF
@@ -105,12 +106,14 @@ run_installer "install.removable.drive.menu.sh"
 run_installer "install.weather.in.panel.sh"
 run_installer "install.wifi.disconnect.sh"
 run_installer "install.wifi.qr.code.sh"
+run_installer "install.system.monitor.sh"
 
 if [[ "$INSTALL_ADD_TO_DESKTOP" == "true" ]]; then
     run_installer "install.add.to.desktop.sh"
+    run_installer "install.desktop.icons.ng.ding.sh"
 else
     echo ""
-    echo "[i] Skipping 'Add to Desktop' extension (enable with --add-to-desktop flag)"
+    echo "[i] Skipping 'Add to Desktop' and 'Desktop Icons NG (DING)' extensions (enable with --add-to-desktop flag)"
 fi
 
 # 2. Enable and Configure System Extensions
