@@ -30,6 +30,9 @@ while [[ $# -gt 0 ]]; do
             show_help
             exit 0
             ;;
+        --no-update|--skip-update)
+            shift
+            ;;
         *)
             echo "[!] Unknown option: $1" >&2
             echo "Use -h or --help for usage information." >&2

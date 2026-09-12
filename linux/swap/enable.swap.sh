@@ -67,6 +67,9 @@ while [[ $# -gt 0 ]]; do
             SWAPPINESS="${1#*=}"
             shift
             ;;
+        --no-update|--skip-update)
+            shift
+            ;;
         *)
             echo "[!] Unknown option: $1" >&2
             echo "Use -h or --help for usage information." >&2

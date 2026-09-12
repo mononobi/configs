@@ -39,6 +39,7 @@ SERVER_APPS=(
     "vim"
     "conduit-node"
     "commands"
+    "disable-swap"
 )
 
 show_help() {
