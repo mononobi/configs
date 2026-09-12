@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
 SKIP_UPDATE=false
 
 show_help() {
@@ -11,7 +14,8 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Docker Engine, Docker CLI, Docker Compose Plugin, and sets user permissions.
+  Installs Docker Engine, Docker CLI, Docker Compose Plugin, sets user permissions,
+  and initializes/enables Watchtower for automated container updates.
 
 Options:
   --no-update   Skip apt update before installation
@@ -59,4 +63,38 @@ sudo systemctl enable --now docker
 sudo usermod -aG docker "$USER"
 echo "[+] Docker CE and Compose installed. User $USER added to docker group (re-login required)."
 
-echo "[✓] Docker CE & Compose setup completed successfully!"
+# Configure & Enable Watchtower
+echo ""
+echo "--------------------------------------------------------------------------------"
+echo "[+] Configuring Watchtower..."
+echo "--------------------------------------------------------------------------------"
+
+WATCHTOWER_DIR="${HOME}/.watchtower"
+WATCHTOWER_SRC="${SCRIPT_DIR}/watchtower/docker-compose.yml"
+
+mkdir -p "$WATCHTOWER_DIR"
+
+if [[ -f "$WATCHTOWER_SRC" ]]; then
+    if ! cmp -s "$WATCHTOWER_SRC" "${WATCHTOWER_DIR}/docker-compose.yml" 2>/dev/null; then
+        cp "$WATCHTOWER_SRC" "${WATCHTOWER_DIR}/docker-compose.yml"
+        echo "[+] Copied Watchtower configuration to ${WATCHTOWER_DIR}/docker-compose.yml"
+    else
+        echo "[+] Watchtower configuration in ${WATCHTOWER_DIR}/ is already up to date."
+    fi
+else
+    echo "[!] Warning: Watchtower template not found at ${WATCHTOWER_SRC}" >&2
+fi
+
+if [[ -f "${WATCHTOWER_DIR}/docker-compose.yml" ]]; then
+    echo "[+] Starting/verifying Watchtower service..."
+    if docker info >/dev/null 2>&1; then
+        docker compose -f "${WATCHTOWER_DIR}/docker-compose.yml" up -d
+    else
+        # If user session has not reloaded group memberships yet, run via sudo
+        sudo docker compose -f "${WATCHTOWER_DIR}/docker-compose.yml" up -d
+    fi
+    echo "[✓] Watchtower is active and monitoring containers."
+fi
+
+echo ""
+echo "[✓] Docker CE, Compose & Watchtower setup completed successfully!"
