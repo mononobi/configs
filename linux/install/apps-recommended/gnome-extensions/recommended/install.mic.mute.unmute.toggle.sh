@@ -51,13 +51,34 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-install_gnome_extension "nothing-to-say@extensions.gnome.wouter.bolsterl.ee" "Nothing to Say (Mic Mute Toggle)"
+UUID="nothing-to-say@extensions.gnome.wouter.bolsterl.ee"
+NAME="Nothing to Say (Mic Mute Toggle)"
 
-# Apply recommended settings if schema is available
-if gsettings list-schemas | grep -q "org.gnome.shell.extensions.nothing-to-say"; then
+install_gnome_extension "${UUID}" "${NAME}"
+
+# Apply recommended settings
+schema_dir=""
+for d in \
+    "${HOME}/.local/share/gnome-shell/extensions/${UUID}/schemas" \
+    "/usr/share/gnome-shell/extensions/${UUID}/schemas" \
+    "${HOME}/.local/share/glib-2.0/schemas" \
+    "/usr/share/glib-2.0/schemas"; do
+    if [[ -f "${d}/org.gnome.shell.extensions.nothing-to-say.gschema.xml" ]]; then
+        schema_dir="$d"
+        break
+    fi
+done
+
+gset=(gsettings)
+if [[ -n "$schema_dir" ]]; then
+    glib-compile-schemas "$schema_dir" 2>/dev/null || true
+    gset+=(--schemadir "$schema_dir")
+fi
+
+if "${gset[@]}" list-keys org.gnome.shell.extensions.nothing-to-say >/dev/null 2>&1; then
     echo "[+] Configuring Nothing to Say settings..."
-    gsettings set org.gnome.shell.extensions.nothing-to-say keybinding "['<Control>F9']" 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.nothing-to-say show-osd true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.nothing-to-say play-sound true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.nothing-to-say icon-visibility 'always' 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say keybinding-toggle-mute "['<Control>F9']" 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say show-osd true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say play-feedback-sounds true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say icon-visibility 'always' 2>/dev/null || true
 fi

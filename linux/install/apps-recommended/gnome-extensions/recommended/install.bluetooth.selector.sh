@@ -52,12 +52,33 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-install_gnome_extension "bluetooth-quick-connect@bjarosze.gmail.com" "Bluetooth Quick Connect"
+UUID="bluetooth-quick-connect@bjarosze.gmail.com"
+NAME="Bluetooth Quick Connect"
+
+install_gnome_extension "${UUID}" "${NAME}"
 
 # Apply recommended settings
-if gsettings list-schemas | grep -q "org.gnome.shell.extensions.bluetooth-quick-connect"; then
+schema_dir=""
+for d in \
+    "${HOME}/.local/share/gnome-shell/extensions/${UUID}/schemas" \
+    "/usr/share/gnome-shell/extensions/${UUID}/schemas" \
+    "${HOME}/.local/share/glib-2.0/schemas" \
+    "/usr/share/glib-2.0/schemas"; do
+    if [[ -f "${d}/org.gnome.shell.extensions.bluetooth-quick-connect.gschema.xml" ]]; then
+        schema_dir="$d"
+        break
+    fi
+done
+
+gset=(gsettings)
+if [[ -n "$schema_dir" ]]; then
+    glib-compile-schemas "$schema_dir" 2>/dev/null || true
+    gset+=(--schemadir "$schema_dir")
+fi
+
+if "${gset[@]}" list-keys org.gnome.shell.extensions.bluetooth-quick-connect >/dev/null 2>&1; then
     echo "[+] Configuring Bluetooth Quick Connect settings..."
-    gsettings set org.gnome.shell.extensions.bluetooth-quick-connect keep-menu-on-toggle true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.bluetooth-quick-connect show-battery-value true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.bluetooth-quick-connect show-battery-icon true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.bluetooth-quick-connect keep-menu-on-toggle true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.bluetooth-quick-connect show-battery-value-on true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.bluetooth-quick-connect show-battery-icon-on true 2>/dev/null || true
 fi
