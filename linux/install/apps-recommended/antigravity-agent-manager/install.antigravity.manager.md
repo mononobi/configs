@@ -30,7 +30,7 @@ sudo chmod 4755 ~/.antigravity-manager/Antigravity-x64/chrome-sandbox
 Copy the app shortcut:
 
 ```bash
-cp files/antigravity-manager.desktop ~/.local/share/applications/
+cp files/antigravity.desktop ~/.local/share/applications/
 ```
 
 Copy the app icon:

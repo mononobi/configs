@@ -8,17 +8,17 @@ set -euo pipefail
 # Resolve script directory and source asset paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FILES_DIR="${SCRIPT_DIR}/files"
-DESKTOP_SRC="${FILES_DIR}/antigravity-manager.desktop"
+DESKTOP_SRC="${FILES_DIR}/antigravity.desktop"
 ICON_SRC="${FILES_DIR}/antigravity.png"
 
 # Target destinations
 INSTALL_DIR="${HOME}/.antigravity-manager"
 APP_DIR="${HOME}/.local/share/applications"
 ICON_DIR="${HOME}/.local/share/icons"
-DEST_DESKTOP="${APP_DIR}/antigravity-manager.desktop"
+DEST_DESKTOP="${APP_DIR}/antigravity.desktop"
 
 # Dynamic values for .desktop entry based on user's $HOME
-DESKTOP_EXEC="sh -c '${INSTALL_DIR}/Antigravity-x64/antigravity --class=AntigravityManager %F; pkill -f AntigravityManager'"
+DESKTOP_EXEC="sh -c '${INSTALL_DIR}/Antigravity-x64/antigravity --class=antigravity %F; pkill -f antigravity'"
 DESKTOP_PATH="${INSTALL_DIR}/Antigravity-x64/"
 
 DRY_RUN=false
