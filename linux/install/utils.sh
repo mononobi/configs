@@ -108,11 +108,57 @@ EOF
     done
 }
 
+# check_extension_archive_compatibility <zip_path> [display_name] [uuid]
+#
+# Inspects metadata.json inside a downloaded extension .zip archive and checks whether
+# its 'shell-version' list supports the current system GNOME Shell version.
+# If incompatible, displays a warning with supported versions vs current version and returns 1.
+# If compatible, returns 0.
+check_extension_archive_compatibility() {
+    local zip_path="$1"
+    local name="${2:-Extension}"
+    local uuid="${3:-}"
+
+    local shell_ver
+    shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
+    shell_ver="${shell_ver:-46}"
+
+    local compat_check
+    compat_check="$(python3 -c "
+import zipfile, json, sys
+
+zip_path = sys.argv[1]
+cur_ver = sys.argv[2]
+try:
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        meta = json.loads(zf.read('metadata.json').decode())
+        svers = meta.get('shell-version', [])
+        match = any(v == cur_ver or v.startswith(cur_ver + '.') for v in svers)
+        if match:
+            print('VALID')
+        else:
+            print('INVALID|' + ', '.join(svers))
+except Exception as e:
+    print('VALID')
+" "$zip_path" "$shell_ver" 2>/dev/null || echo "VALID")"
+
+    if [[ "$compat_check" == INVALID* ]]; then
+        local supported="${compat_check#INVALID|}"
+        local label="$name"
+        [[ -n "$uuid" ]] && label="${name} (${uuid})"
+        echo "    [!] Warning: Downloaded bundle for ${label} does NOT support current GNOME Shell version (${shell_ver})." >&2
+        echo "        Supported versions in downloaded metadata.json: [${supported}]. Skipping installation." >&2
+        return 1
+    fi
+
+    return 0
+}
+
 # install_gnome_extension <uuid> [display_name]
 #
-# Downloads, installs, and enables a GNOME Shell extension by its UUID from extensions.gnome.org.
-# Automatically ensures curl, python, and unzip dependencies exist via require_app.
-# Completely idempotent: if the extension is already installed, it ensures it is enabled.
+# Downloads, inspects metadata.json inside the downloaded zip for compatibility,
+# and installs/enables a GNOME Shell extension by its UUID from extensions.gnome.org.
+# If already installed, ensures it is enabled and exits.
 install_gnome_extension() {
     local uuid="$1"
     local name="${2:-$uuid}"
@@ -180,30 +226,8 @@ except Exception:
         return 1
     fi
 
-    # Check version compatibility from metadata.json inside the downloaded zip before installing to target dest
-    local compat_check
-    compat_check="$(python3 -c "
-import zipfile, json, sys
-
-zip_path = sys.argv[1]
-cur_ver = sys.argv[2]
-try:
-    with zipfile.ZipFile(zip_path, 'r') as zf:
-        meta = json.loads(zf.read('metadata.json').decode())
-        svers = meta.get('shell-version', [])
-        match = any(v == cur_ver or v.startswith(cur_ver + '.') for v in svers)
-        if match:
-            print('VALID')
-        else:
-            print('INVALID|' + ', '.join(svers))
-except Exception as e:
-    print('VALID')
-" "$tmp_zip" "$shell_ver" 2>/dev/null || echo "VALID")"
-
-    if [[ "$compat_check" == INVALID* ]]; then
-        local supported="${compat_check#INVALID|}"
-        echo "    [!] Warning: Downloaded bundle for ${name} (${uuid}) does NOT support current GNOME Shell version (${shell_ver})." >&2
-        echo "        Supported versions in downloaded metadata.json: [${supported}]. Skipping installation." >&2
+    # Check version compatibility from metadata.json inside the downloaded zip before installing
+    if ! check_extension_archive_compatibility "$tmp_zip" "$name" "$uuid"; then
         rm -f "$tmp_zip"
         return 0
     fi
@@ -218,6 +242,8 @@ except Exception as e:
         mkdir -p "$user_ext_dir"
         unzip -q -o "$tmp_zip" -d "$user_ext_dir"
     fi
+    rm -f "$tmp_zip"
+
     if [[ -d "${user_ext_dir}/schemas" ]]; then
         glib-compile-schemas "${user_ext_dir}/schemas" 2>/dev/null || true
     fi
@@ -230,4 +256,5 @@ except Exception as e:
 export INSTALL_ROOT
 export -f require_app
 export -f ensure_local_bin_in_path
+export -f check_extension_archive_compatibility
 export -f install_gnome_extension

@@ -117,28 +117,7 @@ print('https://github.com/jstockdale/quick-settings-tweaks/releases/download/v2.
     fi
 
     # Check version compatibility from metadata.json inside the downloaded zip before extracting to target dest
-    compat_check="$(python3 -c "
-import zipfile, json, sys
-
-zip_path = sys.argv[1]
-cur_ver = sys.argv[2]
-try:
-    with zipfile.ZipFile(zip_path, 'r') as zf:
-        meta = json.loads(zf.read('metadata.json').decode())
-        svers = meta.get('shell-version', [])
-        match = any(v == cur_ver or v.startswith(cur_ver + '.') for v in svers)
-        if match:
-            print('VALID')
-        else:
-            print('INVALID|' + ', '.join(svers))
-except Exception as e:
-    print('VALID')
-" "$TMP_ZIP" "$shell_ver" 2>/dev/null || echo "VALID")"
-
-    if [[ "$compat_check" == INVALID* ]]; then
-        supported="${compat_check#INVALID|}"
-        echo "    [!] Warning: Downloaded GitHub fork (${UUID}) does NOT support current GNOME Shell version (${shell_ver})." >&2
-        echo "        Supported versions in downloaded metadata.json: [${supported}]. Skipping installation." >&2
+    if ! check_extension_archive_compatibility "$TMP_ZIP" "$NAME" "$UUID"; then
         rm -f "$TMP_ZIP"
         exit 0
     fi
