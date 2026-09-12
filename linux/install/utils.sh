@@ -154,11 +154,139 @@ except Exception as e:
     return 0
 }
 
+# compare_extension_version <zip_path> [uuid] [display_name] [installed_dir]
+#
+# Inspects metadata.json inside a downloaded extension .zip archive and compares its
+# extension version (via 'version' or 'version-name') with the currently installed version.
+#
+# Behavior:
+# - If EQUAL or OLDER:
+#     Prints "[✓] Extension is already installed and up to date (v<ver>). Ensuring enabled..."
+#     Ensures extension is enabled via gnome-extensions enable.
+#     Removes the downloaded zip archive.
+#     Returns 1 (skip installation).
+# - If NEWER:
+#     Prints "[+] Upgrading <display_name> from v<old_v> to v<new_v>..."
+#     Returns 0 (proceed with installation).
+# - If NEW_INSTALL:
+#     Returns 0 (proceed with installation).
+compare_extension_version() {
+    local zip_path="$1"
+    local uuid="${2:-}"
+    local name="${3:-$uuid}"
+    local installed_dir="${4:-}"
+
+    local cmp_res
+    cmp_res="$(python3 -c "
+import zipfile, json, sys, os, re
+
+zip_path = sys.argv[1]
+target_uuid = sys.argv[2] if len(sys.argv) > 2 else ''
+target_dir = sys.argv[3] if len(sys.argv) > 3 else ''
+
+def parse_version(v):
+    if v is None:
+        return ()
+    v_str = str(v).strip().lstrip('v')
+    try:
+        from packaging.version import parse
+        return parse(v_str)
+    except Exception:
+        pass
+    parts = re.split(r'[-.+_~ ]+', v_str)
+    res = []
+    for p in parts:
+        for s in re.findall(r'\d+|\D+', p):
+            res.append((0, int(s)) if s.isdigit() else (1, str(s).lower()))
+    return tuple(res)
+
+try:
+    with zipfile.ZipFile(zip_path, 'r') as zf:
+        zip_meta = json.loads(zf.read('metadata.json').decode())
+except Exception:
+    print(f'NEW_INSTALL|{target_uuid}')
+    sys.exit(0)
+
+new_uuid = zip_meta.get('uuid') or target_uuid
+new_v = zip_meta.get('version')
+if new_v is None:
+    new_v = zip_meta.get('version-name', '')
+
+candidate_dirs = []
+if target_dir:
+    candidate_dirs.append(target_dir)
+if new_uuid:
+    candidate_dirs.append(os.path.expanduser(f'~/.local/share/gnome-shell/extensions/{new_uuid}'))
+    candidate_dirs.append(f'/usr/share/gnome-shell/extensions/{new_uuid}')
+
+installed_meta = None
+for d in candidate_dirs:
+    mpath = os.path.join(d, 'metadata.json')
+    if os.path.isfile(mpath):
+        try:
+            with open(mpath) as f:
+                installed_meta = json.load(f)
+                break
+        except Exception:
+            pass
+
+if not installed_meta:
+    print(f'NEW_INSTALL|{new_uuid}')
+    sys.exit(0)
+
+inst_v = installed_meta.get('version')
+if inst_v is None:
+    inst_v = installed_meta.get('version-name', '')
+
+p_new = parse_version(new_v)
+p_inst = parse_version(inst_v)
+
+if p_new > p_inst:
+    print(f'NEWER|{inst_v}|{new_v}|{new_uuid}')
+    sys.exit(0)
+elif p_new == p_inst:
+    print(f'EQUAL|{inst_v}|{new_uuid}')
+    sys.exit(1)
+else:
+    print(f'OLDER|{inst_v}|{new_v}|{new_uuid}')
+    sys.exit(1)
+" "$zip_path" "$uuid" "$installed_dir" 2>/dev/null || echo "NEW_INSTALL")"
+
+    local cmp_status="${cmp_res%%|*}"
+    local rest="${cmp_res#*|}"
+
+    local label="$name"
+    [[ -n "$uuid" && "$name" != "$uuid" && "$name" != *"$uuid"* ]] && label="${name} (${uuid})"
+
+    if [[ "$cmp_status" == "EQUAL" || "$cmp_status" == "OLDER" ]]; then
+        local inst_v="${rest%%|*}"
+        local eff_uuid="${rest##*|}"
+        [[ -z "$eff_uuid" ]] && eff_uuid="$uuid"
+
+        local v_display=""
+        [[ -n "$inst_v" ]] && v_display=" (v${inst_v#v})"
+        echo "    [✓] Extension is already installed and up to date${v_display}. Ensuring enabled..."
+        if [[ -n "$eff_uuid" ]]; then
+            gnome-extensions enable "${eff_uuid}" 2>/dev/null || true
+        fi
+        rm -f "$zip_path"
+        return 1
+    elif [[ "$cmp_status" == "NEWER" ]]; then
+        local old_v="${rest%%|*}"
+        local tmp_rest="${rest#*|}"
+        local new_v="${tmp_rest%%|*}"
+
+        echo "    [+] Upgrading ${label} from v${old_v#v} to v${new_v#v}..."
+        return 0
+    fi
+
+    return 0
+}
+
 # install_gnome_extension <uuid> [display_name]
 #
-# Downloads, inspects metadata.json inside the downloaded zip for compatibility,
-# and installs/enables a GNOME Shell extension by its UUID from extensions.gnome.org.
-# If already installed, ensures it is enabled and exits.
+# Downloads, inspects metadata.json inside the downloaded zip for version comparison
+# and GNOME Shell compatibility, and installs/upgrades/enables a GNOME Shell extension.
 install_gnome_extension() {
     local uuid="$1"
     local name="${2:-$uuid}"
@@ -167,13 +295,6 @@ install_gnome_extension() {
 
     local user_ext_dir="${HOME}/.local/share/gnome-shell/extensions/${uuid}"
     local sys_ext_dir="/usr/share/gnome-shell/extensions/${uuid}"
-
-    # If already installed, simply ensure it is enabled and exit
-    if [[ -d "$user_ext_dir" || -d "$sys_ext_dir" ]]; then
-        echo "    [✓] Extension already installed. Ensuring enabled..."
-        gnome-extensions enable "${uuid}" 2>/dev/null || true
-        return 0
-    fi
 
     # Ensure required helper apps if not already in PATH
     local update_flag=()
@@ -226,7 +347,12 @@ except Exception:
         return 1
     fi
 
-    # Check version compatibility from metadata.json inside the downloaded zip before installing
+    # 1. Compare version of downloaded archive against installed copy
+    if ! compare_extension_version "$tmp_zip" "$uuid" "$name"; then
+        return 0
+    fi
+
+    # 2. Check GNOME Shell version compatibility from metadata.json inside the downloaded zip
     if ! check_extension_archive_compatibility "$tmp_zip" "$name" "$uuid"; then
         rm -f "$tmp_zip"
         return 0
@@ -257,4 +383,5 @@ export INSTALL_ROOT
 export -f require_app
 export -f ensure_local_bin_in_path
 export -f check_extension_archive_compatibility
+export -f compare_extension_version
 export -f install_gnome_extension

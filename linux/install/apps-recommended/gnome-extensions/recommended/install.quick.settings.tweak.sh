@@ -62,30 +62,25 @@ SYS_EXT_DIR="/usr/share/gnome-shell/extensions/${UUID}"
 
 echo "[+] Processing GNOME extension: ${NAME} (${UUID})..."
 
-# 1. If already installed at target destination, simply ensure enabled
-if [[ -d "$USER_EXT_DIR" || -d "$SYS_EXT_DIR" ]]; then
-    echo "    [✓] Extension already installed. Ensuring enabled..."
-    gnome-extensions enable "${UUID}" 2>/dev/null || true
-else
-    # Ensure dependencies (curl, python, unzip) if not already in PATH
-    update_flag=()
-    [[ "$SKIP_UPDATE" == "true" ]] && update_flag=("--no-update")
+# Ensure dependencies (curl, python, unzip) if not already in PATH
+update_flag=()
+[[ "$SKIP_UPDATE" == "true" ]] && update_flag=("--no-update")
 
-    if ! command -v curl >/dev/null 2>&1; then
-        require_app "curl" "apps-recommended" "${update_flag[@]}"
-    fi
-    if ! command -v python3 >/dev/null 2>&1; then
-        require_app "python" "apps-recommended" "${update_flag[@]}"
-    fi
-    if ! command -v unzip >/dev/null 2>&1; then
-        require_app "unzip" "apps-recommended" "${update_flag[@]}"
-    fi
+if ! command -v curl >/dev/null 2>&1; then
+    require_app "curl" "apps-recommended" "${update_flag[@]}"
+fi
+if ! command -v python3 >/dev/null 2>&1; then
+    require_app "python" "apps-recommended" "${update_flag[@]}"
+fi
+if ! command -v unzip >/dev/null 2>&1; then
+    require_app "unzip" "apps-recommended" "${update_flag[@]}"
+fi
 
-    shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
-    shell_ver="${shell_ver:-46}"
+shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
+shell_ver="${shell_ver:-46}"
 
-    echo "    Resolving latest GitHub release asset for jstockdale/quick-settings-tweaks..."
-    DOWNLOAD_URL="$(python3 -c "
+echo "    Resolving latest GitHub release asset for jstockdale/quick-settings-tweaks..."
+DOWNLOAD_URL="$(python3 -c "
 import urllib.request, json, sys
 
 api_url = 'https://api.github.com/repos/jstockdale/quick-settings-tweaks/releases/latest'
@@ -103,62 +98,70 @@ except Exception:
 print('https://github.com/jstockdale/quick-settings-tweaks/releases/download/v2.2-offx1.1/quick-settings-tweaks%40offx1.shell-extension.zip')
 ")"
 
-    if [[ -z "$DOWNLOAD_URL" ]]; then
-        echo "    [!] Error: Failed to determine download URL for ${UUID}" >&2
-        exit 1
-    fi
+if [[ -z "$DOWNLOAD_URL" ]]; then
+    echo "    [!] Error: Failed to determine download URL for ${UUID}" >&2
+    exit 1
+fi
 
-    echo "    Downloading extension bundle from GitHub..."
-    TMP_ZIP="$(mktemp --suffix=.zip)"
-    if ! curl -fsSL "$DOWNLOAD_URL" -o "$TMP_ZIP"; then
-        rm -f "$TMP_ZIP"
-        echo "    [!] Error: Failed to download release bundle from GitHub" >&2
-        exit 1
-    fi
+echo "    Downloading extension bundle from GitHub..."
+TMP_ZIP="$(mktemp --suffix=.zip)"
+if ! curl -fsSL "$DOWNLOAD_URL" -o "$TMP_ZIP"; then
+    rm -f "$TMP_ZIP"
+    echo "    [!] Error: Failed to download release bundle from GitHub" >&2
+    exit 1
+fi
 
-    # Check version compatibility from metadata.json inside the downloaded zip before extracting to target dest
-    if ! check_extension_archive_compatibility "$TMP_ZIP" "$NAME" "$UUID"; then
-        rm -f "$TMP_ZIP"
-        exit 0
+configure_settings() {
+    if gsettings list-schemas | grep -q "org.gnome.shell.extensions.quick-settings-tweaks"; then
+        echo "[+] Configuring Quick Settings Tweaker settings..."
+        gsettings set org.gnome.shell.extensions.quick-settings-tweaks media-control-enabled true 2>/dev/null || true
+        gsettings set org.gnome.shell.extensions.quick-settings-tweaks notifications-enabled true 2>/dev/null || true
+        gsettings set org.gnome.shell.extensions.quick-settings-tweaks weather-enabled false 2>/dev/null || true
+        gsettings set org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-enabled false 2>/dev/null || true
+        gsettings set org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-enabled true 2>/dev/null || true
+        gsettings set org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-enabled false 2>/dev/null || true
     fi
+}
 
-    # Version matches: Remove original upstream extension to prevent conflicts
-    ORIGINAL_UUID="quick-settings-tweaks@qwreey"
-    ORIGINAL_USER_DIR="${HOME}/.local/share/gnome-shell/extensions/${ORIGINAL_UUID}"
-    if [[ -d "$ORIGINAL_USER_DIR" ]] || gnome-extensions list 2>/dev/null | grep -q "$ORIGINAL_UUID"; then
-        echo "[+] Removing original upstream extension (${ORIGINAL_UUID}) to prevent conflicts..."
-        gnome-extensions disable "$ORIGINAL_UUID" 2>/dev/null || true
-        gnome-extensions uninstall "$ORIGINAL_UUID" 2>/dev/null || true
-        rm -rf "$ORIGINAL_USER_DIR"
-    fi
+# 1. Compare version of downloaded archive against installed copy
+if ! compare_extension_version "$TMP_ZIP" "$UUID" "$NAME"; then
+    configure_settings
+    exit 0
+fi
 
-    echo "    Metadata verified for GNOME ${shell_ver}. Installing to target destination..."
-    if command -v gnome-extensions >/dev/null 2>&1; then
-        gnome-extensions install -f "$TMP_ZIP" 2>/dev/null || {
-            mkdir -p "$USER_EXT_DIR"
-            unzip -q -o "$TMP_ZIP" -d "$USER_EXT_DIR"
-        }
-    else
+# 2. Check GNOME Shell version compatibility from metadata.json inside the downloaded zip before extracting to target dest
+if ! check_extension_archive_compatibility "$TMP_ZIP" "$NAME" "$UUID"; then
+    rm -f "$TMP_ZIP"
+    exit 0
+fi
+
+# Version matches: Remove original upstream extension to prevent conflicts
+ORIGINAL_UUID="quick-settings-tweaks@qwreey"
+ORIGINAL_USER_DIR="${HOME}/.local/share/gnome-shell/extensions/${ORIGINAL_UUID}"
+if [[ -d "$ORIGINAL_USER_DIR" ]] || gnome-extensions list 2>/dev/null | grep -q "$ORIGINAL_UUID"; then
+    echo "[+] Removing original upstream extension (${ORIGINAL_UUID}) to prevent conflicts..."
+    gnome-extensions disable "$ORIGINAL_UUID" 2>/dev/null || true
+    gnome-extensions uninstall "$ORIGINAL_UUID" 2>/dev/null || true
+    rm -rf "$ORIGINAL_USER_DIR"
+fi
+
+echo "    Metadata verified for GNOME ${shell_ver}. Installing to target destination..."
+if command -v gnome-extensions >/dev/null 2>&1; then
+    gnome-extensions install -f "$TMP_ZIP" 2>/dev/null || {
         mkdir -p "$USER_EXT_DIR"
         unzip -q -o "$TMP_ZIP" -d "$USER_EXT_DIR"
-    fi
-    rm -f "$TMP_ZIP"
+    }
+else
+    mkdir -p "$USER_EXT_DIR"
+    unzip -q -o "$TMP_ZIP" -d "$USER_EXT_DIR"
+fi
+rm -f "$TMP_ZIP"
 
-    if [[ -d "${USER_EXT_DIR}/schemas" ]]; then
-        glib-compile-schemas "${USER_EXT_DIR}/schemas" 2>/dev/null || true
-    fi
-
-    gnome-extensions enable "${UUID}" 2>/dev/null || true
-    echo "    [✓] Successfully installed and enabled: ${NAME}"
+if [[ -d "${USER_EXT_DIR}/schemas" ]]; then
+    glib-compile-schemas "${USER_EXT_DIR}/schemas" 2>/dev/null || true
 fi
 
-# Apply recommended settings if schema is available
-if gsettings list-schemas | grep -q "org.gnome.shell.extensions.quick-settings-tweaks"; then
-    echo "[+] Configuring Quick Settings Tweaker settings..."
-    gsettings set org.gnome.shell.extensions.quick-settings-tweaks media-control-enabled true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.quick-settings-tweaks notifications-enabled true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.quick-settings-tweaks weather-enabled false 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.quick-settings-tweaks volume-mixer-enabled false 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.quick-settings-tweaks dnd-quick-toggle-enabled true 2>/dev/null || true
-    gsettings set org.gnome.shell.extensions.quick-settings-tweaks unsafe-quick-toggle-enabled false 2>/dev/null || true
-fi
+gnome-extensions enable "${UUID}" 2>/dev/null || true
+echo "    [✓] Successfully installed and enabled: ${NAME}"
+
+configure_settings
