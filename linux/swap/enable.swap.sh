@@ -29,7 +29,7 @@ Options:
 Sizing Formula (when --size is omitted):
   - RAM < 2 GB   -> 2 times the amount of RAM
   - RAM 2 - 8 GB -> Equal to the amount of RAM
-  - RAM > 8 GB   -> 4 GB of swap
+  - RAM > 8 GB   -> 8 GB of swap
 EOF
 }
 
@@ -150,9 +150,9 @@ else
         [[ $SWAP_GB -lt 2 ]] && SWAP_GB=2
         echo "    RAM 2 - 8 GB: Guideline recommends 1x RAM -> ${SWAP_GB} GB"
     else
-        # > 8 GB RAM: at least 4 GB of swap
-        SWAP_GB=4
-        echo "    RAM > 8 GB: Guideline recommends at least 4 GB -> ${SWAP_GB} GB"
+        # > 8 GB RAM: 8 GB of swap
+        SWAP_GB=8
+        echo "    RAM > 8 GB: Guideline recommends 8 GB -> ${SWAP_GB} GB"
     fi
     echo "    Calculated swap size: ${SWAP_GB} GB"
 fi
