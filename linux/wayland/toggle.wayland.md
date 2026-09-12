@@ -41,6 +41,19 @@ Execute the following commands to copy your user's `monitors.xml` file into the 
 home directory, ensuring the display settings persist for the login screen:
 
 ```bash
+# Ensure GDM configuration directory exists with correct permissions
+sudo mkdir -p ~gdm/.config
+sudo chown gdm:gdm ~gdm/.config
+sudo chmod 755 ~gdm/.config
+
+# Copy user monitor configuration and set ownership/permissions
 sudo cp ~/.config/monitors.xml ~gdm/.config/monitors.xml
 sudo chown gdm:gdm ~gdm/.config/monitors.xml
+sudo chmod 644 ~gdm/.config/monitors.xml
+```
+
+Alternatively, you can run the helper script in this directory:
+
+```bash
+./copy.monitor.config.sh
 ```

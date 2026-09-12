@@ -1,0 +1,1 @@
+../../../wayland/copy.monitor.config.sh
