@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE=false
+INSTALL_ADD_TO_DESKTOP=false
 
 show_help() {
     cat <<EOF
@@ -17,13 +18,14 @@ Usage: $(basename "$0") [OPTIONS]
 Description:
   Installs both the GNOME Shell Extensions Activator (Extension Manager,
   gnome-shell-extensions, browser connector, and version check bypass)
-  and installs/configures all recommended extensions from the recommended/ directory.
+  and installs/configures recommended extensions from the recommended/ directory.
 
   Completely idempotent and safe to run repeatedly.
 
 Options:
-  --no-update   Skip apt update before installation
-  -h, --help    Show this help message and exit
+  --add-to-desktop  Install and enable 'Add to Desktop' extension (omitted by default)
+  --no-update       Skip apt update before installation
+  -h, --help        Show this help message and exit
 EOF
 }
 
@@ -36,6 +38,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --no-update|--skip-update)
             SKIP_UPDATE=true
+            shift
+            ;;
+        --add-to-desktop|--with-add-to-desktop|--include-add-to-desktop)
+            INSTALL_ADD_TO_DESKTOP=true
             shift
             ;;
         *)
@@ -71,7 +77,14 @@ fi
 echo ""
 echo "[+] Step 2: Installing and configuring recommended GNOME extensions..."
 if [[ -x "${SCRIPT_DIR}/recommended/install.recommended.extensions.sh" ]]; then
-    "${SCRIPT_DIR}/recommended/install.recommended.extensions.sh" ${SKIP_UPDATE:+--no-update}
+    rec_args=()
+    if [[ "$SKIP_UPDATE" == "true" ]]; then
+        rec_args+=("--no-update")
+    fi
+    if [[ "$INSTALL_ADD_TO_DESKTOP" == "true" ]]; then
+        rec_args+=("--add-to-desktop")
+    fi
+    "${SCRIPT_DIR}/recommended/install.recommended.extensions.sh" "${rec_args[@]}"
 else
     echo "[!] Error: Recommended extensions script not found at ${SCRIPT_DIR}/recommended/install.recommended.extensions.sh" >&2
     exit 1

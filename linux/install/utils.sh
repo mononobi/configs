@@ -108,6 +108,102 @@ EOF
     done
 }
 
+# install_gnome_extension <uuid> [display_name]
+#
+# Downloads, installs, and enables a GNOME Shell extension by its UUID from extensions.gnome.org.
+# Automatically ensures curl, python, and unzip dependencies exist via require_app.
+# Completely idempotent: if the extension is already installed, it ensures it is enabled.
+install_gnome_extension() {
+    local uuid="$1"
+    local name="${2:-$uuid}"
+
+    echo "[+] Processing GNOME extension: ${name} (${uuid})..."
+
+    local user_ext_dir="${HOME}/.local/share/gnome-shell/extensions/${uuid}"
+    local sys_ext_dir="/usr/share/gnome-shell/extensions/${uuid}"
+
+    if [[ -d "$user_ext_dir" || -d "$sys_ext_dir" ]]; then
+        echo "    [✓] Extension already installed. Ensuring enabled..."
+        gnome-extensions enable "${uuid}" 2>/dev/null || true
+        return 0
+    fi
+
+    # Ensure required helper apps
+    if [[ "${SKIP_UPDATE:-false}" == "true" ]]; then
+        require_app "curl" "apps-recommended" --no-update
+        require_app "python" "apps-recommended" --no-update
+        require_app "unzip" "apps-recommended" --no-update
+    else
+        require_app "curl" "apps-recommended"
+        require_app "python" "apps-recommended"
+        require_app "unzip" "apps-recommended"
+    fi
+
+    local shell_ver
+    shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
+    shell_ver="${shell_ver:-46}"
+
+    echo "    Querying extensions.gnome.org for GNOME ${shell_ver} bundle..."
+    local download_url
+    download_url="$(python3 -c "
+import urllib.request, json, sys
+
+uuid = sys.argv[1]
+shell_ver = sys.argv[2]
+url = f'https://extensions.gnome.org/extension-info/?uuid={uuid}&shell_version={shell_ver}'
+req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+try:
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        data = json.loads(resp.read().decode())
+        print('https://extensions.gnome.org' + data['download_url'])
+except Exception:
+    try:
+        url_fallback = f'https://extensions.gnome.org/extension-info/?uuid={uuid}'
+        req_fallback = urllib.request.Request(url_fallback, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req_fallback, timeout=10) as resp2:
+            data2 = json.loads(resp2.read().decode())
+            print('https://extensions.gnome.org' + data2['download_url'])
+    except Exception:
+        pass
+" "$uuid" "$shell_ver" 2>/dev/null || true)"
+
+    if [[ -z "$download_url" ]]; then
+        echo "    [!] Warning: Could not resolve download URL for ${uuid}" >&2
+        return 1
+    fi
+
+    local tmp_zip
+    tmp_zip="$(mktemp --suffix=.zip)"
+    if curl -fsSL "$download_url" -o "$tmp_zip" 2>/dev/null; then
+        if command -v gnome-extensions >/dev/null 2>&1; then
+            gnome-extensions install -f "$tmp_zip" 2>/dev/null || {
+                mkdir -p "$user_ext_dir"
+                unzip -q -o "$tmp_zip" -d "$user_ext_dir"
+            }
+        else
+            mkdir -p "$user_ext_dir"
+            unzip -q -o "$tmp_zip" -d "$user_ext_dir"
+        fi
+        rm -f "$tmp_zip"
+
+        if [[ -d "${user_ext_dir}/schemas" ]]; then
+            glib-compile-schemas "${user_ext_dir}/schemas" 2>/dev/null || true
+        fi
+
+        # Ensure extension version validation is disabled so all extensions load cleanly
+        gsettings set org.gnome.shell disable-extension-version-validation true 2>/dev/null || true
+
+        gnome-extensions enable "${uuid}" 2>/dev/null || true
+        echo "    [✓] Successfully installed and enabled: ${name}"
+        return 0
+    else
+        rm -f "$tmp_zip"
+        echo "    [!] Error: Failed to download extension zip for ${uuid}" >&2
+        return 1
+    fi
+}
+
 export INSTALL_ROOT
 export -f require_app
 export -f ensure_local_bin_in_path
+export -f install_gnome_extension
