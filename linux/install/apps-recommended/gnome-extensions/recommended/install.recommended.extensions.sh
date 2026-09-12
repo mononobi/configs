@@ -113,7 +113,13 @@ if [[ "$INSTALL_ADD_TO_DESKTOP" == "true" ]]; then
     run_installer "install.desktop.icons.ng.ding.sh"
 else
     echo ""
-    echo "[i] Skipping 'Add to Desktop' and 'Desktop Icons NG (DING)' extensions (enable with --add-to-desktop flag)"
+    echo "[i] Desktop extensions disabled by default (pass --add-to-desktop to enable)."
+    for desktop_ext in "add-to-desktop@tommimon.github.com" "ding@rastersoft.com"; do
+        if gnome-extensions list 2>/dev/null | grep -Fxq "$desktop_ext"; then
+            echo "    [-] Disabling: ${desktop_ext}..."
+            gnome-extensions disable "$desktop_ext" 2>/dev/null || true
+        fi
+    done
 fi
 
 # 2. Enable and Configure System Extensions
