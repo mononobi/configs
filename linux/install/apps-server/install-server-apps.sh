@@ -40,6 +40,7 @@ SERVER_APPS=(
     "conduit-node"
     "commands"
     "disable-swap"
+    "ufw-rules-server"
 )
 
 show_help() {

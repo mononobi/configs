@@ -45,10 +45,6 @@ sudo userdel -r ubuntu
 
 [SSH Key Management](/linux/key-management/ssh-key-ed25519.md)
 
-## 5. Enable & Configure Firewall:
-
-[UFW](/linux/commands/ufw.txt)
-
-## 6. Install Server Apps:
+## 5. Install Server Apps & Configurations:
 
 [install-server-apps](/linux/install/apps-server/install-server-apps.sh)
