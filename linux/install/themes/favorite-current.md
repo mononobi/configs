@@ -171,6 +171,7 @@ Set it to **3 out of 5** (The middle size) using the **Ctrl + Mouse Wheel**.
 
 > GDM Settings → Fonts:
 - **Scaling Factor:** 1.0
+- **Login Background** [Abstract Blur](./login-background/images/abstract-blur.jpg)
 
 > **Mini PC (2560x1440):**
 
@@ -202,6 +203,7 @@ Set it to **3 out of 5** (The middle size) using the **Ctrl + Mouse Wheel**.
 
 > GDM Settings → Fonts:
 - **Scaling Factor:** 1.0
+- **Login Background** [Tony Webster Blur](./login-background/images/tony-webster-blur.jpg)
 
 > **Laptop (2880x1800):**
 
@@ -234,6 +236,7 @@ Set it to **3 out of 5** (The middle size) using the **Ctrl + Mouse Wheel**.
 
 > GDM Settings → Fonts:
 - **Scaling Factor:** 1.0
+- **Login Background** [Abstract Blur](./login-background/images/abstract-blur.jpg)
 
 > NOTE:
 > On `Ubuntu 26.04` and later, the cursor change through the `Tweaks` and `GDM-Settings` apps
