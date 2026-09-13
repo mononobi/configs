@@ -160,15 +160,17 @@ Rather than duplicating installer scripts:
   recipe instantly benefits both desktop and server setups.
 - **Custom Scripts Supported**: While primarily a profile orchestrator, custom
   server-only scripts and guides can also live directly in `apps-server/` when needed.
-- **Flexible Invocations**: You can run the entire server suite, or append specific
-  app names as arguments:
+- **Flexible Invocations**: You can run the entire server suite, or append additional
+  app names as arguments (arguments are appended to `SERVER_APPS`, not overriding it):
   ```bash
-  # Install the entire server profile
+  # Install the default server profile
   ./linux/install/apps-server/install-server-apps.sh
 
-  # Install only specific tools from the server suite
-  ./linux/install/apps-server/install-server-apps.sh docker nginx redis
+  # Install the default server profile PLUS extra applications
+  ./linux/install/apps-server/install-server-apps.sh fail2ban postgresql
   ```
+  *(To install an individual tool by itself without the rest of the server suite, run*
+  *its script directly as shown in Section 2).*
 
 ---
 
