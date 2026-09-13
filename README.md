@@ -18,7 +18,9 @@ and system services.
   development applications (e.g., Docker, Git, Python, VS Code, Flatpak, UFW).
 - `apps-extra/`: Optional or specialized desktop software (e.g., Brave, Discord,
   Blender, Thunderbird).
-- `apps-server/`: Dedicated server environments, services, and stack configurations.
+- `apps-server/`: Headless server profiles and orchestration. Instead of duplicating
+  scripts, it maintains a curated list of tools from `apps-recommended` and `apps-extra`
+  and installs them using `require_app` (though custom scripts can also live here).
 - `apps-not-needed/`: Deprecated or redundant alternatives kept for reference.
 - `commands/`, `themes/`, `updates-and-configs/`: Standalone shell scripts, desktop
   themes, and update automation.
@@ -147,6 +149,27 @@ The custom category inherits all framework features: automatic script discovery,
 per-subfolder execution context, `sudo` keepalive, `ignore` file skipping, `--no-update`
 forwarding, and summary diagnostics.
 
+### Server Orchestration (`apps-server`)
+
+The `linux/install/apps-server/` directory is designed for headless servers and VMs.
+Rather than duplicating installer scripts:
+- **Curated Manifest**: Defines an array (`SERVER_APPS`) of server packages (Docker,
+  Git, Nginx, Redis, Python, UFW server rules, etc.).
+- **Zero Duplication**: Installs each app via `require_app`, reusing the existing
+  recipes from `apps-recommended/` and `apps-extra/`. Any fix or improvement to an app
+  recipe instantly benefits both desktop and server setups.
+- **Custom Scripts Supported**: While primarily a profile orchestrator, custom
+  server-only scripts and guides can also live directly in `apps-server/` when needed.
+- **Flexible Invocations**: You can run the entire server suite, or append specific
+  app names as arguments:
+  ```bash
+  # Install the entire server profile
+  ./linux/install/apps-server/install-server-apps.sh
+
+  # Install only specific tools from the server suite
+  ./linux/install/apps-server/install-server-apps.sh docker nginx redis
+  ```
+
 ---
 
 ## How to Install What You Want
@@ -168,9 +191,14 @@ Install extra applications:
 ./linux/install/install-extra.sh
 ```
 
-Run a custom category directory using the generic runner:
+Install the curated server suite:
 ```bash
-./linux/install/installer.sh apps-server
+./linux/install/apps-server/install-server-apps.sh
+```
+
+Run any custom category directory using the generic runner:
+```bash
+./linux/install/installer.sh apps-custom
 ```
 
 ### 2. Individual (Single-App) Installation
