@@ -92,9 +92,9 @@ for src in "${file_entries[@]}"; do
 
     # Resolve real file if symlink
     if [[ -L "$src" ]]; then
-        real_file="$(readlink -f "$src")"
-        if [[ ! -f "$real_file" ]]; then
-            echo "[!] Warning: Symlink target for '${cmd_name}' not found (${real_file}), skipping." >&2
+        real_file="$(readlink -f "$src" 2>/dev/null || true)"
+        if [[ -z "$real_file" || ! -f "$real_file" ]]; then
+            echo "[!] Warning: Symlink target for '${cmd_name}' not found (${real_file:-broken}), skipping." >&2
             continue
         fi
         cp "$real_file" "$dest"
@@ -113,3 +113,4 @@ echo ""
 echo "================================================================================"
 echo "[✓] Finished: ${installed_count} installed, ${skipped_count} skipped (already existed in ${DEST_DIR})"
 echo "================================================================================"
+exit 0
