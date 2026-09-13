@@ -74,12 +74,14 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 
 ### 3. GNOME Extension Helpers
 - **`install_gnome_extension <uuid> [display_name]`**: Queries extensions.gnome.org API
-  for the current GNOME Shell version, downloads the bundle, verifies
-  compatibility, compiles schemas, and enables the extension.
+  for the host GNOME Shell version, downloads the candidate archive, inspects its
+  `metadata.json` to verify actual Shell compatibility and version before installing,
+  compiles schemas, and enables the extension.
 - **`compare_extension_version <zip_path> [uuid]`**: Compares downloaded extension version
   against the installed copy to avoid downgrading or unnecessary reinstallations.
 - **`check_extension_archive_compatibility <zip_path>`**: Inspects `metadata.json` inside
-  downloaded zip to confirm host GNOME Shell version compatibility before installation.
+  downloaded zip to confirm host GNOME Shell version compatibility before installation
+  (critical because the GNOME API falls back to the latest build if unsupported).
 
 ---
 
