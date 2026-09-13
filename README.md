@@ -49,25 +49,37 @@ The framework centers around a modular runner and individual self-contained reci
 
 ---
 
-## Managing Dependencies (`require_app`)
+## Shared Utilities & Dependency Management (`utils.sh`)
 
-Applications often depend on shared utilities (such as Flatpak, Python, Curl, or Unzip).
-The framework avoids duplicate installations or hardcoded package managers through a
-shared helper located in `linux/install/utils.sh`:
+The framework provides common helpers in `linux/install/utils.sh` to keep individual
+scripts minimal, robust, and DRY:
 
-```bash
-require_app <app_name> [category] [extra_args...]
-```
-
-- **Lookup Order**: Checks `apps-recommended/<app_name>`, then `apps-extra/<app_name>`.
+### 1. `require_app <app_name> [category] [extra_args...]`
+Resolves and executes an application installer on demand:
+- **Flexible Category**: Can target any category folder (e.g., `apps-recommended`,
+  `apps-extra`, or any custom category like `apps-custom`).
+- **Default Fallback**: If `category` is omitted, checks `apps-recommended` then
+  `apps-extra`.
 - **Deduplication**: Scripts inspect if a command exists before requiring it:
   ```bash
   if ! command -v flatpak >/dev/null 2>&1; then
       require_app "flatpak" "apps-recommended"
   fi
   ```
-- **Flag Propagation**: Global flags such as `--no-update` are forwarded automatically
-  to satisfy nested dependencies without redundant package index updates.
+- **Flag Propagation**: Global flags such as `--no-update` are forwarded automatically.
+
+### 2. `ensure_local_bin_in_path`
+Ensures `~/.local/bin` exists, exports it to current process `$PATH`, and permanently
+persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
+
+### 3. GNOME Extension Helpers
+- **`install_gnome_extension <uuid> [display_name]`**: Queries extensions.gnome.org API
+  for the current GNOME Shell version, downloads the bundle, verifies
+  compatibility, compiles schemas, and enables the extension.
+- **`compare_extension_version <zip_path> [uuid]`**: Compares downloaded extension version
+  against the installed copy to avoid downgrading or unnecessary reinstallations.
+- **`check_extension_archive_compatibility <zip_path>`**: Inspects `metadata.json` inside
+  downloaded zip to confirm host GNOME Shell version compatibility before installation.
 
 ---
 
@@ -109,6 +121,29 @@ To add a new tool or application:
 4. Make the script executable: `chmod +x install.my-tool.sh`.
 5. (Optional) If the script should only run on demand and not during batch runs,
    create an empty `ignore` file: `touch linux/install/apps-recommended/my-tool/ignore`.
+
+### Creating a Custom Category Folder
+
+The runner framework is fully category-agnostic. You can add a completely new folder
+next to the existing categories (e.g., `linux/install/apps-dev` or `apps-workstation`):
+
+1. Create your custom directory:
+   ```bash
+   mkdir -p linux/install/apps-dev/my-custom-tool
+   ```
+2. Place an installer script inside (e.g., `install.my-custom-tool.sh`).
+3. Run the entire category using `installer.sh`:
+   ```bash
+   ./linux/install/installer.sh apps-dev
+   ```
+4. Other scripts can depend on tools in your custom category via `require_app`:
+   ```bash
+   require_app "my-custom-tool" "apps-dev"
+   ```
+
+The custom category inherits all framework features: automatic script discovery,
+per-subfolder execution context, `sudo` keepalive, `ignore` file skipping, `--no-update`
+forwarding, and summary diagnostics.
 
 ---
 
