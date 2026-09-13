@@ -71,19 +71,16 @@ sudo ufw default deny incoming
 echo "[+] Setting default outgoing policy to allow..."
 sudo ufw default allow outgoing
 
-# allow incoming ssh connection to server (both are the same):
-echo "[+] Allowing SSH (OpenSSH / port 22)..."
-sudo ufw allow OpenSSH
+# allow incoming ssh connection to server (port 22):
+echo "[+] Allowing SSH (port 22)..."
 sudo ufw allow 22
 
-# allow incoming connections to http port (both are the same):
+# allow incoming connections to http port (port 80):
 echo "[+] Allowing HTTP (port 80)..."
-sudo ufw allow http
 sudo ufw allow 80
 
-# allow incoming connections to https port (both are the same):
+# allow incoming connections to https port (port 443):
 echo "[+] Allowing HTTPS (port 443)..."
-sudo ufw allow https
 sudo ufw allow 443
 
 # allow incoming connections to openvpn default tcp port:

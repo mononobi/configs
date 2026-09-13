@@ -105,7 +105,6 @@ if command -v ufw >/dev/null 2>&1; then
     sudo ufw allow from 172.16.0.0/12
     sudo ufw allow from 10.0.0.0/8
     # Allow access to Grafana dashboard and Prometheus from local machine through SSH tunneling
-    sudo ufw allow OpenSSH
     sudo ufw allow 22
 else
     echo "[!] UFW not found, skipping firewall rules."

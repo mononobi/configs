@@ -127,7 +127,6 @@ and to allow access to the Grafana dashboard and Prometheus from your local mach
 sudo ufw allow from 172.16.0.0/12
 sudo ufw allow from 10.0.0.0/8
 # Allow access to Grafana dashboard and Prometheus from your local machine through SSH tunneling
-sudo ufw allow OpenSSH
 sudo ufw allow 22
 ```
 
