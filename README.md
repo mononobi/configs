@@ -115,17 +115,12 @@ You can run entire suites or install individual applications on demand.
 
 ### 1. Batch Installation
 
-Run all recommended applications:
+Install all recommended applications:
 ```bash
 ./linux/install/install-recommended.sh
 ```
 
-Skip upfront APT repository update to save time:
-```bash
-./linux/install/install-recommended.sh --no-update
-```
-
-Install optional/extra applications:
+Install extra applications:
 ```bash
 ./linux/install/install-extra.sh
 ```
@@ -142,8 +137,8 @@ Every application script is standalone and can be run independently at any time:
 # Install Docker
 cd linux/install/apps-recommended/docker && ./install.docker.sh
 
-# Install VS Code
-cd linux/install/apps-recommended/vscode && ./install.vscode.sh
+# Install VS Code & skip upfront APT repository update to save time
+cd linux/install/apps-recommended/vscode && ./install.vscode.sh --no-update
 
 # Configure UFW firewall rules for a local network
 cd linux/install/apps-recommended/ufw-rules-local && ./set.ufw.rules.local.sh
