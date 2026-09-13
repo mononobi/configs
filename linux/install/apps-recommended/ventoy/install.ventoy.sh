@@ -101,12 +101,9 @@ else
         TARBALL="$LOCAL_TAR"
     else
         echo "[+] Fetching latest Ventoy release URL from GitHub..."
-        if ! command -v curl >/dev/null 2>&1 || ! command -v tar >/dev/null 2>&1; then
-            if [[ "$SKIP_UPDATE" != "true" ]]; then
-                sudo apt-get update
-            fi
-            sudo apt-get install -y curl tar ca-certificates
-        fi
+        require_app "curl" "apps-recommended"
+        require_app "tar" "apps-recommended"
+        require_app "ca-certificates" "apps-recommended"
 
         LATEST_URL=$(curl -fsSL https://api.github.com/repos/ventoy/Ventoy/releases/latest 2>/dev/null | grep -Po '"browser_download_url":\s*"\K[^"]*linux\.tar\.gz' | head -n 1 || true)
         if [[ -z "$LATEST_URL" ]]; then
