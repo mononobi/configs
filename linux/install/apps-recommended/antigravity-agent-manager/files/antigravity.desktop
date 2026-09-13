@@ -3,8 +3,8 @@ Version=1.0
 Type=Application
 Name=Antigravity Manager
 Comment=Standalone AI Agent Orchestrator
-Exec=sh -c '/home/mono/.antigravity-manager/Antigravity-x64/antigravity --class=antigravity %F; pkill -f antigravity'
-Path=/home/mono/.antigravity-manager/Antigravity-x64/
+Exec=sh -c '/home/USER_NAME/.antigravity-manager/Antigravity-x64/antigravity --class=antigravity %F; pkill -f antigravity'
+Path=/home/USER_NAME/.antigravity-manager/Antigravity-x64/
 Icon=antigravity
 Terminal=false
 StartupNotify=false
