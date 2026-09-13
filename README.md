@@ -43,6 +43,9 @@ The framework centers around a modular runner and individual self-contained reci
 6. **Execution Logging & Summary**: The runner captures stdout/stderr per application,
    reports clear visual progress, and prints an end-of-run summary with exact failure
    diagnostics if an error occurs.
+7. **Single Upfront APT Update**: Batch runners perform a single `apt update` at the start
+   and pass `--no-update` to every subscript by default. This avoids redundant index
+   downloads for each app, unless an app adds a custom repository that requires refreshing.
 
 ---
 
@@ -114,6 +117,9 @@ To add a new tool or application:
 You can run entire suites or install individual applications on demand.
 
 ### 1. Batch Installation
+
+> **Note**: Batch scripts automatically pass `--no-update` to each installer so
+> `apt update` only runs once at the beginning, unless an app adds a custom repository.
 
 Install all recommended applications:
 ```bash
