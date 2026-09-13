@@ -4,9 +4,12 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 ARCHIVE_PATH=""
 DOWNLOAD_URL=""
-
+FORCE=false
 SKIP_UPDATE=false
 
 show_help() {
@@ -25,6 +28,7 @@ Arguments:
 Options:
   -u, --url URL         Specify download URL
   -f, --file PATH       Specify local archive path
+  -F, --force           Force re-download and reinstall even if already up to date
   --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
@@ -40,6 +44,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        -F|--force)
+            FORCE=true
+            shift
             ;;
         --no-update|--skip-update)
             SKIP_UPDATE=true
@@ -93,10 +101,12 @@ else
         TARBALL="$LOCAL_TAR"
     else
         echo "[+] Fetching latest Ventoy release URL from GitHub..."
-        if [[ "$SKIP_UPDATE" != "true" ]]; then
-            sudo apt-get update
+        if ! command -v curl >/dev/null 2>&1 || ! command -v tar >/dev/null 2>&1; then
+            if [[ "$SKIP_UPDATE" != "true" ]]; then
+                sudo apt-get update
+            fi
+            sudo apt-get install -y curl tar ca-certificates
         fi
-        sudo apt-get install -y curl tar ca-certificates
 
         LATEST_URL=$(curl -fsSL https://api.github.com/repos/ventoy/Ventoy/releases/latest 2>/dev/null | grep -Po '"browser_download_url":\s*"\K[^"]*linux\.tar\.gz' | head -n 1 || true)
         if [[ -z "$LATEST_URL" ]]; then
@@ -108,6 +118,23 @@ else
             echo "[!] Error: No download URL provided."
             exit 1
         fi
+
+        LATEST_VERSION=$(echo "$LATEST_URL" | grep -Po 'ventoy-\K[0-9.]+(?=-linux\.tar\.gz)' || true)
+        CURRENT_VERSION=""
+        if [[ -f "$VENTOY_DIR/ventoy/version" ]]; then
+            CURRENT_VERSION=$(tr -d '[:space:]' < "$VENTOY_DIR/ventoy/version" 2>/dev/null || true)
+        fi
+
+        if [[ "$FORCE" != "true" && -n "$CURRENT_VERSION" && -n "$LATEST_VERSION" && "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
+            if [[ -x "$VENTOY_DIR/VentoyGUI.x86_64" && -f "$HOME/.local/share/applications/ventoy.desktop" ]]; then
+                echo "[✓] Ventoy is already installed and up to date (v${CURRENT_VERSION})."
+                ensure_local_bin_in_path
+                ln -sf "$VENTOY_DIR/VentoyGUI.x86_64" "$HOME/.local/bin/ventoy-gui"
+                ln -sf "$VENTOY_DIR/VentoyWeb.sh" "$HOME/.local/bin/ventoy-web"
+                exit 0
+            fi
+        fi
+
         echo "[+] Downloading Ventoy from $LATEST_URL..."
         curl -fsSL "$LATEST_URL" -o "$TEMP_DIR/ventoy.tar.gz"
         TARBALL="$TEMP_DIR/ventoy.tar.gz"
@@ -116,41 +143,65 @@ fi
 
 # 2. Extract into ~/.local/share/ventoy/ventoy-current
 echo "[+] Preparing directory at $VENTOY_DIR..."
-mkdir -p "$VENTOY_DIR"
+mkdir -p "$VENTOY_BASE"
 
-echo "[+] Extracting archive into $VENTOY_DIR..."
-tar -xzf "$TARBALL" -C "$VENTOY_DIR" --strip-components=1
+EXTRACT_TEMP="$TEMP_DIR/extracted"
+mkdir -p "$EXTRACT_TEMP"
+echo "[+] Extracting archive..."
+tar -xzf "$TARBALL" -C "$EXTRACT_TEMP"
+
+# Locate extracted directory (handles both ./ventoy-X.Y.Z and ventoy-X.Y.Z)
+EXTRACTED_DIR=$(find "$EXTRACT_TEMP" -mindepth 1 -maxdepth 2 -type d -name "ventoy-*" | head -n 1)
+
+if [[ -n "$EXTRACTED_DIR" && -f "$EXTRACTED_DIR/VentoyGUI.x86_64" ]]; then
+    SOURCE_DIR="$EXTRACTED_DIR"
+elif [[ -f "$EXTRACT_TEMP/VentoyGUI.x86_64" ]]; then
+    SOURCE_DIR="$EXTRACT_TEMP"
+else
+    echo "[!] Error: VentoyGUI.x86_64 not found in extracted archive." >&2
+    exit 1
+fi
+
+mkdir -p "$VENTOY_DIR"
+cp -a "$SOURCE_DIR/." "$VENTOY_DIR/"
 
 # 3. Make executables runnable
-if [[ -f "$VENTOY_DIR/VentoyGUI.x86_64" ]]; then
-    chmod 755 "$VENTOY_DIR/VentoyGUI.x86_64"
-fi
-if [[ -f "$VENTOY_DIR/VentoyWeb.sh" ]]; then
-    chmod 755 "$VENTOY_DIR/VentoyWeb.sh"
-fi
-if [[ -f "$VENTOY_DIR/Ventoy2Disk.sh" ]]; then
-    chmod 755 "$VENTOY_DIR/Ventoy2Disk.sh"
-fi
+chmod 755 "$VENTOY_DIR/VentoyGUI."* 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/VentoyWeb.sh" 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/Ventoy2Disk.sh" 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/CreatePersistentImg.sh" 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/ExtendPersistentImg.sh" 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/VentoyPlugson.sh" 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/VentoyVlnk.sh" 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/tool/"*"/Ventoy2Disk."* 2>/dev/null || true
+chmod 755 "$VENTOY_DIR/tool/"*"/xzcat" 2>/dev/null || true
 
 # 4. Copy icon to ~/.local/share/icons
 mkdir -p "$HOME/.local/share/icons"
 if [[ -f "$SCRIPT_DIR/files/ventoy.png" ]]; then
     echo "[+] Copying icon to $HOME/.local/share/icons/ventoy.png..."
     cp "$SCRIPT_DIR/files/ventoy.png" "$HOME/.local/share/icons/ventoy.png"
+    gtk-update-icon-cache -f -t "$HOME/.local/share/icons" 2>/dev/null || true
 fi
 
 # 5. Copy and customize .desktop file in ~/.local/share/applications
 mkdir -p "$HOME/.local/share/applications"
 if [[ -f "$SCRIPT_DIR/files/ventoy.desktop" ]]; then
     echo "[+] Configuring $HOME/.local/share/applications/ventoy.desktop with absolute path..."
-    # Replace USER_NAME or existing Exec path with exact current user path
-    sed "s|^Exec=.*|Exec=${VENTOY_DIR}/VentoyGUI.x86_64|g" "$SCRIPT_DIR/files/ventoy.desktop" > "$HOME/.local/share/applications/ventoy.desktop"
+    sed -e "s|/home/USER_NAME|${HOME}|g" \
+        -e "s|^Exec=.*|Exec=${VENTOY_DIR}/VentoyGUI.x86_64|g" \
+        -e "s|^Path=.*|Path=${VENTOY_DIR}|g" \
+        "$SCRIPT_DIR/files/ventoy.desktop" > "$HOME/.local/share/applications/ventoy.desktop"
+
+    if ! grep -q "^Path=" "$HOME/.local/share/applications/ventoy.desktop"; then
+        sed -i "/^Exec=/a Path=${VENTOY_DIR}" "$HOME/.local/share/applications/ventoy.desktop"
+    fi
     chmod 644 "$HOME/.local/share/applications/ventoy.desktop"
     update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
 fi
 
-# 6. Create user bin symlink for CLI/terminal convenience if ~/.local/bin exists or can be used
-mkdir -p "$HOME/.local/bin"
+# 6. Create user bin symlink for CLI/terminal convenience
+ensure_local_bin_in_path
 ln -sf "$VENTOY_DIR/VentoyGUI.x86_64" "$HOME/.local/bin/ventoy-gui"
 ln -sf "$VENTOY_DIR/VentoyWeb.sh" "$HOME/.local/bin/ventoy-web"
 

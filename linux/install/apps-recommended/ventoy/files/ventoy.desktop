@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=Ventoy
 Exec=/home/USER_NAME/.local/share/ventoy/ventoy-current/VentoyGUI.x86_64
+Path=/home/USER_NAME/.local/share/ventoy/ventoy-current
 Terminal=false
 Type=Application
 Icon=ventoy
-StartupWMClass=Ventoy
+StartupWMClass=Ventoy2Disk.gtk3

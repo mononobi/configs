@@ -7,6 +7,7 @@ set -euo pipefail
 
 # Resolve script directory and source asset paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 FILES_DIR="${SCRIPT_DIR}/files"
 DESKTOP_SRC="${FILES_DIR}/antigravity.desktop"
 ICON_SRC="${FILES_DIR}/antigravity.png"
@@ -22,7 +23,9 @@ DESKTOP_EXEC="sh -c '${INSTALL_DIR}/Antigravity-x64/antigravity --class=antigrav
 DESKTOP_PATH="${INSTALL_DIR}/Antigravity-x64/"
 
 DRY_RUN=false
+FORCE=false
 DOWNLOAD_URL=""
+CUSTOM_URL=false
 
 SKIP_UPDATE=false
 
@@ -32,6 +35,7 @@ Usage: $(basename "$0") [OPTIONS] [DOWNLOAD_URL]
 
 Installs Antigravity Agent Manager (Antigravity v2).
 If DOWNLOAD_URL is omitted, the latest stable release is automatically detected.
+If already installed at the latest version, skips re-downloading.
 
 Arguments:
   [DOWNLOAD_URL]    Optional direct URL to the Antigravity tarball (.tar.gz).
@@ -39,6 +43,7 @@ Arguments:
 
 Options:
   -u, --url <URL>   Specify direct download URL for Antigravity .tar.gz
+  -F, --force       Force re-download and re-installation even if up to date
   -n, --dry-run     Run without modifying files or system state (no side effects)
   --no-update       Skip apt update before installation
   -h, --help        Display this help message and exit
@@ -52,8 +57,13 @@ while [[ $# -gt 0 ]]; do
             DRY_RUN=true
             shift
             ;;
+        -F|--force)
+            FORCE=true
+            shift
+            ;;
         -u|--url)
             DOWNLOAD_URL="$2"
+            CUSTOM_URL=true
             shift 2
             ;;
         -h|--help)
@@ -76,18 +86,59 @@ while [[ $# -gt 0 ]]; do
                 exit 1
             fi
             DOWNLOAD_URL="$1"
+            CUSTOM_URL=true
             shift
             ;;
     esac
 done
 
+get_installed_version() {
+    local version_file="${INSTALL_DIR}/.version"
+    if [[ -f "$version_file" ]]; then
+        cat "$version_file" | tr -d '[:space:]'
+        return 0
+    fi
+
+    local asar_file="${INSTALL_DIR}/Antigravity-x64/resources/app.asar"
+    if [[ -f "$asar_file" ]] && command -v python3 >/dev/null 2>&1; then
+        python3 -c "
+import struct, json, sys
+try:
+    with open(sys.argv[1], 'rb') as f:
+        f.seek(4)
+        header_size = struct.unpack('<I', f.read(4))[0]
+        f.seek(16)
+        header_bytes = f.read(header_size - 8)
+        header = json.loads(header_bytes.decode('utf-8'))
+        pkg_info = header.get('files', {}).get('package.json', {})
+        if 'offset' in pkg_info and 'size' in pkg_info:
+            f.seek(16 + header_size - 8 + int(pkg_info['offset']))
+            pkg = json.loads(f.read(pkg_info['size']).decode('utf-8'))
+            print(pkg.get('version', ''))
+except Exception:
+    pass
+" "$asar_file" 2>/dev/null || true
+    fi
+}
+
 # Auto-detect latest Antigravity v2 release if not provided manually
-if [[ -z "$DOWNLOAD_URL" ]]; then
-    echo "[+] Auto-detecting latest Antigravity v2 download URL..."
+LATEST_VERSION=""
+if [[ "$CUSTOM_URL" != "true" ]]; then
+    echo "[+] Auto-detecting latest Antigravity v2 release..."
     MANIFEST_URL="https://antigravity-hub-auto-updater-974169037036.us-central1.run.app/manifest/latest-x64-linux.yml"
-    BASE_URL=$(curl -fsSL "$MANIFEST_URL" 2>/dev/null | grep -Po 'https://[^\s]+/linux-x64/' | head -n 1 || true)
+    MANIFEST_DATA=$(curl -fsSL "$MANIFEST_URL" 2>/dev/null || true)
+    LATEST_VERSION=$(echo "$MANIFEST_DATA" | grep -Po '^version:\s*\K[0-9.]+' | head -n 1 || true)
+    BASE_URL=$(echo "$MANIFEST_DATA" | grep -Po 'https://[^\s]+/linux-x64/' | head -n 1 || true)
     if [[ -n "$BASE_URL" ]]; then
         DOWNLOAD_URL="${BASE_URL}Antigravity.tar.gz"
+    fi
+
+    CURRENT_VERSION=$(get_installed_version)
+    if [[ "$FORCE" != "true" && -n "$CURRENT_VERSION" && -n "$LATEST_VERSION" && "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
+        if [[ -x "${INSTALL_DIR}/Antigravity-x64/antigravity" && -f "$DEST_DESKTOP" ]]; then
+            echo "[✓] Antigravity Agent Manager is already installed and up to date (v${CURRENT_VERSION})."
+            exit 0
+        fi
     fi
 fi
 
@@ -208,6 +259,18 @@ set_desktop_attribute "$DEST_DESKTOP" "Path" "$DESKTOP_PATH"
 # Step 7: Copy application icon (.png)
 run_cmd mkdir -p "$ICON_DIR"
 run_cmd cp "$ICON_SRC" "${ICON_DIR}/"
+
+# Step 8: Record installed version and refresh desktop databases
+if [[ "$DRY_RUN" != true ]]; then
+    if [[ -n "$LATEST_VERSION" ]]; then
+        echo "$LATEST_VERSION" > "${INSTALL_DIR}/.version"
+    else
+        INSTALLED_VER=$(get_installed_version)
+        [[ -n "$INSTALLED_VER" ]] && echo "$INSTALLED_VER" > "${INSTALL_DIR}/.version"
+    fi
+    update-desktop-database "$APP_DIR" 2>/dev/null || true
+    gtk-update-icon-cache -f -t "$ICON_DIR" 2>/dev/null || true
+fi
 
 if [[ "$DRY_RUN" == true ]]; then
     echo "=== Dry-run completed successfully (no side effects) ==="
