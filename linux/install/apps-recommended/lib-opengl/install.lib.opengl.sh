@@ -11,7 +11,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs OpenGL and Mesa GL runtime libraries via APT.
+  Installs freeglut OpenGL development library (libglut-dev) via APT.
 
 Options:
   --no-update   Skip apt update before installation
@@ -43,6 +43,7 @@ echo "[+] Starting installation/setup for lib-opengl..."
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y libgl1-mesa-glx libgl1-mesa-dri
+
+sudo apt-get install -y libglut-dev
 
 echo "[✓] lib-opengl setup completed successfully!"
