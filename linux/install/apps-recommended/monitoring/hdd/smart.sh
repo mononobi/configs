@@ -43,26 +43,23 @@ pause() {
 
 get_drive_list() {
     # HARDCODED DRIVE LIST
-    # Based on User Setup (2x Toshiba HDD, 1x Samsung SATA SSD, 1x Samsung NVMe)
+    # Based on User Setup (2x Toshiba HDD, 1x Samsung NVMe)
 
     DRIVES=(
         "/dev/disk/by-id/ata-TOSHIBA_MG09ACA18TE_62X0A10RFJDH"
         "/dev/disk/by-id/ata-TOSHIBA_MG09ACA18TE_94G0A0T8FJDH"
-        "/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNJ0R524883Y"
         "/dev/nvme0"
     )
 
     MODELS=(
         "Toshiba MG09 18TB #1 (Movies/Files)"
         "Toshiba MG09 18TB #2 (Movies/Files)"
-        "Samsung 870 EVO 500GB (Plex Metadata)"
         "Samsung 990 EVO 2TB (OS/Home)"
     )
 
     TYPES=(
         "HDD"
         "HDD"
-        "SSD"
         "NVMe"
     )
 }
