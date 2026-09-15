@@ -36,9 +36,13 @@ sudo cp files/ventoy.desktop /usr/share/applications
 
 sudo chmod 644 /usr/share/applications/ventoy.desktop
 
-# copy the 'files/ventoy.png' icon image into '/usr/share/pixmaps':
+# create the icon directory if it does not exist:
 
-sudo cp files/ventoy.png /usr/share/pixmaps
+sudo mkdir -p /usr/share/icons/hicolor/512x512/apps
+
+# copy the icon image:
+
+sudo cp files/ventoy.png /usr/share/icons/hicolor/512x512/apps
 
 # execute this to make the app file executable:
 

@@ -31,9 +31,13 @@ mv ~/.local/share/ventoy/ventoy-X.Y.Z ~/.local/share/ventoy/ventoy-current
 
 cp files/ventoy.desktop ~/.local/share/applications
 
-# copy the 'files/ventoy.png' icon image into '~/.local/share/icons':
+# create the icon directory if it does not exist:
 
-cp files/ventoy.png ~/.local/share/icons
+mkdir -p ~/.local/share/icons/hicolor/512x512/apps
+
+# copy the icon image:
+
+cp files/ventoy.png ~/.local/share/icons/hicolor/512x512/apps
 
 # execute this to make the app file executable:
 
