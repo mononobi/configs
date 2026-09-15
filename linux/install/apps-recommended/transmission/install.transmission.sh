@@ -11,7 +11,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Transmission BitTorrent client via official Transmission PPA.
+  Installs Transmission BitTorrent client via APT.
 
 Options:
   --no-update   Skip apt update before installation
@@ -40,8 +40,6 @@ done
 
 echo "[+] Starting installation/setup for transmission..."
 
-sudo add-apt-repository -y ppa:transmissionbt/ppa
-sudo apt-get update
-sudo apt-get install -y transmission transmission-gtk
+sudo apt-get install -y transmission
 
 echo "[✓] transmission setup completed successfully!"
