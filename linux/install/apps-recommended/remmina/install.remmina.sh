@@ -11,7 +11,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Remmina remote desktop client and plugins via official Remmina PPA.
+  Installs Remmina remote desktop client.
 
 Options:
   --no-update   Skip apt update before installation
@@ -40,8 +40,6 @@ done
 
 echo "[+] Starting installation/setup for remmina..."
 
-sudo add-apt-repository -y ppa:remmina-ppa-team/remmina-next
-sudo apt-get update
-sudo apt-get install -y remmina remmina-plugin-rdp remmina-plugin-secret remmina-plugin-vnc
+sudo apt-get install -y remmina
 
 echo "[✓] remmina setup completed successfully!"
