@@ -18,7 +18,7 @@ Usage: $(basename "$0") [OPTIONS] [ARCHIVE_OR_URL]
 
 Description:
   Installs Ventoy multiboot USB creator locally in ~/.local/share/ventoy/ventoy-current.
-  Copies ventoy.png to ~/.local/share/icons, configures ventoy.desktop with the user's
+  Copies ventoy.png to ~/.local/share/icons/hicolor/512x512/apps, configures ventoy.desktop with the user's
   absolute path in ~/.local/share/applications, and makes the GUI launcher executable.
 
 Arguments:
@@ -173,10 +173,10 @@ chmod 755 "$VENTOY_DIR/VentoyVlnk.sh" 2>/dev/null || true
 chmod 755 "$VENTOY_DIR/tool/"*"/Ventoy2Disk."* 2>/dev/null || true
 chmod 755 "$VENTOY_DIR/tool/"*"/xzcat" 2>/dev/null || true
 
-# 4. Copy icon to ~/.local/share/icons
+# 4. Copy icon to ~/.local/share/icons/hicolor/512x512/apps
 mkdir -p "$HOME/.local/share/icons"
 if [[ -f "$SCRIPT_DIR/files/ventoy.png" ]]; then
-    echo "[+] Copying icon to $HOME/.local/share/icons/ventoy.png..."
+    echo "[+] Copying icon to $HOME/.local/share/icons/hicolor/512x512/apps/ventoy.png..."
     cp "$SCRIPT_DIR/files/ventoy.png" "$HOME/.local/share/icons/ventoy.png"
     mkdir -p "$HOME/.local/share/icons/hicolor/512x512/apps"
     cp "$SCRIPT_DIR/files/ventoy.png" "$HOME/.local/share/icons/hicolor/512x512/apps/ventoy.png"
@@ -206,4 +206,4 @@ ln -sf "$VENTOY_DIR/VentoyWeb.sh" "$HOME/.local/bin/ventoy-web"
 
 echo "[✓] Ventoy successfully installed to: $VENTOY_DIR"
 echo "[✓] Desktop launcher created at: $HOME/.local/share/applications/ventoy.desktop"
-echo "[✓] Icon placed at: $HOME/.local/share/icons/ventoy.png"
+echo "[✓] Icon placed at: $HOME/.local/share/icons/hicolor/512x512/apps/ventoy.png"

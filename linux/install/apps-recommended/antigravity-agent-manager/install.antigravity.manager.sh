@@ -17,6 +17,7 @@ INSTALL_DIR="${HOME}/.antigravity-manager"
 APP_DIR="${HOME}/.local/share/applications"
 ICON_DIR="${HOME}/.local/share/icons"
 DEST_DESKTOP="${APP_DIR}/antigravity.desktop"
+DEST_ICON="${ICON_DIR}/hicolor/512x512/apps/antigravity.png"
 
 # Dynamic values for .desktop entry based on user's $HOME
 DESKTOP_EXEC="sh -c '${INSTALL_DIR}/Antigravity-x64/antigravity --class=antigravity %F; pkill -f antigravity'"
@@ -189,6 +190,7 @@ echo "Install Dir  : ${INSTALL_DIR}"
 echo "Desktop Src  : ${DESKTOP_SRC}"
 echo "Desktop Dest : ${DEST_DESKTOP}"
 echo "Icon Src     : ${ICON_SRC}"
+echo "Icon Dest    : ${DEST_ICON}"
 echo "==========================================="
 
 # Validate source assets exist
@@ -261,7 +263,7 @@ run_cmd mkdir -p "$ICON_DIR"
 run_cmd cp "$ICON_SRC" "${ICON_DIR}/"
 HICOLOR_DIR="${ICON_DIR}/hicolor"
 run_cmd mkdir -p "${HICOLOR_DIR}/512x512/apps"
-run_cmd cp "$ICON_SRC" "${HICOLOR_DIR}/512x512/apps/antigravity.png"
+run_cmd cp "$ICON_SRC" "$DEST_ICON"
 
 # Step 8: Record installed version and refresh desktop databases
 if [[ "$DRY_RUN" != true ]]; then
@@ -278,5 +280,7 @@ fi
 if [[ "$DRY_RUN" == true ]]; then
     echo "=== Dry-run completed successfully (no side effects) ==="
 else
-    echo "=== Antigravity Agent Manager installation completed successfully! ==="
+    echo "[✓] Antigravity Agent Manager successfully installed to: ${INSTALL_DIR}"
+    echo "[✓] Desktop launcher created at: ${DEST_DESKTOP}"
+    echo "[✓] Icon placed at: ${DEST_ICON}"
 fi
