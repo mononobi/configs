@@ -37,6 +37,8 @@ Copy the app icon:
 
 ```bash
 cp files/antigravity.png ~/.local/share/icons/
+mkdir -p ~/.local/share/icons/hicolor/512x512/apps
+cp files/antigravity.png ~/.local/share/icons/hicolor/512x512/apps/
 ```
 
 ## Important

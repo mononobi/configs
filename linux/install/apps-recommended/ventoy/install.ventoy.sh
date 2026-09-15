@@ -178,7 +178,9 @@ mkdir -p "$HOME/.local/share/icons"
 if [[ -f "$SCRIPT_DIR/files/ventoy.png" ]]; then
     echo "[+] Copying icon to $HOME/.local/share/icons/ventoy.png..."
     cp "$SCRIPT_DIR/files/ventoy.png" "$HOME/.local/share/icons/ventoy.png"
-    gtk-update-icon-cache -f -t "$HOME/.local/share/icons" 2>/dev/null || true
+    mkdir -p "$HOME/.local/share/icons/hicolor/512x512/apps"
+    cp "$SCRIPT_DIR/files/ventoy.png" "$HOME/.local/share/icons/hicolor/512x512/apps/ventoy.png"
+    gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
 fi
 
 # 5. Copy and customize .desktop file in ~/.local/share/applications

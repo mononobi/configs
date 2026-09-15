@@ -259,6 +259,9 @@ set_desktop_attribute "$DEST_DESKTOP" "Path" "$DESKTOP_PATH"
 # Step 7: Copy application icon (.png)
 run_cmd mkdir -p "$ICON_DIR"
 run_cmd cp "$ICON_SRC" "${ICON_DIR}/"
+HICOLOR_DIR="${ICON_DIR}/hicolor"
+run_cmd mkdir -p "${HICOLOR_DIR}/512x512/apps"
+run_cmd cp "$ICON_SRC" "${HICOLOR_DIR}/512x512/apps/antigravity.png"
 
 # Step 8: Record installed version and refresh desktop databases
 if [[ "$DRY_RUN" != true ]]; then
@@ -269,7 +272,7 @@ if [[ "$DRY_RUN" != true ]]; then
         [[ -n "$INSTALLED_VER" ]] && echo "$INSTALLED_VER" > "${INSTALL_DIR}/.version"
     fi
     update-desktop-database "$APP_DIR" 2>/dev/null || true
-    gtk-update-icon-cache -f -t "$ICON_DIR" 2>/dev/null || true
+    gtk-update-icon-cache -f -t "$HICOLOR_DIR" 2>/dev/null || true
 fi
 
 if [[ "$DRY_RUN" == true ]]; then
