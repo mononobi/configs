@@ -11,7 +11,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs JPEG compression development libraries (libjpeg-turbo8-dev and libjpeg8-dev).
+  Installs JPEG compression development libraries (libjpeg-dev).
 
 Options:
   --no-update   Skip apt update before installation
@@ -43,6 +43,6 @@ echo "[+] Starting installation/setup for libjpeg..."
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y libjpeg-turbo8-dev libjpeg8-dev libjpeg-dev
+sudo apt-get install -y libjpeg-dev
 
 echo "[✓] libjpeg setup completed successfully!"
