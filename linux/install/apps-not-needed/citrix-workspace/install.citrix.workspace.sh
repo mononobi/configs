@@ -293,6 +293,15 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
         rm -rf "$TEMP_DIR"
     fi
     echo "[✓] Pre-install compatibility dependencies completed."
+    echo "[+] Creating WebKitGTK 4.0 compatibility symlinks..."
+    sudo mkdir -p /opt/Citrix/ICAClient/gtk2/lib
+    if [[ -f /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 ]]; then
+        sudo ln -sf /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 /opt/Citrix/ICAClient/gtk2/lib/libwebkit2gtk-4.0.so.37
+    fi
+    if [[ -f /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 ]]; then
+        sudo ln -sf /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /opt/Citrix/ICAClient/gtk2/lib/libjavascriptcoregtk-4.0.so.18
+    fi
+    echo "[✓] Compatibility symlinks configured in /opt/Citrix/ICAClient/gtk2/lib/"
 fi
 
 # 4. Verify the Citrix Workspace .deb package is available
@@ -328,19 +337,6 @@ echo "[+] Installing Citrix Workspace package: $DEB_PATH..."
 if ! sudo DEBIAN_FRONTEND=noninteractive dpkg -i "$DEB_PATH"; then
     echo "[!] Resolving any missing dependencies via APT..."
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -f -y
-fi
-
-# 8. Post-Install Compatibility Step (Symlinks for WebKitGTK 4.0 -> 4.1)
-if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
-    echo "[+] Creating WebKitGTK 4.0 compatibility symlinks..."
-    sudo mkdir -p /opt/Citrix/ICAClient/gtk2/lib
-    if [[ -f /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 ]]; then
-        sudo ln -sf /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 /opt/Citrix/ICAClient/gtk2/lib/libwebkit2gtk-4.0.so.37
-    fi
-    if [[ -f /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 ]]; then
-        sudo ln -sf /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /opt/Citrix/ICAClient/gtk2/lib/libjavascriptcoregtk-4.0.so.18
-    fi
-    echo "[✓] Compatibility symlinks configured in /opt/Citrix/ICAClient/gtk2/lib/"
 fi
 
 echo "================================================================================"
