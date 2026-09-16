@@ -313,14 +313,24 @@ echo "[+] Pre-creating Citrix logging service user account (ctxcwa)..."
 sudo groupadd -r ctxcwa 2>/dev/null || true
 sudo useradd -r -g ctxcwa -d /var/run/ctxcwa -s /usr/sbin/nologin ctxcwa 2>/dev/null || true
 
-# 6. Install the Citrix Workspace package
-echo "[+] Installing Citrix Workspace package: $DEB_PATH..."
-if ! sudo dpkg -i "$DEB_PATH"; then
-    echo "[!] Resolving any missing dependencies via APT..."
-    sudo apt-get install -f -y
+# 6. Pre-configure debconf selections to answer "No" to prompts
+echo "[+] Pre-configuring installer prompts (App Protection: No, deviceTRUST: No, EPA: No)..."
+if command -v debconf-set-selections >/dev/null 2>&1; then
+    sudo debconf-set-selections <<'EOF'
+icaclient app_protection/install_app_protection select no
+icaclient devicetrust/install_devicetrust select no
+icaclient epa/install_epa select no
+EOF
 fi
 
-# 7. Post-Install Compatibility Step (Symlinks for WebKitGTK 4.0 -> 4.1)
+# 7. Install the Citrix Workspace package non-interactively
+echo "[+] Installing Citrix Workspace package: $DEB_PATH..."
+if ! sudo DEBIAN_FRONTEND=noninteractive dpkg -i "$DEB_PATH"; then
+    echo "[!] Resolving any missing dependencies via APT..."
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -f -y
+fi
+
+# 8. Post-Install Compatibility Step (Symlinks for WebKitGTK 4.0 -> 4.1)
 if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
     echo "[+] Creating WebKitGTK 4.0 compatibility symlinks..."
     sudo mkdir -p /opt/Citrix/ICAClient/gtk2/lib
