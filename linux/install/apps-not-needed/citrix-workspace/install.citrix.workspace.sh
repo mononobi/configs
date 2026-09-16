@@ -6,6 +6,7 @@ set -euo pipefail
 
 SKIP_UPDATE=false
 COMPATIBILITY_MODE="auto"
+AUTO_DOWNLOAD=true
 DEB_PATH=""
 
 show_help() {
@@ -13,22 +14,23 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS] [PATH_TO_DEB]
 
 Description:
-  Installs Citrix Workspace App (ICA Client) with automatic detection
-  for compatibility dependencies on newer or uncertified Ubuntu releases.
+  Installs Citrix Workspace App (ICA Client) with automatic download
+  and automatic detection for compatibility dependencies on Ubuntu.
 
 Arguments:
-  PATH_TO_DEB              Path to the downloaded Citrix .deb package
+  PATH_TO_DEB              Path to the downloaded Citrix .deb package (optional)
 
 Options:
   --deb PATH               Path to the Citrix Workspace .deb package
   --compatibility          Force enable compatibility installation steps
   --no-compatibility       Force disable compatibility installation steps
+  --no-download            Do not attempt auto-download; require local .deb file
   --no-update              Skip apt update before installation
   -h, --help               Show this help message and exit
 
 Notes:
-  - You can download the Debian package from:
-    https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html
+  - If no local package is specified, the script automatically downloads the
+    'Full Package (Self-Service Support) (x86_64)' from the official Citrix page.
   - Choose 'Full Package (Self-Service Support)'.
 EOF
 }
@@ -42,6 +44,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --no-update|--skip-update)
             SKIP_UPDATE=true
+            shift
+            ;;
+        --no-download)
+            AUTO_DOWNLOAD=false
             shift
             ;;
         --compatibility)
@@ -78,13 +84,98 @@ echo "==========================================================================
 echo " Starting Citrix Workspace App Installation"
 echo "================================================================================"
 
-# 1. Locate the Citrix Workspace .deb package first (to inspect its dependencies)
-if [[ -z "$DEB_PATH" ]]; then
-    # Auto-search in current directory and ~/Downloads
+# 1. Resolve or download the Citrix Workspace .deb package
+fetch_citrix_deb() {
+    local page_url="https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html"
+    echo "[+] Attempting to auto-download latest Citrix Workspace package from:"
+    echo "    $page_url"
+
+    local html
+    html=$(curl -sL -A "Mozilla/5.0" "$page_url" 2>/dev/null || true)
+    if [[ -z "$html" ]]; then
+        echo "[!] Warning: Failed to retrieve Citrix downloads page."
+        return 1
+    fi
+
+    local download_url=""
+    if command -v python3 >/dev/null 2>&1; then
+        download_url=$(python3 -c '
+import sys, re
+html = sys.stdin.read()
+pattern = r"<h4>\s*Full Package \(Self-Service Support\)[^<]*\(x86_64\)\s*</h4>.*?rel=\"([^\"]+)\""
+match = re.search(pattern, html, re.DOTALL | re.IGNORECASE)
+if match:
+    rel = match.group(1).strip()
+    if rel.startswith("//"):
+        rel = "https:" + rel
+    print(rel)
+    sys.exit(0)
+sys.exit(1)
+' <<< "$html" 2>/dev/null || true)
+    fi
+
+    if [[ -z "$download_url" ]]; then
+        download_url=$(echo "$html" | awk '
+            /Full Package \(Self-Service Support\)[^<]*\(x86_64\)/ { found=1 }
+            found && /rel="\/\// {
+                match($0, /rel="([^"]+)"/, arr)
+                if (arr[1] != "") {
+                    print arr[1]
+                    exit
+                }
+            }
+        ')
+        if [[ -n "$download_url" && "$download_url" == //* ]]; then
+            download_url="https:${download_url}"
+        fi
+    fi
+
+    if [[ -z "$download_url" ]]; then
+        echo "[!] Warning: Could not locate 'Full Package (Self-Service Support) (x86_64)' download link on Citrix page."
+        return 1
+    fi
+
+    echo "[+] Found package download link:"
+    echo "    ${download_url%%\?*}"
+
+    local target_dir="${HOME}/Downloads"
+    mkdir -p "$target_dir"
+    local target_file="${target_dir}/icaclient_latest_amd64.deb"
+
+    echo "[+] Downloading package to $target_file..."
+    if curl -fL --progress-bar -A "Mozilla/5.0" -o "$target_file" "$download_url"; then
+        if [[ -s "$target_file" ]]; then
+            DEB_PATH="$target_file"
+            echo "[✓] Successfully downloaded: $DEB_PATH"
+            return 0
+        fi
+    fi
+
+    echo "[!] Warning: Download failed or produced an empty file."
+    rm -f "$target_file"
+    return 1
+}
+
+# Resolve Citrix Workspace package
+if [[ -n "$DEB_PATH" && -f "$DEB_PATH" ]]; then
+    echo "[+] Using specified Citrix package: $DEB_PATH"
+else
+    # Check if a package already exists locally in current dir or ~/Downloads
     DEB_CANDIDATE=$(find . ~/Downloads -maxdepth 2 -type f -name "icaclient*.deb" 2>/dev/null | head -n 1 || true)
-    if [[ -n "$DEB_CANDIDATE" && -f "$DEB_CANDIDATE" ]]; then
-        DEB_PATH="$DEB_CANDIDATE"
-        echo "[+] Found Citrix installer package: $DEB_PATH"
+
+    if [[ "$AUTO_DOWNLOAD" == "true" ]]; then
+        if ! fetch_citrix_deb; then
+            echo "[!] Auto-download failed; falling back to local file check."
+            if [[ -n "$DEB_CANDIDATE" && -f "$DEB_CANDIDATE" ]]; then
+                DEB_PATH="$DEB_CANDIDATE"
+                echo "[+] Found existing local package: $DEB_PATH"
+            fi
+        fi
+    else
+        if [[ -n "$DEB_CANDIDATE" && -f "$DEB_CANDIDATE" ]]; then
+            DEB_PATH="$DEB_CANDIDATE"
+            echo "[+] Found existing local package: $DEB_PATH"
+        fi
     fi
 fi
 
