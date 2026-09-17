@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 SKIP_UPDATE=false
 COMPATIBILITY_MODE="auto"
 AUTO_DOWNLOAD=true
@@ -84,6 +87,14 @@ echo "==========================================================================
 echo " Starting Citrix Workspace App Installation"
 echo "================================================================================"
 
+# 0. Ensure required helper applications are satisfied via utils.sh
+if ! command -v curl >/dev/null 2>&1; then
+    require_app "curl" "apps-recommended"
+fi
+if ! dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -q "ok installed"; then
+    require_app "ca-certificates" "apps-recommended"
+fi
+
 # 1. Resolve or download the Citrix Workspace .deb package
 fetch_citrix_deb() {
     local page_url="https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html"
@@ -91,7 +102,7 @@ fetch_citrix_deb() {
     echo "    $page_url"
 
     local html
-    html=$(curl -sL -A "Mozilla/5.0" "$page_url" 2>/dev/null || true)
+    html=$(curl -sL -A "Mozilla/5.0 (X11; Linux x86_64)" "$page_url" 2>/dev/null || true)
     if [[ -z "$html" ]]; then
         echo "[!] Warning: Failed to retrieve Citrix downloads page."
         return 1
@@ -115,16 +126,7 @@ sys.exit(1)
     fi
 
     if [[ -z "$download_url" ]]; then
-        download_url=$(echo "$html" | awk '
-            /Full Package \(Self-Service Support\)[^<]*\(x86_64\)/ { found=1 }
-            found && /rel="\/\// {
-                match($0, /rel="([^"]+)"/, arr)
-                if (arr[1] != "") {
-                    print arr[1]
-                    exit
-                }
-            }
-        ')
+        download_url=$(echo "$html" | awk '/Full Package \(Self-Service Support\)[^<]*\(x86_64\)/{flag=1} flag && /rel="\/\//{print; exit}' | sed -E 's/.*rel="([^"]+)".*/\1/')
         if [[ -n "$download_url" && "$download_url" == //* ]]; then
             download_url="https:${download_url}"
         fi
@@ -143,7 +145,7 @@ sys.exit(1)
     local target_file="${target_dir}/icaclient_latest_amd64.deb"
 
     echo "[+] Downloading package to $target_file..."
-    if curl -fL --progress-bar -A "Mozilla/5.0" -o "$target_file" "$download_url"; then
+    if curl -fL --progress-bar -A "Mozilla/5.0 (X11; Linux x86_64)" -o "$target_file" "$download_url"; then
         if [[ -s "$target_file" ]]; then
             DEB_PATH="$target_file"
             echo "[✓] Successfully downloaded: $DEB_PATH"
@@ -275,13 +277,13 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
         DOWNLOAD_DEBS=()
         if [[ "$NEED_ICU" == "true" ]]; then
             echo "    -> Fetching libicu74..."
-            wget -q --show-progress "http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu74_74.2-1ubuntu3.1_amd64.deb"
+            curl -fLO "http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu74_74.2-1ubuntu3.1_amd64.deb"
             DOWNLOAD_DEBS+=("libicu74_74.2-1ubuntu3.1_amd64.deb")
         fi
 
         if [[ "$NEED_XML2" == "true" ]]; then
             echo "    -> Fetching libxml2..."
-            wget -q --show-progress "http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb"
+            curl -fLO "http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb"
             DOWNLOAD_DEBS+=("libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb")
         fi
 
