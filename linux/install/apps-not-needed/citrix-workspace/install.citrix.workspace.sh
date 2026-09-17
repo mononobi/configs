@@ -277,13 +277,13 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
         DOWNLOAD_DEBS=()
         if [[ "$NEED_ICU" == "true" ]]; then
             echo "    -> Fetching libicu74..."
-            curl -fLO "http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu74_74.2-1ubuntu3.1_amd64.deb"
+            curl -fLO --progress-bar "http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu74_74.2-1ubuntu3.1_amd64.deb"
             DOWNLOAD_DEBS+=("libicu74_74.2-1ubuntu3.1_amd64.deb")
         fi
 
         if [[ "$NEED_XML2" == "true" ]]; then
             echo "    -> Fetching libxml2..."
-            curl -fLO "http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb"
+            curl -fLO --progress-bar "http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb"
             DOWNLOAD_DEBS+=("libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb")
         fi
 
