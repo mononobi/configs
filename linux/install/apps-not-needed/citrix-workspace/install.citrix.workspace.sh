@@ -11,6 +11,7 @@ SKIP_UPDATE=false
 COMPATIBILITY_MODE="auto"
 AUTO_DOWNLOAD=true
 DEB_PATH=""
+DOWNLOADED_FILE=""
 
 show_help() {
     cat <<EOF
@@ -148,6 +149,7 @@ sys.exit(1)
     if curl -fL --progress-bar -A "Mozilla/5.0 (X11; Linux x86_64)" -o "$target_file" "$download_url"; then
         if [[ -s "$target_file" ]]; then
             DEB_PATH="$target_file"
+            DOWNLOADED_FILE="$target_file"
             echo "[✓] Successfully downloaded: $DEB_PATH"
             return 0
         fi
@@ -170,12 +172,14 @@ else
             echo "[!] Auto-download failed; falling back to local file check."
             if [[ -n "$DEB_CANDIDATE" && -f "$DEB_CANDIDATE" ]]; then
                 DEB_PATH="$DEB_CANDIDATE"
+                DOWNLOADED_FILE="$DEB_CANDIDATE"
                 echo "[+] Found existing local package: $DEB_PATH"
             fi
         fi
     else
         if [[ -n "$DEB_CANDIDATE" && -f "$DEB_CANDIDATE" ]]; then
             DEB_PATH="$DEB_CANDIDATE"
+            DOWNLOADED_FILE="$DEB_CANDIDATE"
             echo "[+] Found existing local package: $DEB_PATH"
         fi
     fi
@@ -347,6 +351,14 @@ echo "[+] Installing Citrix Workspace package: $DEB_PATH..."
 if ! sudo DEBIAN_FRONTEND=noninteractive dpkg -i "$DEB_PATH"; then
     echo "[!] Resolving any missing dependencies via APT..."
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -f -y
+fi
+
+# 8. Clean up downloaded installer package upon successful installation
+if dpkg-query -W -f='${Status}' icaclient 2>/dev/null | grep -q "ok installed"; then
+    if [[ -n "${DOWNLOADED_FILE:-}" && -f "$DOWNLOADED_FILE" ]]; then
+        echo "[+] Cleaning up downloaded installer package: $DOWNLOADED_FILE..."
+        rm -f "$DOWNLOADED_FILE"
+    fi
 fi
 
 echo "================================================================================"
