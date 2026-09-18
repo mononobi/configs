@@ -15,7 +15,7 @@ Always read the system requirements to make sure your current Ubuntu version is 
 
 ```bash
 sudo apt update
-sudo apt install libsoup2.4-1 libwebkit2gtk-4.1-0 ca-certificates libsecret-1-0 libsecret-common libsecret-tools libopengl0 libmanette-0.2-0 -y
+sudo apt install libsoup-2.4-1 libwebkit2gtk-4.1-0 ca-certificates libsecret-1-0 libsecret-common libsecret-tools libopengl0 libmanette-0.2-0 net-tools libgtk2.0-0 -y
 ```
 
 These libraries should be manually downloaded & installed:

@@ -246,6 +246,12 @@ fi
 if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
     echo "[+] Performing Compatibility Installation..."
 
+    # Select GTK2 package (libgtk2.0-0t64 on Ubuntu 24.04+, libgtk2.0-0 on earlier releases)
+    GTK2_PKG="libgtk2.0-0"
+    if apt-cache show libgtk2.0-0t64 >/dev/null 2>&1; then
+        GTK2_PKG="libgtk2.0-0t64"
+    fi
+
     echo "    Installing required compatibility libraries from APT..."
     sudo apt-get install -y \
         libsoup2.4-1 \
@@ -255,7 +261,9 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
         libsecret-common \
         libsecret-tools \
         libopengl0 \
-        libmanette-0.2-0
+        libmanette-0.2-0 \
+        net-tools \
+        "$GTK2_PKG"
 
     # Check if libicu74 is already installed
     NEED_ICU=false
