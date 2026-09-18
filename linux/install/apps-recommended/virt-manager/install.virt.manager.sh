@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 SKIP_UPDATE=false
 
 show_help() {
@@ -65,10 +68,15 @@ if ! has_candidate "$QEMU_PKG"; then
     fi
 fi
 
-sudo apt-get install -y virt-manager "$QEMU_PKG" libvirt-daemon-system libvirt-clients bridge-utils ovmf spice-vdagent qemu-guest-agent
+sudo apt-get install -y virt-manager "$QEMU_PKG" libvirt-daemon-system libvirt-clients bridge-utils ovmf
 sudo systemctl enable --now libvirtd
 sudo usermod -aG libvirt "$USER"
 sudo usermod -aG kvm "$USER"
 echo "[+] Virtualization packages installed. User $USER added to libvirt and kvm groups (re-login required)."
+
+if ! dpkg -s spice-vdagent qemu-guest-agent >/dev/null 2>&1; then
+    echo "[+] Guest integration agents not found. Installing dependency..."
+    require_app "qemu-guest-agent" "apps-recommended"
+fi
 
 echo "[✓] virt-manager setup completed successfully!"
