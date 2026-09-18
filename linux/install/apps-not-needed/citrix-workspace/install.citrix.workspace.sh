@@ -254,7 +254,7 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
 
     echo "    Installing required compatibility libraries from APT..."
     sudo apt-get install -y \
-        libsoup2.4-1 \
+        libsoup-2.4-1 \
         libwebkit2gtk-4.1-0 \
         ca-certificates \
         libsecret-1-0 \
