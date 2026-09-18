@@ -82,7 +82,7 @@ sudo apt install spice-vdagent qemu-guest-agent
 ############################ CD-ROM 2 ############################
 # Add a new hardware for a second CD-ROM:
 
-# Device Type: CDROM device
+# Device Type: CD-ROM device
 # Bus Type: SATA
 # Readonly: True
 # Select or create custom storage: select the virtio libs '.iso' file.
