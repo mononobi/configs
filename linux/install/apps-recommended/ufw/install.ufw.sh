@@ -44,8 +44,6 @@ if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
 sudo apt-get install -y ufw
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
 sudo ufw --force enable
 sudo ufw status verbose
 sudo apt-get install -y gufw
