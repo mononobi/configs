@@ -63,14 +63,8 @@ echo "==========================================================================
 echo "[+] Ensuring ~/.local/bin is configured in PATH..."
 ensure_local_bin_in_path
 
-# 2. Check OpenVPN dependency via utils.sh
-echo "[+] Checking OpenVPN and NetworkManager OpenVPN plugin..."
-if ! command -v openvpn >/dev/null 2>&1 || ! dpkg -l network-manager-openvpn-gnome >/dev/null 2>&1; then
-    echo "[!] OpenVPN dependency missing. Installing via utils.sh..."
-    require_app "openvpn"
-else
-    echo "[✓] OpenVPN packages are installed."
-fi
+# 2. Require OpenVPN dependency via utils.sh
+require_app openvpn
 
 # 3. Create required directories (clean up old added/ directory if re-running)
 EXPRESS_DIR="${HOME}/.expressvpn"
