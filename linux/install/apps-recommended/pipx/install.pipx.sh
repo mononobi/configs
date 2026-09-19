@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
-# Description: Install and configure Pipenv
+# Description: Install and configure pipx
 # Note: Modernized for Ubuntu with best practices.
 
 set -euo pipefail
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -14,7 +11,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Pipenv virtual environment and package manager via pipx (recommended) or pip.
+  Installs pipx Python application installer via APT.
 
 Options:
   --no-update   Skip apt update before installation
@@ -41,17 +38,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "[+] Starting installation/setup for Pipenv..."
+echo "[+] Starting installation/setup for pipx..."
 
-if ! command -v virtualenv >/dev/null 2>&1; then
-    require_app "virtualenv" "apps-recommended"
+if [[ "$SKIP_UPDATE" != "true" ]]; then
+    sudo apt-get update
 fi
-if ! command -v pipx >/dev/null 2>&1; then
-    require_app "pipx" "apps-recommended"
-fi
+sudo apt-get install -y pipx
 
-echo "[+] Installing pipenv via pipx..."
-pipx install pipenv
-pipx ensurepath
-
-echo "[✓] Pipenv setup completed successfully!"
+echo "[✓] pipx setup completed successfully!"

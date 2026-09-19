@@ -90,6 +90,11 @@ echo "[+] Target Python versions to install: ${TARGET_VERSIONS[*]}"
 # 4. Assemble package list for each version (runtime, -dev, -full)
 PKGS=()
 for ver in "${TARGET_VERSIONS[@]}"; do
+    if command -v "python${ver}" >/dev/null 2>&1; then
+        echo "[i] Python ${ver} is already installed, skipping..."
+        continue
+    fi
+
     PKGS+=("python${ver}" "python${ver}-dev")
 
     if apt-cache show "python${ver}-full" >/dev/null 2>&1; then
@@ -104,19 +109,40 @@ for ver in "${TARGET_VERSIONS[@]}"; do
 done
 
 # Also install general tools (pip, venv), but NOT python3-is-python
-PKGS+=("python3-pip" "python3-venv" "python3-setuptools")
+GENERAL_PKGS=()
+for pkg in "python3-pip" "python3-venv" "python3-setuptools"; do
+    if ! dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q "ok installed"; then
+        GENERAL_PKGS+=("$pkg")
+    fi
+done
 
-echo "[+] Installing packages..."
-sudo apt-get install -y "${PKGS[@]}"
+TO_INSTALL=("${PKGS[@]}" "${GENERAL_PKGS[@]}")
+
+if [[ ${#TO_INSTALL[@]} -gt 0 ]]; then
+    echo "[+] Installing packages: ${TO_INSTALL[*]}..."
+    sudo apt-get install -y "${TO_INSTALL[@]}"
+else
+    echo "[+] All target Python versions and tools are already installed."
+fi
 
 # 5. Point /usr/bin/python and /usr/bin/python-config to the latest installed version
-LATEST_VER="${TARGET_VERSIONS[-1]}"
-echo "[+] Configuring default /usr/bin/python -> /usr/bin/python${LATEST_VER}..."
-sudo ln -sf "/usr/bin/python${LATEST_VER}" /usr/bin/python
+LATEST_VER=""
+for (( i=${#TARGET_VERSIONS[@]}-1; i>=0; i-- )); do
+    v="${TARGET_VERSIONS[i]}"
+    if command -v "python${v}" >/dev/null 2>&1; then
+        LATEST_VER="$v"
+        break
+    fi
+done
 
-if [[ -f "/usr/bin/python${LATEST_VER}-config" ]]; then
-    echo "[+] Configuring default /usr/bin/python-config -> /usr/bin/python${LATEST_VER}-config..."
-    sudo ln -sf "/usr/bin/python${LATEST_VER}-config" /usr/bin/python-config
+if [[ -n "$LATEST_VER" ]]; then
+    echo "[+] Configuring default /usr/bin/python -> /usr/bin/python${LATEST_VER}..."
+    sudo ln -sf "/usr/bin/python${LATEST_VER}" /usr/bin/python
+
+    if [[ -f "/usr/bin/python${LATEST_VER}-config" ]]; then
+        echo "[+] Configuring default /usr/bin/python-config -> /usr/bin/python${LATEST_VER}-config..."
+        sudo ln -sf "/usr/bin/python${LATEST_VER}-config" /usr/bin/python-config
+    fi
 fi
 
 # 6. Verify installation
