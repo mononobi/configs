@@ -6,7 +6,7 @@ set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../install/utils.sh"
+source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -86,15 +86,12 @@ sudo chown -R "${CURRENT_USER_ID}" "${TARGET_DIR}"
 
 # 4. Firewall Rules
 echo "[+] Applying firewall rules..."
-if command -v ufw >/dev/null 2>&1; then
-    # Allow access from Grafana to Prometheus in the Docker network
-    sudo ufw allow from 172.16.0.0/12
-    sudo ufw allow from 10.0.0.0/8
-    # Allow access to Grafana dashboard and Prometheus from local machine through SSH tunneling
-    sudo ufw allow 22
-else
-    echo "[!] UFW not found, skipping firewall rules."
-fi
+# Allow access from Grafana to Prometheus in the Docker network
+sudo ufw allow from 172.16.0.0/12
+sudo ufw allow from 10.0.0.0/8
+
+echo "You need to allow access to Grafana dashboard and Prometheus from local machine through SSH tunneling..."
+echo "sudo ufw allow 22"
 
 # 5. Start the Service
 echo "[+] Starting Conduit services via Docker Compose..."
