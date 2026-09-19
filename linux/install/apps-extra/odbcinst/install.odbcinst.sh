@@ -4,24 +4,34 @@
 
 set -euo pipefail
 
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
+
+ODBC_VERSION=""
 SKIP_UPDATE=false
+FORCE=false
 
 show_help() {
     cat <<EOF
-Usage: $(basename "$0") [OPTIONS]
+Usage: $(basename "$0") [OPTIONS] [VERSION]
 
 Description:
-  Installs the official Microsoft SQL Server ODBC Driver (msodbcsql18) and SQL Server
-  command-line tools (mssql-tools18 including sqlcmd and bcp).
-  Automatically detects the host Ubuntu version, adds the official Microsoft repository
-  using modern GPG keyrings, and updates PATH in ~/.bashrc.
+  Installs the official Microsoft SQL Server ODBC Driver and command-line tools
+  (sqlcmd and bcp). Automatically detects the host Ubuntu version and adds the
+  official Microsoft repository using modern GPG keyrings.
+
+Arguments:
+  VERSION               Optional driver major version: 18 or 17 (default: 18)
 
 Options:
-  --no-update   Skip apt update before installation
-  -h, --help    Show this help message and exit
+  -v, --version VER     Specify driver major version: 18 or 17 (default: 18)
+  -F, --force           Force reinstallation even if already installed
+  --no-update           Skip apt update before installation
+  -h, --help            Show this help message and exit
+
+Examples:
+  $(basename "$0")              # Installs latest version (v18)
+  $(basename "$0") 17           # Installs version 17
 EOF
 }
 
@@ -36,17 +46,40 @@ while [[ $# -gt 0 ]]; do
             SKIP_UPDATE=true
             shift
             ;;
+        -F|--force)
+            FORCE=true
+            shift
+            ;;
+        -v|--version)
+            ODBC_VERSION="$2"
+            shift 2
+            ;;
+        [0-9]*)
+            ODBC_VERSION="$1"
+            shift
+            ;;
         *)
-            echo "Unknown option: $1"
-            echo "Use -h or --help for usage information."
+            echo "Unknown option: $1" >&2
+            echo "Use -h or --help for usage information." >&2
             exit 1
             ;;
     esac
 done
 
-is_installed "odbcinst" --name "ODBC installer utilities" && exit 0
+ODBC_VERSION="${ODBC_VERSION:-18}"
+DRIVER_PKG="msodbcsql${ODBC_VERSION}"
 
-echo "[+] Starting installation for Microsoft SQL Server ODBC Driver & Tools..."
+if [[ "$ODBC_VERSION" == "17" ]]; then
+    TOOLS_PKG="mssql-tools"
+    TOOLS_DIR="/opt/mssql-tools/bin"
+else
+    TOOLS_PKG="mssql-tools${ODBC_VERSION}"
+    TOOLS_DIR="/opt/mssql-tools${ODBC_VERSION}/bin"
+fi
+
+is_installed "$DRIVER_PKG" --name "Microsoft SQL Server ODBC Driver (v${ODBC_VERSION})" && exit 0
+
+echo "[+] Starting installation for Microsoft SQL Server ODBC Driver v${ODBC_VERSION} & Tools..."
 
 # 1. Install essential prerequisites
 require_app curl ca-certificates gnupg lsb-release
@@ -68,28 +101,27 @@ echo "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/microsoft-prod.gpg] ht
 sudo apt-get update
 
 # 5. Install Microsoft SQL Server ODBC driver and tools (auto-accepting EULA)
-echo "[+] Installing Microsoft SQL Server ODBC Driver and unixodbc-dev..."
-sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 || sudo ACCEPT_EULA=Y apt-get install -y msodbcsql17
+echo "[+] Installing ${DRIVER_PKG} and unixodbc-dev..."
+sudo ACCEPT_EULA=Y apt-get install -y "$DRIVER_PKG" unixodbc-dev
 
-echo "[+] Installing Microsoft SQL Server command-line tools (sqlcmd, bcp)..."
-sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18 || sudo ACCEPT_EULA=Y apt-get install -y mssql-tools || true
-sudo apt-get install -y unixodbc-dev
+echo "[+] Installing Microsoft SQL Server command-line tools (${TOOLS_PKG})..."
+sudo ACCEPT_EULA=Y apt-get install -y "$TOOLS_PKG"
 
 # 6. Add mssql-tools to PATH in ~/.bashrc and current shell
-for tools_dir in /opt/mssql-tools18/bin /opt/mssql-tools/bin; do
-    if [[ -d "$tools_dir" ]]; then
-        if ! grep -qs "$tools_dir" "$HOME/.bashrc"; then
-            echo "export PATH=\"\$PATH:${tools_dir}\"" >> "$HOME/.bashrc"
-            echo "[+] Added $tools_dir to PATH in ~/.bashrc"
-        fi
-        export PATH="$PATH:$tools_dir"
+if [[ -d "$TOOLS_DIR" ]]; then
+    if ! grep -qs "$TOOLS_DIR" "$HOME/.bashrc"; then
+        echo "export PATH=\"\$PATH:${TOOLS_DIR}\"" >> "$HOME/.bashrc"
+        echo "[+] Added $TOOLS_DIR to PATH in ~/.bashrc"
     fi
-done
+    export PATH="$PATH:$TOOLS_DIR"
+fi
 
 # 7. Verification
-echo "[+] ODBC Environment and Registered Drivers:"
-odbcinst -j
-echo "[+] Registered Drivers in /etc/odbcinst.ini:"
-odbcinst -q -d || true
+if command -v odbcinst >/dev/null 2>&1; then
+    echo "[+] ODBC Environment and Registered Drivers:"
+    odbcinst -j
+    echo "[+] Registered Drivers in /etc/odbcinst.ini:"
+    odbcinst -q -d || true
+fi
 
-echo "[✓] Microsoft SQL Server ODBC Driver and Tools setup completed successfully!"
+echo "[✓] Microsoft SQL Server ODBC Driver v${ODBC_VERSION} and Tools setup completed successfully!"
