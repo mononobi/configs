@@ -1,4 +1,4 @@
-# to add native support for PS3, PS4 or PS5 controllers to all playstation
+# to add native support for PS3, PS4 or PS5 controllers to all PlayStation
 # emulators, copy the related file with this command:
 
 # for PS3 controller:
