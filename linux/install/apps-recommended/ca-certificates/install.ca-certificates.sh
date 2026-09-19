@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "ca-certificates" "apt" "ca-certificates" && exit 0
+is_installed "ca-certificates" "apt" && exit 0
 
 echo "[+] Starting installation/setup for ca-certificates..."
 

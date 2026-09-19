@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "audacious" "command" "audacious" && exit 0
+is_installed "audacious" "command" && exit 0
 
 echo "[+] Starting installation/setup for audacious..."
 

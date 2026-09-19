@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "pass" "command" "pass" && exit 0
+is_installed "pass" "command" && exit 0
 
 echo "[+] Starting installation/setup for pass..."
 

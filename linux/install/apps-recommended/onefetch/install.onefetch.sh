@@ -48,7 +48,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "onefetch" "command" "onefetch" && exit 0
+is_installed "onefetch" "command" && exit 0
 
 echo "[+] Starting installation/setup for onefetch..."
 

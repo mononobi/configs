@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "wrk" "command" "wrk" && exit 0
+is_installed "wrk" "command" && exit 0
 
 echo "[+] Starting installation/setup for wrk..."
 

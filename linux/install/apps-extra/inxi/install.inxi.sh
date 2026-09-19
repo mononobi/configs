@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "inxi" "command" "inxi" && exit 0
+is_installed "inxi" "command" && exit 0
 
 echo "[+] Starting installation/setup for inxi..."
 

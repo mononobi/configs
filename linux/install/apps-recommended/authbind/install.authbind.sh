@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "authbind" "command" "authbind" && exit 0
+is_installed "authbind" "command" && exit 0
 
 echo "[+] Starting installation/setup for authbind..."
 

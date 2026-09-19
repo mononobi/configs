@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gcc" "command" "gcc" && exit 0
+is_installed "gcc" "command" && exit 0
 
 echo "[+] Starting installation/setup for gcc..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "nvidia-driver" "command" "nvidia-driver" && exit 0
+is_installed "nvidia-driver" "command" && exit 0
 
 echo "[+] Starting installation/setup for nvidia-driver..."
 

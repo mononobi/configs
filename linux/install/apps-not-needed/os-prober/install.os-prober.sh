@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "os-prober" "command" "os-prober" && exit 0
+is_installed "os-prober" "command" && exit 0
 
 echo "[+] Starting installation/setup for os-prober..."
 

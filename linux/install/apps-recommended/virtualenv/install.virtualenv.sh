@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "virtualenv" "command" "virtualenv" && exit 0
+is_installed "virtualenv" "command" && exit 0
 
 echo "[+] Starting installation/setup for Virtualenv..."
 
