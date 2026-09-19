@@ -53,48 +53,165 @@ The framework centers around a modular runner and individual self-contained reci
 
 ## Shared Utilities & Dependency Management (`utils.sh`)
 
-The framework provides common helpers in `linux/install/utils.sh` to keep individual
-scripts minimal, robust, and DRY:
+The framework provides shared helpers in `linux/install/utils.sh` to keep individual
+scripts minimal, robust, and DRY. All installer scripts source this file.
 
 ### 1. `require_app [OPTIONS] <app1> [app2...]`
 Resolves and executes application installers on demand:
-- **Multiple Apps**: Accepts one or more application names in a single call 
-  (e.g., `require_app curl ca-certificates gnupg`).
-- **Automatic 3-Tier Fallback**: Automatically searches for recipes across directories in 
+- **Multiple Apps in One Call**: Accepts one or more application names separated by
+  spaces (e.g., `require_app curl ca-certificates gnupg`). Always combine dependencies
+  into a single call rather than repeating `require_app` across multiple lines.
+- **Automatic 3-Tier Fallback**: Automatically searches for recipes across categories in
   priority order:
   1. `apps-recommended/`
   2. `apps-extra/`
   3. `apps-not-needed/`
-  Stops looking as soon as a match is found.
-- **Custom Category via `--category`**: Prioritizes a custom folder while retaining 
-  graceful fallback:
+  Halts resolution as soon as a matching installer script is found. Never pass default
+  category names (`apps-recommended`, `apps-extra`, `apps-no-needed`) to `require_app` — allow 
+  the 3-tier fallback to resolve them automatically.
+- **Custom Category via `--category`**: Prioritizes a custom folder while retaining
+  graceful fallback to the standard 3 categories:
   ```bash
   require_app my-tool --category apps-dev
   ```
-- **Instant Fast-Skip**: Each application recipe inspects its own state via `is_installed`, 
+- **Fail-Fast Execution**: If any dependency fails during its installation, `require_app`
+  halts execution immediately and returns a non-zero exit code (`return 1`).
+- **Instant Fast-Skip**: Each required recipe inspects its own state via `is_installed`,
   skipping in `<1ms` if already present.
-- **Flag Propagation**: Global flags such as `--no-update` are forwarded automatically to 
-  all required dependencies.
+- **Flag Propagation**: Global flags such as `--no-update` are deduplicated and forwarded
+  automatically to all required dependencies.
 
-### 2. `conditional_apt_update [--force]`
-Runs `sudo apt-get update` unless `SKIP_UPDATE` is set to `true` (e.g. when `--no-update` 
-is passed or during batch runs). Standardizes conditional APT updates across all recipes. 
-Pass `--force` to bypass `SKIP_UPDATE` if needed.
+### 2. `is_installed <target_name> [type] [display_name]`
+Performs fast-path verification to check whether a package or application is already
+installed, allowing recipes to exit in `<1ms`:
+- **Supported Types**:
+  - `command` (default): Checks binary presence in `$PATH` via `command -v`.
+  - `apt` / `dpkg`: Checks package status via `dpkg-query -W -f='${Status}'` for `ok installed`.
+  - `flatpak`: Checks Flatpak applications via `flatpak info`.
+  - `snap`: Checks Snap applications via `snap list`.
+- **Strict Self-Check Scope**: `is_installed` is strictly meant for an installer script
+  to check **its own primary target** at the start. **NEVER** use `is_installed` to check
+  dependencies or external packages — always use `require_app` for dependencies!
+- **Display Name Rule**:
+  - If the display name is identical to `target_name` (case-sensitive), 
+    **do NOT pass the 3rd argument**:
+    ```bash
+    # Correct
+    is_installed "curl"
+    is_installed "ca-certificates" "apt"
 
-### 3. `ensure_local_bin_in_path`
+    # Incorrect (redundant display name)
+    is_installed "curl" "command" "curl"
+    is_installed "ca-certificates" "apt" "ca-certificates"
+    ```
+  - Only pass `display_name` when it actually differs from `target_name`:
+    ```bash
+    is_installed "code" "command" "Visual Studio Code"
+    is_installed "flatpak" "command" "Flatpak"
+    is_installed "com.spotify.Client" "flatpak" "Spotify"
+    ```
+- **Output Formatting**: Logs `[i] <display_name> is already installed, skipping...` (or
+  `[i] <display_name>: <target_name> is already installed, skipping...` if they differ
+  case-insensitively).
+- **Force Reinstallation**: Respects `FORCE=true` (or `--force`), returning `1` to bypass
+  skipping when reinstallation or update is explicitly requested.
+
+### 3. `conditional_apt_update [--force]`
+Executes `sudo apt-get update` unless `SKIP_UPDATE` is set to `true` (e.g., when `--no-update`
+is passed or during batch runs).
+- **Direct Invocation**: Call `conditional_apt_update` directly without wrapping it in an
+  `if` condition or manual check:
+  ```bash
+  # Correct
+  conditional_apt_update
+
+  # Incorrect (redundant manual check)
+  if [[ "$SKIP_UPDATE" != "true" ]]; then
+      sudo apt-get update
+  fi
+  ```
+- **Distinction from Repository Updates**: `conditional_apt_update` standardizes the upfront
+  package index check. If a recipe adds a third-party PPA, custom GPG keyring, or new
+  APT repository list, it must directly call `sudo apt-get update` after adding the
+  repository. Pass `--force` to `conditional_apt_update` if you need to run unconditionally
+  while respecting the helper.
+
+### 4. `ensure_local_bin_in_path`
 Ensures `~/.local/bin` exists, exports it to current process `$PATH`, and permanently
 persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 
-### 4. GNOME Extension Helpers
+### 5. GNOME Extension Helpers
 - **`install_gnome_extension <uuid> [display_name]`**: Queries extensions.gnome.org API
-  for the host GNOME Shell version, downloads the candidate archive, inspects its
-  `metadata.json` to verify actual Shell compatibility and version before installing,
-  compiles schemas, and enables the extension.
+  for the host GNOME Shell version, downloads candidate archive, inspects `metadata.json`
+  to verify Shell compatibility and version before installing, compiles schemas, and
+  enables the extension.
 - **`compare_extension_version <zip_path> [uuid]`**: Compares downloaded extension version
   against the installed copy to avoid downgrading or unnecessary reinstallations.
 - **`check_extension_archive_compatibility <zip_path>`**: Inspects `metadata.json` inside
-  downloaded zip to confirm host GNOME Shell version compatibility before installation
-  (critical because the GNOME API falls back to the latest build if unsupported).
+  downloaded zip to confirm host GNOME Shell version compatibility before installation.
+
+---
+
+## Architectural Rules & Standards for Recipes
+
+To maintain modularity, speed, and zero code duplication, every script in `linux/install`
+must adhere strictly to the following framework rules:
+
+### Rule 1: Every Installer Must Self-Check via `is_installed`
+At the very top of every installer (immediately after parsing options), check if the
+application is already installed:
+```bash
+is_installed "my-tool" && exit 0
+```
+This guarantees `<1ms` fast-skips when running batches or re-executing installers.
+
+### Rule 2: `is_installed` Is Strictly for Self-Checks
+Never use `is_installed` to inspect external dependencies or third-party packages. Let
+`require_app` handle dependencies, which in turn runs the dependency recipe's own
+`is_installed` check.
+
+### Rule 3: Never Check Dependency Presence Manually
+Never wrap `require_app` in `if ! command -v ...` or `if ! dpkg ...`:
+```bash
+# Correct
+require_app curl ca-certificates gnupg
+
+# Incorrect (redundant manual checks)
+if ! command -v curl >/dev/null 2>&1; then
+    require_app "curl"
+fi
+```
+Because the required recipe already contains its own `is_installed` self-check, manual
+checks in caller scripts are completely redundant and add unnecessary boilerplate.
+
+### Rule 4: Never Check Conditions for `require_app` or `conditional_apt_update`
+Utility functions handle all flags (`--no-update`, `SKIP_UPDATE`, `--force`) internally.
+Call them directly without manual `if` blocks.
+
+### Rule 5: Zero Inline Dependencies (Never Install Dependencies Directly)
+- **No Shared Tool May Be Installed Inline**: Each recipe must only install **its own
+  primary application, private libraries, or specific binaries**.
+- Public CLI tools, libraries, or system services (such as `curl`, `wget`, `docker`,
+  `python`, `unzip`, `gnupg`, `ca-certificates`, `flatpak`, `ufw`) must **NEVER** be
+  installed inline via `apt install` or direct downloads inside another application's script.
+- They must always be required using `require_app`.
+
+### Rule 6: Introducing a New Dependency
+If an application requires a dependency that does not yet exist as a recipe in the repository:
+1. **Do not install it inline** inside the current script.
+2. **First create a standalone recipe folder and installer** under `apps-recommended/`
+   (e.g., `linux/install/apps-recommended/<new-dep>/install.<new-dep>.sh`).
+3. Ensure the new recipe follows all standard conventions (`is_installed`, `conditional_apt_update`,
+   `--no-update`, error handling).
+4. Then, require it in your recipe via `require_app <new-dep>`.
+
+### Rule 7: Syntax & Cleanliness Conventions
+- **Combine `require_app`**: Call `require_app` once with all dependencies on a single
+  line instead of multiple consecutive calls.
+- **Omit Default Categories**: Do not pass `"apps-recommended"` or `"apps-extra"`, or 
+  `apps-not-needed` to `require_app`. The 3-tier fallback automatically searches them in order.
+- **Omit Redundant Display Names**: Do not pass the 3rd argument to `is_installed` if the
+  display name matches the target name (case-sensitive).
 
 ---
 
@@ -121,17 +238,60 @@ To add a new tool or application:
    mkdir -p linux/install/apps-recommended/my-tool
    ```
 2. Add an installation script `install.my-tool.sh` inside that folder.
-3. Use the standard boilerplate:
+3. Use the standard framework boilerplate (This is an example, not all apps need 
+   these specific libraries):
    ```bash
    #!/usr/bin/env bash
+   # Description: Install my-tool
+   # Note: Idempotent and safe to run multiple times.
+
    set -euo pipefail
 
    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
    source "${SCRIPT_DIR}/../../utils.sh"
 
-   # Parse --no-update and -h/--help options
-   # Resolve dependencies via require_app if needed
-   # Install tool and apply configurations
+   SKIP_UPDATE=false
+
+   show_help() {
+       cat <<EOF
+   Usage: $(basename "$0") [OPTIONS]
+
+   Options:
+     --no-update   Skip apt update before installation
+     -h, --help    Show this help message and exit
+   EOF
+   }
+
+   while [[ $# -gt 0 ]]; do
+       case "$1" in
+           -h|--help)
+               show_help
+               exit 0
+               ;;
+           --no-update|--skip-update)
+               SKIP_UPDATE=true
+               shift
+               ;;
+           *)
+               echo "Unknown option: $1" >&2
+               exit 1
+               ;;
+       esac
+   done
+
+   # 1. Fast-path self-check (checks only this tool, drops display name if identical)
+   is_installed "my-tool" && exit 0
+
+   echo "[+] Starting installation/setup for my-tool..."
+
+   # 2. Require shared dependencies (never inline, never manual checks, single call)
+   require_app curl ca-certificates gnupg
+
+   # 3. Conditional upfront APT update (no manual if check)
+   conditional_apt_update
+
+   # 4. Install tool
+   sudo apt-get install -y my-tool
    ```
 4. Make the script executable: `chmod +x install.my-tool.sh`.
 5. (Optional) If the script should only run on demand and not during batch runs,
