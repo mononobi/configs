@@ -88,10 +88,7 @@ echo "[+] Target Python versions to install: ${TARGET_VERSIONS[*]}"
 # 4. Assemble package list for each version (runtime, -dev, -full)
 PKGS=()
 for ver in "${TARGET_VERSIONS[@]}"; do
-    if command -v "python${ver}" >/dev/null 2>&1; then
-        echo "[i] Python ${ver} is already installed, skipping..."
-        continue
-    fi
+    is_installed --check "python${ver}" && continue
 
     PKGS+=("python${ver}" "python${ver}-dev")
 
@@ -109,7 +106,7 @@ done
 # Also install general tools (pip, venv), but NOT python3-is-python
 GENERAL_PKGS=()
 for pkg in "python3-pip" "python3-venv" "python3-setuptools"; do
-    if ! dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q "ok installed"; then
+    if ! is_installed --check "$pkg" "apt"; then
         GENERAL_PKGS+=("$pkg")
     fi
 done
