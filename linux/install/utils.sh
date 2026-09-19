@@ -424,9 +424,7 @@ install_gnome_extension() {
     local sys_ext_dir="/usr/share/gnome-shell/extensions/${uuid}"
 
     # Ensure required helper apps
-    local update_flag=()
-    [[ "${SKIP_UPDATE:-false}" == "true" ]] && update_flag=("--no-update")
-    require_app curl python unzip "${update_flag[@]}"
+    require_app curl python unzip
 
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"

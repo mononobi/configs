@@ -59,17 +59,8 @@ echo " Starting Ollama & Open WebUI Setup"
 echo "================================================================================"
 
 # 1. Require Docker & Docker Compose
-echo "[+] Checking Docker and Docker Compose..."
-if ! command -v docker >/dev/null 2>&1 || ! docker compose version >/dev/null 2>&1; then
-    echo "[!] Docker or Docker Compose not found. Installing Docker..."
-    if [[ "$SKIP_UPDATE" == "true" ]]; then
-        require_app "docker" --no-update
-    else
-        require_app "docker"
-    fi
-else
-    echo "[✓] Docker and Docker Compose are installed."
-fi
+echo "[+] Ensuring Docker and Docker Compose dependency..."
+require_app docker
 
 # 2. Setup ~/.ollama directories and files
 TARGET_DIR="${HOME}/.ollama"

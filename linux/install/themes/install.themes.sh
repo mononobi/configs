@@ -185,11 +185,7 @@ sudo_keepalive_pid=$!
 
 # Ensure required applications are installed via require_app
 echo "[+] Ensuring application dependencies (git, gnome-extensions, sassc) are installed..."
-if [[ "$SKIP_UPDATE" == "true" ]]; then
-    require_app git gnome-extensions sassc --no-update
-else
-    require_app git gnome-extensions sassc
-fi
+require_app git gnome-extensions sassc
 
 # -----------------------------------------------------------------------------
 # Clean previous installations

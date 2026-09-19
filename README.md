@@ -184,11 +184,39 @@ fi
 Because the required recipe already contains its own `is_installed` self-check, manual
 checks in caller scripts are completely redundant and add unnecessary boilerplate.
 
-### Rule 4: Never Check Conditions for `require_app` or `conditional_apt_update`
-Utility functions handle all flags (`--no-update`, `SKIP_UPDATE`, `--force`) internally.
-Call them directly without manual `if` blocks.
+### Rule 4: Never Check Conditions or Pass `--no-update` Manually to Utility Functions
+- **Zero Wrapping Checks**: Never wrap `require_app` or `conditional_apt_update` 
+  in manual `if` blocks.
+- **Automatic Flag Propagation**: **Never manually pass `--no-update` to `require_app` 
+  or `conditional_apt_update`**. The helper functions automatically inspect the `$SKIP_UPDATE` 
+  environment variable and propagate `--no-update` to all child recipes. Always call them directly:
+  ```bash
+  # Correct
+  require_app git gnome-extensions sassc
+  conditional_apt_update
 
-### Rule 5: Zero Inline Dependencies (Never Install Dependencies Directly)
+  # Incorrect (redundant manual forwarding and if checks)
+  if [[ "$SKIP_UPDATE" == "true" ]]; then
+      require_app git gnome-extensions sassc --no-update
+  else
+      require_app git gnome-extensions sassc
+  fi
+  ```
+
+### Rule 5: Every Installer Must Accept `--no-update` and Respect `SKIP_UPDATE`
+To ensure both seamless standalone runs and efficient batch runs:
+- **Standalone CLI Flag**: Every installer script must parse `--no-update` (or `--skip-update`) 
+  and set `SKIP_UPDATE=true`. This allows users to run individual scripts without incurring 
+  an unnecessary `apt-get update`:
+  ```bash
+  ./install.my-tool.sh --no-update
+  ```
+- **Environment Respect**: Every script must respect `SKIP_UPDATE` by calling 
+  `conditional_apt_update`. This guarantees that batch runners (like `installer.sh`) and 
+  parent `require_app` calls execute only a single upfront `apt update`, saving bandwidth 
+  and preventing lock contention.
+
+### Rule 6: Zero Inline Dependencies (Never Install Dependencies Directly)
 - **No Shared Tool May Be Installed Inline**: Each recipe must only install **its own
   primary application, private libraries, or specific binaries**.
 - Public CLI tools, libraries, or system services (such as `curl`, `wget`, `docker`,
@@ -196,7 +224,7 @@ Call them directly without manual `if` blocks.
   installed inline via `apt install` or direct downloads inside another application's script.
 - They must always be required using `require_app`.
 
-### Rule 6: Introducing a New Dependency
+### Rule 7: Introducing a New Dependency
 If an application requires a dependency that does not yet exist as a recipe in the repository:
 1. **Do not install it inline** inside the current script.
 2. **First create a standalone recipe folder and installer** under `apps-recommended/`
@@ -205,7 +233,7 @@ If an application requires a dependency that does not yet exist as a recipe in t
    `--no-update`, error handling).
 4. Then, require it in your recipe via `require_app <new-dep>`.
 
-### Rule 7: Syntax & Cleanliness Conventions
+### Rule 8: Syntax & Cleanliness Conventions
 - **Combine `require_app`**: Call `require_app` once with all dependencies on a single
   line instead of multiple consecutive calls.
 - **Omit Default Categories**: Do not pass `"apps-recommended"` or `"apps-extra"`, or 
