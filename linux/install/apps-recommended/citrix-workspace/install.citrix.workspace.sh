@@ -91,7 +91,7 @@ echo " Starting Citrix Workspace App Installation"
 echo "================================================================================"
 
 # 0. Ensure required helper applications are satisfied via utils.sh
-require_app curl ca-certificates net-tools
+require_app curl ca-certificates net-tools debconf-utils
 
 # 1. Resolve or download the Citrix Workspace .deb package
 fetch_citrix_deb() {
@@ -330,13 +330,11 @@ sudo useradd -r -g ctxcwa -d /var/run/ctxcwa -s /usr/sbin/nologin ctxcwa 2>/dev/
 
 # 6. Pre-configure debconf selections to answer "No" to prompts
 echo "[+] Pre-configuring installer prompts (App Protection: No, deviceTRUST: No, EPA: No)..."
-if command -v debconf-set-selections >/dev/null 2>&1; then
-    sudo debconf-set-selections <<'EOF'
+sudo debconf-set-selections <<'EOF'
 icaclient app_protection/install_app_protection select no
 icaclient devicetrust/install_devicetrust select no
 icaclient epa/install_epa select no
 EOF
-fi
 
 # 7. Install the Citrix Workspace package non-interactively
 echo "[+] Installing Citrix Workspace package: $DEB_PATH..."

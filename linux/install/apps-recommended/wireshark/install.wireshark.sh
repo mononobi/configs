@@ -45,9 +45,11 @@ is_installed "wireshark" --name "Wireshark" && exit 0
 
 echo "[+] Starting installation/setup for wireshark..."
 
+require_app debconf-utils
+
 conditional_apt_update
 # Preconfigure wireshark non-superuser capture
-echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections || true
+echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections
 sudo apt-get install -y wireshark
 sudo usermod -aG wireshark "$USER"
 echo "[+] Wireshark installed. User $USER added to wireshark group (log out and back in to capture without root)."

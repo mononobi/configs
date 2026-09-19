@@ -45,9 +45,11 @@ is_installed "ubuntu-restricted-extras" --name "Ubuntu Restricted Extras" && exi
 
 echo "[+] Starting installation/setup for ubuntu-restricted-extras..."
 
+require_app debconf-utils
+
 conditional_apt_update
 # Pre-accept Microsoft TrueType core fonts EULA to prevent interactive hang
-echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections || true
+echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 sudo apt-get install -y ubuntu-restricted-extras
 
 echo "[✓] ubuntu-restricted-extras setup completed successfully!"
