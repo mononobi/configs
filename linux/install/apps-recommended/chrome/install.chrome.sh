@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 SKIP_UPDATE=false
 
 show_help() {
@@ -11,7 +14,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Google Chrome Browser using the official Google Chrome .deb package (recommended method).
+  Installs Google Chrome Browser using the official Google Chrome APT repository and GPG keyring.
 
 Options:
   --no-update   Skip apt update before installation
@@ -40,13 +43,25 @@ done
 
 echo "[+] Starting installation/setup for chrome..."
 
-TEMP_DEB="$(mktemp --suffix=.deb)"
-echo "[+] Downloading Google Chrome debian package..."
-wget -O "$TEMP_DEB" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
+if ! command -v wget >/dev/null 2>&1; then
+    require_app "wget" "apps-recommended"
 fi
-sudo apt-get install -y "$TEMP_DEB"
-rm -f "$TEMP_DEB"
+if ! dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -q "ok installed"; then
+    require_app "ca-certificates" "apps-recommended"
+fi
+if ! command -v curl >/dev/null 2>&1; then
+    require_app "curl" "apps-recommended"
+fi
+if ! command -v gpg >/dev/null 2>&1; then
+    require_app "gnupg" "apps-recommended"
+fi
+
+sudo install -m 0755 -d /etc/apt/keyrings
+wget -qO - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/google-chrome.gpg > /dev/null
+sudo chmod 644 /etc/apt/keyrings/google-chrome.gpg
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y google-chrome-stable
 
 echo "[✓] chrome setup completed successfully!"
+
