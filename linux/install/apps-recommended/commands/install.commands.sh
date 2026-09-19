@@ -77,17 +77,15 @@ fi
 
 echo "[+] Copying command files into ${DEST_DIR}..."
 installed_count=0
-skipped_count=0
+overwritten_count=0
 
 for src in "${file_entries[@]}"; do
     cmd_name="$(basename "$src")"
     dest="${DEST_DIR}/${cmd_name}"
 
-    # Skip if file or symlink already exists in target
+    is_overwrite=false
     if [[ -e "$dest" || -L "$dest" ]]; then
-        echo "  [-] Skipped: ${cmd_name} (already exists in ${DEST_DIR})"
-        skipped_count=$((skipped_count + 1))
-        continue
+        is_overwrite=true
     fi
 
     # Resolve real file if symlink
@@ -97,20 +95,26 @@ for src in "${file_entries[@]}"; do
             echo "[!] Warning: Symlink target for '${cmd_name}' not found (${real_file:-broken}), skipping." >&2
             continue
         fi
-        cp "$real_file" "$dest"
+        cp -f "$real_file" "$dest"
     elif [[ -f "$src" ]]; then
-        cp "$src" "$dest"
+        cp -f "$src" "$dest"
     else
         continue
     fi
 
     chmod +x "$dest"
-    echo "  [✓] Installed: ${cmd_name}"
-    installed_count=$((installed_count + 1))
+
+    if [[ "$is_overwrite" == "true" ]]; then
+        echo "  [✓] Overwritten: ${cmd_name}"
+        overwritten_count=$((overwritten_count + 1))
+    else
+        echo "  [✓] Installed: ${cmd_name}"
+        installed_count=$((installed_count + 1))
+    fi
 done
 
 echo ""
 echo "================================================================================"
-echo "[✓] Finished: ${installed_count} installed, ${skipped_count} skipped (already existed in ${DEST_DIR})"
+echo "[✓] Finished: ${installed_count} installed, ${overwritten_count} overwritten in ${DEST_DIR}"
 echo "================================================================================"
 exit 0
