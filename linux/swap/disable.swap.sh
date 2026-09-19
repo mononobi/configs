@@ -6,6 +6,9 @@ set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+source "${SCRIPT_DIR}/../install/utils.sh"
+
+SKIP_UPDATE=false
 
 show_help() {
     cat <<EOF
@@ -19,6 +22,7 @@ Description:
   Completely idempotent and safe to run multiple times.
 
 Options:
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOF
 }
@@ -31,6 +35,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --no-update|--skip-update)
+            SKIP_UPDATE=true
             shift
             ;;
         *)
@@ -46,14 +51,8 @@ echo " Disable Swap Script"
 echo "================================================================================"
 
 # 1. Detect Ubuntu version
-if [[ -f /etc/os-release ]]; then
-    . /etc/os-release
-    OS_VERSION="${VERSION_ID:-}"
-elif command -v lsb_release >/dev/null 2>&1; then
-    OS_VERSION="$(lsb_release -rs)"
-else
-    OS_VERSION="24.04"
-fi
+require_app lsb-release
+OS_VERSION="$(lsb_release -rs)"
 
 MAJOR_MINOR="$(echo "$OS_VERSION" | cut -d. -f1,2)"
 
