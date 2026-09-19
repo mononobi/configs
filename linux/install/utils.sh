@@ -443,6 +443,7 @@ except Exception:
 
 export INSTALL_ROOT
 export -f require_app
+export -f is_installed
 export -f ensure_local_bin_in_path
 export -f check_extension_archive_compatibility
 export -f compare_extension_version
