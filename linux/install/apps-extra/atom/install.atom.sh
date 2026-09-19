@@ -46,8 +46,10 @@ is_installed "atom" --name "Atom" && exit 0
 
 echo "[+] Starting installation/setup for Atom..."
 
+require_app curl ca-certificates
+
 conditional_apt_update
-sudo apt-get install -y curl ca-certificates libgconf-2-4
+sudo apt-get install -y libgconf-2-4
 
 TEMP_DEB=$(mktemp --suffix=.deb)
 trap "rm -f "$TEMP_DEB"" EXIT

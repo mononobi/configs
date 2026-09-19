@@ -48,9 +48,8 @@ is_installed "odbcinst" --name "ODBC installer utilities" && exit 0
 
 echo "[+] Starting installation for Microsoft SQL Server ODBC Driver & Tools..."
 
-# 1. Update system and install essential prerequisites
-conditional_apt_update
-sudo apt-get install -y curl ca-certificates gnupg lsb-release
+# 1. Install essential prerequisites
+require_app curl ca-certificates gnupg lsb-release
 
 # 2. Detect host OS version and codename
 UBUNTU_VER=$(lsb_release -rs)

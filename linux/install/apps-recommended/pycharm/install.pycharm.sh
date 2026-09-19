@@ -64,8 +64,7 @@ is_installed "jetbrains-toolbox" --name "JetBrains Toolbox (PyCharm)" && exit 0
 
 echo "[+] Starting installation/setup for PyCharm (JetBrains Toolbox)..."
 
-conditional_apt_update
-sudo apt-get install -y curl tar ca-certificates
+require_app curl tar ca-certificates
 
 # Configure inotify file watch limit for the IDE per guideline
 echo "[+] Configuring inotify file watch limit for JetBrains IDEs..."

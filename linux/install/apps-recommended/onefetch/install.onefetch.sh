@@ -52,8 +52,7 @@ is_installed "onefetch" && exit 0
 
 echo "[+] Starting installation/setup for onefetch..."
 
-conditional_apt_update
-sudo apt-get install -y curl tar ca-certificates
+require_app curl tar ca-certificates
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT

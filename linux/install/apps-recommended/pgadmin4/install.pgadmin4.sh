@@ -45,8 +45,7 @@ is_installed "pgadmin4" --name "pgAdmin 4" && exit 0
 
 echo "[+] Starting installation/setup for pgAdmin 4..."
 
-conditional_apt_update
-sudo apt-get install -y curl ca-certificates gnupg lsb-release
+require_app curl ca-certificates gnupg lsb-release
 
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/packages-pgadmin-org.gpg > /dev/null

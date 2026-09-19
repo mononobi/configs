@@ -42,8 +42,10 @@ done
 
 echo "[+] Starting installation/setup for Rclone..."
 
+require_app curl ca-certificates unzip
+
 conditional_apt_update
-sudo apt-get install -y curl fuse3 ca-certificates unzip
+sudo apt-get install -y fuse3
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT

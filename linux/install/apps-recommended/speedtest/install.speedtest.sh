@@ -63,10 +63,7 @@ done
 
 echo "[+] Starting installation/setup for Ookla Speedtest CLI..."
 
-if ! command -v curl >/dev/null 2>&1 || ! command -v tar >/dev/null 2>&1; then
-    conditional_apt_update
-    sudo apt-get install -y curl tar ca-certificates
-fi
+require_app curl tar ca-certificates
 
 TARGET_DIR="${HOME}/.local/bin"
 TARGET_BIN="${TARGET_DIR}/speedtest"
