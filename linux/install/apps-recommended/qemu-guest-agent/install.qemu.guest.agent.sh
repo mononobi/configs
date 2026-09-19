@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "qemu-guest-agent" "apt" && exit 0
+is_installed "qemu-guest-agent" "apt" && is_installed "spice-vdagent" "apt" && exit 0
 
 echo "[+] Starting installation/setup for qemu-guest-agent and spice-vdagent..."
 

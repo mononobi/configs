@@ -142,8 +142,9 @@ conditional_apt_update() {
 #   If not installed (or FORCE is 'true'), returns 1.
 #
 # Types:
-#   command (default) - Checks binary in PATH via command -v
-#   apt / dpkg        - Checks package status via dpkg-query
+#   (omitted/default) - Smart fallback: checks binary in PATH first, then dpkg
+#   command           - Strictly checks binary in PATH via command -v
+#   apt / dpkg        - Strictly checks package status via dpkg-query
 #   flatpak           - Checks Flatpak application via flatpak info
 #   snap              - Checks Snap package via snap list
 #
@@ -174,7 +175,7 @@ is_installed() {
     done
 
     local target="${positional_args[0]:-}"
-    local type="${positional_args[1]:-command}"
+    local type="${positional_args[1]:-}"
     local name="${positional_args[2]:-$target}"
 
     if [[ -z "$target" ]]; then
