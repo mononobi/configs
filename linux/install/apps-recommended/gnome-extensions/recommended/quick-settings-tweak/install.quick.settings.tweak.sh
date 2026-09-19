@@ -63,8 +63,7 @@ SYS_EXT_DIR="/usr/share/gnome-shell/extensions/${UUID}"
 echo "[+] Processing GNOME extension: ${NAME} (${UUID})..."
 
 # Ensure dependencies (curl, python, activator)
-require_app curl python
-require_app activator --category apps-recommended/gnome-extensions
+require_app curl python gnome-extensions/activator
 
 shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
 shell_ver="${shell_ver:-46}"

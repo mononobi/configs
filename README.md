@@ -74,12 +74,16 @@ Resolves and executes application installers on demand:
   Halts resolution as soon as a matching installer script is found. Never pass default
   category names (`apps-recommended`, `apps-extra`, `apps-no-needed`) to `require_app` — allow 
   the 3-tier fallback to resolve them automatically.
-- **Custom Category via `--category`**: Prioritizes a custom folder or nested subcategory 
-  while retaining graceful fallback to the standard 3 categories:
+- **Direct Nested Path Resolution**: Accepts relative nested paths under standard categories 
+  without needing `--category` or repeating `apps-recommended`:
+  ```bash
+  require_app "gnome-extensions/activator"
+  require_app "gnome-extensions/recommended/color-picker"
+  ```
+- **Custom Category via `--category`**: Prioritizes an entirely custom top-level folder 
+  (such as `apps-dev`) while retaining graceful fallback to the standard 3 categories:
   ```bash
   require_app my-tool --category apps-dev
-  require_app activator --category apps-recommended/gnome-extensions
-  require_app color-picker --category apps-recommended/gnome-extensions/recommended
   ```
 - **Fail-Fast Execution**: If any dependency fails during its installation, `require_app`
   halts execution immediately and returns a non-zero exit code (`return 1`).
@@ -191,7 +195,7 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
   to verify Shell compatibility and version before installing, compiles schemas, and
   enables the extension. Automatically ensures the CLI activator via:
   ```bash
-  require_app activator --category apps-recommended/gnome-extensions
+  require_app "gnome-extensions/activator"
   ```
 - **`compare_extension_version <zip_path> [uuid]`**: Compares downloaded extension version
   against the installed copy to avoid downgrading or unnecessary reinstallations.
@@ -208,7 +212,7 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 - **Dynamic Auto-Discovery Orchestrator**: The top-level runner `install.gnome.extensions.sh`
   dynamically auto-discovers all extension subfolders under `recommended/*/` and invokes them via:
   ```bash
-  require_app "$ext_name" --category apps-recommended/gnome-extensions/recommended
+  require_app "gnome-extensions/recommended/${ext_name}"
   ```
   Any newly added extension subfolder in `recommended/` is automatically discovered and installed
   without modifying orchestrator manifests.

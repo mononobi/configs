@@ -67,7 +67,7 @@ echo "==========================================================================
 
 # 1. Run Activator Setup
 echo "[+] Step 1: Ensuring GNOME Shell Extensions Activator is installed..."
-require_app activator --category apps-recommended/gnome-extensions
+require_app gnome-extensions/activator
 
 # 2. Auto-discover and install recommended extensions
 echo ""
@@ -94,7 +94,7 @@ for ext_dir in "${SCRIPT_DIR}/recommended"/*/; do
         continue
     fi
 
-    require_app "$ext_name" --category apps-recommended/gnome-extensions/recommended
+    require_app "gnome-extensions/recommended/${ext_name}"
 done
 
 # 3. Handle desktop extensions disabled notice if not requested
@@ -112,7 +112,7 @@ fi
 # 4. Enable and configure built-in system extensions
 echo ""
 echo "[+] Step 3: Configuring built-in system extensions..."
-require_app system-extensions --category apps-recommended/gnome-extensions/recommended
+require_app gnome-extensions/recommended/system-extensions
 
 echo ""
 echo "================================================================================"
