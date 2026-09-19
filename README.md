@@ -288,6 +288,20 @@ If an application requires a dependency that does not yet exist as a recipe in t
   or Snap packages. Standard CLI tools and APT packages use the default smart check and
   must never pass `--type`.
 
+### Rule 9: Always Use `apt-get` (Never `apt`) in Scripts
+All scripts and automation recipes must invoke `apt-get` (e.g., `sudo apt-get install -y`,
+`sudo apt-get update`) and **never bare `apt`**:
+- **Script-Safe Stability**: `apt-get` provides a 100% backward-compatible, deterministic
+  CLI interface designed specifically for automation. Its flags, options, and behaviors
+  remain rock-solid across Ubuntu/Debian releases.
+- **Unstable CLI in `apt`**: The high-level `apt` binary is meant solely for human terminal
+  interaction. Using `apt` inside scripts emits warnings (`WARNING: apt does not have a stable
+  CLI interface. Use with caution in scripts.`) and Debian explicitly reserves the right to
+  change its output format and flags between releases.
+- **Log & Pipe Cleanliness**: `apt-get` outputs clean, machine-friendly text without ANSI
+  terminal formatting, dynamic progress bars, or interactive prompts that corrupt log files
+  or hang headless batch runners.
+
 ---
 
 ## Application Types & Extensibility
