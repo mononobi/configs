@@ -45,8 +45,10 @@ is_installed "eb" --name "AWS Elastic Beanstalk CLI" && exit 0
 
 echo "[+] Starting installation/setup for ebcli..."
 
+require_app build-essential pipx
+
 conditional_apt_update
-sudo apt-get install -y build-essential zlib1g-dev libssl-dev libncurses-dev libffi-dev libsqlite3-dev libreadline-dev libbz2-dev pipx
+sudo apt-get install -y zlib1g-dev libssl-dev libncurses-dev libffi-dev libsqlite3-dev libreadline-dev libbz2-dev
 pipx install awsebcli
 
 echo "[✓] ebcli setup completed successfully!"

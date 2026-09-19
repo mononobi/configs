@@ -75,8 +75,7 @@ is_installed "dotnet" --name ".NET SDK" && exit 0
 echo "[+] Starting installation/setup for .NET SDK & Runtimes..."
 
 # 1. Update system and add ppa:dotnet/backports (official Canonical / Microsoft supported feed)
-conditional_apt_update
-sudo apt-get install -y software-properties-common ca-certificates curl
+require_app software-properties-common ca-certificates curl
 
 echo "[+] Adding official Canonical .NET Backports PPA..."
 sudo add-apt-repository -y ppa:dotnet/backports

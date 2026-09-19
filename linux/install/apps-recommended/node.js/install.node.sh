@@ -88,8 +88,7 @@ except Exception:
     echo "[+] Latest stable LTS version detected: Node.js v${NODE_MAJOR}.x"
 fi
 
-conditional_apt_update
-require_app ca-certificates curl gnupg
+require_app ca-certificates curl gnupg build-essential
 
 # 1. Install NodeSource repository
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -100,7 +99,7 @@ echo "[+] Setting up NodeSource repository for Node.js v${NODE_MAJOR}.x..."
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 
 sudo apt-get update
-sudo apt-get install -y nodejs build-essential
+sudo apt-get install -y nodejs
 
 # 2. Install Yarn repository
 curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/yarn.gpg > /dev/null

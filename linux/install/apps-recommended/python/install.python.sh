@@ -58,8 +58,7 @@ done
 echo "[+] Starting installation/setup for Python toolchains..."
 
 # 1. Update system and install essential prerequisites
-conditional_apt_update
-sudo apt-get install -y software-properties-common ca-certificates curl build-essential
+require_app software-properties-common ca-certificates curl build-essential
 
 # 2. Add deadsnakes PPA for multi-version Python support
 echo "[+] Adding deadsnakes PPA..."
@@ -105,7 +104,7 @@ done
 
 # Also install general tools (pip, venv), but NOT python3-is-python
 GENERAL_PKGS=()
-for pkg in "python3-pip" "python3-venv" "python3-setuptools"; do
+for pkg in "python3" "python3-dev" "python3-pip" "python3-venv" "python3-setuptools"; do
     if ! is_installed --check "$pkg"; then
         GENERAL_PKGS+=("$pkg")
     fi

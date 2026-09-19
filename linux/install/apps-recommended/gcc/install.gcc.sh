@@ -45,7 +45,9 @@ is_installed "gcc" && exit 0
 
 echo "[+] Starting installation/setup for gcc..."
 
+require_app build-essential
+
 conditional_apt_update
-sudo apt-get install -y gcc build-essential
+sudo apt-get install -y gcc
 
 echo "[✓] gcc setup completed successfully!"

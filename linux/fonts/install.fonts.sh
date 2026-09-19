@@ -56,17 +56,7 @@ echo " Installing Custom User Fonts"
 echo "================================================================================"
 
 # 1. Ensure required CLI tools (unzip and fontconfig)
-if ! command -v unzip >/dev/null 2>&1; then
-    echo "[+] Installing unzip dependency..."
-    conditional_apt_update
-    sudo apt-get install -y unzip
-fi
-
-if ! command -v fc-cache >/dev/null 2>&1; then
-    echo "[+] Installing fontconfig dependency..."
-    conditional_apt_update
-    sudo apt-get install -y fontconfig
-fi
+require_app unzip fontconfig
 
 # 2. Check source archive
 ZIP_FILE="${SCRIPT_DIR}/fonts.zip"

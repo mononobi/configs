@@ -45,7 +45,9 @@ is_installed "g++" && exit 0
 
 echo "[+] Starting installation/setup for g++..."
 
+require_app build-essential
+
 conditional_apt_update
-sudo apt-get install -y g++ build-essential
+sudo apt-get install -y g++
 
 echo "[✓] g++ setup completed successfully!"

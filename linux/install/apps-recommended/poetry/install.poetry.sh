@@ -45,8 +45,7 @@ is_installed "poetry" --name "Poetry" && exit 0
 
 echo "[+] Starting installation/setup for poetry..."
 
-conditional_apt_update
-sudo apt-get install -y curl python3 python3-venv
+require_app curl python
 
 echo "[+] Running official Poetry installer..."
 curl -sSL https://install.python-poetry.org | python3 -

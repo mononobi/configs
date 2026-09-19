@@ -45,8 +45,8 @@ is_installed "rustc" --name "Rust" && exit 0
 
 echo "[+] Starting installation/setup for rust..."
 
-conditional_apt_update
-sudo apt-get install -y curl build-essential gcc
+require_app curl build-essential gcc
+
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source "$HOME/.cargo/env" || true
 rustc --version

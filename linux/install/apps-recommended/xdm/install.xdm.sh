@@ -46,8 +46,7 @@ done
 
 echo "[+] Starting installation/setup for XDM (Xtreme Download Manager)..."
 
-conditional_apt_update
-sudo apt-get install -y curl tar xz-utils ca-certificates
+require_app curl tar xz-utils ca-certificates
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT

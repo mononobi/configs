@@ -45,8 +45,7 @@ is_installed "appimagelauncher" --name "AppImageLauncher" && exit 0
 
 echo "[+] Starting installation/setup for appimage..."
 
-conditional_apt_update
-sudo apt-get install -y software-properties-common
+require_app software-properties-common
 
 echo "[+] Adding AppImageLauncher PPA..."
 sudo add-apt-repository -y ppa:appimagelauncher-team/stable

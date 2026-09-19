@@ -65,8 +65,7 @@ is_installed "java" --name "OpenJDK" && exit 0
 
 echo "[+] Starting installation/setup for openjdk..."
 
-conditional_apt_update
-sudo apt-get install -y software-properties-common ca-certificates
+require_app software-properties-common ca-certificates
 
 echo "[+] Adding OpenJDK PPA..."
 sudo add-apt-repository -y ppa:openjdk-r/ppa
