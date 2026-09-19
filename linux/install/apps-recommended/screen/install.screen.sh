@@ -45,9 +45,7 @@ is_installed "screen" "command" "GNU Screen" && exit 0
 
 echo "[+] Starting installation/setup for screen..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y screen
 
 echo "[✓] screen setup completed successfully!"

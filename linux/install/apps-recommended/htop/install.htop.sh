@@ -45,9 +45,7 @@ is_installed "htop" "command" && exit 0
 
 echo "[+] Starting installation/setup for htop..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y htop
 
 echo "[✓] htop setup completed successfully!"

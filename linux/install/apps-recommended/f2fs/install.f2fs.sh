@@ -45,9 +45,7 @@ is_installed "fsck.f2fs" "command" "F2FS utilities" && exit 0
 
 echo "[+] Starting installation/setup for f2fs..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y f2fs-tools
 
 echo "[✓] f2fs setup completed successfully!"

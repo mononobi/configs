@@ -45,9 +45,7 @@ is_installed "virt-manager" "command" "Virtual Machine Manager" && exit 0
 
 echo "[+] Starting installation/setup for virt-manager..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 has_candidate() {
     local candidate
     candidate=$(apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2}')

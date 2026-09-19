@@ -45,9 +45,7 @@ is_installed "sassc" "command" "SassC" && exit 0
 
 echo "[+] Starting installation/setup for sassc..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y sassc
 
 echo "[✓] sassc setup completed successfully!"

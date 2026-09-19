@@ -45,9 +45,7 @@ is_installed "cpu-x" "command" "CPU-X" && exit 0
 
 echo "[+] Starting installation/setup for cpu-x..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y cpu-x
 
 echo "[✓] cpu-x setup completed successfully!"

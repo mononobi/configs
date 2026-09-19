@@ -47,9 +47,7 @@ echo "==========================================================================
 echo " Starting GNOME Shell Extensions Activator Setup"
 echo "================================================================================"
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 
 echo "[+] Installing packages: gnome-shell-extension-manager, gnome-shell-extensions, chrome-gnome-shell..."
 sudo apt-get install -y gnome-shell-extension-manager gnome-shell-extensions chrome-gnome-shell

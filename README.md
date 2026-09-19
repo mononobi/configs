@@ -58,24 +58,34 @@ scripts minimal, robust, and DRY:
 
 ### 1. `require_app [OPTIONS] <app1> [app2...]`
 Resolves and executes application installers on demand:
-- **Multiple Apps**: Accepts one or more application names in a single call (e.g., `require_app curl ca-certificates gnupg`).
-- **Automatic 3-Tier Fallback**: Automatically searches for recipes across directories in priority order:
+- **Multiple Apps**: Accepts one or more application names in a single call 
+  (e.g., `require_app curl ca-certificates gnupg`).
+- **Automatic 3-Tier Fallback**: Automatically searches for recipes across directories in 
+  priority order:
   1. `apps-recommended/`
   2. `apps-extra/`
   3. `apps-not-needed/`
   Stops looking as soon as a match is found.
-- **Custom Category via `--category`**: Prioritizes a custom folder while retaining graceful fallback:
+- **Custom Category via `--category`**: Prioritizes a custom folder while retaining 
+  graceful fallback:
   ```bash
   require_app my-tool --category apps-dev
   ```
-- **Instant Fast-Skip**: Each application recipe inspects its own state via `is_installed`, skipping in `<1ms` if already present.
-- **Flag Propagation**: Global flags such as `--no-update` are forwarded automatically to all required dependencies.
+- **Instant Fast-Skip**: Each application recipe inspects its own state via `is_installed`, 
+  skipping in `<1ms` if already present.
+- **Flag Propagation**: Global flags such as `--no-update` are forwarded automatically to 
+  all required dependencies.
 
-### 2. `ensure_local_bin_in_path`
+### 2. `conditional_apt_update [--force]`
+Runs `sudo apt-get update` unless `SKIP_UPDATE` is set to `true` (e.g. when `--no-update` 
+is passed or during batch runs). Standardizes conditional APT updates across all recipes. 
+Pass `--force` to bypass `SKIP_UPDATE` if needed.
+
+### 3. `ensure_local_bin_in_path`
 Ensures `~/.local/bin` exists, exports it to current process `$PATH`, and permanently
 persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 
-### 3. GNOME Extension Helpers
+### 4. GNOME Extension Helpers
 - **`install_gnome_extension <uuid> [display_name]`**: Queries extensions.gnome.org API
   for the host GNOME Shell version, downloads the candidate archive, inspects its
   `metadata.json` to verify actual Shell compatibility and version before installing,

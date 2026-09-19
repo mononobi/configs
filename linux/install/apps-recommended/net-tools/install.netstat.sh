@@ -45,9 +45,7 @@ is_installed "netstat" "command" "net-tools" && exit 0
 
 echo "[+] Starting installation/setup for net-tools..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y net-tools
 
 echo "[✓] net-tools setup completed successfully!"

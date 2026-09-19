@@ -45,9 +45,7 @@ is_installed "nvtop" "command" && exit 0
 
 echo "[+] Starting installation/setup for nvtop..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y nvtop
 
 echo "[✓] nvtop setup completed successfully!"

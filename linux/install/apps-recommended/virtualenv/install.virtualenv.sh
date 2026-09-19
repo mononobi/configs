@@ -45,9 +45,7 @@ is_installed "virtualenv" "command" && exit 0
 
 echo "[+] Starting installation/setup for Virtualenv..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y virtualenv python3-virtualenv
 virtualenv --version
 

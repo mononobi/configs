@@ -46,9 +46,7 @@ done
 
 echo "[+] Starting installation/setup for XDM (Xtreme Download Manager)..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl tar xz-utils ca-certificates
 
 TEMP_DIR=$(mktemp -d)

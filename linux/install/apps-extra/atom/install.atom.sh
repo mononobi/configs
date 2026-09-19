@@ -46,9 +46,7 @@ is_installed "atom" "command" "Atom" && exit 0
 
 echo "[+] Starting installation/setup for Atom..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl ca-certificates libgconf-2-4
 
 TEMP_DEB=$(mktemp --suffix=.deb)

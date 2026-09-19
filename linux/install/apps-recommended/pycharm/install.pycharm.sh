@@ -64,9 +64,7 @@ is_installed "jetbrains-toolbox" "command" "JetBrains Toolbox (PyCharm)" && exit
 
 echo "[+] Starting installation/setup for PyCharm (JetBrains Toolbox)..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl tar ca-certificates
 
 # Configure inotify file watch limit for the IDE per guideline

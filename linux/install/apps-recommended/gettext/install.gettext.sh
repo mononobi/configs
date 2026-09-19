@@ -45,9 +45,7 @@ is_installed "gettext" "command" && exit 0
 
 echo "[+] Starting installation/setup for gettext..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gettext
 
 echo "[✓] gettext setup completed successfully!"

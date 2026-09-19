@@ -45,9 +45,7 @@ is_installed "notepadqq" "command" "Notepadqq" && exit 0
 
 echo "[+] Starting installation/setup for notepadqq..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y notepadqq
 
 echo "[✓] notepadqq setup completed successfully!"

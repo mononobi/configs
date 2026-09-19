@@ -49,9 +49,7 @@ is_installed "odbcinst" "command" "ODBC installer utilities" && exit 0
 echo "[+] Starting installation for Microsoft SQL Server ODBC Driver & Tools..."
 
 # 1. Update system and install essential prerequisites
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl ca-certificates gnupg lsb-release
 
 # 2. Detect host OS version and codename

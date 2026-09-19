@@ -45,9 +45,7 @@ is_installed "pandoc" "command" "Pandoc" && exit 0
 
 echo "[+] Starting installation/setup for pandoc..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-recommended texlive-latex-extra
 
 echo "[✓] pandoc setup completed successfully!"

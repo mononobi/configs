@@ -45,9 +45,7 @@ is_installed "rustc" "command" "Rust" && exit 0
 
 echo "[+] Starting installation/setup for rust..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl build-essential gcc
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source "$HOME/.cargo/env" || true

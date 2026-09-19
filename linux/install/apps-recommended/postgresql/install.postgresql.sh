@@ -73,9 +73,7 @@ is_installed "psql" "command" "PostgreSQL" && exit 0
 echo "[+] Starting installation/setup for PostgreSQL..."
 
 # 1. Update system and install prerequisites
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get -y upgrade
 require_app wget ca-certificates curl gnupg
 sudo apt-get install -y lsb-release

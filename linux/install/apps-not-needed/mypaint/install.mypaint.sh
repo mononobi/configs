@@ -45,9 +45,7 @@ is_installed "mypaint" "command" "MyPaint" && exit 0
 
 echo "[+] Starting installation/setup for mypaint..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y mypaint
 
 echo "[✓] mypaint setup completed successfully!"

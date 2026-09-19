@@ -45,9 +45,7 @@ is_installed "radeontop" "command" "RadeonTop" && exit 0
 
 echo "[+] Starting installation/setup for radeontop..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y radeontop
 
 echo "[✓] radeontop setup completed successfully!"

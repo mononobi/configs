@@ -45,9 +45,7 @@ is_installed "fsck.exfat" "command" "exFAT utilities" && exit 0
 
 echo "[+] Starting installation/setup for exfat..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y exfat-fuse exfatprogs
 
 echo "[✓] exfat setup completed successfully!"

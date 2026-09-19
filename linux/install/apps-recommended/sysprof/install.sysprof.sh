@@ -45,9 +45,7 @@ is_installed "sysprof" "command" "Sysprof" && exit 0
 
 echo "[+] Starting installation/setup for sysprof..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y sysprof
 
 echo "[✓] sysprof setup completed successfully!"

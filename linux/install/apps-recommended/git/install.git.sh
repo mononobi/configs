@@ -45,9 +45,7 @@ is_installed "git" "command" "Git" && exit 0
 
 echo "[+] Starting installation/setup for git..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y git
 
 echo "[✓] git setup completed successfully!"

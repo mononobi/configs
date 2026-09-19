@@ -45,9 +45,7 @@ is_installed "tar" "command" && exit 0
 
 echo "[+] Starting installation/setup for tar..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y tar
 
 echo "[✓] tar setup completed successfully!"

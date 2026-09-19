@@ -45,9 +45,7 @@ is_installed "gparted" "command" "GParted" && exit 0
 
 echo "[+] Starting installation/setup for gparted..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gparted
 
 echo "[✓] gparted setup completed successfully!"

@@ -45,9 +45,7 @@ is_installed "appimagelauncher" "command" "AppImageLauncher" && exit 0
 
 echo "[+] Starting installation/setup for appimage..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y software-properties-common
 
 echo "[+] Adding AppImageLauncher PPA..."

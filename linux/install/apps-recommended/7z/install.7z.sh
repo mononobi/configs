@@ -45,9 +45,7 @@ is_installed "7z" "command" "7-Zip" && exit 0
 
 echo "[+] Starting installation/setup for 7z..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y 7zip 7zip-rar
 
 echo "[✓] 7z setup completed successfully!"

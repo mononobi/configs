@@ -45,9 +45,7 @@ is_installed "xournalpp" "command" "Xournal++" && exit 0
 
 echo "[+] Starting installation/setup for xournalpp..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y xournalpp
 
 echo "[✓] xournalpp setup completed successfully!"

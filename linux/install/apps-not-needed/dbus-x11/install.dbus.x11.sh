@@ -45,9 +45,7 @@ is_installed "dbus-launch" "command" "dbus-x11" && exit 0
 
 echo "[+] Starting installation/setup for dbus-x11..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y dbus-x11
 
 echo "[✓] dbus-x11 setup completed successfully!"

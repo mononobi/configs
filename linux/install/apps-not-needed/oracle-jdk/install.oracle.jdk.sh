@@ -50,9 +50,7 @@ echo "[+] Checking for Oracle JDK .deb package in directory..."
 DEB_FILE=$(ls jdk-*.deb 2>/dev/null | head -n 1 || true)
 
 if [[ -n "$DEB_FILE" && -f "$DEB_FILE" ]]; then
-    if [[ "$SKIP_UPDATE" != "true" ]]; then
-        sudo apt-get update
-    fi
+    conditional_apt_update
     sudo apt-get install -y "./$DEB_FILE"
 else
     echo "[!] No Oracle JDK .deb found in current directory."

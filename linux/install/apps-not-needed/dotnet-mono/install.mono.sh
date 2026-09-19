@@ -45,9 +45,7 @@ is_installed "mono" "command" "Mono" && exit 0
 
 echo "[+] Starting installation/setup for Mono Runtime & SDK..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y ca-certificates gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.mono-project.com/repo/xamarin.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/mono-official-archive-keyring.gpg > /dev/null

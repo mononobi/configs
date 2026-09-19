@@ -45,9 +45,7 @@ is_installed "gnome-tweaks" "command" "GNOME Tweaks" && exit 0
 
 echo "[+] Starting installation/setup for gnome-tweaks..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gnome-tweaks
 
 echo "[✓] gnome-tweaks setup completed successfully!"

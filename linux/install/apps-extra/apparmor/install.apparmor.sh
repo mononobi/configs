@@ -45,9 +45,7 @@ is_installed "aa-status" "command" "AppArmor Utilities" && exit 0
 
 echo "[+] Starting installation/setup for apparmor..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y apparmor-easyprof apparmor-notify apparmor-utils
 
 echo "[✓] apparmor setup completed successfully!"

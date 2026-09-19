@@ -45,9 +45,7 @@ is_installed "vulkaninfo" "command" "Vulkan Tools" && exit 0
 
 echo "[+] Starting installation/setup for vulkan-tools..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y vulkan-tools vulkan-validationlayers libvulkan1
 
 echo "[✓] vulkan-tools setup completed successfully!"

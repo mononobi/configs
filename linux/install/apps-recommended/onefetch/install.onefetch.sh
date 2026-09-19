@@ -52,9 +52,7 @@ is_installed "onefetch" "command" && exit 0
 
 echo "[+] Starting installation/setup for onefetch..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl tar ca-certificates
 
 TEMP_DIR=$(mktemp -d)

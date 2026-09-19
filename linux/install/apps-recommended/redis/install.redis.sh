@@ -45,9 +45,7 @@ is_installed "redis-server" "command" "Redis" && exit 0
 
 echo "[+] Starting installation/setup for redis..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y redis-server
 sudo systemctl enable --now redis-server
 

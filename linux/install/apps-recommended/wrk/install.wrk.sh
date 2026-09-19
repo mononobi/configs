@@ -45,9 +45,7 @@ is_installed "wrk" "command" && exit 0
 
 echo "[+] Starting installation/setup for wrk..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y wrk
 
 echo "[✓] wrk setup completed successfully!"

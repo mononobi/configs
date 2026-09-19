@@ -45,9 +45,7 @@ is_installed "gpg" "command" "GnuPG" && exit 0
 
 echo "[+] Starting installation/setup for gnupg..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gnupg
 
 echo "[✓] gnupg setup completed successfully!"

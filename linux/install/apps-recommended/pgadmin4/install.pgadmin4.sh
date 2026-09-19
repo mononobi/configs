@@ -45,9 +45,7 @@ is_installed "pgadmin4" "command" "pgAdmin 4" && exit 0
 
 echo "[+] Starting installation/setup for pgAdmin 4..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl ca-certificates gnupg lsb-release
 
 sudo install -m 0755 -d /etc/apt/keyrings

@@ -64,9 +64,7 @@ done
 echo "[+] Starting installation/setup for Ookla Speedtest CLI..."
 
 if ! command -v curl >/dev/null 2>&1 || ! command -v tar >/dev/null 2>&1; then
-    if [[ "$SKIP_UPDATE" != "true" ]]; then
-        sudo apt-get update
-    fi
+    conditional_apt_update
     sudo apt-get install -y curl tar ca-certificates
 fi
 

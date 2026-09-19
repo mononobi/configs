@@ -47,9 +47,7 @@ echo "[+] Starting installation/setup for spotify..."
 
 require_app ca-certificates curl gnupg
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.spotify.com/debian/pubkey_5384CE82BA52C83A.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/spotify.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/spotify.gpg

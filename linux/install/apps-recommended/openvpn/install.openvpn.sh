@@ -45,9 +45,7 @@ is_installed "openvpn" "command" "OpenVPN" && exit 0
 
 echo "[+] Starting installation/setup for openvpn..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y openvpn network-manager-openvpn-gnome
 
 echo "[✓] openvpn setup completed successfully!"

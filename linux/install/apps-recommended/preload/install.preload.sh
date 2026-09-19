@@ -45,9 +45,7 @@ is_installed "preload" "command" "Preload" && exit 0
 
 echo "[+] Starting installation/setup for preload..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y preload
 sudo systemctl enable --now preload
 

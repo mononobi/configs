@@ -45,9 +45,7 @@ is_installed "kdeconnect-indicator" "command" "KDE Connect" && exit 0
 
 echo "[+] Starting installation/setup for kdeconnect..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y kdeconnect
 echo "[+] Note: If using GNOME Shell, the GSConnect extension (https://extensions.gnome.org/extension/1319/gsconnect/) is also recommended."
 

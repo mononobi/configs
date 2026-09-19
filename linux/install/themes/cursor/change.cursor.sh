@@ -61,9 +61,7 @@ echo "==========================================================================
 # 1. Install xcursor-themes package
 echo "[+] Ensuring xcursor-themes package is installed..."
 if ! dpkg -s xcursor-themes >/dev/null 2>&1; then
-    if [[ "$SKIP_UPDATE" != "true" ]]; then
-        sudo apt-get update
-    fi
+    conditional_apt_update
     sudo apt-get install -y xcursor-themes
 else
     echo "[✓] xcursor-themes package is already installed."

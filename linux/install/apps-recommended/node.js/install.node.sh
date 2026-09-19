@@ -88,9 +88,7 @@ except Exception:
     echo "[+] Latest stable LTS version detected: Node.js v${NODE_MAJOR}.x"
 fi
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 require_app ca-certificates curl gnupg
 
 # 1. Install NodeSource repository

@@ -45,9 +45,7 @@ is_installed "ufw" "command" "UFW" && exit 0
 
 echo "[+] Starting installation/setup for ufw..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y ufw
 sudo ufw default allow outgoing
 sudo ufw --force enable

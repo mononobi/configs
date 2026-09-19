@@ -45,9 +45,7 @@ is_installed "pipewire" "command" "PipeWire" && exit 0
 
 echo "[+] Starting installation/setup for pipewire..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y pipewire pipewire-audio-client-libraries pipewire-pulse wireplumber libspa-0.2-bluetooth
 systemctl --user enable --now pipewire pipewire-pulse wireplumber
 

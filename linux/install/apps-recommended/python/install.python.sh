@@ -58,9 +58,7 @@ done
 echo "[+] Starting installation/setup for Python toolchains..."
 
 # 1. Update system and install essential prerequisites
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y software-properties-common ca-certificates curl build-essential
 
 # 2. Add deadsnakes PPA for multi-version Python support

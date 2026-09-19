@@ -45,9 +45,7 @@ is_installed "blueman-manager" "command" "Blueman" && exit 0
 
 echo "[+] Starting installation/setup for blueman..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y blueman
 
 echo "[✓] blueman setup completed successfully!"

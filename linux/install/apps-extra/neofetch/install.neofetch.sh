@@ -46,9 +46,7 @@ is_installed "neofetch" "command" "Neofetch" && exit 0
 
 echo "[+] Starting installation for Neofetch..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y neofetch
 
 echo "[✓] Neofetch installation completed successfully!"

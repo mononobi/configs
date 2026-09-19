@@ -47,9 +47,7 @@ echo "[+] Starting installation/setup for signal..."
 
 require_app ca-certificates curl gnupg
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/signal-desktop-keyring.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/signal-desktop-keyring.gpg

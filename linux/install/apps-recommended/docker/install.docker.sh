@@ -49,9 +49,7 @@ is_installed "docker" "command" "Docker" && exit 0
 
 echo "[+] Starting installation/setup for Docker CE & Compose..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 require_app ca-certificates curl gnupg lsb-release
 
 sudo install -m 0755 -d /etc/apt/keyrings

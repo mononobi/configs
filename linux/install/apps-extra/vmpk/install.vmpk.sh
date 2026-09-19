@@ -45,9 +45,7 @@ is_installed "vmpk" "command" "Virtual MIDI Piano Keyboard" && exit 0
 
 echo "[+] Starting installation for VMPK (Virtual MIDI Piano Keyboard)..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y vmpk
 
 echo "[✓] VMPK installation completed successfully!"

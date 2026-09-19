@@ -45,9 +45,7 @@ is_installed "audacious" "command" && exit 0
 
 echo "[+] Starting installation/setup for audacious..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y audacious
 
 echo "[✓] audacious setup completed successfully!"

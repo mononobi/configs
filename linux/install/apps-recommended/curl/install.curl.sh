@@ -45,9 +45,7 @@ is_installed "curl" "command" && exit 0
 
 echo "[+] Starting installation/setup for curl..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl
 
 echo "[✓] curl setup completed successfully!"

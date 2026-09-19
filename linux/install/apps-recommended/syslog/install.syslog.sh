@@ -45,9 +45,7 @@ is_installed "syslog-ng" "command" && exit 0
 
 echo "[+] Starting installation/setup for syslog..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y syslog-ng-core
 sudo systemctl enable --now syslog-ng
 

@@ -45,9 +45,7 @@ is_installed "poetry" "command" "Poetry" && exit 0
 
 echo "[+] Starting installation/setup for poetry..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl python3 python3-venv
 
 echo "[+] Running official Poetry installer..."

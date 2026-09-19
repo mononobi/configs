@@ -45,9 +45,7 @@ is_installed "synaptic" "command" "Synaptic" && exit 0
 
 echo "[+] Starting installation/setup for synaptic..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y synaptic
 
 echo "[✓] synaptic setup completed successfully!"

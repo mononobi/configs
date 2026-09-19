@@ -45,9 +45,7 @@ is_installed "tmux" "command" && exit 0
 
 echo "[+] Starting installation/setup for tmux..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y tmux
 
 # Configure ~/.tmux.conf if not already created

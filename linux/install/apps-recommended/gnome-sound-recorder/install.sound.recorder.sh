@@ -45,9 +45,7 @@ is_installed "gnome-sound-recorder" "command" "GNOME Sound Recorder" && exit 0
 
 echo "[+] Starting installation/setup for gnome-sound-recorder..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gnome-sound-recorder
 
 echo "[✓] gnome-sound-recorder setup completed successfully!"

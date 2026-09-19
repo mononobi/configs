@@ -45,9 +45,7 @@ is_installed "shotwell" "command" "Shotwell" && exit 0
 
 echo "[+] Starting installation/setup for shotwell..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y shotwell
 
 echo "[✓] shotwell setup completed successfully!"

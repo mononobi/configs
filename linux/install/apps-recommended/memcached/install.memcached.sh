@@ -45,9 +45,7 @@ is_installed "memcached" "command" "Memcached" && exit 0
 
 echo "[+] Starting installation/setup for memcached..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y memcached libmemcached-tools
 sudo systemctl enable --now memcached
 

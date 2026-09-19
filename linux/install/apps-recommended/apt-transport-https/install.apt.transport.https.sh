@@ -45,9 +45,7 @@ is_installed "apt-transport-https" "apt" && exit 0
 
 echo "[+] Starting installation/setup for apt-transport-https..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y apt-transport-https
 
 echo "[✓] apt-transport-https setup completed successfully!"

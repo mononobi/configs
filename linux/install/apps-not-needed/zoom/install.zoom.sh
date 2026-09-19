@@ -48,9 +48,7 @@ echo "[+] Starting installation/setup for zoom..."
 TEMP_DEB=$(mktemp --suffix=.deb)
 echo "[+] Downloading Zoom deb package..."
 wget -O "$TEMP_DEB" https://zoom.us/client/latest/zoom_amd64.deb
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y "$TEMP_DEB"
 rm -f "$TEMP_DEB"
 

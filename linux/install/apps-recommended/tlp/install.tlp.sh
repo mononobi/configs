@@ -45,9 +45,7 @@ is_installed "tlp" "command" "TLP" && exit 0
 
 echo "[+] Starting installation/setup for tlp..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y tlp tlp-rdw
 sudo systemctl enable --now tlp
 sudo tlp start || true

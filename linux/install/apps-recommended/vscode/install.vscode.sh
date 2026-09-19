@@ -47,9 +47,7 @@ echo "[+] Starting installation/setup for vscode..."
 
 require_app ca-certificates curl gnupg apt-transport-https
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/packages.microsoft.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/packages.microsoft.gpg

@@ -45,9 +45,7 @@ is_installed "beekeeper-studio" "command" "Beekeeper Studio" && exit 0
 
 echo "[+] Starting installation/setup for beekeeper..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 require_app ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://deb.beekeeperstudio.io/beekeeper.key | gpg --dearmor | sudo tee /etc/apt/keyrings/beekeeper.gpg > /dev/null

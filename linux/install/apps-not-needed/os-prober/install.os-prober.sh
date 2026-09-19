@@ -45,9 +45,7 @@ is_installed "os-prober" "command" && exit 0
 
 echo "[+] Starting installation/setup for os-prober..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y os-prober
 
 # Enable GRUB_DISABLE_OS_PROBER=false in /etc/default/grub if disabled

@@ -45,9 +45,7 @@ is_installed "dotnet" "command" ".NET Core" && exit 0
 
 echo "[+] Starting installation/setup for .NET Core..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y libc6 libgcc1 libgssapi-krb5-2 libicu74 || sudo apt-get install -y libicu-dev || true
 sudo apt-get install -y dotnet-runtime-6.0 dotnet-sdk-6.0 || sudo apt-get install -y dotnet-sdk-8.0 || true
 dotnet --list-runtimes || true

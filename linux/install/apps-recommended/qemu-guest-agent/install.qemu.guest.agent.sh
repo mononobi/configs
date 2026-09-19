@@ -45,9 +45,7 @@ is_installed "qemu-guest-agent" "apt" && exit 0
 
 echo "[+] Starting installation/setup for qemu-guest-agent and spice-vdagent..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y spice-vdagent qemu-guest-agent
 
 echo "[✓] qemu-guest-agent setup completed successfully!"

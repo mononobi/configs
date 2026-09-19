@@ -238,10 +238,7 @@ else
 fi
 
 # 2. Update APT cache if requested
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    echo "[+] Updating APT package index..."
-    sudo apt-get update
-fi
+conditional_apt_update
 
 # 3. Step: Compatibility Installation (if needed, MUST happen before install)
 if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then

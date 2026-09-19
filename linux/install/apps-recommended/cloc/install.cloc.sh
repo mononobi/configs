@@ -45,9 +45,7 @@ is_installed "cloc" "command" && exit 0
 
 echo "[+] Starting installation/setup for cloc..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y cloc
 
 echo "[✓] cloc setup completed successfully!"

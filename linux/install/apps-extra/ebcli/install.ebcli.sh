@@ -45,9 +45,7 @@ is_installed "eb" "command" "AWS Elastic Beanstalk CLI" && exit 0
 
 echo "[+] Starting installation/setup for ebcli..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y build-essential zlib1g-dev libssl-dev libncurses-dev libffi-dev libsqlite3-dev libreadline-dev libbz2-dev pipx
 pipx install awsebcli
 

@@ -45,9 +45,7 @@ is_installed "gnome-weather" "command" "GNOME Weather" && exit 0
 
 echo "[+] Starting installation/setup for gnome-weather..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gnome-weather
 
 echo "[✓] gnome-weather setup completed successfully!"

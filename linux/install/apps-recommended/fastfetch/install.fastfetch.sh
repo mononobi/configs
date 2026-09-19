@@ -45,9 +45,7 @@ is_installed "fastfetch" "command" && exit 0
 
 echo "[+] Starting installation for Fastfetch..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 if apt-cache show fastfetch >/dev/null 2>&1; then
     sudo apt-get install -y fastfetch
 else

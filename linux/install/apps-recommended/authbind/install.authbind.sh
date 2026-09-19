@@ -45,9 +45,7 @@ is_installed "authbind" "command" && exit 0
 
 echo "[+] Starting installation/setup for authbind..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y authbind
 
 # Setup permissions for standard HTTP/HTTPS ports (80 & 443)

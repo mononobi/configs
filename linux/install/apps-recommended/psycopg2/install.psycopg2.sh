@@ -45,9 +45,7 @@ is_installed "libpq-dev" "apt" "psycopg2 build dependencies" && exit 0
 
 echo "[+] Starting installation/setup for psycopg2..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y libpq-dev python3-dev build-essential
 
 echo "[✓] psycopg2 setup completed successfully!"

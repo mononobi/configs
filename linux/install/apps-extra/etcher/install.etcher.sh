@@ -45,9 +45,7 @@ is_installed "balena-etcher-electron" "command" "balenaEtcher" && exit 0
 
 echo "[+] Starting installation/setup for etcher..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 require_app ca-certificates curl gnupg
 
 echo "[+] Adding Balena Etcher repository via official Cloudsmith script..."

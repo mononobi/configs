@@ -45,9 +45,7 @@ is_installed "designer" "command" "Qt Designer" && exit 0
 
 echo "[+] Starting installation/setup for pyqt5-designer..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y qttools5-dev-tools pyqt5-dev-tools qttools5-dev
 
 echo "[✓] pyqt5-designer setup completed successfully!"

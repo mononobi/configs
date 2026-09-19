@@ -45,9 +45,7 @@ is_installed "wireshark" "command" "Wireshark" && exit 0
 
 echo "[+] Starting installation/setup for wireshark..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 # Preconfigure wireshark non-superuser capture
 echo "wireshark-common wireshark-common/install-setuid boolean true" | sudo debconf-set-selections || true
 sudo apt-get install -y wireshark

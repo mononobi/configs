@@ -58,17 +58,13 @@ echo "==========================================================================
 # 1. Ensure required CLI tools (unzip and fontconfig)
 if ! command -v unzip >/dev/null 2>&1; then
     echo "[+] Installing unzip dependency..."
-    if [[ "$SKIP_UPDATE" != "true" ]]; then
-        sudo apt-get update
-    fi
+    conditional_apt_update
     sudo apt-get install -y unzip
 fi
 
 if ! command -v fc-cache >/dev/null 2>&1; then
     echo "[+] Installing fontconfig dependency..."
-    if [[ "$SKIP_UPDATE" != "true" ]]; then
-        sudo apt-get update
-    fi
+    conditional_apt_update
     sudo apt-get install -y fontconfig
 fi
 

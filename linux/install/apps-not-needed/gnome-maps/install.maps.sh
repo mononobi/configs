@@ -45,9 +45,7 @@ is_installed "gnome-maps" "command" "GNOME Maps" && exit 0
 
 echo "[+] Starting installation/setup for gnome-maps..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gnome-maps
 
 echo "[✓] gnome-maps setup completed successfully!"

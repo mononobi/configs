@@ -45,9 +45,7 @@ is_installed "jami" "command" "Jami" && exit 0
 
 echo "[+] Starting installation/setup for jami..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y gnupg dirmngr ca-certificates curl lsb-release --no-install-recommends
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://dl.jami.net/jami-archive-keyring.gpg | sudo tee /etc/apt/keyrings/jami-archive-keyring.gpg > /dev/null

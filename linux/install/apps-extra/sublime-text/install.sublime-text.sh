@@ -45,9 +45,7 @@ is_installed "subl" "command" "Sublime Text" && exit 0
 
 echo "[+] Starting installation/setup for sublime-text..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 require_app ca-certificates curl gnupg apt-transport-https
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/sublimehq-pub.gpg > /dev/null

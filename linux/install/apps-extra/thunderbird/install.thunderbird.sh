@@ -45,9 +45,7 @@ is_installed "thunderbird" "command" "Thunderbird" && exit 0
 
 echo "[+] Starting installation/setup for thunderbird..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y thunderbird
 
 echo "[✓] thunderbird setup completed successfully!"

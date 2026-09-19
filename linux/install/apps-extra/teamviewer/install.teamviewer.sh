@@ -48,9 +48,7 @@ echo "[+] Starting installation/setup for teamviewer..."
 TEMP_DEB=$(mktemp --suffix=.deb)
 echo "[+] Downloading TeamViewer deb package..."
 wget -O "$TEMP_DEB" https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y "$TEMP_DEB"
 rm -f "$TEMP_DEB"
 

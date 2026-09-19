@@ -45,9 +45,7 @@ is_installed "flatpak" && exit 0
 
 echo "[+] Starting installation/setup for flatpak..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y flatpak gnome-software-plugin-flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 

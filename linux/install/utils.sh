@@ -113,6 +113,20 @@ require_app() {
     done
 }
 
+# conditional_apt_update [--force]
+#
+# Runs 'sudo apt-get update' unless SKIP_UPDATE is set to 'true'.
+# Pass --force to run unconditionally.
+#
+# Examples:
+#   conditional_apt_update
+#   conditional_apt_update --force
+conditional_apt_update() {
+    if [[ "${1:-}" == "--force" || "${SKIP_UPDATE:-false}" != "true" ]]; then
+        sudo apt-get update
+    fi
+}
+
 # is_installed <target_name> [type] [display_name]
 #
 # Checks if an application or package is already installed.
@@ -485,6 +499,7 @@ except Exception:
 
 export INSTALL_ROOT
 export -f require_app
+export -f conditional_apt_update
 export -f is_installed
 export -f ensure_local_bin_in_path
 export -f check_extension_archive_compatibility

@@ -45,9 +45,7 @@ is_installed "svn" "command" "Subversion" && exit 0
 
 echo "[+] Starting installation/setup for svn..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y subversion
 
 echo "[✓] svn setup completed successfully!"

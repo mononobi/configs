@@ -45,9 +45,7 @@ is_installed "libglut-dev" "apt" "OpenGL Development Libraries" && exit 0
 
 echo "[+] Starting installation/setup for lib-opengl..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 
 sudo apt-get install -y libglut-dev
 

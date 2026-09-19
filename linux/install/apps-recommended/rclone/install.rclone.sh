@@ -42,9 +42,7 @@ done
 
 echo "[+] Starting installation/setup for Rclone..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl fuse3 ca-certificates unzip
 
 TEMP_DIR=$(mktemp -d)

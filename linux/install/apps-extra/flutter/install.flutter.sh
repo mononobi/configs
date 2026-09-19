@@ -45,9 +45,7 @@ is_installed "flutter" "command" "Flutter" && exit 0
 
 echo "[+] Starting installation/setup for Flutter SDK & Dependencies..."
 
-if [[ "$SKIP_UPDATE" != "true" ]]; then
-    sudo apt-get update
-fi
+conditional_apt_update
 sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev
 
 INSTALL_DIR="$HOME/.flutter-sdk/flutter"
