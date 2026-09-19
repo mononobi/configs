@@ -45,7 +45,7 @@ is_installed "brave-browser" --name "Brave Browser" && exit 0
 
 echo "[+] Starting installation/setup for brave..."
 
-require_app ca-certificates curl gnupg
+require_app ca-certificates curl gnupg apt-transport-https
 
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSLo /etc/apt/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
