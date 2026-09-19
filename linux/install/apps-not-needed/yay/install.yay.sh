@@ -45,7 +45,7 @@ is_installed "yay" && exit 0
 
 echo "[+] Starting installation/setup for yay..."
 
-if command -v pacman >/dev/null 2>&1; then
+if is_installed --check "pacman"; then
     sudo pacman -S --needed --noconfirm base-devel git
     TEMP_DIR=$(mktemp -d)
     git clone https://aur.archlinux.org/yay.git "$TEMP_DIR"
