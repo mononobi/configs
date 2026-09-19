@@ -45,7 +45,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "docker" "command" "Docker" && exit 0
+is_installed "docker" && exit 0
 
 echo "[+] Starting installation/setup for Docker CE & Compose..."
 
