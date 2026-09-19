@@ -95,6 +95,9 @@ fi
 if ! dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -q "ok installed"; then
     require_app "ca-certificates" "apps-recommended"
 fi
+if ! command -v netstat >/dev/null 2>&1; then
+    require_app "net-tools" "apps-recommended"
+fi
 
 # 1. Resolve or download the Citrix Workspace .deb package
 fetch_citrix_deb() {
@@ -260,13 +263,11 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
     sudo apt-get install -y \
         libsoup-2.4-1 \
         libwebkit2gtk-4.1-0 \
-        ca-certificates \
         libsecret-1-0 \
         libsecret-common \
         libsecret-tools \
         libopengl0 \
         libmanette-0.2-0 \
-        net-tools \
         "$GTK2_PKG"
 
     # Check if libicu74 is already installed

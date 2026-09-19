@@ -8,6 +8,14 @@ Download the `.deb` package from here:
 Always read the system requirements to make sure your current Ubuntu version is supported:
 [System Requirements and Compatibility](https://docs.citrix.com/en-us/citrix-workspace-app-for-linux/system-requirements.html)
 
+### Install Required tools
+
+```bash
+sudo apt install curl
+sudo apt install ca-certificates
+sudo apt install net-tools
+```
+
 > If your current Ubuntu version is not yet on the list of supported versions, follow the 
 > `Compatibility Installation` before performing the `Citrix App Installation`.
 
@@ -15,7 +23,7 @@ Always read the system requirements to make sure your current Ubuntu version is 
 
 ```bash
 sudo apt update
-sudo apt install libsoup-2.4-1 libwebkit2gtk-4.1-0 ca-certificates libsecret-1-0 libsecret-common libsecret-tools libopengl0 libmanette-0.2-0 net-tools libgtk2.0-0 -y
+sudo apt install libsoup-2.4-1 libwebkit2gtk-4.1-0 libsecret-1-0 libsecret-common libsecret-tools libopengl0 libmanette-0.2-0 libgtk2.0-0 -y
 ```
 
 These libraries should be manually downloaded & installed:
