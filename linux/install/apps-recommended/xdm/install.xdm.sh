@@ -4,9 +4,13 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 DOWNLOAD_URL="https://github.com/subhra74/xdm/releases/download/7.2.11/xdm-setup-7.2.11.tar.xz"
 
 SKIP_UPDATE=false
+FORCE=false
 
 show_help() {
     cat <<EOF
@@ -16,6 +20,7 @@ Description:
   Downloads and installs XDM (Xtreme Download Manager 7.2.11).
 
 Options:
+  -F, --force        Force reinstallation even if already installed
   --no-update        Skip apt update before installation
   -h, --help         Show this help message and exit
 EOF
@@ -32,6 +37,10 @@ while [[ $# -gt 0 ]]; do
             SKIP_UPDATE=true
             shift
             ;;
+        -F|--force)
+            FORCE=true
+            shift
+            ;;
         -u|--url)
             DOWNLOAD_URL="$2"
             shift 2
@@ -43,6 +52,8 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+is_installed "xdman" --name "XDM" && exit 0
 
 echo "[+] Starting installation/setup for XDM (Xtreme Download Manager)..."
 
