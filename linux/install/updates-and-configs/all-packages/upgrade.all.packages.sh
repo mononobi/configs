@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -38,12 +41,12 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get autoremove -y
 
-if command -v flatpak >/dev/null 2>&1; then
+if is_installed --check "flatpak"; then
     echo "[+] Updating Flatpak applications..."
     flatpak update -y
 fi
 
-if command -v snap >/dev/null 2>&1; then
+if is_installed --check "snap"; then
     echo "[+] Updating Snap packages..."
     sudo snap refresh
 fi
