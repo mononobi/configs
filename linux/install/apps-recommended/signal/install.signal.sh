@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
+
 SKIP_UPDATE=false
 
 show_help() {
@@ -40,10 +43,19 @@ done
 
 echo "[+] Starting installation/setup for signal..."
 
+if ! dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -q "ok installed"; then
+    require_app "ca-certificates" "apps-recommended"
+fi
+if ! command -v curl >/dev/null 2>&1; then
+    require_app "curl" "apps-recommended"
+fi
+if ! command -v gpg >/dev/null 2>&1; then
+    require_app "gnupg" "apps-recommended"
+fi
+
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/signal-desktop-keyring.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/signal-desktop-keyring.gpg
