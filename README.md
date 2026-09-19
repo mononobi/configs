@@ -3,6 +3,11 @@
 A curated collection of production-tested configurations, setup guidelines, and
 automation scripts for Linux environments, development tools, databases, and IDEs.
 
+> [!NOTE]
+> The entire installation framework, automation scripts, and configurations in this
+> repository are 100% AI-generated. No humans are to blame for any bugs, anti-patterns,
+> or code design—all code was produced and maintained by AI.
+
 ---
 
 ## The `linux/install` Framework
