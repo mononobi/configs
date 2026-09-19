@@ -184,7 +184,7 @@ trap cleanup EXIT
 TEMP_TARBALL="${TEMP_DIR}/Antigravity.tar.gz"
 
 echo "==> Downloading Antigravity tarball..."
-curl -fSL "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
+curl -fL --progress-bar "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
 
 # Step 2: Create installation directory
 mkdir -p "$INSTALL_DIR"
