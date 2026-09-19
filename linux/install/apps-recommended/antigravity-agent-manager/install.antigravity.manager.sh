@@ -93,6 +93,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# Require shared dependencies
+require_app curl python tar
+
 get_installed_version() {
     local version_file="${INSTALL_DIR}/.version"
     if [[ -f "$version_file" ]]; then
@@ -101,7 +104,7 @@ get_installed_version() {
     fi
 
     local asar_file="${INSTALL_DIR}/Antigravity-x64/resources/app.asar"
-    if [[ -f "$asar_file" ]] && command -v python3 >/dev/null 2>&1; then
+    if [[ -f "$asar_file" ]]; then
         python3 -c "
 import struct, json, sys
 try:
@@ -204,25 +207,10 @@ if [[ ! -f "$ICON_SRC" ]]; then
     exit 1
 fi
 
-# Detect download tool (curl / wget)
-DOWNLOAD_CMD=""
-if command -v curl &>/dev/null; then
-    DOWNLOAD_CMD="curl"
-elif command -v wget &>/dev/null; then
-    DOWNLOAD_CMD="wget"
-else
-    echo "Error: Neither 'curl' nor 'wget' was found on this system." >&2
-    exit 1
-fi
-
 # Step 1: Download tarball
 if [[ "$DRY_RUN" == true ]]; then
     TEMP_TARBALL="/tmp/Antigravity.tar.gz"
-    if [[ "$DOWNLOAD_CMD" == "curl" ]]; then
-        run_cmd curl -fSL "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
-    else
-        run_cmd wget -O "$TEMP_TARBALL" "$DOWNLOAD_URL"
-    fi
+    run_cmd curl -fSL "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
 else
     TEMP_DIR="$(mktemp -d)"
     cleanup() {
@@ -232,11 +220,7 @@ else
     TEMP_TARBALL="${TEMP_DIR}/Antigravity.tar.gz"
 
     echo "==> Downloading Antigravity tarball..."
-    if [[ "$DOWNLOAD_CMD" == "curl" ]]; then
-        curl -fSL "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
-    else
-        wget -O "$TEMP_TARBALL" "$DOWNLOAD_URL"
-    fi
+    curl -fSL "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
 fi
 
 # Step 2: Create installation directory
