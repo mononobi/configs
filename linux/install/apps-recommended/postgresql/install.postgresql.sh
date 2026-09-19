@@ -72,11 +72,9 @@ is_installed "psql" "command" "PostgreSQL" && exit 0
 
 echo "[+] Starting installation/setup for PostgreSQL..."
 
-# 1. Update system and install prerequisites
+# 1. Install prerequisites
+require_app wget ca-certificates curl gnupg lsb-release
 conditional_apt_update
-sudo apt-get -y upgrade
-require_app wget ca-certificates curl gnupg
-sudo apt-get install -y lsb-release
 
 # 2. Add official PostgreSQL PGDG repository & GPG keyring
 sudo install -m 0755 -d /etc/apt/keyrings

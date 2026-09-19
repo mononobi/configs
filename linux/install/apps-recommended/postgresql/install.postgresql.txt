@@ -1,7 +1,6 @@
 ############# NEW INSTALLATION #############
 
 sudo apt update
-sudo apt -y upgrade
 sudo apt install -y wget
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc
 RELEASE=$(lsb_release -cs)
