@@ -45,6 +45,8 @@ is_installed "teamviewer" --name "TeamViewer" && exit 0
 
 echo "[+] Starting installation/setup for teamviewer..."
 
+require_app wget
+
 TEMP_DEB=$(mktemp --suffix=.deb)
 echo "[+] Downloading TeamViewer deb package..."
 wget -O "$TEMP_DEB" https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
