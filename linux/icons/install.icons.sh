@@ -19,7 +19,7 @@ Description:
   ~/.local/share/icons. Completely idempotent and safe to run repeatedly.
 
 Options:
-  --no-update   Ignored (no APT dependencies required)
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOF
 }
@@ -32,6 +32,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --no-update|--skip-update)
+            SKIP_UPDATE=true
             shift
             ;;
         *)
@@ -53,6 +54,8 @@ fi
 echo "================================================================================"
 echo " Installing Custom Application Icons"
 echo "================================================================================"
+
+require_app gtk-update-icon-cache
 
 FILES_DIR="${SCRIPT_DIR}/files"
 if [[ ! -d "$FILES_DIR" ]]; then
@@ -86,11 +89,10 @@ for src in "${icon_files[@]}"; do
     copied_count=$((copied_count + 1))
 done
 
-# Optional: Refresh GTK icon cache if hicolor exists
-if command -v gtk-update-icon-cache >/dev/null 2>&1; then
-    if [[ -d "${TARGET_DIR}/hicolor" ]]; then
-        gtk-update-icon-cache -q -f -t "${TARGET_DIR}/hicolor" 2>/dev/null || true
-    fi
+# Refresh GTK icon cache if hicolor exists
+if [[ -d "${TARGET_DIR}/hicolor" ]]; then
+    echo "[+] Updating GTK icon cache for ${TARGET_DIR}/hicolor..."
+    gtk-update-icon-cache -q -f -t "${TARGET_DIR}/hicolor"
 fi
 
 echo ""
