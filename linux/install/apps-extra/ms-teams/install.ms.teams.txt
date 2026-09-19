@@ -1,9 +1,7 @@
-# install using apt (RECOMMENDED):
+# Install as PWA web app (Recommended):
 
-# download the latest version of the app from here:
+https://teams.cloud.microsoft
 
-https://www.microsoft.com/en-us/microsoft-teams/download-app
+# Install using Flatpak (Not Recommended):
 
-# execute this to install:
-
-sudo apt install ./DOWNLOADED_FILE.deb
+flatpak install -y flathub com.github.IsmaelMartinez.teams_for_linux
