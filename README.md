@@ -115,6 +115,22 @@ installed, allowing recipes to exit in `<1ms`:
   case-insensitively).
 - **Force Reinstallation**: Respects `FORCE=true` (or `--force`), returning `1` to bypass
   skipping when reinstallation or update is explicitly requested.
+- **Pure Existence Query via `--check`**:
+  When passed `--check`, `is_installed` operates in silent query mode:
+  ```bash
+  is_installed --check <target_name> [type]
+  ```
+  - Suppresses console logging (`[i] ... skipping...`).
+  - Bypasses and ignores `$FORCE`, performing a factual query against host reality.
+  - Returns exit code `0` if present, `1` if not.
+  - **Permitted Use Scope**: While `is_installed` is primarily intended as an installer's
+    own top-level self-check, `is_installed --check` **may** be used by other scripts
+    **only** when the goal is purely to inspect whether an application, tool, or binary is
+    present *without any intention of installing it* (e.g., validating user CLI input or
+    inspecting non-managed binaries).
+  - **Strict Prohibition**: Scripts must **NEVER** use `is_installed` or `is_installed --check`
+    to test for a dependency and then proceed to install it manually. Installing dependencies
+    is strictly the responsibility of `require_app`.
 
 ### 3. `conditional_apt_update [--force]`
 Executes `sudo apt-get update` unless `SKIP_UPDATE` is set to `true` (e.g., when `--no-update`
@@ -166,9 +182,13 @@ is_installed "my-tool" && exit 0
 This guarantees `<1ms` fast-skips when running batches or re-executing installers.
 
 ### Rule 2: `is_installed` Is Strictly for Self-Checks
-Never use `is_installed` to inspect external dependencies or third-party packages. Let
-`require_app` handle dependencies, which in turn runs the dependency recipe's own
-`is_installed` check.
+Never use `is_installed` to inspect external dependencies or third-party packages with
+the goal of installing them. Let `require_app` handle dependencies, which in turn runs the
+dependency recipe's own `is_installed` check.
+The only exception is using `is_installed --check <target>` when a script purely needs to
+inspect whether a tool or binary is present on the system without intending to install it
+(e.g., validating user CLI input or inspecting non-managed binaries). Never follow an
+`is_installed` check with a manual installation — that is strictly the role of `require_app`.
 
 ### Rule 3: Never Check Dependency Presence Manually
 Never wrap `require_app` in `if ! command -v ...` or `if ! dpkg ...`:

@@ -63,7 +63,7 @@ SYSTEM_PY=$(readlink -f /usr/bin/python3 2>/dev/null || echo "/usr/bin/python3")
 # 3. Resolve target Python (either specified or latest non-system version)
 if [[ -n "$TARGET_PYTHON" ]]; then
     [[ "$TARGET_PYTHON" =~ ^[0-9]+\.[0-9]+$ ]] && TARGET_PYTHON="python${TARGET_PYTHON}"
-    if ! command -v "$TARGET_PYTHON" >/dev/null 2>&1; then
+    if ! is_installed --check "$TARGET_PYTHON"; then
         echo "[!] Error: Specified Python executable '$TARGET_PYTHON' not found." >&2
         exit 1
     fi

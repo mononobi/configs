@@ -127,11 +127,19 @@ conditional_apt_update() {
     fi
 }
 
-# is_installed <target_name> [type] [display_name]
+# is_installed [OPTIONS] <target_name> [type] [display_name]
 #
 # Checks if an application or package is already installed.
-# If installed (and FORCE is not 'true'), prints an info message and returns 0.
-# If not installed (or FORCE is 'true'), returns 1.
+#
+# Options:
+#   --check            Query mode: performs a factual check, suppresses console
+#                      logging, and ignores $FORCE. Returns 0 if installed, 1 if not.
+#                      Use ONLY when you need to inspect package presence without
+#                      intending to install it.
+#
+# Default Behavior (Installer Self-Check):
+#   If installed (and FORCE is not 'true'), prints an info message and returns 0.
+#   If not installed (or FORCE is 'true'), returns 1.
 #
 # Types:
 #   command (default) - Checks binary in PATH via command -v
@@ -143,12 +151,39 @@ conditional_apt_update() {
 #   is_installed "curl" && exit 0
 #   is_installed "ca-certificates" "apt" && exit 0
 #   is_installed "org.audacityteam.Audacity" "flatpak" "Audacity" && exit 0
+#   is_installed --check "python3.13"
 is_installed() {
-    local target="$1"
-    local type="${2:-command}"
-    local name="${3:-$target}"
+    local check_only=false
+    local positional_args=()
 
-    if [[ "${FORCE:-false}" == "true" ]]; then
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --check)
+                check_only=true
+                shift
+                ;;
+            -*)
+                echo "[!] Error: Unknown option in is_installed: $1" >&2
+                return 1
+                ;;
+            *)
+                positional_args+=("$1")
+                shift
+                ;;
+        esac
+    done
+
+    local target="${positional_args[0]:-}"
+    local type="${positional_args[1]:-command}"
+    local name="${positional_args[2]:-$target}"
+
+    if [[ -z "$target" ]]; then
+        echo "[!] Error: is_installed requires a target name" >&2
+        return 1
+    fi
+
+    # When not in check mode, respect FORCE to bypass skip logic for reinstalls
+    if [[ "$check_only" != "true" && "${FORCE:-false}" == "true" ]]; then
         return 1
     fi
 
@@ -182,6 +217,9 @@ is_installed() {
     esac
 
     if [[ "$installed" == "true" ]]; then
+        if [[ "$check_only" == "true" ]]; then
+            return 0
+        fi
         local label="$name"
         if [[ "${target,,}" != "${name,,}" ]]; then
             label="${name}: ${target}"
