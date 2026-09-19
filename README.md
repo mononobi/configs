@@ -81,14 +81,31 @@ Resolves and executes application installers on demand:
 - **Flag Propagation**: Global flags such as `--no-update` are deduplicated and forwarded
   automatically to all required dependencies.
 
-### 2. `is_installed <target_name> [type] [display_name]`
+### 2. `is_installed [OPTIONS] <target_name> [type] [display_name]`
 Performs fast-path verification to check whether a package or application is already
 installed, allowing recipes to exit in `<1ms`:
-- **Supported Types**:
-  - `command` (default): Checks binary presence in `$PATH` via `command -v`.
-  - `apt` / `dpkg`: Checks package status via `dpkg-query -W -f='${Status}'` for `ok installed`.
-  - `flatpak`: Checks Flatpak applications via `flatpak info`.
-  - `snap`: Checks Snap applications via `snap list`.
+- **Supported Types & Argument Behavior**:
+  - `command` (default): Checks binary presence in `$PATH` via `command -v`. Can be safely 
+    dropped/omitted because it is the primary default:
+    ```bash
+    is_installed "curl"
+    ```
+  - `apt` / `dpkg`: Checks package status via `dpkg-query -W -f='${Status}'` for `ok installed`. 
+    Because `apt`/`dpkg` is the secondary check in the smart fallback, omitting it will still 
+    work in most cases, but it is strongly recommended to specify `"apt"` explicitly for clarity:
+    ```bash
+    is_installed "ca-certificates" "apt"
+    ```
+  - `flatpak`: Checks Flatpak applications via `flatpak info`. Because Flatpaks are not part of 
+    the default fallback checks, the `"flatpak"` type **must always be explicitly passed**:
+    ```bash
+    is_installed "com.spotify.Client" "flatpak" "Spotify"
+    ```
+  - `snap`: Checks Snap applications via `snap list`. Because Snaps are not part of the default 
+    fallback checks, the `"snap"` type **must always be explicitly passed**:
+    ```bash
+    is_installed "canonical-livepatch" "snap"
+    ```
 - **Strict Self-Check Scope**: `is_installed` is strictly meant for an installer script
   to check **its own primary target** at the start. **NEVER** use `is_installed` to check
   dependencies or external packages — always use `require_app` for dependencies!
@@ -129,7 +146,7 @@ installed, allowing recipes to exit in `<1ms`:
     present *without any intention of installing it* (e.g., validating user CLI input or
     inspecting non-managed binaries).
   - **Strict Prohibition**: Scripts must **NEVER** use `is_installed` or `is_installed --check`
-    to test for a dependency and then proceed to install it manually. Installing dependencies
+    to test for a dependency and then proceed to install it. Installing dependencies
     is strictly the responsibility of `require_app`.
 
 ### 3. `conditional_apt_update [--force]`
@@ -260,6 +277,12 @@ If an application requires a dependency that does not yet exist as a recipe in t
   `apps-not-needed` to `require_app`. The 3-tier fallback automatically searches them in order.
 - **Omit Redundant Display Names**: Do not pass the 3rd argument to `is_installed` if the
   display name matches the target name (case-sensitive).
+- **Package Type Arguments in `is_installed`**:
+  - Omit `type` for CLI binaries (defaults to `command`).
+  - Provide `"apt"` explicitly for libraries or meta-packages without a primary CLI 
+    binary (though fallback will attempt `dpkg`).
+  - Always explicitly provide `"flatpak"` or `"snap"` for Flatpak or Snap packages, as they 
+    are isolated runtimes not covered by default fallback checks.
 
 ---
 
