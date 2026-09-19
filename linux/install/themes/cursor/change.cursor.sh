@@ -60,12 +60,7 @@ echo "==========================================================================
 
 # 1. Install xcursor-themes package
 echo "[+] Ensuring xcursor-themes package is installed..."
-if ! dpkg -s xcursor-themes >/dev/null 2>&1; then
-    conditional_apt_update
-    sudo apt-get install -y xcursor-themes
-else
-    echo "[✓] xcursor-themes package is already installed."
-fi
+require_app xcursor-themes unzip
 
 # 2. Set system-wide fallback via update-alternatives
 echo "[+] Configuring system-wide cursor alternative..."
