@@ -46,7 +46,7 @@ done
 echo "[+] Starting installation/setup for Firefox (Official Mozilla DEB)..."
 
 # 1. Remove Snap version if present
-if command -v snap >/dev/null 2>&1 && snap list firefox >/dev/null 2>&1; then
+if is_installed --check "firefox" --type snap; then
     echo "[+] Snap version of Firefox detected. Removing..."
     if sudo snap remove --purge firefox; then
         echo "[+] Removing legacy snap wrapper binary at /usr/bin/firefox..."
