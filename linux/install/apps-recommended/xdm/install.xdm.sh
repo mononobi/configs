@@ -76,4 +76,14 @@ else
     exit 1
 fi
 
+# Configure OpenJ9 Java shared class cache to live under ~/.cache/xdman instead of ~/javasharedresources
+if [[ -f "/opt/xdman/xdman" ]]; then
+    echo "[+] Configuring Java shared class cache under ~/.cache/xdman..."
+    if ! grep -q "cacheDir=" /opt/xdman/xdman; then
+        sudo sed -i 's|/opt/xdman/jre/bin/java|/opt/xdman/jre/bin/java -Xshareclasses:cacheDir="${HOME}/.cache/xdman"|g' /opt/xdman/xdman
+    fi
+    mkdir -p "${HOME}/.cache/xdman"
+    rm -rf "${HOME}/javasharedresources"
+fi
+
 echo "[✓] XDM (Xtreme Download Manager) setup completed successfully!"
