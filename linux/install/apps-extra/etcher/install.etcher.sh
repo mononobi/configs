@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -38,12 +41,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "balena-etcher-electron" "command" "balenaEtcher" && exit 0
+
 echo "[+] Starting installation/setup for etcher..."
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ca-certificates curl gnupg
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
 
 echo "[+] Adding Balena Etcher repository via official Cloudsmith script..."
 curl -1sLf 'https://dl.cloudsmith.io/public/balena/etcher/setup.deb.sh' | sudo -E bash

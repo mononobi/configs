@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -37,6 +40,8 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+is_installed "vmpk" "command" "Virtual MIDI Piano Keyboard" && exit 0
 
 echo "[+] Starting installation for VMPK (Virtual MIDI Piano Keyboard)..."
 

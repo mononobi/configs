@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -38,12 +41,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "brave-browser" "command" "Brave Browser" && exit 0
+
 echo "[+] Starting installation/setup for brave..."
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ca-certificates curl gnupg
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSLo /etc/apt/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
 sudo chmod 644 /etc/apt/keyrings/brave-browser-archive-keyring.gpg

@@ -54,10 +54,6 @@ fi
 
 # Require prerequisite application gnome-weather
 echo "[+] Ensuring gnome-weather application dependency is installed..."
-if [[ "$SKIP_UPDATE" == "true" ]]; then
-    require_app "gnome-weather" "apps-recommended" --no-update
-else
-    require_app "gnome-weather" "apps-recommended"
-fi
+require_app "gnome-weather" "apps-recommended"
 
 install_gnome_extension "weatheroclock@CleoMenezesJr.github.io" "Weather O'Clock"

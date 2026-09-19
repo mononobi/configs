@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "org.sugarlabs.MusicKeyboard" "flatpak" "Sugar Labs Music Keyboard" && exit 0
+
 echo "[+] Starting installation for Sugar Labs Music Keyboard via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing org.sugarlabs.MusicKeyboard from Flathub..."
 flatpak install -y flathub org.sugarlabs.MusicKeyboard

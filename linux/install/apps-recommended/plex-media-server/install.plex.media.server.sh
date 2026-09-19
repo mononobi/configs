@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -38,12 +41,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "plexmediaserver" "apt" "Plex Media Server" && exit 0
+
 echo "[+] Starting installation/setup for Plex Media Server & Desktop..."
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ca-certificates curl gnupg
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
 
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://downloads.plex.tv/plex-keys/PlexSign.key | gpg --dearmor | sudo tee /etc/apt/keyrings/plexmediaserver.gpg > /dev/null

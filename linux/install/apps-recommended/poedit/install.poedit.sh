@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "net.poedit.Poedit" "flatpak" "Poedit" && exit 0
+
 echo "[+] Starting installation for Poedit via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing net.poedit.Poedit from Flathub..."
 flatpak install -y flathub net.poedit.Poedit

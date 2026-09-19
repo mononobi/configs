@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 PG_VERSION=""
 PG_PASSWORD="123"
 
@@ -65,6 +68,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "psql" "command" "PostgreSQL" && exit 0
+
 echo "[+] Starting installation/setup for PostgreSQL..."
 
 # 1. Update system and install prerequisites
@@ -72,7 +77,11 @@ if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
 sudo apt-get -y upgrade
-sudo apt-get install -y wget ca-certificates curl gnupg lsb-release
+require_app "wget" "apps-recommended"
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
+sudo apt-get install -y lsb-release
 
 # 2. Add official PostgreSQL PGDG repository & GPG keyring
 sudo install -m 0755 -d /etc/apt/keyrings

@@ -41,13 +41,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "com.bitwarden.desktop" "flatpak" "Bitwarden" && exit 0
+
 echo "[+] Starting installation/setup for Bitwarden..."
 
 # 1. Install Bitwarden Desktop via Flatpak
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing Bitwarden Desktop from Flathub..."
 flatpak install -y flathub com.bitwarden.desktop

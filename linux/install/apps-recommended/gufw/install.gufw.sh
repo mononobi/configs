@@ -41,11 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "gufw" "command" "GUFW" && exit 0
+
 echo "[+] Starting installation/setup for gufw..."
 
-if ! command -v ufw >/dev/null 2>&1; then
-    require_app "ufw" "apps-recommended"
-fi
+require_app "ufw" "apps-recommended"
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update

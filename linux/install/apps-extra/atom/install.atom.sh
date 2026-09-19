@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -38,6 +41,8 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+is_installed "atom" "command" "Atom" && exit 0
 
 echo "[+] Starting installation/setup for Atom..."
 

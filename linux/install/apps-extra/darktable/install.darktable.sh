@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "org.darktable.Darktable" "flatpak" "Darktable" && exit 0
+
 echo "[+] Starting installation for Darktable via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing org.darktable.Darktable from Flathub..."
 flatpak install -y flathub org.darktable.Darktable

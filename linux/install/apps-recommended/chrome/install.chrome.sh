@@ -41,20 +41,14 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "google-chrome" "command" "Google Chrome" && exit 0
+
 echo "[+] Starting installation/setup for chrome..."
 
-if ! command -v wget >/dev/null 2>&1; then
-    require_app "wget" "apps-recommended"
-fi
-if ! dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -q "ok installed"; then
-    require_app "ca-certificates" "apps-recommended"
-fi
-if ! command -v curl >/dev/null 2>&1; then
-    require_app "curl" "apps-recommended"
-fi
-if ! command -v gpg >/dev/null 2>&1; then
-    require_app "gnupg" "apps-recommended"
-fi
+require_app "wget" "apps-recommended"
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
 
 sudo install -m 0755 -d /etc/apt/keyrings
 wget -qO - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/google-chrome.gpg > /dev/null

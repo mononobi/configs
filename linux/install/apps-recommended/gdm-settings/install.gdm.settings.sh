@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "io.github.realmazharhussain.GdmSettings" "flatpak" "GDM Settings" && exit 0
+
 echo "[+] Starting installation for GDM Settings via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing io.github.realmazharhussain.GdmSettings from Flathub..."
 flatpak install -y flathub io.github.realmazharhussain.GdmSettings

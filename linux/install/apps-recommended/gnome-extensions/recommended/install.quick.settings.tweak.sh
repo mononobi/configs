@@ -62,19 +62,10 @@ SYS_EXT_DIR="/usr/share/gnome-shell/extensions/${UUID}"
 
 echo "[+] Processing GNOME extension: ${NAME} (${UUID})..."
 
-# Ensure dependencies (curl, python, unzip) if not already in PATH
-update_flag=()
-[[ "$SKIP_UPDATE" == "true" ]] && update_flag=("--no-update")
-
-if ! command -v curl >/dev/null 2>&1; then
-    require_app "curl" "apps-recommended" "${update_flag[@]}"
-fi
-if ! command -v python3 >/dev/null 2>&1; then
-    require_app "python" "apps-recommended" "${update_flag[@]}"
-fi
-if ! command -v unzip >/dev/null 2>&1; then
-    require_app "unzip" "apps-recommended" "${update_flag[@]}"
-fi
+# Ensure dependencies (curl, python, unzip)
+require_app "curl" "apps-recommended"
+require_app "python" "apps-recommended"
+require_app "unzip" "apps-recommended"
 
 shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
 shell_ver="${shell_ver:-46}"

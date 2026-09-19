@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -58,6 +61,8 @@ if grep -rq "mozillateam/ppa" /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/
     sudo rm -f /etc/apt/sources.list.d/*mozillateam* 2>/dev/null || true
 fi
 sudo rm -f /etc/apt/preferences.d/mozilla-firefox 2>/dev/null || true
+
+is_installed "firefox" "command" "Firefox" && exit 0
 
 # 3. Create keyrings directory and import Mozilla official signing key
 sudo install -d -m 0755 /etc/apt/keyrings

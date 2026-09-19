@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 NODE_MAJOR=""
 
 SKIP_UPDATE=false
@@ -57,6 +60,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "node" "command" "Node.js" && exit 0
+
 echo "[+] Starting installation/setup for Node.js, NPM & Yarn..."
 
 # Auto-detect latest stable LTS if not manually specified
@@ -86,7 +91,9 @@ fi
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ca-certificates curl gnupg
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
 
 # 1. Install NodeSource repository
 sudo install -m 0755 -d /etc/apt/keyrings

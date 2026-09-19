@@ -53,11 +53,7 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
 fi
 
 echo "[+] Ensuring gnome-system-monitor application dependency is installed..."
-if [[ "$SKIP_UPDATE" == "true" ]]; then
-    require_app "gnome-system-monitor" "apps-recommended" --no-update
-else
-    require_app "gnome-system-monitor" "apps-recommended"
-fi
+require_app "gnome-system-monitor" "apps-recommended"
 
 install_gnome_extension "system-monitor@gnome-shell-extensions.gcampax.github.com" "System Monitor"
 

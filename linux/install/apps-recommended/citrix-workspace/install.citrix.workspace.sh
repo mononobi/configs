@@ -84,20 +84,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "icaclient" "apt" "Citrix Workspace" && exit 0
+
 echo "================================================================================"
 echo " Starting Citrix Workspace App Installation"
 echo "================================================================================"
 
 # 0. Ensure required helper applications are satisfied via utils.sh
-if ! command -v curl >/dev/null 2>&1; then
-    require_app "curl" "apps-recommended"
-fi
-if ! dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -q "ok installed"; then
-    require_app "ca-certificates" "apps-recommended"
-fi
-if ! command -v netstat >/dev/null 2>&1; then
-    require_app "net-tools" "apps-recommended"
-fi
+require_app "curl" "apps-recommended"
+require_app "ca-certificates" "apps-recommended"
+require_app "net-tools" "apps-recommended"
 
 # 1. Resolve or download the Citrix Workspace .deb package
 fetch_citrix_deb() {

@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "fr.handbrake.ghb" "flatpak" "HandBrake" && exit 0
+
 echo "[+] Starting installation for HandBrake via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing fr.handbrake.ghb from Flathub..."
 flatpak install -y flathub fr.handbrake.ghb

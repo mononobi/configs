@@ -41,17 +41,13 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "signal-desktop" "command" "Signal Desktop" && exit 0
+
 echo "[+] Starting installation/setup for signal..."
 
-if ! dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -q "ok installed"; then
-    require_app "ca-certificates" "apps-recommended"
-fi
-if ! command -v curl >/dev/null 2>&1; then
-    require_app "curl" "apps-recommended"
-fi
-if ! command -v gpg >/dev/null 2>&1; then
-    require_app "gnupg" "apps-recommended"
-fi
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update

@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "com.github.IsmaelMartinez.teams_for_linux" "flatpak" "Microsoft Teams" && exit 0
+
 echo "[+] Starting installation for Microsoft Teams via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing com.github.IsmaelMartinez.teams_for_linux from Flathub..."
 flatpak install -y flathub com.github.IsmaelMartinez.teams_for_linux

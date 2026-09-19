@@ -41,6 +41,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "virt-manager" "command" "Virtual Machine Manager" && exit 0
+
 echo "[+] Starting installation/setup for virt-manager..."
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
@@ -74,9 +76,6 @@ sudo usermod -aG libvirt "$USER"
 sudo usermod -aG kvm "$USER"
 echo "[+] Virtualization packages installed. User $USER added to libvirt and kvm groups (re-login required)."
 
-if ! dpkg -s spice-vdagent qemu-guest-agent >/dev/null 2>&1; then
-    echo "[+] Guest integration agents not found. Installing dependency..."
-    require_app "qemu-guest-agent" "apps-recommended"
-fi
+require_app "qemu-guest-agent" "apps-recommended"
 
 echo "[✓] virt-manager setup completed successfully!"

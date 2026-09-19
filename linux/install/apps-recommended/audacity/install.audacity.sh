@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "org.audacityteam.Audacity" "flatpak" "Audacity" && exit 0
+
 echo "[+] Starting installation for Audacity via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing org.audacityteam.Audacity from Flathub..."
 flatpak install -y flathub org.audacityteam.Audacity

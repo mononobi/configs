@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -38,12 +41,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "tuxedo-control-center" "command" "Tuxedo Control Center" && exit 0
+
 echo "[+] Starting installation/setup for TUXEDO Control Center & Drivers..."
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ca-certificates curl gnupg lsb-release
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
+require_app "lsb-release" "apps-recommended"
 
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://deb.tuxedocomputers.com/0x54840598.pub.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/tuxedocomputers.gpg > /dev/null

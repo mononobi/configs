@@ -60,6 +60,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "jetbrains-toolbox" "command" "JetBrains Toolbox (PyCharm)" && exit 0
+
 echo "[+] Starting installation/setup for PyCharm (JetBrains Toolbox)..."
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then

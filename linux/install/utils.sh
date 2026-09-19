@@ -66,6 +66,68 @@ require_app() {
     (cd "$target_dir" && ./"$script_name" "${update_args[@]}" "${extra_args[@]}")
 }
 
+# is_installed <target_name> [type] [display_name]
+#
+# Checks if an application or package is already installed.
+# If installed (and FORCE is not 'true'), prints an info message and returns 0.
+# If not installed (or FORCE is 'true'), returns 1.
+#
+# Types:
+#   command (default) - Checks binary in PATH via command -v
+#   apt / dpkg        - Checks package status via dpkg-query
+#   flatpak           - Checks Flatpak application via flatpak info
+#   snap              - Checks Snap package via snap list
+#
+# Examples:
+#   is_installed "curl" && exit 0
+#   is_installed "ca-certificates" "apt" && exit 0
+#   is_installed "org.audacityteam.Audacity" "flatpak" "Audacity" && exit 0
+is_installed() {
+    local target="$1"
+    local type="${2:-command}"
+    local name="${3:-$target}"
+
+    if [[ "${FORCE:-false}" == "true" ]]; then
+        return 1
+    fi
+
+    local installed=false
+
+    case "$type" in
+        command|bin|cli)
+            command -v "$target" >/dev/null 2>&1 && installed=true
+            ;;
+        apt|dpkg)
+            dpkg-query -W -f='${Status}' "$target" 2>/dev/null | grep -q "ok installed" && installed=true
+            ;;
+        flatpak)
+            if command -v flatpak >/dev/null 2>&1; then
+                flatpak info "$target" >/dev/null 2>&1 && installed=true
+            fi
+            ;;
+        snap)
+            if command -v snap >/dev/null 2>&1; then
+                snap list "$target" >/dev/null 2>&1 && installed=true
+            fi
+            ;;
+        *)
+            # Smart fallback: check command first, then dpkg
+            if command -v "$target" >/dev/null 2>&1; then
+                installed=true
+            elif dpkg-query -W -f='${Status}' "$target" 2>/dev/null | grep -q "ok installed"; then
+                installed=true
+            fi
+            ;;
+    esac
+
+    if [[ "$installed" == "true" ]]; then
+        echo "[i] ${name} is already installed, skipping..."
+        return 0
+    fi
+
+    return 1
+}
+
 # ensure_local_bin_in_path
 #
 # Ensures ~/.local/bin exists, exports it to current process PATH,

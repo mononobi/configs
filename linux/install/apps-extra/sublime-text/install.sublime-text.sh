@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 SKIP_UPDATE=false
 
 show_help() {
@@ -38,12 +41,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "subl" "command" "Sublime Text" && exit 0
+
 echo "[+] Starting installation/setup for sublime-text..."
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ca-certificates curl gnupg apt-transport-https
+require_app "ca-certificates" "apps-recommended"
+require_app "curl" "apps-recommended"
+require_app "gnupg" "apps-recommended"
+require_app "apt-transport-https" "apps-recommended"
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/sublimehq-pub.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/sublimehq-pub.gpg

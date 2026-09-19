@@ -41,12 +41,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "com.gitlab.wonderwall" "flatpak" "Wonderwall" && exit 0
+
 echo "[+] Starting installation for Wonderwall via Flatpak..."
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "[!] Flatpak not found. Installing flatpak dependency..."
-    require_app "flatpak" "apps-recommended"
-fi
+require_app "flatpak" "apps-recommended"
 
 echo "[+] Installing com.gitlab.wonderwall from Flathub..."
 flatpak install -y flathub com.gitlab.wonderwall
