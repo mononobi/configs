@@ -57,21 +57,7 @@ echo " Starting Conduit Node Setup"
 echo "================================================================================"
 
 # 1. Require Docker and UFW dependencies
-echo "[+] Checking Docker and Docker Compose..."
-if ! command -v docker >/dev/null 2>&1 || ! docker compose version >/dev/null 2>&1; then
-    echo "[!] Docker or Docker Compose not found. Installing docker via utils.sh..."
-    require_app "docker"
-else
-    echo "[✓] Docker and Docker Compose are installed."
-fi
-
-echo "[+] Checking UFW..."
-if ! command -v ufw >/dev/null 2>&1; then
-    echo "[!] UFW not found. Installing ufw via utils.sh..."
-    require_app "ufw"
-else
-    echo "[✓] UFW is installed."
-fi
+require_app docker ufw
 
 # 2. Conduit Node Directory & File Setup
 TARGET_DIR="${HOME}/.conduit-node"
