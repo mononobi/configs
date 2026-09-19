@@ -1,59 +1,57 @@
 #!/usr/bin/env bash
-# Description: Install and configure Antigravity Agent Manager (Antigravity v2)
-# Note: Idempotent and safe to run multiple times.
-
 set -euo pipefail
 
+# -----------------------------------------------------------------------------
+# Antigravity Agent Manager Installer
+# -----------------------------------------------------------------------------
+
+# Resolve script directory and source asset paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
-
 FILES_DIR="${SCRIPT_DIR}/files"
 DESKTOP_SRC="${FILES_DIR}/antigravity.desktop"
 ICON_SRC="${FILES_DIR}/antigravity.png"
 
+# Target destinations
 INSTALL_DIR="${HOME}/.antigravity-manager"
 APP_DIR="${HOME}/.local/share/applications"
-ICON_DIR="${HOME}/.local/share/icons/hicolor/512x512/apps"
+ICON_DIR="${HOME}/.local/share/icons"
 DEST_DESKTOP="${APP_DIR}/antigravity.desktop"
-DEST_ICON="${ICON_DIR}/antigravity.png"
+DEST_ICON="${ICON_DIR}/hicolor/512x512/apps/antigravity.png"
+
+# Dynamic values for .desktop entry based on user's $HOME
+DESKTOP_EXEC="sh -c '${INSTALL_DIR}/Antigravity-x64/antigravity --class=antigravity %F; pkill -f antigravity'"
+DESKTOP_PATH="${INSTALL_DIR}/Antigravity-x64/"
 
 FORCE=false
 DOWNLOAD_URL=""
 CUSTOM_URL=false
+
 SKIP_UPDATE=false
 
-show_help() {
+usage() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS] [DOWNLOAD_URL]
 
-Description:
-  Installs Antigravity Agent Manager (Antigravity v2).
-  If DOWNLOAD_URL is omitted, the latest stable release is automatically detected.
-  If already installed at the latest version, skips re-downloading.
+Installs Antigravity Agent Manager (Antigravity v2).
+If DOWNLOAD_URL is omitted, the latest stable release is automatically detected.
+If already installed at the latest version, skips re-downloading.
 
 Arguments:
-  DOWNLOAD_URL          Optional direct URL to the Antigravity tarball (.tar.gz).
-                        Default: auto-detects from the official auto-updater service.
+  [DOWNLOAD_URL]    Optional direct URL to the Antigravity tarball (.tar.gz).
+                    If omitted, auto-detects from the official auto-updater service.
 
 Options:
-  -u, --url <URL>       Specify direct download URL for Antigravity .tar.gz
-  -F, --force           Force re-download and re-installation even if up to date
-  --no-update           Skip apt update before installation
-  -h, --help            Show this help message and exit
+  -u, --url <URL>   Specify direct download URL for Antigravity .tar.gz
+  -F, --force       Force re-download and re-installation even if up to date
+  --no-update       Skip apt update before installation
+  -h, --help        Display this help message and exit
 EOF
 }
 
 # Parse command line options and arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -h|--help)
-            show_help
-            exit 0
-            ;;
-        --no-update|--skip-update)
-            SKIP_UPDATE=true
-            shift
-            ;;
         -F|--force)
             FORCE=true
             shift
@@ -63,14 +61,23 @@ while [[ $# -gt 0 ]]; do
             CUSTOM_URL=true
             shift 2
             ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
+            ;;
         -*)
-            echo "Unknown option: $1" >&2
-            echo "Use -h or --help for usage information." >&2
+            echo "Error: Unknown option '$1'" >&2
+            usage >&2
             exit 1
             ;;
         *)
             if [[ -n "$DOWNLOAD_URL" ]]; then
                 echo "Error: Only a single download URL argument is accepted." >&2
+                usage >&2
                 exit 1
             fi
             DOWNLOAD_URL="$1"
@@ -127,7 +134,7 @@ if [[ "$CUSTOM_URL" != "true" ]]; then
     CURRENT_VERSION=$(get_installed_version)
     if [[ "$FORCE" != "true" && -n "$CURRENT_VERSION" && -n "$LATEST_VERSION" && "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
         if [[ -x "${INSTALL_DIR}/Antigravity-x64/antigravity" && -f "$DEST_DESKTOP" ]]; then
-            echo "[i] Antigravity Agent Manager is already installed and up to date (v${CURRENT_VERSION}), skipping..."
+            echo "[✓] Antigravity Agent Manager is already installed and up to date (v${CURRENT_VERSION})."
             exit 0
         fi
     fi
@@ -140,11 +147,33 @@ if [[ -z "$DOWNLOAD_URL" ]]; then
 fi
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
-    echo "[!] Error: Missing required download URL." >&2
+    echo "Error: Missing required download URL." >&2
+    usage >&2
     exit 1
 fi
 
-echo "[+] Starting installation/setup for Antigravity Agent Manager..."
+set_desktop_attribute() {
+    local file="$1"
+    local key="$2"
+    local value="$3"
+
+    if grep -q "^${key}=" "$file" 2>/dev/null; then
+        sed -i "s|^${key}=.*|${key}=${value}|" "$file"
+    else
+        echo "${key}=${value}" >> "$file"
+    fi
+}
+
+# Validate source assets exist
+if [[ ! -f "$DESKTOP_SRC" ]]; then
+    echo "Error: Desktop file not found at '${DESKTOP_SRC}'" >&2
+    exit 1
+fi
+
+if [[ ! -f "$ICON_SRC" ]]; then
+    echo "Error: Icon file not found at '${ICON_SRC}'" >&2
+    exit 1
+fi
 
 # Step 1: Download tarball
 TEMP_DIR="$(mktemp -d)"
@@ -154,37 +183,47 @@ cleanup() {
 trap cleanup EXIT
 TEMP_TARBALL="${TEMP_DIR}/Antigravity.tar.gz"
 
-echo "[+] Downloading Antigravity package..."
+echo "==> Downloading Antigravity tarball..."
 curl -fSL "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
 
 # Step 2: Create installation directory
-echo "[+] Extracting archive to ${INSTALL_DIR}..."
 mkdir -p "$INSTALL_DIR"
+
+# Step 3: Extract archive into installation directory
+echo "==> Extracting archive..."
 tar -xzf "$TEMP_TARBALL" -C "$INSTALL_DIR"
 
-# Step 3: Set required permissions and ownership on chrome-sandbox
+# Step 4: Set required permissions and ownership on chrome-sandbox
 CHROME_SANDBOX="${INSTALL_DIR}/Antigravity-x64/chrome-sandbox"
-echo "[+] Configuring chrome-sandbox permissions..."
+echo "==> Configuring chrome-sandbox..."
 sudo chown root:root "$CHROME_SANDBOX"
 sudo chmod 4755 "$CHROME_SANDBOX"
 
-# Step 4: Configure desktop launcher and application icon
-echo "[+] Configuring desktop application launcher and icon..."
-mkdir -p "$APP_DIR" "$ICON_DIR"
+# Step 5: Copy application shortcut (.desktop) to destination
+mkdir -p "$APP_DIR"
+cp "$DESKTOP_SRC" "$DEST_DESKTOP"
+
+# Step 6: Dynamically set Exec and Path attributes in destination .desktop file
+set_desktop_attribute "$DEST_DESKTOP" "Exec" "$DESKTOP_EXEC"
+set_desktop_attribute "$DEST_DESKTOP" "Path" "$DESKTOP_PATH"
+
+# Step 7: Copy application icon (.png)
+mkdir -p "$ICON_DIR"
+cp "$ICON_SRC" "${ICON_DIR}/"
+HICOLOR_DIR="${ICON_DIR}/hicolor"
+mkdir -p "${HICOLOR_DIR}/512x512/apps"
 cp "$ICON_SRC" "$DEST_ICON"
 
-sed -e "s|/home/USER_NAME|${HOME}|g" "$DESKTOP_SRC" > "$DEST_DESKTOP"
-chmod +x "$DEST_DESKTOP"
-
-# Step 5: Record installed version and refresh desktop databases
+# Step 8: Record installed version and refresh desktop databases
 if [[ -n "$LATEST_VERSION" ]]; then
     echo "$LATEST_VERSION" > "${INSTALL_DIR}/.version"
 else
     INSTALLED_VER=$(get_installed_version)
     [[ -n "$INSTALLED_VER" ]] && echo "$INSTALLED_VER" > "${INSTALL_DIR}/.version"
 fi
-
 update-desktop-database "$APP_DIR" 2>/dev/null || true
-gtk-update-icon-cache -f -t "${HOME}/.local/share/icons/hicolor" 2>/dev/null || true
+gtk-update-icon-cache -f -t "$HICOLOR_DIR" 2>/dev/null || true
 
-echo "[✓] Antigravity Agent Manager successfully installed!"
+echo "[✓] Antigravity Agent Manager successfully installed to: ${INSTALL_DIR}"
+echo "[✓] Desktop launcher created at: ${DEST_DESKTOP}"
+echo "[✓] Icon placed at: ${DEST_ICON}"
