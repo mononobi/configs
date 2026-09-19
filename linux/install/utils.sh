@@ -121,7 +121,11 @@ is_installed() {
     esac
 
     if [[ "$installed" == "true" ]]; then
-        echo "[i] ${name} is already installed, skipping..."
+        local label="$name"
+        if [[ "${target,,}" != "${name,,}" ]]; then
+            label="${name}: ${target}"
+        fi
+        echo "[i] ${label} is already installed, skipping..."
         return 0
     fi
 
