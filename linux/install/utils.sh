@@ -487,7 +487,8 @@ install_gnome_extension() {
     local sys_ext_dir="/usr/share/gnome-shell/extensions/${uuid}"
 
     # Ensure required helper apps
-    require_app curl python unzip
+    require_app curl python
+    require_app activator --category apps-recommended/gnome-extensions
 
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
@@ -538,15 +539,7 @@ except Exception:
     fi
 
     echo "    Metadata verified for GNOME ${shell_ver}. Installing to target destination..."
-    if command -v gnome-extensions >/dev/null 2>&1; then
-        gnome-extensions install -f "$tmp_zip" 2>/dev/null || {
-            mkdir -p "$user_ext_dir"
-            unzip -q -o "$tmp_zip" -d "$user_ext_dir"
-        }
-    else
-        mkdir -p "$user_ext_dir"
-        unzip -q -o "$tmp_zip" -d "$user_ext_dir"
-    fi
+    gnome-extensions install -f "$tmp_zip"
     rm -f "$tmp_zip"
 
     if [[ -d "${user_ext_dir}/schemas" ]]; then

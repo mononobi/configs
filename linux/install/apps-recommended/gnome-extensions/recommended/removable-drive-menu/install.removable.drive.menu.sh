@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and enable GSConnect GNOME Shell extension
+# Description: Install and enable Removable Drive Menu GNOME Shell extension
 # Note: Completely idempotent. Can be run standalone or invoked from batch runners.
 
 set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -15,8 +15,9 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and enables GSConnect (UUID: gsconnect@andyholmes.github.io),
-  the complete implementation of KDE Connect for GNOME Shell.
+  Installs and enables Removable Drive Menu
+  (UUID: drive-menu@gnome-shell-extensions.gcampax.github.com), providing an icon in the
+  status area showing attached external and removable storage drives.
 
 Options:
   --no-update   Skip apt update when verifying dependencies
@@ -51,4 +52,4 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-install_gnome_extension "gsconnect@andyholmes.github.io" "GSConnect"
+install_gnome_extension "drive-menu@gnome-shell-extensions.gcampax.github.com" "Removable Drive Menu"

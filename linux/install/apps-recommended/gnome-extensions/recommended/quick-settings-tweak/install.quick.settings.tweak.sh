@@ -6,7 +6,7 @@ set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -62,8 +62,9 @@ SYS_EXT_DIR="/usr/share/gnome-shell/extensions/${UUID}"
 
 echo "[+] Processing GNOME extension: ${NAME} (${UUID})..."
 
-# Ensure dependencies (curl, python, unzip)
-require_app curl python unzip
+# Ensure dependencies (curl, python, activator)
+require_app curl python
+require_app activator --category apps-recommended/gnome-extensions
 
 shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
 shell_ver="${shell_ver:-46}"
@@ -182,15 +183,7 @@ if [[ -d "$ORIGINAL_USER_DIR" ]] || gnome-extensions list 2>/dev/null | grep -q 
 fi
 
 echo "    Metadata verified for GNOME ${shell_ver}. Installing to target destination..."
-if command -v gnome-extensions >/dev/null 2>&1; then
-    gnome-extensions install -f "$TMP_ZIP" 2>/dev/null || {
-        mkdir -p "$USER_EXT_DIR"
-        unzip -q -o "$TMP_ZIP" -d "$USER_EXT_DIR"
-    }
-else
-    mkdir -p "$USER_EXT_DIR"
-    unzip -q -o "$TMP_ZIP" -d "$USER_EXT_DIR"
-fi
+gnome-extensions install -f "$TMP_ZIP"
 rm -f "$TMP_ZIP"
 
 if [[ -d "${USER_EXT_DIR}/schemas" ]]; then

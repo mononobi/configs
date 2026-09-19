@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Install GNOME Shell Extensions activator/manager and all recommended extensions
-# Note: Orchestrates both activator/install.activator.sh and recommended/install.recommended.extensions.sh. Completely idempotent.
+# Note: Idempotently orchestrates activator and all extension subfolders under recommended/.
 
 set -euo pipefail
 
@@ -16,9 +16,10 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs both the GNOME Shell Extensions Activator (Extension Manager,
+  Installs the GNOME Shell Extensions Activator (Extension Manager,
   gnome-shell-extensions, browser connector, and version check bypass)
-  and installs/configures recommended extensions from the recommended/ directory.
+  and dynamically auto-discovers and installs all recommended extensions
+  from the recommended/ subdirectories.
 
   Completely idempotent and safe to run repeatedly.
 
@@ -65,30 +66,53 @@ echo " Starting Full GNOME Shell Extensions Setup"
 echo "================================================================================"
 
 # 1. Run Activator Setup
-echo "[+] Step 1: Installing GNOME Shell Extensions Activator..."
-if [[ -x "${SCRIPT_DIR}/activator/install.activator.sh" ]]; then
-    "${SCRIPT_DIR}/activator/install.activator.sh" ${SKIP_UPDATE:+--no-update}
-else
-    echo "[!] Error: Activator script not found at ${SCRIPT_DIR}/activator/install.activator.sh" >&2
-    exit 1
+echo "[+] Step 1: Ensuring GNOME Shell Extensions Activator is installed..."
+require_app activator --category apps-recommended/gnome-extensions
+
+# 2. Auto-discover and install recommended extensions
+echo ""
+echo "[+] Step 2: Auto-discovering and installing recommended GNOME extensions..."
+for ext_dir in "${SCRIPT_DIR}/recommended"/*/; do
+    [[ -d "$ext_dir" ]] || continue
+    ext_name="$(basename "$ext_dir")"
+
+    # Handle desktop extensions conditionally
+    if [[ "$ext_name" == "add-to-desktop" || "$ext_name" == "desktop-icons-ng-ding" ]]; then
+        if [[ "$INSTALL_ADD_TO_DESKTOP" != "true" ]]; then
+            continue
+        fi
+    fi
+
+    # Skip system-extensions for the dedicated final step
+    if [[ "$ext_name" == "system-extensions" ]]; then
+        continue
+    fi
+
+    # Respect ignore file if present in the extension folder
+    if [[ -f "${ext_dir}/ignore" ]]; then
+        echo "    [-] Skipping ignored extension: ${ext_name}"
+        continue
+    fi
+
+    require_app "$ext_name" --category apps-recommended/gnome-extensions/recommended
+done
+
+# 3. Handle desktop extensions disabled notice if not requested
+if [[ "$INSTALL_ADD_TO_DESKTOP" != "true" ]]; then
+    echo ""
+    echo "[i] Desktop extensions disabled by default (pass --add-to-desktop to enable)."
+    for desktop_ext in "add-to-desktop@tommimon.github.com" "ding@rastersoft.com"; do
+        if gnome-extensions list 2>/dev/null | grep -Fxq "$desktop_ext"; then
+            echo "    [-] Disabling: ${desktop_ext}..."
+            gnome-extensions disable "$desktop_ext" 2>/dev/null || true
+        fi
+    done
 fi
 
-# 2. Run Recommended Extensions Setup
+# 4. Enable and configure built-in system extensions
 echo ""
-echo "[+] Step 2: Installing and configuring recommended GNOME extensions..."
-if [[ -x "${SCRIPT_DIR}/recommended/install.recommended.extensions.sh" ]]; then
-    rec_args=()
-    if [[ "$SKIP_UPDATE" == "true" ]]; then
-        rec_args+=("--no-update")
-    fi
-    if [[ "$INSTALL_ADD_TO_DESKTOP" == "true" ]]; then
-        rec_args+=("--add-to-desktop")
-    fi
-    "${SCRIPT_DIR}/recommended/install.recommended.extensions.sh" "${rec_args[@]}"
-else
-    echo "[!] Error: Recommended extensions script not found at ${SCRIPT_DIR}/recommended/install.recommended.extensions.sh" >&2
-    exit 1
-fi
+echo "[+] Step 3: Configuring built-in system extensions..."
+require_app system-extensions --category apps-recommended/gnome-extensions/recommended
 
 echo ""
 echo "================================================================================"

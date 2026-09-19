@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and enable Disconnect WiFi GNOME Shell extension
+# Description: Install, enable, and configure System Monitor GNOME Shell extension
 # Note: Completely idempotent. Can be run standalone or invoked from batch runners.
 
 set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -15,8 +15,9 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and enables Disconnect WiFi (UUID: disconnect-wifi@kgshank.net),
-  adding a direct 'Disconnect' button to active WiFi connections in Quick Settings.
+  Installs, enables, and configures System Monitor
+  (UUID: system-monitor@gnome-shell-extensions.gcampax.github.com).
+  Displays system status (CPU, memory, network) in the GNOME top panel.
 
 Options:
   --no-update   Skip apt update when verifying dependencies
@@ -51,4 +52,12 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-install_gnome_extension "disconnect-wifi@kgshank.net" "Disconnect WiFi"
+echo "[+] Ensuring gnome-system-monitor application dependency is installed..."
+require_app "gnome-system-monitor"
+
+install_gnome_extension "system-monitor@gnome-shell-extensions.gcampax.github.com" "System Monitor"
+
+if gsettings list-schemas | grep -q "org.gnome.shell.extensions.system-monitor"; then
+    echo "[+] Configuring System Monitor settings..."
+    gsettings set org.gnome.shell.extensions.system-monitor show-swap false 2>/dev/null || true
+fi

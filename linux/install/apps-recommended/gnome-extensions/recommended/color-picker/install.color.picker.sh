@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and enable WiFi QR Code GNOME Shell extension
+# Description: Install and enable Color Picker GNOME Shell extension
 # Note: Completely idempotent. Can be run standalone or invoked from batch runners.
 
 set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -15,8 +15,8 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and enables WiFi QR Code (UUID: wifiqrcode@glerro.pm.me),
-  which displays a QR code for your currently connected WiFi network in the system menu.
+  Installs and enables Color Picker (UUID: color-picker@tuberry), allowing color
+  sampling from anywhere on screen in multiple color formats.
 
 Options:
   --no-update   Skip apt update when verifying dependencies
@@ -51,4 +51,4 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-install_gnome_extension "wifiqrcode@glerro.pm.me" "WiFi QR Code"
+install_gnome_extension "color-picker@tuberry" "Color Picker"

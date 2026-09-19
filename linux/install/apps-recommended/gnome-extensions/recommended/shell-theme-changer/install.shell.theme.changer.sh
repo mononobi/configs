@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and enable Add to Desktop GNOME Shell extension
+# Description: Install and enable User Themes (Shell Theme Changer) GNOME Shell extension
 # Note: Completely idempotent. Can be run standalone or invoked from batch runners.
 
 set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -15,8 +15,9 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and enables the 'Add to Desktop' extension (UUID: add-to-desktop@tommimon.github.com)
-  from extensions.gnome.org. Adds an 'Add to Desktop' context menu option for applications in GNOME.
+  Installs and enables the User Themes extension
+  (UUID: user-theme@gnome-shell-extensions.gcampax.github.com), which allows
+  loading custom shell themes from ~/.themes.
 
 Options:
   --no-update   Skip apt update when verifying dependencies
@@ -51,4 +52,4 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-install_gnome_extension "add-to-desktop@tommimon.github.com" "Add to Desktop"
+install_gnome_extension "user-theme@gnome-shell-extensions.gcampax.github.com" "User Themes (Shell Theme Changer)"

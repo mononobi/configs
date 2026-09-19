@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and enable User Themes (Shell Theme Changer) GNOME Shell extension
+# Description: Install and enable Disconnect WiFi GNOME Shell extension
 # Note: Completely idempotent. Can be run standalone or invoked from batch runners.
 
 set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -15,9 +15,8 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and enables the User Themes extension
-  (UUID: user-theme@gnome-shell-extensions.gcampax.github.com), which allows
-  loading custom shell themes from ~/.themes.
+  Installs and enables Disconnect WiFi (UUID: disconnect-wifi@kgshank.net),
+  adding a direct 'Disconnect' button to active WiFi connections in Quick Settings.
 
 Options:
   --no-update   Skip apt update when verifying dependencies
@@ -52,4 +51,4 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-install_gnome_extension "user-theme@gnome-shell-extensions.gcampax.github.com" "User Themes (Shell Theme Changer)"
+install_gnome_extension "disconnect-wifi@kgshank.net" "Disconnect WiFi"

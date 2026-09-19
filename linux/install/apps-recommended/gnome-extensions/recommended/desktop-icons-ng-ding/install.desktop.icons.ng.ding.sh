@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and enable Weather O'Clock GNOME Shell extension
+# Description: Install, enable, and configure Desktop Icons NG (DING) GNOME Shell extension
 # Note: Completely idempotent. Can be run standalone or invoked from batch runners.
 
 set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -15,9 +15,8 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and enables Weather O'Clock (UUID: weatheroclock@CleoMenezesJr.github.io),
-  displaying current weather conditions and temperature next to the top-bar clock.
-  Requires gnome-weather to be installed.
+  Installs, enables, and configures Desktop Icons NG (DING) (UUID: ding@rastersoft.com).
+  Adds icons to the desktop with customizable sizing and alignment.
 
 Options:
   --no-update   Skip apt update when verifying dependencies
@@ -52,8 +51,14 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-# Require prerequisite application gnome-weather
-echo "[+] Ensuring gnome-weather application dependency is installed..."
-require_app "gnome-weather"
+install_gnome_extension "ding@rastersoft.com" "Desktop Icons NG (DING)"
 
-install_gnome_extension "weatheroclock@CleoMenezesJr.github.io" "Weather O'Clock"
+if gsettings list-schemas | grep -q "org.gnome.shell.extensions.ding"; then
+    echo "[+] Configuring Desktop Icons NG (DING) settings..."
+    gsettings set org.gnome.shell.extensions.ding icon-size 'small' 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.ding show-home false 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.ding show-trash true 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.ding show-volumes false 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.ding show-network-volumes false 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.ding start-corner 'top-left' 2>/dev/null || true
+fi

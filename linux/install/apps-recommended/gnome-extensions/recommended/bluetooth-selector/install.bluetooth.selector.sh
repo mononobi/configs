@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and enable Nothing to Say (Mic Mute/Unmute Toggle) GNOME Shell extension
+# Description: Install and enable Bluetooth Quick Connect GNOME Shell extension
 # Note: Completely idempotent. Can be run standalone or invoked from batch runners.
 
 set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -15,8 +15,9 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and enables Nothing to Say (UUID: nothing-to-say@extensions.gnome.wouter.bolsterl.ee),
-  adding a microphone mute toggle in the top panel with keybinding support.
+  Installs and enables Bluetooth Quick Connect
+  (UUID: bluetooth-quick-connect@bjarosze.gmail.com), allowing quick connecting/disconnecting
+  of paired bluetooth devices from the system menu.
 
 Options:
   --no-update   Skip apt update when verifying dependencies
@@ -51,8 +52,8 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
     exit 1
 fi
 
-UUID="nothing-to-say@extensions.gnome.wouter.bolsterl.ee"
-NAME="Nothing to Say (Mic Mute Toggle)"
+UUID="bluetooth-quick-connect@bjarosze.gmail.com"
+NAME="Bluetooth Quick Connect"
 
 install_gnome_extension "${UUID}" "${NAME}"
 
@@ -63,7 +64,7 @@ for d in \
     "/usr/share/gnome-shell/extensions/${UUID}/schemas" \
     "${HOME}/.local/share/glib-2.0/schemas" \
     "/usr/share/glib-2.0/schemas"; do
-    if [[ -f "${d}/org.gnome.shell.extensions.nothing-to-say.gschema.xml" ]]; then
+    if [[ -f "${d}/org.gnome.shell.extensions.bluetooth-quick-connect.gschema.xml" ]]; then
         schema_dir="$d"
         break
     fi
@@ -75,10 +76,9 @@ if [[ -n "$schema_dir" ]]; then
     gset+=(--schemadir "$schema_dir")
 fi
 
-if "${gset[@]}" list-keys org.gnome.shell.extensions.nothing-to-say >/dev/null 2>&1; then
-    echo "[+] Configuring Nothing to Say settings..."
-    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say keybinding-toggle-mute "['<Control>F9']" 2>/dev/null || true
-    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say show-osd true 2>/dev/null || true
-    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say play-feedback-sounds true 2>/dev/null || true
-    "${gset[@]}" set org.gnome.shell.extensions.nothing-to-say icon-visibility 'always' 2>/dev/null || true
+if "${gset[@]}" list-keys org.gnome.shell.extensions.bluetooth-quick-connect >/dev/null 2>&1; then
+    echo "[+] Configuring Bluetooth Quick Connect settings..."
+    "${gset[@]}" set org.gnome.shell.extensions.bluetooth-quick-connect keep-menu-on-toggle true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.bluetooth-quick-connect show-battery-value-on true 2>/dev/null || true
+    "${gset[@]}" set org.gnome.shell.extensions.bluetooth-quick-connect show-battery-icon-on true 2>/dev/null || true
 fi

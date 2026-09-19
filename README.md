@@ -69,10 +69,12 @@ Resolves and executes application installers on demand:
   Halts resolution as soon as a matching installer script is found. Never pass default
   category names (`apps-recommended`, `apps-extra`, `apps-no-needed`) to `require_app` — allow 
   the 3-tier fallback to resolve them automatically.
-- **Custom Category via `--category`**: Prioritizes a custom folder while retaining
-  graceful fallback to the standard 3 categories:
+- **Custom Category via `--category`**: Prioritizes a custom folder or nested subcategory 
+  while retaining graceful fallback to the standard 3 categories:
   ```bash
   require_app my-tool --category apps-dev
+  require_app activator --category apps-recommended/gnome-extensions
+  require_app color-picker --category apps-recommended/gnome-extensions/recommended
   ```
 - **Fail-Fast Execution**: If any dependency fails during its installation, `require_app`
   halts execution immediately and returns a non-zero exit code (`return 1`).
@@ -182,11 +184,29 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 - **`install_gnome_extension <uuid> [display_name]`**: Queries extensions.gnome.org API
   for the host GNOME Shell version, downloads candidate archive, inspects `metadata.json`
   to verify Shell compatibility and version before installing, compiles schemas, and
-  enables the extension.
+  enables the extension. Automatically ensures the CLI activator via:
+  ```bash
+  require_app activator --category apps-recommended/gnome-extensions
+  ```
 - **`compare_extension_version <zip_path> [uuid]`**: Compares downloaded extension version
   against the installed copy to avoid downgrading or unnecessary reinstallations.
 - **`check_extension_archive_compatibility <zip_path>`**: Inspects `metadata.json` inside
   downloaded zip to confirm host GNOME Shell version compatibility before installation.
+- **Modular Subfolder Architecture**: Each recommended extension lives in its own dedicated
+  directory under `apps-recommended/gnome-extensions/recommended/<extension-name>/` (containing
+  its installer script and reference `.txt`).
+- **4-Level Relative Depth**: Because extension recipes reside 4 directory levels 
+  below `linux/install/`, they source `utils.sh` with 4 parent traversals:
+  ```bash
+  source "${SCRIPT_DIR}/../../../../utils.sh"
+  ```
+- **Dynamic Auto-Discovery Orchestrator**: The top-level runner `install.gnome.extensions.sh`
+  dynamically auto-discovers all extension subfolders under `recommended/*/` and invokes them via:
+  ```bash
+  require_app "$ext_name" --category apps-recommended/gnome-extensions/recommended
+  ```
+  Any newly added extension subfolder in `recommended/` is automatically discovered and installed
+  without modifying orchestrator manifests.
 
 ---
 
@@ -385,6 +405,17 @@ To add a new tool or application:
 4. Make the script executable: `chmod +x install.my-tool.sh`.
 5. (Optional) If the script should only run on demand and not during batch runs,
    create an empty `ignore` file: `touch linux/install/apps-recommended/my-tool/ignore`.
+
+#### Sourcing `utils.sh` by Directory Depth
+Ensure the relative path to `utils.sh` matches the script's directory depth from `linux/install/`:
+- **Standard 2-Level Depth** (`apps-recommended/<app>/` or `apps-extra/<app>/`):
+  ```bash
+  source "${SCRIPT_DIR}/../../utils.sh"
+  ```
+- **Nested 4-Level Depth** (e.g. `apps-recommended/gnome-extensions/recommended/<ext>/`):
+  ```bash
+  source "${SCRIPT_DIR}/../../../../utils.sh"
+  ```
 
 ### Creating a Custom Category Folder
 

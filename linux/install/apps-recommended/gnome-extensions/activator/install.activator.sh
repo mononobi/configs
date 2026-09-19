@@ -6,6 +6,7 @@ set -euo pipefail
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+source "${SCRIPT_DIR}/../../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -43,13 +44,15 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+is_installed "gnome-extensions" && exit 0
+
 echo "================================================================================"
 echo " Starting GNOME Shell Extensions Activator Setup"
 echo "================================================================================"
 
 conditional_apt_update
 
-echo "[+] Installing packages: gnome-shell-extension-manager, gnome-shell-extensions, chrome-gnome-shell..."
-sudo apt-get install -y gnome-shell-extension-manager gnome-shell-extensions chrome-gnome-shell
+echo "[+] Installing packages: gnome-shell, gnome-shell-extension-manager, gnome-shell-extensions, chrome-gnome-shell..."
+sudo apt-get install -y gnome-shell gnome-shell-extension-manager gnome-shell-extensions chrome-gnome-shell
 
 echo "[✓] GNOME Shell Extensions Activator setup completed successfully!"
