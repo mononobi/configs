@@ -6,7 +6,7 @@ automation scripts for Linux environments, development tools, databases, and IDE
 > [!NOTE]
 > The entire installation framework, automation scripts, and configurations in this
 > repository are 100% AI-generated. No humans are to blame for any bugs, anti-patterns,
-> or code design—all code was produced and maintained by AI.
+> or code design—all code was produced and maintained by AI under human supervision.
 
 ---
 
