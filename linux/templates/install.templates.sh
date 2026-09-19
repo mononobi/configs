@@ -8,6 +8,8 @@ SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 source "${SCRIPT_DIR}/../install/utils.sh"
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -20,7 +22,7 @@ Description:
   Completely idempotent and safe to run repeatedly.
 
 Options:
-  --no-update   Ignored (no APT dependencies required)
+  --no-update   Skip apt update before installation
   -h, --help    Show this help message and exit
 EOF
 }
@@ -33,6 +35,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --no-update|--skip-update)
+            SKIP_UPDATE=true
             shift
             ;;
         *)
@@ -55,17 +58,16 @@ echo "==========================================================================
 echo " Installing Desktop File Templates"
 echo "================================================================================"
 
+require_app xdg-user-dirs
+
 FILES_DIR="${SCRIPT_DIR}/files"
 if [[ ! -d "$FILES_DIR" ]]; then
     echo "[!] Error: files directory not found at ${FILES_DIR}" >&2
     exit 1
 fi
 
-# Detect user's Templates folder via xdg-user-dir if available
-TEMPLATES_DIR=""
-if command -v xdg-user-dir >/dev/null 2>&1; then
-    TEMPLATES_DIR="$(xdg-user-dir TEMPLATES 2>/dev/null || true)"
-fi
+# Detect user's Templates folder via xdg-user-dir
+TEMPLATES_DIR="$(xdg-user-dir TEMPLATES)"
 TEMPLATES_DIR="${TEMPLATES_DIR:-${HOME}/Templates}"
 
 echo "[+] Target Templates directory: ${TEMPLATES_DIR}"
