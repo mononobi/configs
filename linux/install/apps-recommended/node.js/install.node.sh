@@ -4,12 +4,12 @@
 
 set -euo pipefail
 
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
-NODE_MAJOR=""
 
+NODE_MAJOR=""
 SKIP_UPDATE=false
+FORCE=false
 
 show_help() {
     cat <<EOF
@@ -24,6 +24,7 @@ Arguments:
 
 Options:
   -v, --version VER     Specify a custom Node.js major version (e.g. 24, 22, 20)
+  -F, --force           Force reinstallation even if already installed
   --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
@@ -44,6 +45,10 @@ while [[ $# -gt 0 ]]; do
             SKIP_UPDATE=true
             shift
             ;;
+        -F|--force)
+            FORCE=true
+            shift
+            ;;
         -v|--version)
             NODE_MAJOR="$2"
             shift 2
@@ -60,14 +65,32 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "node" --name "Node.js" && exit 0
+NODE_INSTALLED=false
+YARN_INSTALLED=false
+
+if is_installed "node" --name "Node.js"; then
+    NODE_INSTALLED=true
+fi
+
+if is_installed "yarn"; then
+    YARN_INSTALLED=true
+fi
+
+# Skip early if both Node.js and Yarn are already installed
+if [[ "$NODE_INSTALLED" == true && "$YARN_INSTALLED" == true ]]; then
+    exit 0
+fi
 
 echo "[+] Starting installation/setup for Node.js, NPM & Yarn..."
 
-# Auto-detect latest stable LTS if not manually specified
-if [[ -z "$NODE_MAJOR" ]]; then
-    echo "[+] Auto-detecting latest stable Node.js LTS version..."
-    DETECTED_LTS=$(python3 -c '
+require_app ca-certificates curl gnupg build-essential
+
+# 1. Install Node.js (and NPM, serve) if not already installed
+if [[ "$NODE_INSTALLED" != true ]]; then
+    # Auto-detect latest stable LTS if not manually specified
+    if [[ -z "$NODE_MAJOR" ]]; then
+        echo "[+] Auto-detecting latest stable Node.js LTS version..."
+        DETECTED_LTS=$(python3 -c '
 import json, urllib.request
 try:
     with urllib.request.urlopen("https://nodejs.org/dist/index.json", timeout=5) as r:
@@ -80,37 +103,39 @@ except Exception:
     pass
 ' 2>/dev/null || true)
 
-    if [[ -z "$DETECTED_LTS" ]]; then
-        DETECTED_LTS=$(curl -fsSL https://nodejs.org/download/release/index.tab 2>/dev/null | awk -F'\t' '$10 != "-" && $10 != "lts" {gsub(/^v|\..*$/, "", $1); print $1; exit}' || true)
+        if [[ -z "$DETECTED_LTS" ]]; then
+            DETECTED_LTS=$(curl -fsSL https://nodejs.org/download/release/index.tab 2>/dev/null | awk -F'\t' '$10 != "-" && $10 != "lts" {gsub(/^v|\..*$/, "", $1); print $1; exit}' || true)
+        fi
+
+        NODE_MAJOR="${DETECTED_LTS:-24}"
+        echo "[+] Latest stable LTS version detected: Node.js v${NODE_MAJOR}.x"
     fi
 
-    NODE_MAJOR="${DETECTED_LTS:-24}"
-    echo "[+] Latest stable LTS version detected: Node.js v${NODE_MAJOR}.x"
+    echo "[+] Setting up NodeSource repository for Node.js v${NODE_MAJOR}.x..."
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/nodesource.gpg > /dev/null
+    sudo chmod 644 /etc/apt/keyrings/nodesource.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+
+    sudo apt-get update
+    sudo apt-get install -y nodejs
+
+    # 2. Install global utilities (serve) under node branch
+    echo "[+] Installing global utility 'serve' via npm..."
+    sudo npm install -g serve || true
 fi
 
-require_app ca-certificates curl gnupg build-essential
+# 3. Install Yarn if not already installed
+if [[ "$YARN_INSTALLED" != true ]]; then
+    echo "[+] Setting up Yarn repository..."
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/yarn.gpg > /dev/null
+    sudo chmod 644 /etc/apt/keyrings/yarn.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
-# 1. Install NodeSource repository
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/nodesource.gpg > /dev/null
-sudo chmod 644 /etc/apt/keyrings/nodesource.gpg
-
-echo "[+] Setting up NodeSource repository for Node.js v${NODE_MAJOR}.x..."
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-
-sudo apt-get update
-sudo apt-get install -y nodejs
-
-# 2. Install Yarn repository
-curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/yarn.gpg > /dev/null
-sudo chmod 644 /etc/apt/keyrings/yarn.gpg
-echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
-sudo apt-get update
-sudo apt-get install -y yarn
-
-# 3. Install global utilities (serve)
-sudo npm install -g serve || true
+    sudo apt-get update
+    sudo apt-get install -y yarn
+fi
 
 node -v
 npm -v
