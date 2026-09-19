@@ -123,7 +123,7 @@ fi
 LATEST_VER=""
 for (( i=${#TARGET_VERSIONS[@]}-1; i>=0; i-- )); do
     v="${TARGET_VERSIONS[i]}"
-    if command -v "python${v}" >/dev/null 2>&1; then
+    if is_installed --check "python${v}"; then
         LATEST_VER="$v"
         break
     fi
