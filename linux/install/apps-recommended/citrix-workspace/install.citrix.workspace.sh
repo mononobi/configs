@@ -91,7 +91,7 @@ echo " Starting Citrix Workspace App Installation"
 echo "================================================================================"
 
 # 0. Ensure required helper applications are satisfied via utils.sh
-require_app curl ca-certificates net-tools debconf-utils
+require_app curl ca-certificates net-tools debconf-utils python
 
 # 1. Resolve or download the Citrix Workspace .deb package
 fetch_citrix_deb() {
@@ -107,8 +107,7 @@ fetch_citrix_deb() {
     fi
 
     local download_url=""
-    if command -v python3 >/dev/null 2>&1; then
-        download_url=$(python3 -c '
+    download_url=$(python3 -c '
 import sys, re
 html = sys.stdin.read()
 pattern = r"<h4>\s*Full Package \(Self-Service Support\)[^<]*\(x86_64\)\s*</h4>.*?rel=\"([^\"]+)\""
@@ -121,14 +120,6 @@ if match:
     sys.exit(0)
 sys.exit(1)
 ' <<< "$html" 2>/dev/null || true)
-    fi
-
-    if [[ -z "$download_url" ]]; then
-        download_url=$(echo "$html" | awk '/Full Package \(Self-Service Support\)[^<]*\(x86_64\)/{flag=1} flag && /rel="\/\//{print; exit}' | sed -E 's/.*rel="([^"]+)".*/\1/')
-        if [[ -n "$download_url" && "$download_url" == //* ]]; then
-            download_url="https:${download_url}"
-        fi
-    fi
 
     if [[ -z "$download_url" ]]; then
         echo "[!] Warning: Could not locate 'Full Package (Self-Service Support) (x86_64)' download link on Citrix page."
