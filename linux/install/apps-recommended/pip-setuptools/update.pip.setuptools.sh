@@ -54,62 +54,39 @@ done
 
 echo "[+] Starting installation/setup for pip-setuptools..."
 
-SYSTEM_PY=$(readlink -f /usr/bin/python3)
+# 1. Require Python toolchain upfront
+require_app python
 
+# 2. Determine system default Python to avoid PEP 668 conflicts
+SYSTEM_PY=$(readlink -f /usr/bin/python3 2>/dev/null || echo "/usr/bin/python3")
+
+# 3. Resolve target Python (either specified or latest non-system version)
 if [[ -n "$TARGET_PYTHON" ]]; then
-    if [[ "$TARGET_PYTHON" =~ ^[0-9]+\.[0-9]+$ ]]; then
-        TARGET_PYTHON="python${TARGET_PYTHON}"
-    fi
+    [[ "$TARGET_PYTHON" =~ ^[0-9]+\.[0-9]+$ ]] && TARGET_PYTHON="python${TARGET_PYTHON}"
     if ! command -v "$TARGET_PYTHON" >/dev/null 2>&1; then
-        echo "[!] Specified Python '$TARGET_PYTHON' not found. Installing python dependency..."
-        require_app "python"
-    fi
-    if ! command -v "$TARGET_PYTHON" >/dev/null 2>&1; then
-        echo "[!] Error: Specified Python executable '$TARGET_PYTHON' not found."
+        echo "[!] Error: Specified Python executable '$TARGET_PYTHON' not found." >&2
         exit 1
     fi
     TARGET_PYTHON=$(command -v "$TARGET_PYTHON")
 else
-    # Find all installed pythonX.Y binaries
-    find_candidates() {
-        CANDIDATES=()
-        for bin in /usr/bin/python[0-9]*.[0-9]* /usr/local/bin/python[0-9]*.[0-9]*; do
-            [[ -x "$bin" ]] || continue
-            bname=$(basename "$bin")
-            [[ "$bname" =~ ^python[0-9]+\.[0-9]+$ ]] || continue
+    candidates=()
+    for bin in /usr/bin/python[0-9]*.[0-9]* /usr/local/bin/python[0-9]*.[0-9]*; do
+        [[ -x "$bin" ]] || continue
+        [[ "$(basename "$bin")" =~ ^python[0-9]+\.[0-9]+$ ]] || continue
+        if [[ "$(readlink -f "$bin")" != "$SYSTEM_PY" ]]; then
+            candidates+=("$bin")
+        fi
+    done
 
-            real_path=$(readlink -f "$bin")
-            if [[ "$real_path" != "$SYSTEM_PY" ]]; then
-                CANDIDATES+=("$bin")
-            fi
-        done
-    }
-
-    find_candidates
-
-    if [[ ${#CANDIDATES[@]} -eq 0 ]]; then
-        echo "[!] No non-system Python installation found. Installing python dependency..."
-        require_app "python"
-        find_candidates
-    fi
-
-    if [[ ${#CANDIDATES[@]} -eq 0 ]]; then
-        echo "[!] Error: No non-system Python installation found in /usr/bin or /usr/local/bin."
-        echo "[!] System Python ($SYSTEM_PY) is protected by OS package manager."
+    if [[ ${#candidates[@]} -eq 0 ]]; then
+        echo "[!] Error: No non-system Python installation found in /usr/bin or /usr/local/bin." >&2
+        echo "    System Python ($SYSTEM_PY) is protected by OS package manager." >&2
         exit 1
     fi
 
-    TARGET_PYTHON=$(printf "%s\n" "${CANDIDATES[@]}" | sort -V -u | tail -n 1)
+    TARGET_PYTHON=$(printf "%s\n" "${candidates[@]}" | sort -V -u | tail -n 1)
 fi
 
-REAL_TARGET=$(readlink -f "$TARGET_PYTHON")
-if [[ "$REAL_TARGET" == "$SYSTEM_PY" ]]; then
-    echo "[!] Error: Target Python ($REAL_TARGET) is the system default python3."
-    echo "[!] Modifying system Python site-packages can break OS package management."
-    exit 1
-fi
-
-echo "[+] System Python default: $SYSTEM_PY"
 echo "[+] Target Python: $TARGET_PYTHON ($("$TARGET_PYTHON" --version))"
 
 if ! "$TARGET_PYTHON" -m pip --version >/dev/null 2>&1; then
