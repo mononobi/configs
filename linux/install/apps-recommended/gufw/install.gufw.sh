@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Description: Install and configure ufw
+# Description: Install and configure gufw
 # Note: Modernized for Ubuntu with best practices.
 
 set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE=false
 
@@ -11,7 +14,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs and initializes UFW (Uncomplicated Firewall).
+  Installs GUFW (Graphical User Interface for UFW) via APT.
 
 Options:
   --no-update   Skip apt update before installation
@@ -38,14 +41,15 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo "[+] Starting installation/setup for ufw..."
+echo "[+] Starting installation/setup for gufw..."
+
+if ! command -v ufw >/dev/null 2>&1; then
+    require_app "ufw" "apps-recommended"
+fi
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-sudo apt-get install -y ufw
-sudo ufw default allow outgoing
-sudo ufw --force enable
-sudo ufw status verbose
+sudo apt-get install -y gufw
 
-echo "[✓] ufw setup completed successfully!"
+echo "[✓] gufw setup completed successfully!"
