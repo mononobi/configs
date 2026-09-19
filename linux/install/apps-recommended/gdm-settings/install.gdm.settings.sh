@@ -45,7 +45,7 @@ is_installed "io.github.realmazharhussain.GdmSettings" "flatpak" "GDM Settings" 
 
 echo "[+] Starting installation for GDM Settings via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing io.github.realmazharhussain.GdmSettings from Flathub..."
 flatpak install -y flathub io.github.realmazharhussain.GdmSettings

@@ -63,9 +63,9 @@ echo "[+] Checking Docker and Docker Compose..."
 if ! command -v docker >/dev/null 2>&1 || ! docker compose version >/dev/null 2>&1; then
     echo "[!] Docker or Docker Compose not found. Installing Docker..."
     if [[ "$SKIP_UPDATE" == "true" ]]; then
-        require_app "docker" "apps-recommended" --no-update
+        require_app "docker" --no-update
     else
-        require_app "docker" "apps-recommended"
+        require_app "docker"
     fi
 else
     echo "[✓] Docker and Docker Compose are installed."

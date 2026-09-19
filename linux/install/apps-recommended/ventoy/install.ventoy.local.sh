@@ -101,9 +101,7 @@ else
         TARBALL="$LOCAL_TAR"
     else
         echo "[+] Fetching latest Ventoy release URL from GitHub..."
-        require_app "curl" "apps-recommended"
-        require_app "tar" "apps-recommended"
-        require_app "ca-certificates" "apps-recommended"
+        require_app curl tar ca-certificates
 
         LATEST_URL=$(curl -fsSL https://api.github.com/repos/ventoy/Ventoy/releases/latest 2>/dev/null | grep -Po '"browser_download_url":\s*"\K[^"]*linux\.tar\.gz' | head -n 1 || true)
         if [[ -z "$LATEST_URL" ]]; then

@@ -91,9 +91,7 @@ fi
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
+require_app ca-certificates curl gnupg
 
 # 1. Install NodeSource repository
 sudo install -m 0755 -d /etc/apt/keyrings

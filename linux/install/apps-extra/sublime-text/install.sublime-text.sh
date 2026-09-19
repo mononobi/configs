@@ -48,10 +48,7 @@ echo "[+] Starting installation/setup for sublime-text..."
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
-require_app "apt-transport-https" "apps-recommended"
+require_app ca-certificates curl gnupg apt-transport-https
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/sublimehq-pub.gpg > /dev/null
 sudo chmod 644 /etc/apt/keyrings/sublimehq-pub.gpg

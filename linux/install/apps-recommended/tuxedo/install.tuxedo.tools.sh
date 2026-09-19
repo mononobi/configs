@@ -48,10 +48,7 @@ echo "[+] Starting installation/setup for TUXEDO Control Center & Drivers..."
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
-require_app "lsb-release" "apps-recommended"
+require_app ca-certificates curl gnupg lsb-release
 
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://deb.tuxedocomputers.com/0x54840598.pub.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/tuxedocomputers.gpg > /dev/null

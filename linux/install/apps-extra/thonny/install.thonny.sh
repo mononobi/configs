@@ -45,7 +45,7 @@ is_installed "org.thonny.Thonny" "flatpak" "Thonny" && exit 0
 
 echo "[+] Starting installation for Thonny via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.thonny.Thonny from Flathub..."
 flatpak install -y flathub org.thonny.Thonny

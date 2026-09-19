@@ -45,7 +45,7 @@ is_installed "com.discordapp.Discord" "flatpak" "Discord" && exit 0
 
 echo "[+] Starting installation for Discord via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing com.discordapp.Discord from Flathub..."
 flatpak install -y flathub com.discordapp.Discord

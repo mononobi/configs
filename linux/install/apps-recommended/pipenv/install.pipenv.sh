@@ -45,8 +45,7 @@ is_installed "pipenv" "command" "Pipenv" && exit 0
 
 echo "[+] Starting installation/setup for Pipenv..."
 
-require_app "virtualenv" "apps-recommended"
-require_app "pipx" "apps-recommended"
+require_app virtualenv pipx
 
 echo "[+] Installing pipenv via pipx..."
 pipx install pipenv

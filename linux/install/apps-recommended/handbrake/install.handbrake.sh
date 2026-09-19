@@ -45,7 +45,7 @@ is_installed "fr.handbrake.ghb" "flatpak" "HandBrake" && exit 0
 
 echo "[+] Starting installation for HandBrake via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing fr.handbrake.ghb from Flathub..."
 flatpak install -y flathub fr.handbrake.ghb

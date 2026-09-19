@@ -46,7 +46,7 @@ is_installed "com.bitwarden.desktop" "flatpak" "Bitwarden" && exit 0
 echo "[+] Starting installation/setup for Bitwarden..."
 
 # 1. Install Bitwarden Desktop via Flatpak
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing Bitwarden Desktop from Flathub..."
 flatpak install -y flathub com.bitwarden.desktop

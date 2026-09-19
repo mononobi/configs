@@ -54,6 +54,6 @@ fi
 
 # Require prerequisite application gnome-weather
 echo "[+] Ensuring gnome-weather application dependency is installed..."
-require_app "gnome-weather" "apps-recommended"
+require_app "gnome-weather"
 
 install_gnome_extension "weatheroclock@CleoMenezesJr.github.io" "Weather O'Clock"

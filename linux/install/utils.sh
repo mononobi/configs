@@ -11,59 +11,106 @@ _INSTALL_UTILS_LOADED=1
 # Resolve the absolute path to linux/install/
 INSTALL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# require_app <app_name> [category] [extra_args...]
+# require_app [OPTIONS] <app_name> [app_name2...]
 #
-# Ensures that an application dependency script has been executed.
-# If category is omitted, searches 'apps-recommended' first, then 'apps-extra'.
+# Ensures that one or more application dependency scripts have been executed.
+# Candidate search order per application:
+#   1. Custom category folder (if provided via --category)
+#   2. apps-recommended
+#   3. apps-extra
+#   4. apps-not-needed
+# Stops looking as soon as it finds a matching script.
+#
+# Options:
+#   --category <dir>   Custom category folder to search first
+#   --no-update        Forwarded to candidate scripts
 #
 # Examples:
-#   require_app "python" "apps-recommended"
-#   require_app "flatpak"
+#   require_app curl
+#   require_app curl ca-certificates gnupg
+#   require_app my-tool --category apps-custom
 require_app() {
-    local app_name="$1"
-    local category="${2:-}"
-    shift 2 2>/dev/null || shift 1 2>/dev/null || true
-    local extra_args=("$@")
+    local apps=()
+    local category=""
+    local extra_args=()
 
-    local candidate_dirs=()
-    if [[ -n "$category" ]]; then
-        candidate_dirs=("${INSTALL_ROOT}/${category}/${app_name}")
-    else
-        candidate_dirs=(
-            "${INSTALL_ROOT}/apps-recommended/${app_name}"
-            "${INSTALL_ROOT}/apps-extra/${app_name}"
-        )
-    fi
-
-    local target_script=""
-    local target_dir=""
-    for dir in "${candidate_dirs[@]}"; do
-        if [[ -d "$dir" ]]; then
-            local found
-            found=$(find "$dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)
-            if [[ -n "$found" && -f "$found" ]]; then
-                target_script="$found"
-                target_dir="$dir"
-                break
-            fi
-        fi
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --category)
+                if [[ $# -ge 2 ]]; then
+                    category="$2"
+                    shift 2
+                else
+                    echo "[!] Error: --category requires an argument" >&2
+                    return 1
+                fi
+                ;;
+            --category=*)
+                category="${1#*=}"
+                shift
+                ;;
+            -*)
+                extra_args+=("$1")
+                shift
+                ;;
+            *)
+                apps+=("$1")
+                shift
+                ;;
+        esac
     done
 
-    if [[ -z "$target_script" ]]; then
-        echo "[!] Error: Dependency application '${app_name}' not found in candidate locations: ${candidate_dirs[*]}" >&2
+    if [[ ${#apps[@]} -eq 0 ]]; then
+        echo "[!] Error: require_app called without any application names" >&2
         return 1
     fi
 
-    local script_name
-    script_name="$(basename "$target_script")"
+    for app_name in "${apps[@]}"; do
+        local candidate_dirs=()
+        if [[ -n "$category" ]]; then
+            candidate_dirs+=("${INSTALL_ROOT}/${category}/${app_name}")
+        fi
+        candidate_dirs+=(
+            "${INSTALL_ROOT}/apps-recommended/${app_name}"
+            "${INSTALL_ROOT}/apps-extra/${app_name}"
+            "${INSTALL_ROOT}/apps-not-needed/${app_name}"
+        )
 
-    local update_args=()
-    if [[ "${SKIP_UPDATE:-false}" == "true" ]]; then
-        update_args=("--no-update")
-    fi
+        local target_script=""
+        local target_dir=""
+        for dir in "${candidate_dirs[@]}"; do
+            if [[ -d "$dir" ]]; then
+                local found
+                found=$(find "$dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)
+                if [[ -n "$found" && -f "$found" ]]; then
+                    target_script="$found"
+                    target_dir="$dir"
+                    break
+                fi
+            fi
+        done
 
-    echo "[+] Satisfying dependency: $(basename "$target_dir") (${script_name})..."
-    (cd "$target_dir" && ./"$script_name" "${update_args[@]}" "${extra_args[@]}")
+        if [[ -z "$target_script" ]]; then
+            echo "[!] Error: Dependency application '${app_name}' not found in candidate locations: ${candidate_dirs[*]}" >&2
+            return 1
+        fi
+
+        local script_name
+        script_name="$(basename "$target_script")"
+
+        local pass_args=()
+        if [[ "${SKIP_UPDATE:-false}" == "true" ]]; then
+            pass_args+=("--no-update")
+        fi
+        for arg in "${extra_args[@]}"; do
+            if [[ "$arg" != "--no-update" || ! " ${pass_args[*]} " =~ " --no-update " ]]; then
+                pass_args+=("$arg")
+            fi
+        done
+
+        echo "[+] Satisfying dependency: $(basename "$target_dir") (${script_name})..."
+        (cd "$target_dir" && ./"$script_name" "${pass_args[@]}") || return 1
+    done
 }
 
 # is_installed <target_name> [type] [display_name]
@@ -362,19 +409,10 @@ install_gnome_extension() {
     local user_ext_dir="${HOME}/.local/share/gnome-shell/extensions/${uuid}"
     local sys_ext_dir="/usr/share/gnome-shell/extensions/${uuid}"
 
-    # Ensure required helper apps if not already in PATH
+    # Ensure required helper apps
     local update_flag=()
     [[ "${SKIP_UPDATE:-false}" == "true" ]] && update_flag=("--no-update")
-
-    if ! command -v curl >/dev/null 2>&1; then
-        require_app "curl" "apps-recommended" "${update_flag[@]}"
-    fi
-    if ! command -v python3 >/dev/null 2>&1; then
-        require_app "python" "apps-recommended" "${update_flag[@]}"
-    fi
-    if ! command -v unzip >/dev/null 2>&1; then
-        require_app "unzip" "apps-recommended" "${update_flag[@]}"
-    fi
+    require_app curl python unzip "${update_flag[@]}"
 
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"

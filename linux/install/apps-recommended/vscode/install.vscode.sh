@@ -45,10 +45,7 @@ is_installed "code" "command" "Visual Studio Code" && exit 0
 
 echo "[+] Starting installation/setup for vscode..."
 
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
-require_app "apt-transport-https" "apps-recommended"
+require_app ca-certificates curl gnupg apt-transport-https
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update

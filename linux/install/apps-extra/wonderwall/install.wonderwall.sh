@@ -45,7 +45,7 @@ is_installed "com.gitlab.wonderwall" "flatpak" "Wonderwall" && exit 0
 
 echo "[+] Starting installation for Wonderwall via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing com.gitlab.wonderwall from Flathub..."
 flatpak install -y flathub com.gitlab.wonderwall

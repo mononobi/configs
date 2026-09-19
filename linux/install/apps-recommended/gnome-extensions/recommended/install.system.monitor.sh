@@ -53,7 +53,7 @@ if [[ -n "${SUDO_USER:-}" && $EUID -eq 0 ]]; then
 fi
 
 echo "[+] Ensuring gnome-system-monitor application dependency is installed..."
-require_app "gnome-system-monitor" "apps-recommended"
+require_app "gnome-system-monitor"
 
 install_gnome_extension "system-monitor@gnome-shell-extensions.gcampax.github.com" "System Monitor"
 

@@ -45,7 +45,7 @@ is_installed "org.gimp.GIMP" "flatpak" "GIMP" && exit 0
 
 echo "[+] Starting installation for GIMP via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.gimp.GIMP from Flathub..."
 flatpak install -y flathub org.gimp.GIMP

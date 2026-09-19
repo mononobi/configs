@@ -45,7 +45,7 @@ is_installed "org.shotcut.Shotcut" "flatpak" "Shotcut" && exit 0
 
 echo "[+] Starting installation for Shotcut via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.shotcut.Shotcut from Flathub..."
 flatpak install -y flathub org.shotcut.Shotcut

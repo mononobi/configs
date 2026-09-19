@@ -45,10 +45,7 @@ is_installed "google-chrome" "command" "Google Chrome" && exit 0
 
 echo "[+] Starting installation/setup for chrome..."
 
-require_app "wget" "apps-recommended"
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
+require_app wget ca-certificates curl gnupg
 
 sudo install -m 0755 -d /etc/apt/keyrings
 wget -qO - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/google-chrome.gpg > /dev/null

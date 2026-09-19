@@ -45,7 +45,7 @@ is_installed "com.getpostman.Postman" "flatpak" "Postman" && exit 0
 
 echo "[+] Starting installation for Postman via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing com.getpostman.Postman from Flathub..."
 flatpak install -y flathub com.getpostman.Postman

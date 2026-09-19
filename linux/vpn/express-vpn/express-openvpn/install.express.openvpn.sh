@@ -67,7 +67,7 @@ ensure_local_bin_in_path
 echo "[+] Checking OpenVPN and NetworkManager OpenVPN plugin..."
 if ! command -v openvpn >/dev/null 2>&1 || ! dpkg -l network-manager-openvpn-gnome >/dev/null 2>&1; then
     echo "[!] OpenVPN dependency missing. Installing via utils.sh..."
-    require_app "openvpn" "apps-recommended"
+    require_app "openvpn"
 else
     echo "[✓] OpenVPN packages are installed."
 fi

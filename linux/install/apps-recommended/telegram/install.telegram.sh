@@ -45,7 +45,7 @@ is_installed "org.telegram.desktop" "flatpak" "Telegram" && exit 0
 
 echo "[+] Starting installation for Telegram via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.telegram.desktop from Flathub..."
 flatpak install -y flathub org.telegram.desktop

@@ -45,7 +45,7 @@ is_installed "org.chromium.Chromium" "flatpak" "Chromium" && exit 0
 
 echo "[+] Starting installation for Chromium via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.chromium.Chromium from Flathub..."
 flatpak install -y flathub org.chromium.Chromium

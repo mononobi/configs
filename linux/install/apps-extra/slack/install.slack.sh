@@ -45,7 +45,7 @@ is_installed "com.slack.Slack" "flatpak" "Slack" && exit 0
 
 echo "[+] Starting installation for Slack via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing com.slack.Slack from Flathub..."
 flatpak install -y flathub com.slack.Slack

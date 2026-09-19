@@ -62,7 +62,7 @@ if [[ -n "$TARGET_PYTHON" ]]; then
     fi
     if ! command -v "$TARGET_PYTHON" >/dev/null 2>&1; then
         echo "[!] Specified Python '$TARGET_PYTHON' not found. Installing python dependency..."
-        require_app "python" "apps-recommended" "${TARGET_PYTHON#python}"
+        require_app "python"
     fi
     if ! command -v "$TARGET_PYTHON" >/dev/null 2>&1; then
         echo "[!] Error: Specified Python executable '$TARGET_PYTHON' not found."
@@ -89,7 +89,7 @@ else
 
     if [[ ${#CANDIDATES[@]} -eq 0 ]]; then
         echo "[!] No non-system Python installation found. Installing python dependency..."
-        require_app "python" "apps-recommended"
+        require_app "python"
         find_candidates
     fi
 

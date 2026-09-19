@@ -45,7 +45,7 @@ is_installed "org.dbgate.DbGate" "flatpak" "DbGate" && exit 0
 
 echo "[+] Starting installation for DbGate via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.dbgate.DbGate from Flathub..."
 flatpak install -y flathub org.dbgate.DbGate

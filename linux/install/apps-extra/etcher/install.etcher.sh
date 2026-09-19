@@ -48,9 +48,7 @@ echo "[+] Starting installation/setup for etcher..."
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
+require_app ca-certificates curl gnupg
 
 echo "[+] Adding Balena Etcher repository via official Cloudsmith script..."
 curl -1sLf 'https://dl.cloudsmith.io/public/balena/etcher/setup.deb.sh' | sudo -E bash

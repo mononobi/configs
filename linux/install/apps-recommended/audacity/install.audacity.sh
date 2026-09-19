@@ -45,7 +45,7 @@ is_installed "org.audacityteam.Audacity" "flatpak" "Audacity" && exit 0
 
 echo "[+] Starting installation for Audacity via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.audacityteam.Audacity from Flathub..."
 flatpak install -y flathub org.audacityteam.Audacity

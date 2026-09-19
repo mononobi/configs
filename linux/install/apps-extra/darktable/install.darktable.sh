@@ -45,7 +45,7 @@ is_installed "org.darktable.Darktable" "flatpak" "Darktable" && exit 0
 
 echo "[+] Starting installation for Darktable via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.darktable.Darktable from Flathub..."
 flatpak install -y flathub org.darktable.Darktable

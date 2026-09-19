@@ -58,7 +58,7 @@ echo "==========================================================================
 # Ensure ufw is installed
 if ! command -v ufw >/dev/null 2>&1; then
     echo "[+] ufw is not installed. Resolving ufw dependency..."
-    require_app "ufw" "apps-recommended"
+    require_app "ufw"
 fi
 
 # deny all incoming connections which don't match any specific rule:

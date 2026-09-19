@@ -76,6 +76,6 @@ sudo usermod -aG libvirt "$USER"
 sudo usermod -aG kvm "$USER"
 echo "[+] Virtualization packages installed. User $USER added to libvirt and kvm groups (re-login required)."
 
-require_app "qemu-guest-agent" "apps-recommended"
+require_app "qemu-guest-agent"
 
 echo "[✓] virt-manager setup completed successfully!"

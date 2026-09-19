@@ -77,10 +77,7 @@ if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update
 fi
 sudo apt-get -y upgrade
-require_app "wget" "apps-recommended"
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
+require_app wget ca-certificates curl gnupg
 sudo apt-get install -y lsb-release
 
 # 2. Add official PostgreSQL PGDG repository & GPG keyring

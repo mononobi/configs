@@ -45,7 +45,7 @@ is_installed "org.blender.Blender" "flatpak" "Blender" && exit 0
 
 echo "[+] Starting installation for Blender via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.blender.Blender from Flathub..."
 flatpak install -y flathub org.blender.Blender

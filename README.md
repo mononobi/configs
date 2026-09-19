@@ -56,19 +56,20 @@ The framework centers around a modular runner and individual self-contained reci
 The framework provides common helpers in `linux/install/utils.sh` to keep individual
 scripts minimal, robust, and DRY:
 
-### 1. `require_app <app_name> [category] [extra_args...]`
-Resolves and executes an application installer on demand:
-- **Flexible Category**: Can target any category folder (e.g., `apps-recommended`,
-  `apps-extra`, or any custom category like `apps-custom`).
-- **Default Fallback**: If `category` is omitted, checks `apps-recommended` then
-  `apps-extra`.
-- **Deduplication**: Scripts inspect if a command exists before requiring it:
+### 1. `require_app [OPTIONS] <app1> [app2...]`
+Resolves and executes application installers on demand:
+- **Multiple Apps**: Accepts one or more application names in a single call (e.g., `require_app curl ca-certificates gnupg`).
+- **Automatic 3-Tier Fallback**: Automatically searches for recipes across directories in priority order:
+  1. `apps-recommended/`
+  2. `apps-extra/`
+  3. `apps-not-needed/`
+  Stops looking as soon as a match is found.
+- **Custom Category via `--category`**: Prioritizes a custom folder while retaining graceful fallback:
   ```bash
-  if ! command -v flatpak >/dev/null 2>&1; then
-      require_app "flatpak" "apps-recommended"
-  fi
+  require_app my-tool --category apps-dev
   ```
-- **Flag Propagation**: Global flags such as `--no-update` are forwarded automatically.
+- **Instant Fast-Skip**: Each application recipe inspects its own state via `is_installed`, skipping in `<1ms` if already present.
+- **Flag Propagation**: Global flags such as `--no-update` are forwarded automatically to all required dependencies.
 
 ### 2. `ensure_local_bin_in_path`
 Ensures `~/.local/bin` exists, exports it to current process `$PATH`, and permanently
@@ -142,7 +143,7 @@ next to the existing categories (e.g., `linux/install/apps-dev` or `apps-worksta
    ```
 4. Other scripts can depend on tools in your custom category via `require_app`:
    ```bash
-   require_app "my-custom-tool" "apps-dev"
+   require_app my-custom-tool --category apps-dev
    ```
 
 The custom category inherits all framework features: automatic script discovery,

@@ -45,9 +45,7 @@ is_installed "gh" "command" "GitHub CLI" && exit 0
 
 echo "[+] Starting installation/setup for github-cli..."
 
-require_app "ca-certificates" "apps-recommended"
-require_app "curl" "apps-recommended"
-require_app "gnupg" "apps-recommended"
+require_app ca-certificates curl gnupg
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update

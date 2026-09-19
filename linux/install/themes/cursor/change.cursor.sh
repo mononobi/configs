@@ -96,9 +96,9 @@ fi
 echo "[+] Ensuring Flatpak dependency is installed..."
 if ! command -v flatpak >/dev/null 2>&1; then
     if [[ "$SKIP_UPDATE" == "true" ]]; then
-        require_app "flatpak" "apps-recommended" --no-update
+        require_app "flatpak" --no-update
     else
-        require_app "flatpak" "apps-recommended"
+        require_app "flatpak"
     fi
 fi
 

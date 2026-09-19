@@ -45,7 +45,7 @@ is_installed "gufw" "command" "GUFW" && exit 0
 
 echo "[+] Starting installation/setup for gufw..."
 
-require_app "ufw" "apps-recommended"
+require_app "ufw"
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
     sudo apt-get update

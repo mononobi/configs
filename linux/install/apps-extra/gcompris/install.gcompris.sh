@@ -45,7 +45,7 @@ is_installed "net.gcompris.GCompris" "flatpak" "GCompris" && exit 0
 
 echo "[+] Starting installation for GCompris via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing net.gcompris.GCompris from Flathub..."
 flatpak install -y flathub net.gcompris.GCompris

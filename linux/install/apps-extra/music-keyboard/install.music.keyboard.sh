@@ -45,7 +45,7 @@ is_installed "org.sugarlabs.MusicKeyboard" "flatpak" "Sugar Labs Music Keyboard"
 
 echo "[+] Starting installation for Sugar Labs Music Keyboard via Flatpak..."
 
-require_app "flatpak" "apps-recommended"
+require_app "flatpak"
 
 echo "[+] Installing org.sugarlabs.MusicKeyboard from Flathub..."
 flatpak install -y flathub org.sugarlabs.MusicKeyboard

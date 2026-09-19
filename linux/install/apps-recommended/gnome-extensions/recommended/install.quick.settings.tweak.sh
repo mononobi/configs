@@ -63,9 +63,7 @@ SYS_EXT_DIR="/usr/share/gnome-shell/extensions/${UUID}"
 echo "[+] Processing GNOME extension: ${NAME} (${UUID})..."
 
 # Ensure dependencies (curl, python, unzip)
-require_app "curl" "apps-recommended"
-require_app "python" "apps-recommended"
-require_app "unzip" "apps-recommended"
+require_app curl python unzip
 
 shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
 shell_ver="${shell_ver:-46}"
