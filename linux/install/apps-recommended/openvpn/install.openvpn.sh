@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "openvpn" "command" "OpenVPN" && exit 0
+is_installed "openvpn" --name "OpenVPN" && exit 0
 
 echo "[+] Starting installation/setup for openvpn..."
 

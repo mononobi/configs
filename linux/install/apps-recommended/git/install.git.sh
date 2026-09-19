@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "git" "command" "Git" && exit 0
+is_installed "git" --name "Git" && exit 0
 
 echo "[+] Starting installation/setup for git..."
 

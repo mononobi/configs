@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gnome-weather" "command" "GNOME Weather" && exit 0
+is_installed "gnome-weather" --name "GNOME Weather" && exit 0
 
 echo "[+] Starting installation/setup for gnome-weather..."
 

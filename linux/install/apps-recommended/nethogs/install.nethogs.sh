@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "nethogs" "command" "NetHogs" && exit 0
+is_installed "nethogs" --name "NetHogs" && exit 0
 
 echo "[+] Starting installation/setup for nethogs..."
 

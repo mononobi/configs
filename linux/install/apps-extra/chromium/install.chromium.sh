@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.chromium.Chromium" "flatpak" "Chromium" && exit 0
+is_installed "org.chromium.Chromium" --type flatpak --name "Chromium" && exit 0
 
 echo "[+] Starting installation for Chromium via Flatpak..."
 

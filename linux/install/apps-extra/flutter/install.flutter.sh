@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "flutter" "command" "Flutter" && exit 0
+is_installed "flutter" --name "Flutter" && exit 0
 
 echo "[+] Starting installation/setup for Flutter SDK & Dependencies..."
 

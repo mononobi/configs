@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "com.bitwarden.desktop" "flatpak" "Bitwarden" && exit 0
+is_installed "com.bitwarden.desktop" --type flatpak --name "Bitwarden" && exit 0
 
 echo "[+] Starting installation/setup for Bitwarden..."
 

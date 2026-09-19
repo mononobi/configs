@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "subl" "command" "Sublime Text" && exit 0
+is_installed "subl" --name "Sublime Text" && exit 0
 
 echo "[+] Starting installation/setup for sublime-text..."
 

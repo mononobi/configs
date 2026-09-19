@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "convert" "command" "ImageMagick" && exit 0
+is_installed "convert" --name "ImageMagick" && exit 0
 
 echo "[+] Starting installation/setup for ImageMagick..."
 

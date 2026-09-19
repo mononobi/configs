@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "sassc" "command" "SassC" && exit 0
+is_installed "sassc" --name "SassC" && exit 0
 
 echo "[+] Starting installation/setup for sassc..."
 

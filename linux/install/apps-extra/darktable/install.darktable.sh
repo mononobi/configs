@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.darktable.Darktable" "flatpak" "Darktable" && exit 0
+is_installed "org.darktable.Darktable" --type flatpak --name "Darktable" && exit 0
 
 echo "[+] Starting installation for Darktable via Flatpak..."
 

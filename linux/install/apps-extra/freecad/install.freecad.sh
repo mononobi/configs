@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.freecad.FreeCAD" "flatpak" "FreeCAD" && exit 0
+is_installed "org.freecad.FreeCAD" --type flatpak --name "FreeCAD" && exit 0
 
 echo "[+] Starting installation for FreeCAD via Flatpak..."
 

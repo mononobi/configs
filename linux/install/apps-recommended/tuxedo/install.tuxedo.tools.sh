@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "tuxedo-control-center" "command" "Tuxedo Control Center" && exit 0
+is_installed "tuxedo-control-center" --name "Tuxedo Control Center" && exit 0
 
 echo "[+] Starting installation/setup for TUXEDO Control Center & Drivers..."
 

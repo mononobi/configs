@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.thonny.Thonny" "flatpak" "Thonny" && exit 0
+is_installed "org.thonny.Thonny" --type flatpak --name "Thonny" && exit 0
 
 echo "[+] Starting installation for Thonny via Flatpak..."
 

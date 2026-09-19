@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.dbgate.DbGate" "flatpak" "DbGate" && exit 0
+is_installed "org.dbgate.DbGate" --type flatpak --name "DbGate" && exit 0
 
 echo "[+] Starting installation for DbGate via Flatpak..."
 

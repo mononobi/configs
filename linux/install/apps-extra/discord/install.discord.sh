@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "com.discordapp.Discord" "flatpak" "Discord" && exit 0
+is_installed "com.discordapp.Discord" --type flatpak --name "Discord" && exit 0
 
 echo "[+] Starting installation for Discord via Flatpak..."
 

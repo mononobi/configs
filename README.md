@@ -81,52 +81,57 @@ Resolves and executes application installers on demand:
 - **Flag Propagation**: Global flags such as `--no-update` are deduplicated and forwarded
   automatically to all required dependencies.
 
-### 2. `is_installed [OPTIONS] <target_name> [type] [display_name]`
+### 2. `is_installed [OPTIONS] <target_name>`
 Performs fast-path verification to check whether a package or application is already
-installed, allowing recipes to exit in `<1ms`:
-- **Supported Types & Argument Behavior**:
-  - `command` (default): Checks binary presence in `$PATH` via `command -v`. Can be safely 
-    dropped/omitted because it is the primary default:
+installed, allowing recipes to exit in `<1ms`.
+The target name is the **only positional argument**. All options are passed via named `--` flags:
+
+- **Options**:
+  - `--name <display_name>`: Custom human-readable display name for logs 
+    (e.g. `--name "Visual Studio Code"`).
+  - `--type <flatpak|snap>`: Specifies sandboxed runtime. Only `'flatpak'` or `'snap'` are accepted.
+  - `--check`: Silent query mode. Performs a factual check, suppresses console logging, and 
+    ignores `$FORCE`. Returns exit code `0` if present, `1` if not.
+
+- **Smart Default Check (No Type Needed for CLI/APT)**:
+  By default, `is_installed` checks binary presence in `$PATH` via `command -v`, and if not found, 
+  falls back to `dpkg-query` for APT packages.
+  - Arguments like `command`, `bin`, `apt`, or `dpkg` are **never passed**.
+  - Recipes are completely decoupled from package packaging format (whether a tool is installed 
+    via APT deb or direct binary in `~/.local/bin`, it detects seamlessly):
     ```bash
     is_installed "curl"
+    is_installed "ca-certificates"
     ```
-  - `apt` / `dpkg`: Checks package status via `dpkg-query -W -f='${Status}'` for `ok installed`. 
-    Because `apt`/`dpkg` is the secondary check in the smart fallback, omitting it will still 
-    work in most cases, but it is strongly recommended to specify `"apt"` explicitly for clarity:
-    ```bash
-    is_installed "ca-certificates" "apt"
-    ```
-  - `flatpak`: Checks Flatpak applications via `flatpak info`. Because Flatpaks are not part of 
-    the default fallback checks, the `"flatpak"` type **must always be explicitly passed**:
-    ```bash
-    is_installed "com.spotify.Client" "flatpak" "Spotify"
-    ```
-  - `snap`: Checks Snap applications via `snap list`. Because Snaps are not part of the default 
-    fallback checks, the `"snap"` type **must always be explicitly passed**:
-    ```bash
-    is_installed "canonical-livepatch" "snap"
-    ```
-- **Strict Self-Check Scope**: `is_installed` is strictly meant for an installer script
-  to check **its own primary target** at the start. **NEVER** use `is_installed` to check
-  dependencies or external packages — always use `require_app` for dependencies!
-- **Display Name Rule**:
-  - If the display name is identical to `target_name` (case-sensitive), 
-    **do NOT pass the 3rd argument**:
+
+- **Sandboxed Packages (`--type flatpak` / `--type snap`)**:
+  Because Flatpak and Snap are isolated runtimes not present in standard `$PATH`, the `--type` 
+  flag must be explicitly passed:
+  ```bash
+  is_installed "com.spotify.Client" --type flatpak --name "Spotify"
+  is_installed "canonical-livepatch" --type snap
+  ```
+
+- **Display Name Flag (`--name`)**:
+  - If the display name is identical to `target_name` (case-sensitive), omit `--name`:
     ```bash
     # Correct
     is_installed "curl"
-    is_installed "ca-certificates" "apt"
+    is_installed "ca-certificates"
 
-    # Incorrect (redundant display name)
-    is_installed "curl" "command" "curl"
-    is_installed "ca-certificates" "apt" "ca-certificates"
+    # Incorrect (redundant --name)
+    is_installed "curl" --name "curl"
     ```
-  - Only pass `display_name` when it actually differs from `target_name`:
+  - Only pass `--name` when the human-readable display name differs:
     ```bash
-    is_installed "code" "command" "Visual Studio Code"
-    is_installed "flatpak" "command" "Flatpak"
-    is_installed "com.spotify.Client" "flatpak" "Spotify"
+    is_installed "code" --name "Visual Studio Code"
+    is_installed "subl" --name "Sublime Text"
+    is_installed "com.spotify.Client" --type flatpak --name "Spotify"
     ```
+
+- **Strict Self-Check Scope**: `is_installed` is strictly meant for an installer script
+  to check **its own primary target** at the start. **NEVER** use `is_installed` to check
+  dependencies or external packages — always use `require_app` for dependencies!
 - **Output Formatting**: Logs `[i] <display_name> is already installed, skipping...` (or
   `[i] <display_name>: <target_name> is already installed, skipping...` if they differ
   case-insensitively).
@@ -135,7 +140,7 @@ installed, allowing recipes to exit in `<1ms`:
 - **Pure Existence Query via `--check`**:
   When passed `--check`, `is_installed` operates in silent query mode:
   ```bash
-  is_installed --check <target_name> [type]
+  is_installed --check <target_name>
   ```
   - Suppresses console logging (`[i] ... skipping...`).
   - Bypasses and ignores `$FORCE`, performing a factual query against host reality.
@@ -275,14 +280,13 @@ If an application requires a dependency that does not yet exist as a recipe in t
   line instead of multiple consecutive calls.
 - **Omit Default Categories**: Do not pass `"apps-recommended"` or `"apps-extra"`, or 
   `apps-not-needed` to `require_app`. The 3-tier fallback automatically searches them in order.
-- **Omit Redundant Display Names**: Do not pass the 3rd argument to `is_installed` if the
-  display name matches the target name (case-sensitive).
-- **Package Type Arguments in `is_installed`**:
-  - Omit `type` for CLI binaries (defaults to `command`).
-  - Provide `"apt"` explicitly for libraries or meta-packages without a primary CLI 
-    binary (though fallback will attempt `dpkg`).
-  - Always explicitly provide `"flatpak"` or `"snap"` for Flatpak or Snap packages, as they 
-    are isolated runtimes not covered by default fallback checks.
+- **Strict Single Positional Argument for `is_installed`**: Always pass only `<target_name>`
+  as a positional argument to `is_installed`. Never pass dummy types like `"command"` or `"apt"`.
+- **Display Names via `--name`**: Use `--name "Display Name"` only when the human-readable
+  name differs from `target_name`.
+- **Sandbox Types via `--type`**: Pass `--type flatpak` or `--type snap` only for Flatpak
+  or Snap packages. Standard CLI tools and APT packages use the default smart check and
+  must never pass `--type`.
 
 ---
 

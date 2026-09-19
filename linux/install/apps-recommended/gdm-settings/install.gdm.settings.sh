@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "io.github.realmazharhussain.GdmSettings" "flatpak" "GDM Settings" && exit 0
+is_installed "io.github.realmazharhussain.GdmSettings" --type flatpak --name "GDM Settings" && exit 0
 
 echo "[+] Starting installation for GDM Settings via Flatpak..."
 

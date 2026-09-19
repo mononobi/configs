@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.audacityteam.Audacity" "flatpak" "Audacity" && exit 0
+is_installed "org.audacityteam.Audacity" --type flatpak --name "Audacity" && exit 0
 
 echo "[+] Starting installation for Audacity via Flatpak..."
 

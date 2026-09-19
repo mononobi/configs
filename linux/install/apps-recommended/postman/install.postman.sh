@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "com.getpostman.Postman" "flatpak" "Postman" && exit 0
+is_installed "com.getpostman.Postman" --type flatpak --name "Postman" && exit 0
 
 echo "[+] Starting installation for Postman via Flatpak..."
 

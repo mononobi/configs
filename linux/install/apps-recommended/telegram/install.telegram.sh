@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.telegram.desktop" "flatpak" "Telegram" && exit 0
+is_installed "org.telegram.desktop" --type flatpak --name "Telegram" && exit 0
 
 echo "[+] Starting installation for Telegram via Flatpak..."
 

@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "odbcinst" "command" "ODBC installer utilities" && exit 0
+is_installed "odbcinst" --name "ODBC installer utilities" && exit 0
 
 echo "[+] Starting installation for Microsoft SQL Server ODBC Driver & Tools..."
 

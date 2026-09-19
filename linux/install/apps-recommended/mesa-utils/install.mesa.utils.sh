@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "glxinfo" "command" "Mesa utilities" && exit 0
+is_installed "glxinfo" --name "Mesa utilities" && exit 0
 
 echo "[+] Starting installation/setup for mesa-utils..."
 

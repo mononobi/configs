@@ -127,40 +127,65 @@ conditional_apt_update() {
     fi
 }
 
-# is_installed [OPTIONS] <target_name> [type] [display_name]
+# is_installed [OPTIONS] <target_name>
 #
 # Checks if an application or package is already installed.
+# The only positional argument is <target_name>.
 #
 # Options:
-#   --check            Query mode: performs a factual check, suppresses console
-#                      logging, and ignores $FORCE. Returns 0 if installed, 1 if not.
-#                      Use ONLY when you need to inspect package presence without
-#                      intending to install it.
+#   --type <flatpak|snap>  Sandbox type (only 'flatpak' or 'snap' accepted)
+#   --name <name>          Custom display name (e.g. --name "Visual Studio Code")
+#   --check                Query mode: performs a factual check, suppresses console
+#                          logging, and ignores $FORCE. Returns 0 if installed, 1 if not.
+#                          Use ONLY when you need to inspect package presence without
+#                          intending to install it.
 #
-# Default Behavior (Installer Self-Check):
-#   If installed (and FORCE is not 'true'), prints an info message and returns 0.
-#   If not installed (or FORCE is 'true'), returns 1.
-#
-# Types:
-#   (omitted/default) - Smart fallback: checks binary in PATH first, then dpkg
-#   command           - Strictly checks binary in PATH via command -v
-#   apt / dpkg        - Strictly checks package status via dpkg-query
-#   flatpak           - Checks Flatpak application via flatpak info
-#   snap              - Checks Snap package via snap list
+# Default Check Behavior:
+#   Smart check: checks binary in PATH via command -v, then package via dpkg-query.
 #
 # Examples:
 #   is_installed "curl" && exit 0
-#   is_installed "ca-certificates" "apt" && exit 0
-#   is_installed "org.audacityteam.Audacity" "flatpak" "Audacity" && exit 0
+#   is_installed "ca-certificates" && exit 0
+#   is_installed "code" --name "Visual Studio Code" && exit 0
+#   is_installed "org.audacityteam.Audacity" --type flatpak --name "Audacity" && exit 0
+#   is_installed "canonical-livepatch" --type snap && exit 0
 #   is_installed --check "python3.13"
 is_installed() {
     local check_only=false
+    local custom_name=""
+    local type=""
     local positional_args=()
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --check)
                 check_only=true
+                shift
+                ;;
+            --name)
+                if [[ $# -ge 2 ]]; then
+                    custom_name="$2"
+                    shift 2
+                else
+                    echo "[!] Error: --name requires an argument" >&2
+                    return 1
+                fi
+                ;;
+            --name=*)
+                custom_name="${1#*=}"
+                shift
+                ;;
+            --type)
+                if [[ $# -ge 2 ]]; then
+                    type="$2"
+                    shift 2
+                else
+                    echo "[!] Error: --type requires an argument" >&2
+                    return 1
+                fi
+                ;;
+            --type=*)
+                type="${1#*=}"
                 shift
                 ;;
             -*)
@@ -174,14 +199,19 @@ is_installed() {
         esac
     done
 
-    local target="${positional_args[0]:-}"
-    local type="${positional_args[1]:-}"
-    local name="${positional_args[2]:-$target}"
-
-    if [[ -z "$target" ]]; then
-        echo "[!] Error: is_installed requires a target name" >&2
+    if [[ "${#positional_args[@]}" -ne 1 ]]; then
+        echo "[!] Error: is_installed requires exactly one positional argument (<target_name>)" >&2
         return 1
     fi
+
+    local target="${positional_args[0]}"
+
+    if [[ -n "$type" && "$type" != "flatpak" && "$type" != "snap" ]]; then
+        echo "[!] Error: is_installed --type only accepts 'flatpak' or 'snap'" >&2
+        return 1
+    fi
+
+    local name="${custom_name:-$target}"
 
     # When not in check mode, respect FORCE to bypass skip logic for reinstalls
     if [[ "$check_only" != "true" && "${FORCE:-false}" == "true" ]]; then
@@ -191,12 +221,6 @@ is_installed() {
     local installed=false
 
     case "$type" in
-        command|bin|cli)
-            command -v "$target" >/dev/null 2>&1 && installed=true
-            ;;
-        apt|dpkg)
-            dpkg-query -W -f='${Status}' "$target" 2>/dev/null | grep -q "ok installed" && installed=true
-            ;;
         flatpak)
             if command -v flatpak >/dev/null 2>&1; then
                 flatpak info "$target" >/dev/null 2>&1 && installed=true
@@ -208,7 +232,7 @@ is_installed() {
             fi
             ;;
         *)
-            # Smart fallback: check command first, then dpkg
+            # Smart check: check binary in PATH first, then dpkg
             if command -v "$target" >/dev/null 2>&1; then
                 installed=true
             elif dpkg-query -W -f='${Status}' "$target" 2>/dev/null | grep -q "ok installed"; then

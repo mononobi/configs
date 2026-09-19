@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "net.poedit.Poedit" "flatpak" "Poedit" && exit 0
+is_installed "net.poedit.Poedit" --type flatpak --name "Poedit" && exit 0
 
 echo "[+] Starting installation for Poedit via Flatpak..."
 

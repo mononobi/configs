@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "google-chrome" "command" "Google Chrome" && exit 0
+is_installed "google-chrome" --name "Google Chrome" && exit 0
 
 echo "[+] Starting installation/setup for chrome..."
 

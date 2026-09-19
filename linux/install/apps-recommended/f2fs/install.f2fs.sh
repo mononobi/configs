@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "fsck.f2fs" "command" "F2FS utilities" && exit 0
+is_installed "fsck.f2fs" --name "F2FS utilities" && exit 0
 
 echo "[+] Starting installation/setup for f2fs..."
 

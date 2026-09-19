@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "pgadmin4" "command" "pgAdmin 4" && exit 0
+is_installed "pgadmin4" --name "pgAdmin 4" && exit 0
 
 echo "[+] Starting installation/setup for pgAdmin 4..."
 

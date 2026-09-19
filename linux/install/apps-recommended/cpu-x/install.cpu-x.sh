@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "cpu-x" "command" "CPU-X" && exit 0
+is_installed "cpu-x" --name "CPU-X" && exit 0
 
 echo "[+] Starting installation/setup for cpu-x..."
 

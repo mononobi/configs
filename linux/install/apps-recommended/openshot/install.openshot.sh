@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "openshot-qt" "command" "OpenShot" && exit 0
+is_installed "openshot-qt" --name "OpenShot" && exit 0
 
 echo "[+] Starting installation/setup for openshot..."
 

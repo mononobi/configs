@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.videolan.VLC" "flatpak" "VLC" && exit 0
+is_installed "org.videolan.VLC" --type flatpak --name "VLC" && exit 0
 
 echo "[+] Starting installation for VLC via Flatpak..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "thunderbird" "command" "Thunderbird" && exit 0
+is_installed "thunderbird" --name "Thunderbird" && exit 0
 
 echo "[+] Starting installation/setup for thunderbird..."
 

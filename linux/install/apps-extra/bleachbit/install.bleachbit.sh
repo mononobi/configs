@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "bleachbit" "command" "BleachBit" && exit 0
+is_installed "bleachbit" --name "BleachBit" && exit 0
 
 echo "[+] Starting installation/setup for bleachbit..."
 

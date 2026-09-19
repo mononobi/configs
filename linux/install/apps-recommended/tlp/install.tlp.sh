@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "tlp" "command" "TLP" && exit 0
+is_installed "tlp" --name "TLP" && exit 0
 
 echo "[+] Starting installation/setup for tlp..."
 

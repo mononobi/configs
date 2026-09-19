@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "spotify" "command" "Spotify" && exit 0
+is_installed "spotify" --name "Spotify" && exit 0
 
 echo "[+] Starting installation/setup for spotify..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "sqlitebrowser" "command" "DB Browser for SQLite" && exit 0
+is_installed "sqlitebrowser" --name "DB Browser for SQLite" && exit 0
 
 echo "[+] Starting installation/setup for sqlitebrowser..."
 

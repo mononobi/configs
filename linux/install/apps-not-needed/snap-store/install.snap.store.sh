@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "snap-store" "snap" "Snap Store" && exit 0
+is_installed "snap-store" --type snap --name "Snap Store" && exit 0
 
 echo "[+] Starting installation/setup for snap-store..."
 

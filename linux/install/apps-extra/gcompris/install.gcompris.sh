@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "net.gcompris.GCompris" "flatpak" "GCompris" && exit 0
+is_installed "net.gcompris.GCompris" --type flatpak --name "GCompris" && exit 0
 
 echo "[+] Starting installation for GCompris via Flatpak..."
 

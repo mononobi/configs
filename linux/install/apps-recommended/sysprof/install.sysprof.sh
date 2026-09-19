@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "sysprof" "command" "Sysprof" && exit 0
+is_installed "sysprof" --name "Sysprof" && exit 0
 
 echo "[+] Starting installation/setup for sysprof..."
 

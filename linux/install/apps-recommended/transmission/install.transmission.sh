@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "transmission-gtk" "command" "Transmission" && exit 0
+is_installed "transmission-gtk" --name "Transmission" && exit 0
 
 echo "[+] Starting installation/setup for transmission..."
 

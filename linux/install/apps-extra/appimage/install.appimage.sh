@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "appimagelauncher" "command" "AppImageLauncher" && exit 0
+is_installed "appimagelauncher" --name "AppImageLauncher" && exit 0
 
 echo "[+] Starting installation/setup for appimage..."
 

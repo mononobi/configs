@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "mypaint" "command" "MyPaint" && exit 0
+is_installed "mypaint" --name "MyPaint" && exit 0
 
 echo "[+] Starting installation/setup for mypaint..."
 

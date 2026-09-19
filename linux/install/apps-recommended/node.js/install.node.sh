@@ -60,7 +60,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "node" "command" "Node.js" && exit 0
+is_installed "node" --name "Node.js" && exit 0
 
 echo "[+] Starting installation/setup for Node.js, NPM & Yarn..."
 

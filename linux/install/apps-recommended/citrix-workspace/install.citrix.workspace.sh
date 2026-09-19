@@ -84,7 +84,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "icaclient" "apt" "Citrix Workspace" && exit 0
+is_installed "icaclient" --name "Citrix Workspace" && exit 0
 
 echo "================================================================================"
 echo " Starting Citrix Workspace App Installation"

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "plexmediaserver" "apt" "Plex Media Server" && exit 0
+is_installed "plexmediaserver" --name "Plex Media Server" && exit 0
 
 echo "[+] Starting installation/setup for Plex Media Server & Desktop..."
 

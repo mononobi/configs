@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "com.github.IsmaelMartinez.teams_for_linux" "flatpak" "Microsoft Teams" && exit 0
+is_installed "com.github.IsmaelMartinez.teams_for_linux" --type flatpak --name "Microsoft Teams" && exit 0
 
 echo "[+] Starting installation for Microsoft Teams via Flatpak..."
 

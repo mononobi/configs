@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "rustc" "command" "Rust" && exit 0
+is_installed "rustc" --name "Rust" && exit 0
 
 echo "[+] Starting installation/setup for rust..."
 

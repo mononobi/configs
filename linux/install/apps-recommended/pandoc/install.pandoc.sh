@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "pandoc" "command" "Pandoc" && exit 0
+is_installed "pandoc" --name "Pandoc" && exit 0
 
 echo "[+] Starting installation/setup for pandoc..."
 

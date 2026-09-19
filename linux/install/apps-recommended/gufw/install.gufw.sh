@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gufw" "command" "GUFW" && exit 0
+is_installed "gufw" --name "GUFW" && exit 0
 
 echo "[+] Starting installation/setup for gufw..."
 

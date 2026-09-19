@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.sugarlabs.MusicKeyboard" "flatpak" "Sugar Labs Music Keyboard" && exit 0
+is_installed "org.sugarlabs.MusicKeyboard" --type flatpak --name "Sugar Labs Music Keyboard" && exit 0
 
 echo "[+] Starting installation for Sugar Labs Music Keyboard via Flatpak..."
 

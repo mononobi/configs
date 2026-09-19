@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "java" "command" "Oracle JDK" && exit 0
+is_installed "java" --name "Oracle JDK" && exit 0
 
 echo "[+] Starting installation/setup for oracle-jdk..."
 

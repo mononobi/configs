@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "beekeeper-studio" "command" "Beekeeper Studio" && exit 0
+is_installed "beekeeper-studio" --name "Beekeeper Studio" && exit 0
 
 echo "[+] Starting installation/setup for beekeeper..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "kdeconnect-indicator" "command" "KDE Connect" && exit 0
+is_installed "kdeconnect-indicator" --name "KDE Connect" && exit 0
 
 echo "[+] Starting installation/setup for kdeconnect..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "com.slack.Slack" "flatpak" "Slack" && exit 0
+is_installed "com.slack.Slack" --type flatpak --name "Slack" && exit 0
 
 echo "[+] Starting installation for Slack via Flatpak..."
 

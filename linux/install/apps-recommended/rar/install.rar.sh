@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "rar" "command" "RAR" && exit 0
+is_installed "rar" --name "RAR" && exit 0
 
 echo "[+] Starting installation/setup for rar..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.gimp.GIMP" "flatpak" "GIMP" && exit 0
+is_installed "org.gimp.GIMP" --type flatpak --name "GIMP" && exit 0
 
 echo "[+] Starting installation for GIMP via Flatpak..."
 

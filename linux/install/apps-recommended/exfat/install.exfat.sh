@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "fsck.exfat" "command" "exFAT utilities" && exit 0
+is_installed "fsck.exfat" --name "exFAT utilities" && exit 0
 
 echo "[+] Starting installation/setup for exfat..."
 

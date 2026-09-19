@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "libreoffice" "command" "LibreOffice" && exit 0
+is_installed "libreoffice" --name "LibreOffice" && exit 0
 
 echo "[+] Starting installation/setup for libreoffice..."
 

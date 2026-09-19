@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "libpq-dev" "apt" "psycopg2 build dependencies" && exit 0
+is_installed "libpq-dev" --name "psycopg2 build dependencies" && exit 0
 
 echo "[+] Starting installation/setup for psycopg2..."
 

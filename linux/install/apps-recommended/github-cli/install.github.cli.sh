@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gh" "command" "GitHub CLI" && exit 0
+is_installed "gh" --name "GitHub CLI" && exit 0
 
 echo "[+] Starting installation/setup for github-cli..."
 

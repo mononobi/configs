@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "designer" "command" "Qt Designer" && exit 0
+is_installed "designer" --name "Qt Designer" && exit 0
 
 echo "[+] Starting installation/setup for pyqt5-designer..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "com.gitlab.wonderwall" "flatpak" "Wonderwall" && exit 0
+is_installed "com.gitlab.wonderwall" --type flatpak --name "Wonderwall" && exit 0
 
 echo "[+] Starting installation for Wonderwall via Flatpak..."
 

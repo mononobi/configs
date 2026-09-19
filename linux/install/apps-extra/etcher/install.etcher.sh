@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "balena-etcher-electron" "command" "balenaEtcher" && exit 0
+is_installed "balena-etcher-electron" --name "balenaEtcher" && exit 0
 
 echo "[+] Starting installation/setup for etcher..."
 

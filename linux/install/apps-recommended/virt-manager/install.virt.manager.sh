@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "virt-manager" "command" "Virtual Machine Manager" && exit 0
+is_installed "virt-manager" --name "Virtual Machine Manager" && exit 0
 
 echo "[+] Starting installation/setup for virt-manager..."
 

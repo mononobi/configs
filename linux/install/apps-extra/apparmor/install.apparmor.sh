@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "aa-status" "command" "AppArmor Utilities" && exit 0
+is_installed "aa-status" --name "AppArmor Utilities" && exit 0
 
 echo "[+] Starting installation/setup for apparmor..."
 

@@ -70,7 +70,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "dotnet" "command" ".NET SDK" && exit 0
+is_installed "dotnet" --name ".NET SDK" && exit 0
 
 echo "[+] Starting installation/setup for .NET SDK & Runtimes..."
 

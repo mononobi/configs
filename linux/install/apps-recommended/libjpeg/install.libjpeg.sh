@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "libjpeg-dev" "apt" "JPEG Development Libraries" && exit 0
+is_installed "libjpeg-dev" --name "JPEG Development Libraries" && exit 0
 
 echo "[+] Starting installation/setup for libjpeg..."
 

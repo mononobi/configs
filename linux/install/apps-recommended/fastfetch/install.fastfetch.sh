@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "fastfetch" "command" && exit 0
+is_installed "fastfetch" && exit 0
 
 echo "[+] Starting installation for Fastfetch..."
 

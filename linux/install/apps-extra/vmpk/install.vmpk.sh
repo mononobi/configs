@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "vmpk" "command" "Virtual MIDI Piano Keyboard" && exit 0
+is_installed "vmpk" --name "Virtual MIDI Piano Keyboard" && exit 0
 
 echo "[+] Starting installation for VMPK (Virtual MIDI Piano Keyboard)..."
 

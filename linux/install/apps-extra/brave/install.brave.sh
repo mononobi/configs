@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "brave-browser" "command" "Brave Browser" && exit 0
+is_installed "brave-browser" --name "Brave Browser" && exit 0
 
 echo "[+] Starting installation/setup for brave..."
 

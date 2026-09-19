@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "apt-transport-https" "apt" && exit 0
+is_installed "apt-transport-https" && exit 0
 
 echo "[+] Starting installation/setup for apt-transport-https..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gnome-clocks" "command" "GNOME Clocks" && exit 0
+is_installed "gnome-clocks" --name "GNOME Clocks" && exit 0
 
 echo "[+] Starting installation/setup for clocks..."
 

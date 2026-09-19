@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "dotnet" "command" ".NET Core" && exit 0
+is_installed "dotnet" --name ".NET Core" && exit 0
 
 echo "[+] Starting installation/setup for .NET Core..."
 

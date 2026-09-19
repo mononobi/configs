@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "dbus-launch" "command" "dbus-x11" && exit 0
+is_installed "dbus-launch" --name "dbus-x11" && exit 0
 
 echo "[+] Starting installation/setup for dbus-x11..."
 

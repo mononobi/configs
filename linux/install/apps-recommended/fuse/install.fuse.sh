@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "fusermount" "command" "FUSE utilities" && exit 0
+is_installed "fusermount" --name "FUSE utilities" && exit 0
 
 echo "[+] Starting installation/setup for fuse..."
 

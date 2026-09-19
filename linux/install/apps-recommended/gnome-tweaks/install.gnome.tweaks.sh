@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gnome-tweaks" "command" "GNOME Tweaks" && exit 0
+is_installed "gnome-tweaks" --name "GNOME Tweaks" && exit 0
 
 echo "[+] Starting installation/setup for gnome-tweaks..."
 

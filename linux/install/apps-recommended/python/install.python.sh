@@ -106,7 +106,7 @@ done
 # Also install general tools (pip, venv), but NOT python3-is-python
 GENERAL_PKGS=()
 for pkg in "python3-pip" "python3-venv" "python3-setuptools"; do
-    if ! is_installed --check "$pkg" "apt"; then
+    if ! is_installed --check "$pkg"; then
         GENERAL_PKGS+=("$pkg")
     fi
 done

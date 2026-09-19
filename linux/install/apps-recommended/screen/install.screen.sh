@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "screen" "command" "GNU Screen" && exit 0
+is_installed "screen" --name "GNU Screen" && exit 0
 
 echo "[+] Starting installation/setup for screen..."
 

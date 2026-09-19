@@ -62,7 +62,7 @@ if grep -rq "mozillateam/ppa" /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/
 fi
 sudo rm -f /etc/apt/preferences.d/mozilla-firefox 2>/dev/null || true
 
-is_installed "firefox" "command" "Firefox" && exit 0
+is_installed "firefox" --name "Firefox" && exit 0
 
 # 3. Create keyrings directory and import Mozilla official signing key
 sudo install -d -m 0755 /etc/apt/keyrings

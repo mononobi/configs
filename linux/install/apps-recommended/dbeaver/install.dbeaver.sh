@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "dbeaver" "command" "DBeaver" && exit 0
+is_installed "dbeaver" --name "DBeaver" && exit 0
 
 echo "[+] Starting installation/setup for DBeaver CE..."
 

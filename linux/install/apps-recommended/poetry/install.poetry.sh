@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "poetry" "command" "Poetry" && exit 0
+is_installed "poetry" --name "Poetry" && exit 0
 
 echo "[+] Starting installation/setup for poetry..."
 

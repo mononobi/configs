@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "catfish" "command" "Catfish" && exit 0
+is_installed "catfish" --name "Catfish" && exit 0
 
 echo "[+] Starting installation/setup for catfish..."
 

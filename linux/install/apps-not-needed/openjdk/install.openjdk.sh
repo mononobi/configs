@@ -61,7 +61,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "java" "command" "OpenJDK" && exit 0
+is_installed "java" --name "OpenJDK" && exit 0
 
 echo "[+] Starting installation/setup for openjdk..."
 

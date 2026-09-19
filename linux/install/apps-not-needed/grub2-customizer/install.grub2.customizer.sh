@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "grub-customizer" "command" "GRUB Customizer" && exit 0
+is_installed "grub-customizer" --name "GRUB Customizer" && exit 0
 
 echo "[+] Starting installation/setup for grub2-customizer..."
 

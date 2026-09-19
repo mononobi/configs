@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "ubuntu-restricted-extras" "apt" "Ubuntu Restricted Extras" && exit 0
+is_installed "ubuntu-restricted-extras" --name "Ubuntu Restricted Extras" && exit 0
 
 echo "[+] Starting installation/setup for ubuntu-restricted-extras..."
 

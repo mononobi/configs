@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.blender.Blender" "flatpak" "Blender" && exit 0
+is_installed "org.blender.Blender" --type flatpak --name "Blender" && exit 0
 
 echo "[+] Starting installation for Blender via Flatpak..."
 

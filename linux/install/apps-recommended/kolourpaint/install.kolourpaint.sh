@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "kolourpaint" "command" "KolourPaint" && exit 0
+is_installed "kolourpaint" --name "KolourPaint" && exit 0
 
 echo "[+] Starting installation/setup for kolourpaint..."
 

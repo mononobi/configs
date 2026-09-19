@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "preload" "command" "Preload" && exit 0
+is_installed "preload" --name "Preload" && exit 0
 
 echo "[+] Starting installation/setup for preload..."
 

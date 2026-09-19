@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "nginx" "command" "Nginx" && exit 0
+is_installed "nginx" --name "Nginx" && exit 0
 
 echo "[+] Starting installation/setup for nginx..."
 

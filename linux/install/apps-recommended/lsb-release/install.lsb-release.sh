@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "lsb-release" "apt" && exit 0
+is_installed "lsb-release" && exit 0
 
 echo "[+] Starting installation/setup for lsb-release..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gnome-maps" "command" "GNOME Maps" && exit 0
+is_installed "gnome-maps" --name "GNOME Maps" && exit 0
 
 echo "[+] Starting installation/setup for gnome-maps..."
 

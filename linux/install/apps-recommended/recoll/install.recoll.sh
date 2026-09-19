@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "recoll" "command" "Recoll" && exit 0
+is_installed "recoll" --name "Recoll" && exit 0
 
 echo "[+] Starting installation/setup for recoll..."
 

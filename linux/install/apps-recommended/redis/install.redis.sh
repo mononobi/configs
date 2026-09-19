@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "redis-server" "command" "Redis" && exit 0
+is_installed "redis-server" --name "Redis" && exit 0
 
 echo "[+] Starting installation/setup for redis..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "libglut-dev" "apt" "OpenGL Development Libraries" && exit 0
+is_installed "libglut-dev" --name "OpenGL Development Libraries" && exit 0
 
 echo "[+] Starting installation/setup for lib-opengl..."
 

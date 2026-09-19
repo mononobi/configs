@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "notepadqq" "command" "Notepadqq" && exit 0
+is_installed "notepadqq" --name "Notepadqq" && exit 0
 
 echo "[+] Starting installation/setup for notepadqq..."
 

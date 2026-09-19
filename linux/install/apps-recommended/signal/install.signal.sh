@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "signal-desktop" "command" "Signal Desktop" && exit 0
+is_installed "signal-desktop" --name "Signal Desktop" && exit 0
 
 echo "[+] Starting installation/setup for signal..."
 

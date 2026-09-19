@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "blueman-manager" "command" "Blueman" && exit 0
+is_installed "blueman-manager" --name "Blueman" && exit 0
 
 echo "[+] Starting installation/setup for blueman..."
 

@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "org.shotcut.Shotcut" "flatpak" "Shotcut" && exit 0
+is_installed "org.shotcut.Shotcut" --type flatpak --name "Shotcut" && exit 0
 
 echo "[+] Starting installation for Shotcut via Flatpak..."
 

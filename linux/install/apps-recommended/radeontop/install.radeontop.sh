@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "radeontop" "command" "RadeonTop" && exit 0
+is_installed "radeontop" --name "RadeonTop" && exit 0
 
 echo "[+] Starting installation/setup for radeontop..."
 

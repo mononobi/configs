@@ -42,7 +42,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "atom" "command" "Atom" && exit 0
+is_installed "atom" --name "Atom" && exit 0
 
 echo "[+] Starting installation/setup for Atom..."
 
