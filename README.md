@@ -53,6 +53,8 @@ The framework centers around a modular runner and individual self-contained reci
 7. **Single Upfront APT Update**: Batch runners perform a single `apt update` at the start
    and pass `--no-update` to every subscript by default. This avoids redundant index
    downloads for each app, unless an app adds a custom repository that requires refreshing.
+8. **Strict Idempotency**: Every recipe is idempotent—safe to execute repeatedly without
+   unintended side effects, corrupted states, duplicate configurations, or redundant downloads.
 
 ---
 
@@ -224,13 +226,32 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 To maintain modularity, speed, and zero code duplication, every script in `linux/install`
 must adhere strictly to the following framework rules:
 
-### Rule 1: Every Installer Must Self-Check via `is_installed`
-At the very top of every installer (immediately after parsing options), check if the
-application is already installed:
-```bash
-is_installed "my-tool" && exit 0
-```
-This guarantees `<1ms` fast-skips when running batches or re-executing installers.
+### Rule 1: Every Installer Must Be Idempotent and Self-Check Early
+Every installation script must be **idempotent**—meaning it is safe and side-effect-free to 
+execute multiple times on the same machine without duplicating configurations, corrupting files, 
+or re-downloading packages if already present.
+
+How to achieve idempotency across recipe types:
+- **Standard APT & CLI Packages**: Perform a fast-path self-check via `is_installed` at the 
+  very top of the installer (immediately after parsing options):
+  ```bash
+  is_installed "my-tool" && exit 0
+  ```
+  This guarantees `<1ms` fast-skips when running batches or re-executing installers 
+  (bypassed only when `FORCE=true` or `--force` is passed).
+- **Direct Tarballs, Binaries & Online Scripts**: For tools installed via custom tarballs, 
+  direct GitHub releases, or remote installation scripts (e.g., Antigravity Agent Manager, 
+  Rclone, Ventoy):
+  - Perform custom version or state checks before downloading. Compare the installed local 
+    version (via binary `--version`, inspecting application manifests, or reading a 
+    `.version` marker file) against the latest remote release.
+  - If the target binaries or desktop entries already exist and match the remote version, 
+    skip immediately without re-downloading or re-extracting unless `--force` is explicitly 
+    specified.
+- **System Configurations & File Modifications**: Never blindly append lines to configuration 
+  files or shell profiles. Always check whether the setting or block already exists 
+  (e.g. via `grep -q`) before adding or updating it in place.
+
 
 ### Rule 2: `is_installed` Is Strictly for Self-Checks
 Never use `is_installed` to inspect external dependencies or third-party packages with
