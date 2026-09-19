@@ -117,7 +117,7 @@ if [[ -d "$TOOLS_DIR" ]]; then
 fi
 
 # 7. Verification
-if command -v odbcinst >/dev/null 2>&1; then
+if is_installed --check "odbcinst"; then
     echo "[+] ODBC Environment and Registered Drivers:"
     odbcinst -j
     echo "[+] Registered Drivers in /etc/odbcinst.ini:"
