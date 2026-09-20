@@ -73,8 +73,9 @@ if [[ -n "$SETUP_SH" && -f "$SETUP_SH" ]]; then
     sudo bash "$SETUP_SH"
 
     # XDM's installer archive contains a 'usr/' folder packaged as UID 1000 and extracts directly
-    # to '/', which resets /usr ownership to UID 1000 and drops /install-script.sh into '/'.
-    sudo chown root:root /usr
+    # to '/', which resets /usr and its extracted subdirectories to UID 1000.
+    # Restore root ownership on /usr and its top-level subdirectories, and remove leftover file.
+    sudo chown root:root /usr /usr/lib /usr/bin /usr/share 2>/dev/null || true
     sudo rm -f /install-script.sh
 else
     echo "[!] Error: 'install.sh' not found in downloaded XDM archive." >&2
