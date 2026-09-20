@@ -49,7 +49,8 @@ echo "[+] Starting installation/setup for Firefox (Official Mozilla DEB)..."
 if is_installed --check "firefox" --type snap; then
     echo "[+] Snap version of Firefox detected. Removing..."
     if sudo snap remove --purge firefox; then
-        echo "[+] Removing legacy snap wrapper binary at /usr/bin/firefox..."
+        echo "[+] Removing legacy snap wrapper binary and transitional package..."
+        sudo apt-get purge -y firefox 2>/dev/null || true
         sudo rm -f /usr/bin/firefox
     fi
 fi
