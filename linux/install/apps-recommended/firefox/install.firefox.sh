@@ -65,6 +65,8 @@ sudo rm -f /etc/apt/preferences.d/mozilla-firefox 2>/dev/null || true
 
 is_installed "firefox" --name "Firefox" && exit 0
 
+require_app wget gnupg
+
 # 3. Create keyrings directory and import Mozilla official signing key
 sudo install -d -m 0755 /etc/apt/keyrings
 echo "[+] Importing Mozilla signing key from https://packages.mozilla.org/apt/repo-signing-key.gpg..."
