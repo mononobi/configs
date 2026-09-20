@@ -260,7 +260,7 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
 
     # Check if compatible libxml2 is installed
     NEED_XML2=false
-    if ! dpkg-query -W -f='${Status}' libxml2 2>/dev/null | grep -q "ok installed"; then
+    if ! is_installed --check "libxml2"; then
         NEED_XML2=true
     fi
 
