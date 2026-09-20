@@ -335,7 +335,7 @@ if ! sudo DEBIAN_FRONTEND=noninteractive dpkg -i "$DEB_PATH"; then
 fi
 
 # 8. Clean up downloaded installer package upon successful installation
-if dpkg-query -W -f='${Status}' icaclient 2>/dev/null | grep -q "ok installed"; then
+if is_installed --check "icaclient"; then
     if [[ -n "${DOWNLOADED_FILE:-}" && -f "$DOWNLOADED_FILE" ]]; then
         echo "[+] Cleaning up downloaded installer package: $DOWNLOADED_FILE..."
         rm -f "$DOWNLOADED_FILE"
