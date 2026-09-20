@@ -27,6 +27,7 @@ Options:
                         Default: calculated from system RAM based on guidelines
   -w, --swappiness <N>  Set Linux kernel swappiness (0-100) and persist to /etc/sysctl.conf
                         Default: calculated from system RAM (10 for >8GB, 30 for 2-8GB, 60 for <2GB)
+  --no-update           Ignored (no APT dependencies required)
   -h, --help            Show this help message and exit
 
 Sizing Formula (when --size is omitted):
@@ -71,6 +72,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --no-update|--skip-update)
+            SKIP_UPDATE=true
             shift
             ;;
         *)

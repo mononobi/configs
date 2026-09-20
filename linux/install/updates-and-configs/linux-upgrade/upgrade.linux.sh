@@ -7,6 +7,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -15,6 +17,7 @@ Description:
   Performs a full Linux distribution upgrade using apt-get dist-upgrade and cleanup.
 
 Options:
+  --no-update   Skip apt update before dist-upgrade
   -h, --help    Show this help message and exit
 EOF
 }
@@ -25,6 +28,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"
@@ -37,7 +44,7 @@ done
 echo "[+] Starting installation/setup for linux-upgrade..."
 
 echo "[+] Running APT distribution upgrade..."
-sudo apt-get update
+conditional_apt_update
 sudo apt-get dist-upgrade -y
 sudo apt-get autoremove -y
 sudo apt-get clean

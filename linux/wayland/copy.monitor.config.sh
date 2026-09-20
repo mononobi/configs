@@ -37,6 +37,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --no-update|--skip-update)
+            SKIP_UPDATE=true
             shift
             ;;
         *)

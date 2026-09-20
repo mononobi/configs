@@ -8,6 +8,8 @@ SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -31,7 +33,7 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         --no-update|--skip-update)
-            # No APT packages needed for local commands
+            SKIP_UPDATE=true
             shift
             ;;
         *)

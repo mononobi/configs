@@ -7,6 +7,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
+SKIP_UPDATE=false
+
 show_help() {
     cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
@@ -15,6 +17,7 @@ Description:
   Configures system default browser alternatives using update-alternatives for x-www-browser and gnome-www-browser.
 
 Options:
+  --no-update   Ignored (no APT packages needed)
   -h, --help    Show this help message and exit
 EOF
 }
@@ -25,6 +28,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        --no-update|--skip-update)
+            SKIP_UPDATE=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"

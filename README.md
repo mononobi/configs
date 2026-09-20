@@ -344,13 +344,17 @@ Scripts must **never** run manual shell commands (`command -v`, `which`, `dpkg-q
   fi
   ```
 
-### Rule 5: Every Installer Must Accept `--no-update` and Respect `SKIP_UPDATE`
+### Rule 5: Every Installer Must Accept `--no-update|--skip-update` and Respect `SKIP_UPDATE`
 To ensure both seamless standalone runs and efficient batch runs:
-- **Standalone CLI Flag**: Every installer script must parse `--no-update` (or `--skip-update`) 
-  and set `SKIP_UPDATE=true`. This allows users to run individual scripts without incurring 
-  an unnecessary `apt-get update`:
+- **Mandatory Default Definition**: Every installer script must explicitly 
+  define `SKIP_UPDATE=false` upfront before argument parsing.
+- **Standalone CLI Flags**: Every installer script must accept both `--no-update` and 
+  `--skip-update` (`--no-update|--skip-update`) and set `SKIP_UPDATE=true`. This allows 
+  users to run individual scripts without incurring an unnecessary `apt-get update`:
   ```bash
   ./install.my-tool.sh --no-update
+  # or
+  ./install.my-tool.sh --skip-update
   ```
 - **Environment Respect**: Every script must respect `SKIP_UPDATE` by calling 
   `conditional_apt_update`. This guarantees that batch runners (like `installer.sh`) and 
@@ -455,6 +459,7 @@ To add a new tool or application:
    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
    source "${SCRIPT_DIR}/../../utils.sh"
 
+   # Mandatory: define default update control state
    SKIP_UPDATE=false
 
    show_help() {
@@ -462,8 +467,8 @@ To add a new tool or application:
    Usage: $(basename "$0") [OPTIONS]
 
    Options:
-     --no-update   Skip apt update before installation
-     -h, --help    Show this help message and exit
+     --no-update, --skip-update  Skip apt update before installation
+     -h, --help                  Show this help message and exit
    EOF
    }
 
