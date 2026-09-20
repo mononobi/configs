@@ -19,12 +19,14 @@ Description:
   that contain an 'ignore' file.
 
 Options:
+  -c, --category CAT          Category directory to scan (e.g. apps-recommended, apps-extra)
   -s, --short, --names-only   Output only folder names without headers/decorations
   -h, --help                  Show this help message and exit
 
 Examples:
   $(basename "$0")
   $(basename "$0") --names-only
+  $(basename "$0") -c apps-recommended --names-only
   $(basename "$0") apps-recommended
 EOF
 }
@@ -38,6 +40,19 @@ while [[ $# -gt 0 ]]; do
             ;;
         -s|--short|--names-only)
             NAMES_ONLY=true
+            shift
+            ;;
+        -c|--category)
+            if [[ $# -ge 2 ]]; then
+                CATEGORIES+=("$2")
+                shift 2
+            else
+                echo "[!] Error: --category requires an argument" >&2
+                exit 1
+            fi
+            ;;
+        --category=*)
+            CATEGORIES+=("${1#*=}")
             shift
             ;;
         -*)
