@@ -14,6 +14,12 @@ In this guide, we will use the following terms:
 
 ## 1. Generate SSH Key on Your Local Device
 
+Create `.ssh` directory:
+
+```bash
+mkdir -p ~/.ssh
+```
+
 Generate a new SSH key pair on your local machine. The ed25519 algorithm 
 is recommended for its strong security properties.
 
