@@ -407,6 +407,17 @@ All scripts and automation recipes must invoke `apt-get` (e.g., `sudo apt-get in
   terminal formatting, dynamic progress bars, or interactive prompts that corrupt log files
   or hang headless batch runners.
 
+### Rule 10: Every Installer Must Import `utils.sh` (Regardless of Usage)
+Every installer, setup script, and configuration recipe must source `utils.sh` at the very 
+beginning of the script, **regardless of whether it currently invokes any helper functions**:
+- **Why**: Sourcing `utils.sh` guarantees that all shared utilities (`require_app`, `is_installed`, 
+  `conditional_apt_update`, `ensure_local_bin_in_path`, color formatting, error trapping) are 
+  immediately and unconditionally available.
+- **Fail-Safe Evolution**: If an existing recipe is later edited or extended to call a helper 
+  function (such as `require_app` or `is_installed`), it will work immediately without 
+  obscure "command not found" errors caused by a missing import.
+- **Mandatory for All Recipes**: No installer may omit sourcing `utils.sh`.
+
 ---
 
 ## Application Types & Extensibility
@@ -500,6 +511,13 @@ To add a new tool or application:
      via `require_app`, or batch-installed through `install-ignored.sh`.
 
 #### Sourcing `utils.sh` by Directory Depth
+> [!IMPORTANT]
+> **Mandatory Import for Every Installer**: Every single installer, script, or configuration 
+> recipe must source `utils.sh` at the beginning, regardless of whether it currently calls 
+> any utility functions. This ensures all shared helpers (`require_app`, `is_installed`, 
+> `conditional_apt_update`, etc.) are always in scope, preventing failures when utility 
+> functions are used.
+
 Ensure the relative path to `utils.sh` matches the script's directory depth from `linux/install/`:
 - **Standard 2-Level Depth** (`apps-recommended/<app>/` or `apps-extra/<app>/`):
   ```bash
