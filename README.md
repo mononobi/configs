@@ -45,8 +45,16 @@ The framework centers around a modular runner and individual self-contained reci
    required.
 4. **Credential Keepalive**: The batch runner initializes `sudo` credentials upfront
    and maintains a background keepalive loop, preventing repetitive password prompts.
-5. **Selective Skipping via `ignore`**: Any subfolder that contains an `ignore` file is
-   automatically skipped during batch installations.
+5. **Selective Skipping via `ignore` & Interactive Installers**: Any subfolder that contains an
+   `ignore` file is automatically skipped during unattended batch installations (`installer.sh`,
+   `install-recommended.sh`, `install-extra.sh`).
+   - **Inherently Interactive Recipes**: Any installer that is inevitably interactive (requiring
+     manual terminal choices, prompts for credentials, interactive wizards, or license acceptance)
+     **must be intentionally marked with an `ignore` file** so it does not block unattended 
+     batch runs.
+   - **Interactive Batch Runner (`install-ignored.sh`)**: The framework provides 
+     `install-ignored.sh` to perform an interactive batch installation across all ignored 
+     applications, asking the user one-by-one (`[y/N]`) whether to install each one.
 6. **Execution Logging & Summary**: The runner captures stdout/stderr per application,
    reports clear visual progress, and prints an end-of-run summary with exact failure
    diagnostics if an error occurs.
@@ -480,8 +488,16 @@ To add a new tool or application:
    sudo apt-get install -y my-tool
    ```
 4. Make the script executable: `chmod +x install.my-tool.sh`.
-5. (Optional) If the script should only run on demand and not during batch runs,
-   create an empty `ignore` file: `touch linux/install/apps-recommended/my-tool/ignore`.
+5. **Marking with `ignore` for Inherently Interactive Recipes**:
+   - If an application installer is **inevitably or inherently interactive** (e.g. requires manual
+     terminal prompts, license agreements, or interactive setup wizardry), or should only run 
+     on demand, you **must mark its folder with an `ignore` file**:
+     ```bash
+     touch linux/install/apps-recommended/my-tool/ignore
+     ```
+   - This ensures unattended batch runners (`installer.sh`, `install-recommended.sh`) run cleanly
+     without hanging on user prompts, while still allowing the recipe to be run on demand, required
+     via `require_app`, or batch-installed through `install-ignored.sh`.
 
 #### Sourcing `utils.sh` by Directory Depth
 Ensure the relative path to `utils.sh` matches the script's directory depth from `linux/install/`:
@@ -619,14 +635,42 @@ cd linux/install/apps-recommended/vscode && ./install.vscode.sh --no-update
 cd linux/install/apps-recommended/ufw-rules-local && ./set.ufw.rules.local.sh
 ```
 
-### 3. Inspecting Ignored Applications
+### 3. Interactive Batch Installation for Ignored Applications (`install-ignored.sh`)
 
-To see all folders marked with an `ignore` file:
+Unattended batch runners (`install-recommended.sh`, `installer.sh`) deliberately skip any folder
+containing an `ignore` file to ensure non-blocking, automated execution. All recipes that are
+inevitably interactive are intentionally marked with an `ignore` file.
+
+To perform a batch installation across ignored and interactive applications in a controlled,
+guided manner, use `install-ignored.sh`:
+
 ```bash
-./linux/install/list-ignored.sh
+# Interactively iterate through ignored recommended applications (default)
+./linux/install/install-ignored.sh
+
+# Interactively iterate through ignored applications in another category
+./linux/install/install-ignored.sh -c apps-extra
 ```
 
-To output plain names for scripting:
+**How it works**:
+- Scans all ignored application recipes in the selected category (defaulting to `apps-recommended`).
+- Prompts for each ignored application one-by-one: `Install <app_name>? [y/N]`.
+- Default answer is **No** (simply pressing `<Enter>` skips the application).
+- Entering `y` or `yes` runs that application installer (passing `--no-update`), logs output, 
+  and moves on to the next.
+- Automatically maintains `sudo` keepalive in the background and prints an end-of-run summary 
+  of installed vs. skipped applications.
+
+### 4. Inspecting Ignored Applications (`list-ignored.sh`)
+
+To see all folders marked with an `ignore` file across categories:
 ```bash
-./linux/install/list-ignored.sh --names-only
+# List all ignored recipes across all categories
+./linux/install/list-ignored.sh
+
+# Filter ignored recipes for a specific category
+./linux/install/list-ignored.sh -c apps-recommended
+
+# Output plain folder names only (for scripting and loops)
+./linux/install/list-ignored.sh --names-only -c apps-recommended
 ```
