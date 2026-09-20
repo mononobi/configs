@@ -45,7 +45,8 @@ is_installed "poetry" --name "Poetry" && exit 0
 
 echo "[+] Starting installation/setup for poetry..."
 
-require_app curl python
+require_app curl
+require_app python --fast
 
 echo "[+] Running official Poetry installer..."
 curl -sSL https://install.python-poetry.org | python3 -

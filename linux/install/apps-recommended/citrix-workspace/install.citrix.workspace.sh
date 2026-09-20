@@ -91,7 +91,8 @@ echo " Starting Citrix Workspace App Installation"
 echo "================================================================================"
 
 # 0. Ensure required helper applications are satisfied via utils.sh
-require_app curl ca-certificates net-tools debconf-utils python
+require_app curl ca-certificates net-tools debconf-utils
+require_app python --fast
 
 # 1. Resolve or download the Citrix Workspace .deb package
 fetch_citrix_deb() {

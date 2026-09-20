@@ -88,7 +88,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Require shared dependencies
-require_app curl python tar
+require_app curl tar
+require_app python --fast
 
 get_installed_version() {
     local version_file="${INSTALL_DIR}/.version"

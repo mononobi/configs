@@ -536,7 +536,8 @@ install_gnome_extension() {
     local sys_ext_dir="/usr/share/gnome-shell/extensions/${uuid}"
 
     # Ensure required helper apps
-    require_app curl python gnome-extensions/activator
+    require_app curl gnome-extensions/activator
+    require_app python --fast
 
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
