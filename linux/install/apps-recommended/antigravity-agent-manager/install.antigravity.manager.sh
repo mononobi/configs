@@ -27,7 +27,7 @@ FORCE=false
 DOWNLOAD_URL=""
 CUSTOM_URL=false
 
-SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
+SKIP_UPDATE="${SKIP_UPDATE:-false}"
 
 usage() {
     cat <<EOF

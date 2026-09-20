@@ -68,7 +68,7 @@ Examples:
 EOF
 }
 
-SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
+SKIP_UPDATE="${SKIP_UPDATE:-false}"
 CLI_APPS=()
 
 # Parse arguments

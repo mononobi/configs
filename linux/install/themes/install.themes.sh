@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 source "${SCRIPT_DIR}/../utils.sh"
 
 SYSTEM_TARGET=""
-SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
+SKIP_UPDATE="${SKIP_UPDATE:-false}"
 RESTART_GDM=false
 CLEAN_ONLY=false
 

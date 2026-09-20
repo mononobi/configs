@@ -8,7 +8,7 @@ SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 source "${SCRIPT_DIR}/../../../../utils.sh"
 
-SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
+SKIP_UPDATE="${SKIP_UPDATE:-false}"
 
 show_help() {
     cat <<EOF

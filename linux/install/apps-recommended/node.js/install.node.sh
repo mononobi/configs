@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
 NODE_MAJOR=""
-SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
+SKIP_UPDATE="${SKIP_UPDATE:-false}"
 FORCE=false
 
 show_help() {

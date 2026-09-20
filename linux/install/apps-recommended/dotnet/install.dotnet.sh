@@ -10,7 +10,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 DOTNET_VER=""
 INSTALL_MAUI=true
 
-SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
+SKIP_UPDATE="${SKIP_UPDATE:-false}"
 
 show_help() {
     cat <<EOF
