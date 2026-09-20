@@ -68,6 +68,10 @@ Resolves and executes application installers on demand:
 - **Multiple Apps in One Call**: Accepts one or more application names separated by
   spaces (e.g., `require_app curl ca-certificates gnupg`). Always combine dependencies
   into a single call rather than repeating `require_app` across multiple lines.
+- **Recipe Folder Names (Not Package Names)**: Positional arguments passed to `require_app`
+  must always be the **folder name of the recipe in this repository** (e.g., `net-tools`,
+  `xdg-user-dirs`, `debconf-utils`, `python`, `odbcinst`), **NOT** the underlying system package
+  or binary name. `require_app` resolves the folder, enters it, and executes its installer script.
 - **Automatic 3-Tier Fallback**: Automatically searches for recipes across categories in
   priority order:
   1. `apps-recommended/`
@@ -98,6 +102,13 @@ Resolves and executes application installers on demand:
 Performs fast-path verification to check whether a package or application is already
 installed, allowing recipes to exit in `<1ms`.
 The target name is the **only positional argument**. All options are passed via named `--` flags:
+
+- **Target Name is the Real Installed Package/Binary**:
+  The positional `<target_name>` passed to `is_installed` is always the **real package,
+  binary, or application ID installed on the host system** (e.g., `is_installed "netstat"`,
+  `is_installed "xdg-user-dir"`, `is_installed "debconf-set-selections"`, 
+  `is_installed "msodbcsql18"`). This directly contrasts with `require_app`, which takes 
+  the **recipe folder name** in this repo.
 
 - **Options**:
   - `--name <display_name>`: Custom human-readable display name for logs 
@@ -158,14 +169,17 @@ The target name is the **only positional argument**. All options are passed via 
   - Suppresses console logging (`[i] ... skipping...`).
   - Bypasses and ignores `$FORCE`, performing a factual query against host reality.
   - Returns exit code `0` if present, `1` if not.
-  - **Permitted Use Scope**: While `is_installed` is primarily intended as an installer's
-    own top-level self-check, `is_installed --check` **may** be used by other scripts
-    **only** when the goal is purely to inspect whether an application, tool, or binary is
-    present *without any intention of installing it* (e.g., validating user CLI input or
-    inspecting non-managed binaries).
-  - **Strict Prohibition**: Scripts must **NEVER** use `is_installed` or `is_installed --check`
-    to test for a dependency and then proceed to install it. Installing dependencies
-    is strictly the responsibility of `require_app`.
+  - **Strict Prohibition on Manual Package Checks**: Scripts must **NEVER** use manual
+    shell commands (`command -v`, `which`, `dpkg-query`, `dpkg -l`, `flatpak list`,
+    `flatpak info`, `snap list`) to check if a package or tool is installed. Always use
+    `is_installed --check <target_name>`.
+  - **Check As Sole Purpose Only**: `is_installed --check` may **only** be used when inspecting
+    presence is the **sole purpose** and **NO installation should follow it** (e.g., validating 
+    user CLI input, running optional updates on already-existing runtimes, or checking non-managed 
+    host tools).
+  - **Strict Prohibition on Manual Installation**: Scripts must **NEVER** use `is_installed`
+    or `is_installed --check` to test for a dependency and then proceed to install it.
+    If installation is intended, `require_app <folder_name>` must always be used.
 
 ### 3. `conditional_apt_update [--force]`
 Executes `sudo apt-get update` unless `SKIP_UPDATE` is set to `true` (e.g., when `--no-update`
@@ -257,24 +271,51 @@ How to achieve idempotency across recipe types:
 Never use `is_installed` to inspect external dependencies or third-party packages with
 the goal of installing them. Let `require_app` handle dependencies, which in turn runs the
 dependency recipe's own `is_installed` check.
-The only exception is using `is_installed --check <target>` when a script purely needs to
-inspect whether a tool or binary is present on the system without intending to install it
-(e.g., validating user CLI input or inspecting non-managed binaries). Never follow an
-`is_installed` check with a manual installation — that is strictly the role of `require_app`.
+
+- **Folder Names vs. Real Package Names**:
+  - `require_app <folder_name>`: The argument is always the **folder name of the recipe in 
+    this repository** (e.g., `net-tools`, `xdg-user-dirs`, `debconf-utils`, `python`, `odbcinst`, 
+    `gtk-update-icon-cache`), **not** the underlying package or binary name.
+  - `is_installed <target_name>`: The argument is always the **real package, binary, 
+    or application ID** installed on the system (e.g., `netstat`, `xdg-user-dir`, 
+    `debconf-set-selections`, `python3.12`, `msodbcsql18`, `gtk-update-icon-cache`).
+- **Pure Existence Queries via `--check`**:
+  Using `is_installed --check <target>` is allowed **only** when inspecting whether a tool, 
+  package, or runtime is present is the **sole purpose** and **no installation will follow** 
+  (e.g., querying environment capabilities, validating user CLI options, or checking optional 
+  runtimes for update tasks).
+- **Strict Prohibition**: Never follow an `is_installed` or `is_installed --check` query with 
+  a manual installation command (`apt-get install`, direct download, etc.) — installing 
+  dependencies is strictly the role of `require_app`.
 
 ### Rule 3: Never Check Dependency Presence Manually
-Never wrap `require_app` in `if ! command -v ...` or `if ! dpkg ...`:
-```bash
-# Correct
-require_app curl ca-certificates gnupg
+Scripts must **never** run manual shell commands (`command -v`, `which`, `dpkg-query`, `dpkg -l`,
+`flatpak list`, `flatpak info`, `snap list`) to check whether a package is installed:
+- **If installation is intended**: Never wrap `require_app` in manual checks:
+  ```bash
+  # Correct
+  require_app curl ca-certificates gnupg
 
-# Incorrect (redundant manual checks)
-if ! command -v curl >/dev/null 2>&1; then
-    require_app "curl"
-fi
-```
-Because the required recipe already contains its own `is_installed` self-check, manual
-checks in caller scripts are completely redundant and add unnecessary boilerplate.
+  # Incorrect (redundant manual checks)
+  if ! command -v curl >/dev/null 2>&1; then
+      require_app "curl"
+  fi
+  ```
+  Because the required recipe already contains its own `is_installed` self-check, manual
+  checks in caller scripts are completely redundant and add unnecessary boilerplate.
+- **If checking is the sole purpose (no installation intended)**: Never use raw `command -v` or
+  package manager queries; use `is_installed --check`:
+  ```bash
+  # Correct
+  if is_installed --check "flatpak"; then
+      flatpak update -y
+  fi
+
+  # Incorrect (manual command -v)
+  if command -v flatpak >/dev/null 2>&1; then
+      flatpak update -y
+  fi
+  ```
 
 ### Rule 4: Never Check Conditions or Pass `--no-update` Manually to Utility Functions
 - **Zero Wrapping Checks**: Never wrap `require_app` or `conditional_apt_update` 
