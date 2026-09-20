@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gnome-extensions" && exit 0
+is_installed "gnome-shell" && is_installed "extension-manager" && is_installed "gnome-extensions-app" && is_installed "chrome-gnome-shell" && exit 0
 
 echo "================================================================================"
 echo " Starting GNOME Shell Extensions Activator Setup"
