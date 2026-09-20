@@ -10,7 +10,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 PG_VERSION=""
 PG_PASSWORD="123"
 
-SKIP_UPDATE=false
+SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
 
 show_help() {
     cat <<EOF

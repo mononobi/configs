@@ -28,7 +28,7 @@ EOHELP
 }
 
 TARGET_INPUT=""
-SKIP_UPDATE=false
+SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do

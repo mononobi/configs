@@ -10,7 +10,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 
-SKIP_UPDATE=false
+SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
 
 show_help() {
     cat <<EOF

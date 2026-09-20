@@ -347,7 +347,9 @@ Scripts must **never** run manual shell commands (`command -v`, `which`, `dpkg-q
 ### Rule 5: Every Installer Must Accept `--no-update|--skip-update` and Respect `SKIP_UPDATE`
 To ensure both seamless standalone runs and efficient batch runs:
 - **Mandatory Default Definition**: Every installer script must explicitly 
-  define `SKIP_UPDATE=false` upfront before argument parsing.
+  define `SKIP_UPDATE="${SKIP_UPDATE:-false}"` upfront before argument parsing. This ensures
+  that any value inherited from the calling environment (e.g., from `export SKIP_UPDATE=true` 
+  or parent runners) is preserved, while cleanly defaulting to `false` if unset.
 - **Standalone CLI Flags**: Every installer script must accept both `--no-update` and 
   `--skip-update` (`--no-update|--skip-update`) and set `SKIP_UPDATE=true`. This allows 
   users to run individual scripts without incurring an unnecessary `apt-get update`:
@@ -459,8 +461,8 @@ To add a new tool or application:
    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
    source "${SCRIPT_DIR}/../../utils.sh"
 
-   # Mandatory: define default update control state
-   SKIP_UPDATE=false
+   # Mandatory: define default update control state (respects existing env value)
+   SKIP_UPDATE="${SKIP_UPDATE:-false}"
 
    show_help() {
        cat <<EOF
@@ -474,15 +476,15 @@ To add a new tool or application:
 
    while [[ $# -gt 0 ]]; do
        case "$1" in
-           -h|--help)
+           -h|--help) # Mandatory: always accept this flag
                show_help
                exit 0
                ;;
-           --no-update|--skip-update)
-               SKIP_UPDATE=true
+           --no-update|--skip-update) # Mandatory: always accept these flags
+               SKIP_UPDATE=true # Mandatory: always set SKIP_UPDATE to true when either flag is provided
                shift
                ;;
-           *)
+           *) # Mandatory: always fallback and fail safe
                echo "Unknown option: $1" >&2
                exit 1
                ;;

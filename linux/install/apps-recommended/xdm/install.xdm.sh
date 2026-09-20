@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 
 DOWNLOAD_URL="https://github.com/subhra74/xdm/releases/download/7.2.11/xdm-setup-7.2.11.tar.xz"
 
-SKIP_UPDATE=false
+SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
 FORCE=false
 
 show_help() {

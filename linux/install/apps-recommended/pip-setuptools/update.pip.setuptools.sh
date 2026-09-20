@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 
 TARGET_PYTHON=""
 
-SKIP_UPDATE=false
+SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
 
 show_help() {
     cat <<EOF

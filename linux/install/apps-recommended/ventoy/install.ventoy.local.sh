@@ -10,7 +10,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 ARCHIVE_PATH=""
 DOWNLOAD_URL=""
 FORCE=false
-SKIP_UPDATE=false
+SKIP_UPDATE=\"${SKIP_UPDATE:-false}\"
 
 show_help() {
     cat <<EOF
