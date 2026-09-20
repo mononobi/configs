@@ -103,8 +103,16 @@ Resolves and executes application installers on demand:
   halts execution immediately and returns a non-zero exit code (`return 1`).
 - **Instant Fast-Skip**: Each required recipe inspects its own state via `is_installed`,
   skipping in `<1ms` if already present.
+- **Passing Arguments via `--args`**: Pass custom arguments or version numbers directly to
+  the underlying recipe script using `--args`. This is strictly allowed only when requiring a
+  single application:
+  ```bash
+  require_app python --args 3.14 3.11 --force
+  ```
 - **Flag Propagation**: Global flags such as `--no-update` are deduplicated and forwarded
-  automatically to all required dependencies.
+  automatically to all required dependencies. Custom flags or `--args` cannot be passed
+  when requiring multiple applications.
+
 
 ### 2. `is_installed [OPTIONS] <target_name>`
 Performs fast-path verification to check whether a package or application is already

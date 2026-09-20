@@ -23,19 +23,30 @@ INSTALL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 #
 # Options:
 #   --category <dir>   Custom category folder to search first
+#   --args <args...>   Pass trailing arguments and flags directly to the underlying installer
+#                      (only valid when requiring a single application)
 #   --no-update        Forwarded to candidate scripts
 #
 # Examples:
 #   require_app curl
 #   require_app curl ca-certificates gnupg
 #   require_app my-tool --category apps-custom
+#   require_app python --args 3.14 3.11 --force
 require_app() {
     local apps=()
     local category=""
     local extra_args=()
+    local forwarded_args=()
+    local has_args_flag=false
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
+            --args)
+                has_args_flag=true
+                shift
+                forwarded_args+=("$@")
+                break
+                ;;
             --category)
                 if [[ $# -ge 2 ]]; then
                     category="$2"
@@ -63,6 +74,20 @@ require_app() {
     if [[ ${#apps[@]} -eq 0 ]]; then
         echo "[!] Error: require_app called without any application names" >&2
         return 1
+    fi
+
+    if [[ "$has_args_flag" == "true" && ${#apps[@]} -ne 1 ]]; then
+        echo "[!] Error: --args can only be used when requiring a single application" >&2
+        return 1
+    fi
+
+    if [[ ${#apps[@]} -gt 1 ]]; then
+        for arg in "${extra_args[@]}"; do
+            if [[ "$arg" != "--no-update" && "$arg" != "--skip-update" ]]; then
+                echo "[!] Error: Custom flags ($arg) can only be passed when requiring a single application" >&2
+                return 1
+            fi
+        done
     fi
 
     for app_name in "${apps[@]}"; do
@@ -103,6 +128,11 @@ require_app() {
             pass_args+=("--no-update")
         fi
         for arg in "${extra_args[@]}"; do
+            if [[ "$arg" != "--no-update" || ! " ${pass_args[*]} " =~ " --no-update " ]]; then
+                pass_args+=("$arg")
+            fi
+        done
+        for arg in "${forwarded_args[@]}"; do
             if [[ "$arg" != "--no-update" || ! " ${pass_args[*]} " =~ " --no-update " ]]; then
                 pass_args+=("$arg")
             fi
