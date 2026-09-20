@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Description: Install and configure Python versions (from 3.8 up to latest stable)
-# Note: Installs Python runtimes with -dev and -full packages; links default python without python3-is-python.
+# Note: Installs Python runtimes with -dev and -full packages; links default python
+# without python3-is-python.
 
 set -euo pipefail
 
@@ -8,7 +9,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
 CUSTOM_VERSIONS=()
-
+FAST=false
+FORCE="${FORCE:-false}"
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
 
 show_help() {
@@ -16,21 +18,25 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS] [VERSIONS...]
 
 Description:
-  Installs Python versions starting from 3.8, 3.9 up to the current latest stable version (e.g. 3.14).
-  For each version, both the development package (-dev) and the complete runtime (-full) are installed.
-  Configures the default /usr/bin/python and /usr/bin/python-config symlinks to point to the latest
-  installed Python version without requiring the python3-is-python package.
+  Installs Python versions starting from 3.8, 3.9 up to current latest stable
+  version (e.g. 3.14). For each version, both the development package (-dev)
+  and the complete runtime (-full) are installed. Configures default /usr/bin/python
+  and /usr/bin/python-config symlinks to point to the latest installed Python version
+  without requiring the python3-is-python package.
 
 Arguments:
   VERSIONS              Optional specific Python version(s) to install (e.g. 3.12 3.14).
-                        Default: all versions from 3.8 up to the latest available in repository.
+                        Default: all versions from 3.8 up to latest available in repo.
 
 Options:
+  --fast                Quickly check if target Python is installed and exit immediately
   --no-update           Skip apt update before installation
+  -f, --force           Force installation even if already installed
   -h, --help            Show this help message and exit
 
 Examples:
-  $(basename "$0")              # Installs 3.8 through latest (e.g. 3.14) and links python to latest
+  $(basename "$0")              # Installs 3.8 through latest and links python
+  $(basename "$0") --fast       # Fast-exits if python3 is already installed
   $(basename "$0") 3.12 3.14    # Installs only Python 3.12 and 3.14
 EOF
 }
@@ -42,12 +48,24 @@ while [[ $# -gt 0 ]]; do
             show_help
             exit 0
             ;;
+        -f|--force)
+            FORCE=true
+            shift
+            ;;
+        --fast)
+            FAST=true
+            shift
+            ;;
         --no-update|--skip-update)
             SKIP_UPDATE=true
             shift
             ;;
-        [0-9]*)
-            CUSTOM_VERSIONS+=("$1")
+        python[0-9]*|python-[0-9]*|python|[0-9]*)
+            raw_ver="$1"
+            ver="${raw_ver#python}"
+            ver="${ver#-}"
+            [[ -z "$ver" ]] && ver="3"
+            CUSTOM_VERSIONS+=("$ver")
             shift
             ;;
         *)
@@ -57,6 +75,27 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Fast-path check: if --fast is specified, exit or narrow target versions
+if [[ "$FAST" == "true" && "$FORCE" != "true" ]]; then
+    if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
+        missing_versions=()
+        for ver in "${CUSTOM_VERSIONS[@]}"; do
+            if ! is_installed "python${ver}"; then
+                missing_versions+=("$ver")
+            fi
+        done
+
+        if [[ ${#missing_versions[@]} -eq 0 ]]; then
+            exit 0
+        fi
+
+        # Narrow custom versions to only those that need to be installed
+        CUSTOM_VERSIONS=("${missing_versions[@]}")
+    else
+        is_installed "python3" && exit 0
+    fi
+fi
 
 echo "[+] Starting installation/setup for Python toolchains..."
 
@@ -75,7 +114,10 @@ if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
 else
     # Target versions from 3.8 up to at least 3.14 (or higher if newer exists)
     MAX_MINOR=14
-    DETECTED_MAX=$(apt-cache search "^python3\.[0-9]+$" | awk '{print $1}' | grep -Po '3\.\K[0-9]+' | sort -n | tail -1)
+    DETECTED_MAX=$(
+        apt-cache search "^python3\.[0-9]+$" | awk '{print $1}' \
+            | grep -Po '3\.\K[0-9]+' | sort -n | tail -1
+    )
     if [[ -n "$DETECTED_MAX" ]] && (( DETECTED_MAX > MAX_MINOR )); then
         MAX_MINOR="$DETECTED_MAX"
     fi
@@ -137,7 +179,7 @@ if [[ -n "$LATEST_VER" ]]; then
     sudo ln -sf "/usr/bin/python${LATEST_VER}" /usr/bin/python
 
     if [[ -f "/usr/bin/python${LATEST_VER}-config" ]]; then
-        echo "[+] Configuring default /usr/bin/python-config -> /usr/bin/python${LATEST_VER}-config..."
+        echo "[+] Configuring /usr/bin/python-config -> /usr/bin/python${LATEST_VER}-config..."
         sudo ln -sf "/usr/bin/python${LATEST_VER}-config" /usr/bin/python-config
     fi
 fi
