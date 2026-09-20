@@ -424,6 +424,13 @@ beginning of the script, **regardless of whether it currently invokes any helper
   obscure "command not found" errors caused by a missing import.
 - **Mandatory for All Recipes**: No installer may omit sourcing `utils.sh`.
 
+### Rule 11: Text File Line Length Limit (Max 95 Characters)
+Any text file (`.md`, `.txt`, etc.) when created or modified in this repository must
+strictly adhere to a line length limit:
+- **Max 95 Characters Per Line**: Each line must not exceed 95 characters in length.
+- **Line Breaking**: Lines should be cleanly broken and wrapped at a maximum of 95
+  characters.
+
 ---
 
 ## Application Types & Extensibility
