@@ -28,10 +28,29 @@ INSTALL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 #   --no-update        Forwarded to candidate scripts
 #
 # Examples:
+#   # 1. Single application:
 #   require_app curl
+#
+#   # 2. Multiple applications in one call:
 #   require_app curl ca-certificates gnupg
+#
+#   # 3. Custom category folder with priority search:
 #   require_app my-tool --category apps-custom
+#
+#   # 4. Standalone flag forwarded to a single application:
+#   require_app python --force
+#   require_app python --silent
+#
+#   # 5. Positional arguments & custom flags via --args (single app only):
+#   require_app python --args 3.14 3.11
 #   require_app python --args 3.14 3.11 --force
+#
+#   # 6. Global framework update flag across multiple applications:
+#   require_app curl docker ufw --no-update
+#
+#   # 7. Nested subfolder under standard categories (resolved automatically):
+#   require_app "gnome-extensions/activator"
+#   require_app "gnome-extensions/recommended/color-picker"
 require_app() {
     local apps=()
     local category=""
