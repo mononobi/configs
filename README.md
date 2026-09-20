@@ -378,6 +378,12 @@ If an application requires a dependency that does not yet exist as a recipe in t
 - **Sandbox Types via `--type`**: Pass `--type flatpak` or `--type snap` only for Flatpak
   or Snap packages. Standard CLI tools and APT packages use the default smart check and
   must never pass `--type`.
+- **Symlinked Scripts Must Calculate Paths from Real Canonical Location**: When a recipe folder
+  in `apps-recommended/` or `apps-extra/` contains a symlink pointing to an external script
+  outside `linux/install/` (e.g. `linux/vpn-server-setup/conduit-node/`), the script resolves
+  its location using `readlink -f "${BASH_SOURCE[0]}"`. Sourcing `utils.sh` and resolving local
+  assets must be computed relative to the **real target file location**, never from the symlink
+  directory.
 
 ### Rule 9: Always Use `apt-get` (Never `apt`) in Scripts
 All scripts and automation recipes must invoke `apt-get` (e.g., `sudo apt-get install -y`,
@@ -487,6 +493,40 @@ Ensure the relative path to `utils.sh` matches the script's directory depth from
   ```bash
   source "${SCRIPT_DIR}/../../../../utils.sh"
   ```
+- **Symlinked Scripts Outside `linux/install/` (Real Target Path Rule)**:
+  When an installer script physically resides outside `linux/install/` (such as in 
+  `linux/fonts/`, `linux/icons/`, `linux/templates/`, `linux/llm/ollama/`, 
+  `linux/vpn/express-vpn/express-openvpn/`, or `linux/vpn-server-setup/conduit-node/`) 
+  and is symlinked into `linux/install/apps-recommended/` or `apps-extra/`, scripts resolve 
+  their directory using `readlink -f`:
+  ```bash
+  SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+  ```
+  > [!IMPORTANT]
+  > Because `readlink -f` dereferences symlinks to the **canonical target location 
+  > outside `install/`**, `SCRIPT_DIR` resolves to the physical directory on disk, 
+  > **not the symlink path** inside `apps-recommended/` or `apps-extra/`.
+  > 
+  > Therefore, relative paths to `utils.sh` (as well as relative paths to config files 
+  > and local assets) **must always be calculated from the real file location**, 
+  > targeting `install/utils.sh`:
+  > - **1 level under `linux/`** (e.g., `linux/fonts/`, `linux/icons/`, `linux/templates/`):
+  >   ```bash
+  >   source "${SCRIPT_DIR}/../install/utils.sh"
+  >   ```
+  > - **2 levels under `linux/`** (e.g., `linux/vpn-server-setup/conduit-node/`, 
+  >   `linux/llm/ollama/`):
+  >   ```bash
+  >   source "${SCRIPT_DIR}/../../install/utils.sh"
+  >   ```
+  > - **3 levels under `linux/`** (e.g., `linux/vpn/express-vpn/express-openvpn/`):
+  >   ```bash
+  >   source "${SCRIPT_DIR}/../../../install/utils.sh"
+  >   ```
+  > 
+  > Never assume the relative path to `utils.sh` is `../../utils.sh` when the physical file 
+  > lives outside `linux/install/`.
 
 ### Creating a Custom Category Folder
 
