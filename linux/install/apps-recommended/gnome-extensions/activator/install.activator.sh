@@ -16,7 +16,7 @@ Usage: $(basename "$0") [OPTIONS]
 
 Description:
   Installs GNOME Shell Extension Manager (app), official GNOME extensions,
-  and the browser connector (chrome-gnome-shell).
+  and the browser connector (gnome-browser-connector).
   Disables extension version compatibility validation so extensions remain functional.
 
 Options:
@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gnome-shell" && is_installed "extension-manager" && is_installed "gnome-extensions-app" && is_installed "gnome-extensions" && is_installed "chrome-gnome-shell" && exit 0
+is_installed "gnome-shell" && is_installed "extension-manager" && is_installed "gnome-extensions-app" && is_installed "gnome-extensions" && is_installed "gnome-browser-connector" && exit 0
 
 echo "================================================================================"
 echo " Starting GNOME Shell Extensions Activator Setup"
@@ -52,7 +52,7 @@ echo "==========================================================================
 
 conditional_apt_update
 
-echo "[+] Installing packages: gnome-shell, gnome-shell-extension-manager, gnome-shell-extensions, chrome-gnome-shell..."
-sudo apt-get install -y gnome-shell gnome-shell-extension-manager gnome-shell-extensions chrome-gnome-shell
+echo "[+] Installing packages: gnome-shell, gnome-shell-extension-manager, gnome-shell-extensions, gnome-browser-connector..."
+sudo apt-get install -y gnome-shell gnome-shell-extension-manager gnome-shell-extensions gnome-browser-connector
 
 echo "[✓] GNOME Shell Extensions Activator setup completed successfully!"

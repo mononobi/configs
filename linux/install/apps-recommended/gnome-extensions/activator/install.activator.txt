@@ -14,7 +14,7 @@ sudo apt install gnome-shell-extensions
 
 # open a terminal and install this:
 
-sudo apt install chrome-gnome-shell
+sudo apt install gnome-browser-connector
 
 ###### INSTALL ABOVE AND FOLLOW ALL IF YOU ONLY WANT SUPPORT IN BROWSER ######
 
