@@ -5,7 +5,7 @@
 When running `sudo ufw` or installing applications that manage firewall rules 
 (such as Conduit Node), you may see warnings like:
 
-```text
+```terminaloutput
 WARN: uid is 0 but '/lib' is owned by 1000
 WARN: uid is 0 but '/usr' is owned by 1000
 ```
@@ -61,3 +61,25 @@ After running these commands, verify that the warning is gone:
 ```bash
 sudo ufw status verbose
 ```
+
+---
+
+## Why Does the Fix Only Target `/usr` and Not `/lib`?
+
+On modern Ubuntu and Debian systems (merged-usr layout), `/lib` is **not a real directory**—it is 
+a symbolic link pointing directly to `usr/lib`:
+
+```terminaloutput
+lrwxrwxrwx 1 root root 7 Apr 20 10:46 /lib -> usr/lib
+```
+
+1. **The `/lib` symlink is already owned by `root:root`:** The archive never modified 
+   the `/lib` symlink itself.
+2. **UFW follows symlinks:** When UFW inspects its configuration and library 
+   paths (`/lib/ufw/...`), Python's `os.stat()` resolves the symlink to `/usr/lib/ufw/...`. 
+   As UFW walks up the parent directories to verify permissions (`/usr/lib` -> `/usr` -> `/`), 
+   it encounters `/usr` owned by UID 1000 and warns for both paths.
+
+Because the underlying files for `/lib` reside entirely inside `/usr`, restoring root ownership 
+to `/usr` (`sudo chown root:root /usr`) immediately resolves **both** the `/usr` 
+and `/lib` warnings.
