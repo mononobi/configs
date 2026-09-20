@@ -67,7 +67,6 @@ require_app curl gnome-extensions/activator
 require_app python --fast
 
 shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
-shell_ver="${shell_ver:-46}"
 
 echo "    Resolving latest GitHub release asset for jstockdale/quick-settings-tweaks..."
 DOWNLOAD_URL="$(python3 -c "

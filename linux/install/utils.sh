@@ -358,9 +358,11 @@ check_extension_archive_compatibility() {
     local name="${2:-Extension}"
     local uuid="${3:-}"
 
+    require_app gnome-extensions/activator
+    require_app python --fast
+
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
-    shell_ver="${shell_ver:-46}"
 
     local compat_check
     compat_check="$(python3 -c "
@@ -494,6 +496,8 @@ else:
     local cmp_status="${cmp_res%%|*}"
     local rest="${cmp_res#*|}"
 
+    require_app gnome-extensions/activator
+
     local label="$name"
     [[ -n "$uuid" && "$name" != "$uuid" && "$name" != *"$uuid"* ]] && label="${name} (${uuid})"
 
@@ -541,7 +545,6 @@ install_gnome_extension() {
 
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
-    shell_ver="${shell_ver:-46}"
 
     echo "    Resolving download URL for GNOME ${shell_ver} on extensions.gnome.org..."
     local download_url
