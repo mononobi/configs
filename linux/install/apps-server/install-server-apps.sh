@@ -30,7 +30,6 @@ SERVER_APPS=(
     "pass"
     "python"
     "virtualenv"
-    "pip-setuptools"
     "pipenv"
     "poetry"
     "redis"
