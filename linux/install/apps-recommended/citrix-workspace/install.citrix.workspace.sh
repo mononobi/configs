@@ -182,7 +182,7 @@ detect_compatibility() {
         
         # If the package requires libicu74, check if APT can supply it
         if echo "$deps" | grep -q "libicu74"; then
-            if ! dpkg-query -W -f='${Status}' libicu74 2>/dev/null | grep -q "ok installed"; then
+            if ! is_installed --check "libicu74"; then
                 if ! apt-cache show libicu74 >/dev/null 2>&1; then
                     return 0
                 fi
@@ -193,7 +193,7 @@ detect_compatibility() {
     # Check B: Check if ABI dependencies (e.g. libicu74) exist in APT repos
     # On supported Ubuntu versions (e.g. 24.04), libicu74 is present in the archive.
     # On unsupported future versions (e.g. 26.04), libicu74 is absent from APT.
-    if ! dpkg-query -W -f='${Status}' libicu74 2>/dev/null | grep -q "ok installed"; then
+    if ! is_installed --check "libicu74"; then
         if ! apt-cache show libicu74 >/dev/null 2>&1; then
             return 0
         fi
@@ -254,7 +254,7 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
 
     # Check if libicu74 is already installed
     NEED_ICU=false
-    if ! dpkg-query -W -f='${Status}' libicu74 2>/dev/null | grep -q "ok installed"; then
+    if ! is_installed --check "libicu74"; then
         NEED_ICU=true
     fi
 
