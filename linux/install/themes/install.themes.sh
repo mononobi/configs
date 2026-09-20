@@ -184,8 +184,8 @@ done < /dev/null > /dev/null 2>&1 &
 sudo_keepalive_pid=$!
 
 # Ensure required applications are installed via require_app
-echo "[+] Ensuring application dependencies (git, gnome-extensions, sassc) are installed..."
-require_app git gnome-extensions sassc
+echo "[+] Ensuring application dependencies (shell-theme-changer, git, sassc) are installed..."
+require_app gnome-extensions/recommended/shell-theme-changer git sassc
 
 # -----------------------------------------------------------------------------
 # Clean previous installations
@@ -271,7 +271,6 @@ echo "[+] Step 6: Applying user desktop themes and icons..."
 gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
 gsettings set org.gnome.desktop.interface icon-theme "${ICON_NAME}"
 gsettings set org.gnome.desktop.interface gtk-theme "${THEME_NAME}"
-gnome-extensions enable "user-theme@gnome-shell-extensions.gcampax.github.com" 2>/dev/null || true
 if gsettings list-schemas | grep -q "org.gnome.shell.extensions.user-theme"; then
     gsettings set org.gnome.shell.extensions.user-theme name "${THEME_NAME}"
 fi
