@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Description: Install and configure GNOME Shell Extension Manager and Browser Connector (Activator)
+# Description: Install and configure GNOME Shell Extension Manager and Browser Connector
 # Note: Implements the guidelines in install.activator.txt. Completely idempotent.
 
 set -euo pipefail
@@ -44,7 +44,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "gnome-shell" && is_installed "extension-manager" && is_installed "gnome-extensions-app" && is_installed "gnome-extensions" && is_installed "gnome-browser-connector" && exit 0
+if is_installed --check "gnome-shell" && \
+   is_installed --check "extension-manager" && \
+   is_installed --check "gnome-shell-extensions" && \
+   is_installed --check "gnome-browser-connector"; then
+    is_installed "extension-manager" --name "GNOME Shell Extensions Activator" && exit 0
+fi
 
 echo "================================================================================"
 echo " Starting GNOME Shell Extensions Activator Setup"
@@ -52,7 +57,11 @@ echo "==========================================================================
 
 conditional_apt_update
 
-echo "[+] Installing packages: gnome-shell, gnome-shell-extension-manager, gnome-shell-extensions, gnome-browser-connector..."
-sudo apt-get install -y gnome-shell gnome-shell-extension-manager gnome-shell-extensions gnome-browser-connector
+echo "[+] Installing GNOME extensions packages (extension-manager, browser connector)..."
+sudo apt-get install -y \
+    gnome-shell \
+    gnome-shell-extension-manager \
+    gnome-shell-extensions \
+    gnome-browser-connector
 
 echo "[✓] GNOME Shell Extensions Activator setup completed successfully!"

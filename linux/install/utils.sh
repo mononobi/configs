@@ -358,9 +358,6 @@ check_extension_archive_compatibility() {
     local name="${2:-Extension}"
     local uuid="${3:-}"
 
-    require_app gnome-extensions/activator
-    require_app python --fast
-
     local shell_ver
     shell_ver="$(gnome-shell --version 2>/dev/null | awk '{print $3}' | cut -d. -f1)"
 
@@ -495,8 +492,6 @@ else:
 
     local cmp_status="${cmp_res%%|*}"
     local rest="${cmp_res#*|}"
-
-    require_app gnome-extensions/activator
 
     local label="$name"
     [[ -n "$uuid" && "$name" != "$uuid" && "$name" != *"$uuid"* ]] && label="${name} (${uuid})"
