@@ -164,7 +164,10 @@ for subfolder in "${TARGET_DIR}"/*/; do
 
     # Skip subfolders containing an 'ignore' marker file
     if [[ -f "${subfolder}ignore" ]]; then
+        echo ""
+        echo "--------------------------------------------------------------------------------"
         echo "[i] Skipping ignored application: ${app_name}"
+        echo "--------------------------------------------------------------------------------"
         ignored_apps+=("$app_name")
         ((ignored_count++)) || true
         continue
