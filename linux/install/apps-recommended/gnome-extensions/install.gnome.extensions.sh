@@ -94,10 +94,12 @@ for ext_dir in "${SCRIPT_DIR}/recommended"/*/; do
     # Respect ignore file if present in the extension folder
     if [[ -f "${ext_dir}/ignore" ]]; then
         echo -e "    ${C_YELLOW}[-] Skipping ignored extension: ${ext_name}${C_RESET}"
+        echo -e "${C_BLUE}${DIV_SUB}${C_RESET}"
         continue
     fi
 
     require_app "gnome-extensions/recommended/${ext_name}"
+    echo -e "${C_BLUE}${DIV_SUB}${C_RESET}"
 done
 
 # 3. Handle desktop extensions disabled notice if not requested
