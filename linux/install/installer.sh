@@ -110,6 +110,22 @@ extract_error_message() {
     echo "$err_msg"
 }
 
+# Terminal colors for distinct visual categories (disabled if redirected or NO_COLOR set)
+if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+    C_RESET='\033[0m'
+    C_BOLD='\033[1m'
+    C_CYAN='\033[1;36m'
+    C_BLUE='\033[1;34m'
+    C_GREEN='\033[1;32m'
+    C_YELLOW='\033[1;33m'
+    C_RED='\033[1;31m'
+else
+    C_RESET='' C_BOLD='' C_CYAN='' C_BLUE='' C_GREEN='' C_YELLOW='' C_RED=''
+fi
+
+DIV_MAIN="================================================================================"
+DIV_SUB="--------------------------------------------------------------------------------"
+
 # Statistics tracking
 installed_count=0
 ignored_count=0
@@ -144,10 +160,10 @@ while true; do
 done < /dev/null > /dev/null 2>&1 &
 sudo_keepalive_pid=$!
 
-echo "================================================================================"
-echo " Starting Installation of Applications: ${category_name}"
-echo " Directory: ${TARGET_DIR}"
-echo "================================================================================"
+echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
+echo -e " ${C_BOLD}Starting Installation of Applications: ${category_name}${C_RESET}"
+echo -e " Directory: ${TARGET_DIR}"
+echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
 
 # Ensure ~/.local/bin exists and is permanently added to PATH
 ensure_local_bin_in_path
@@ -165,9 +181,9 @@ for subfolder in "${TARGET_DIR}"/*/; do
     # Skip subfolders containing an 'ignore' marker file
     if [[ -f "${subfolder}ignore" ]]; then
         echo ""
-        echo "--------------------------------------------------------------------------------"
-        echo "[i] Skipping ignored application: ${app_name}"
-        echo "--------------------------------------------------------------------------------"
+        echo -e "${C_YELLOW}${DIV_SUB}${C_RESET}"
+        echo -e "${C_YELLOW}[i] Skipping ignored application: ${app_name}${C_RESET}"
+        echo -e "${C_YELLOW}${DIV_SUB}${C_RESET}"
         ignored_apps+=("$app_name")
         ((ignored_count++)) || true
         continue
@@ -185,9 +201,10 @@ for subfolder in "${TARGET_DIR}"/*/; do
         script_name="$(basename "$script")"
 
         echo ""
-        echo "--------------------------------------------------------------------------------"
-        echo "[==>] Installing: ${app_name} (${script_name})"
-        echo "--------------------------------------------------------------------------------"
+        echo -e "${C_BLUE}${DIV_SUB}${C_RESET}"
+        echo -e "${C_BLUE}[==>] Installing:${C_RESET}" \
+            "${C_BOLD}${app_name}${C_RESET} (${script_name})"
+        echo -e "${C_BLUE}${DIV_SUB}${C_RESET}"
 
         current_log_file="$(mktemp)"
 
@@ -199,14 +216,15 @@ for subfolder in "${TARGET_DIR}"/*/; do
         # Check for user cancellation (Ctrl+C)
         if [[ $exit_code -eq 130 ]] || [[ $exit_code -eq 2 ]]; then
             echo ""
-            echo "[!] Interrupted by user (SIGINT). Aborting installation run." >&2
+            echo -e "${C_RED}[!] Interrupted by user (SIGINT)." \
+                "Aborting installation run.${C_RESET}" >&2
             rm -f "$current_log_file"
             exit 130
         fi
 
         if [[ $exit_code -eq 0 ]]; then
             ((installed_count++)) || true
-            echo "[✓] Successfully installed: ${app_name}"
+            echo -e "${C_GREEN}[✓] Successfully installed: ${app_name}${C_RESET}"
         else
             ((failed_count++)) || true
             err_msg="$(extract_error_message "$current_log_file" "$exit_code")"
@@ -214,7 +232,8 @@ for subfolder in "${TARGET_DIR}"/*/; do
             failed_scripts+=("$script_name")
             failed_codes+=("$exit_code")
             failed_messages+=("$err_msg")
-            echo "[✗] Failed: ${app_name} (${script_name}) [Exit code: ${exit_code}]"
+            echo -e "${C_RED}[✗] Failed: ${app_name} (${script_name})" \
+                "[Exit code: ${exit_code}]${C_RESET}"
         fi
 
         rm -f "$current_log_file"
@@ -225,45 +244,50 @@ done
 total_processed=$((installed_count + ignored_count + failed_count))
 
 echo ""
-echo "================================================================================"
-echo " Final Installation Statistics: ${category_name}"
-echo "================================================================================"
-echo " Total Processed Apps: ${total_processed}"
-echo "   - Installed:        ${installed_count}"
-echo "   - Ignored:          ${ignored_count}"
-echo "   - Failed:           ${failed_count}"
-if [[ $skipped_count -gt 0 ]]; then
-    echo "   - Skipped:          ${skipped_count} (no .sh script found)"
+echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
+echo -e " ${C_BOLD}Final Installation Statistics: ${category_name}${C_RESET}"
+echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
+echo -e " Total Processed Apps: ${C_BOLD}${total_processed}${C_RESET}"
+echo -e "   - Installed:        ${C_GREEN}${installed_count}${C_RESET}"
+echo -e "   - Ignored:          ${C_YELLOW}${ignored_count}${C_RESET}"
+if [[ $failed_count -gt 0 ]]; then
+    echo -e "   - Failed:           ${C_RED}${failed_count}${C_RESET}"
+else
+    echo -e "   - Failed:           ${failed_count}"
 fi
-echo "================================================================================"
+if [[ $skipped_count -gt 0 ]]; then
+    echo -e "   - Skipped:          ${skipped_count} (no .sh script found)"
+fi
+echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
 
 if [[ ${#ignored_apps[@]} -gt 0 ]]; then
     echo ""
-    echo "================================================================================"
-    echo " Ignored Applications (${#ignored_apps[@]}):"
-    echo "================================================================================"
+    echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
+    echo -e " ${C_BOLD}${C_YELLOW}Ignored Applications (${#ignored_apps[@]}):${C_RESET}"
+    echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
     for app in "${ignored_apps[@]}"; do
-        echo "  [i] ${app}"
+        echo -e "  ${C_YELLOW}[i]${C_RESET} ${app}"
     done
-    echo "================================================================================"
+    echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
 fi
 
 if [[ $failed_count -gt 0 ]]; then
     echo ""
-    echo "================================================================================"
-    echo " Failure Details (${failed_count}):"
-    echo "================================================================================"
+    echo -e "${C_RED}${DIV_MAIN}${C_RESET}"
+    echo -e " ${C_BOLD}${C_RED}Failure Details (${failed_count}):${C_RESET}"
+    echo -e "${C_RED}${DIV_MAIN}${C_RESET}"
     for i in "${!failed_apps[@]}"; do
-        echo "  [✗] ${failed_apps[i]} (${failed_scripts[i]}) - Exit Code: ${failed_codes[i]}"
-        echo "      Error Output:"
+        echo -e "  ${C_RED}[✗] ${failed_apps[i]} (${failed_scripts[i]})" \
+            "- Exit Code: ${failed_codes[i]}${C_RESET}"
+        echo -e "      ${C_RED}Error Output:${C_RESET}"
         while IFS= read -r line; do
-            [[ -n "$line" ]] && echo "        $line"
+            [[ -n "$line" ]] && echo -e "        ${C_RED}$line${C_RESET}"
         done <<< "${failed_messages[i]}"
         echo ""
     done
-    echo "================================================================================"
+    echo -e "${C_RED}${DIV_MAIN}${C_RESET}"
     exit 1
 else
-    echo "[✓] All processed applications installed successfully!"
-    echo "================================================================================"
+    echo -e "${C_GREEN}[✓] All processed applications installed successfully!${C_RESET}"
+    echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
 fi
