@@ -1,12 +1,47 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+set -euo pipefail
+
+sudo_keepalive_pid=""
+
+cleanup() {
+    if [[ -n "$sudo_keepalive_pid" ]]; then
+        kill "$sudo_keepalive_pid" 2>/dev/null || true
+    fi
+}
+trap cleanup EXIT INT TERM
+
+echo "[+] Initializing sudo credentials..."
+sudo -v
+
+# Keep sudo timestamp updated in background every 60 seconds
+while true; do
+    sudo -n true
+    sleep 60
+    kill -0 "$$" 2>/dev/null || exit
+done < /dev/null > /dev/null 2>&1 &
+sudo_keepalive_pid=$!
+
+echo "[+] Updating APT packages..."
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get autoremove -y
-sudo flatpak update -y
-sudo flatpak uninstall --unused -y
-sudo snap refresh
+
+if command -v flatpak >/dev/null 2>&1; then
+    echo "[+] Updating Flatpak applications..."
+    sudo flatpak update -y
+    sudo flatpak uninstall --unused -y
+fi
+
+if command -v snap >/dev/null 2>&1; then
+    echo "[+] Refreshing Snap packages..."
+    sudo snap refresh
+fi
+
+echo "[+] Reloading systemd daemon..."
 sudo systemctl daemon-reload
+
+echo "[✓] System update completed successfully!"
 
 ########## Uncomment the below commands if you want to disable any of these services ##########
 
