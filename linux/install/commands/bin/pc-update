@@ -38,17 +38,18 @@ if command -v snap >/dev/null 2>&1; then
     sudo snap refresh
 fi
 
+if command -v apache2 >/dev/null 2>&1; then
+    echo "[+] Disabling apache2 service (prevents port conflict with nginx)..."
+    sudo systemctl stop apache2.service
+    sudo systemctl disable apache2.service
+fi
+
 echo "[+] Reloading systemd daemon..."
 sudo systemctl daemon-reload
 
 echo "[✓] System update completed successfully!"
 
-########## Uncomment the below commands if you want to disable any of these services ##########
-
-# Disable apache service not to conflict with nginx port (Recommended).
-
-#sudo systemctl stop apache2.service
-#sudo systemctl disable apache2.service
+########## Optional service overrides (uncomment if needed) ##########
 
 # Disable systemd-resolved service only if you want to use another
 # DNS resolver service such as dnsmasq (Not recommended).
