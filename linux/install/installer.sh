@@ -96,7 +96,9 @@ extract_error_message() {
     fi
 
     # Check for lines containing common error indicators
-    err_msg="$(grep -Ei "error|failed|fatal|cannot|unable to|not found|denied|invalid|\[\!\]" "$log_file" | tail -n 5 || true)"
+    err_msg="$(grep -Ei \
+        "error|failed|fatal|cannot|unable to|not found|denied|invalid|\[\!\]" \
+        "$log_file" | tail -n 5 || true)"
 
     if [[ -z "$err_msg" ]]; then
         # Fall back to the last 5 non-empty lines of output
@@ -107,7 +109,8 @@ extract_error_message() {
         err_msg="Exited with code ${exit_code}"
     fi
 
-    echo "$err_msg"
+    # Strip ANSI escape codes to prevent color resets from leaking into summaries
+    printf '%s\n' "$err_msg" | sed -r 's/\x1B\[[0-9;]*[a-zA-Z]//g'
 }
 
 format_duration() {

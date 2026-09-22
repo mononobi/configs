@@ -8,8 +8,8 @@ if [[ -n "${_INSTALL_COLORS_LOADED:-}" ]]; then
 fi
 _INSTALL_COLORS_LOADED=1
 
-# Terminal colors & styles (automatically disabled if redirected or NO_COLOR is set)
-if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
+# Terminal colors & styles (enabled unless NO_COLOR is set)
+if [[ -z "${NO_COLOR:-}" ]]; then
     C_RESET='\033[0m'
     C_BOLD='\033[1m'
     C_CYAN='\033[1;36m'

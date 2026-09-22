@@ -261,8 +261,8 @@ which is automatically sourced by `utils.sh`:
 - **Standard Palette**: Defines standard ANSI styling variables (`C_RESET`, `C_BOLD`,
   `C_CYAN`, `C_BLUE`, `C_GREEN`, `C_YELLOW`, `C_RED`) and standard dividers (`DIV_MAIN`,
   `DIV_SUB`).
-- **TTY & `NO_COLOR` Aware**: Colors are automatically evaluated and suppressed if stdout
-  is redirected (not a TTY via `[[ -t 1 ]]`) or if `NO_COLOR` is defined in the environment.
+- **`NO_COLOR` Aware**: Colors are automatically evaluated and enabled unless
+  `NO_COLOR` is defined in the environment.
 - **Universal Availability**: Because `utils.sh` sources `colors.sh`, every recipe and runner
   inherits the palette automatically without duplicate boilerplate.
 - **Standalone Reusability**: Independent scripts (such as CLI tools in `commands/bin/`) can
