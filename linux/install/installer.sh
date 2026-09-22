@@ -110,6 +110,22 @@ extract_error_message() {
     echo "$err_msg"
 }
 
+format_duration() {
+    local total_seconds="$1"
+    if (( total_seconds < 60 )); then
+        echo "${total_seconds}s"
+    elif (( total_seconds < 3600 )); then
+        local min=$((total_seconds / 60))
+        local sec=$((total_seconds % 60))
+        echo "${min}m ${sec}s"
+    else
+        local hours=$((total_seconds / 3600))
+        local min=$(((total_seconds % 3600) / 60))
+        local sec=$((total_seconds % 60))
+        echo "${hours}h ${min}m ${sec}s"
+    fi
+}
+
 # Terminal colors for distinct visual categories (disabled if redirected or NO_COLOR set)
 if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
     C_RESET='\033[0m'
@@ -148,6 +164,8 @@ cleanup() {
     [[ -n "$current_log_file" && -f "$current_log_file" ]] && rm -f "$current_log_file" || true
 }
 trap cleanup EXIT INT TERM
+
+start_time=$(date +%s)
 
 echo "[+] Initializing sudo credentials..."
 sudo -v
@@ -242,6 +260,9 @@ for subfolder in "${TARGET_DIR}"/*/; do
 done
 
 total_processed=$((installed_count + ignored_count + failed_count))
+end_time=$(date +%s)
+duration=$((end_time - start_time))
+duration_display="$(format_duration "$duration")"
 
 echo ""
 echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
@@ -258,6 +279,7 @@ fi
 if [[ $skipped_count -gt 0 ]]; then
     echo -e "   - Skipped:          ${skipped_count} (no .sh script found)"
 fi
+echo -e " Total Duration:       ${C_BOLD}${duration_display}${C_RESET}"
 echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
 
 if [[ ${#ignored_apps[@]} -gt 0 ]]; then
