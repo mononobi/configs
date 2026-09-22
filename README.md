@@ -216,6 +216,11 @@ is passed or during batch runs).
   APT repository list, it must directly call `sudo apt-get update` after adding the
   repository. Pass `--force` to `conditional_apt_update` if you need to run unconditionally
   while respecting the helper.
+- **Always Pass `-n` / `--no-update` to `add-apt-repository`**: When adding a PPA via
+  `add-apt-repository`, always pass `-n` (e.g. `sudo add-apt-repository -y -n ppa:...`)
+  to prevent Ubuntu's automatic index update, followed by explicit `sudo apt-get update`.
+  This prevents redundant back-to-back `apt update` cycles and guarantees deterministic,
+  single-refresh behavior across all Debian/Ubuntu environments.
 
 ### 4. `ensure_local_bin_in_path`
 Ensures `~/.local/bin` exists, exports it to current process `$PATH`, and permanently
@@ -420,6 +425,10 @@ All scripts and automation recipes must invoke `apt-get` (e.g., `sudo apt-get in
 - **Log & Pipe Cleanliness**: `apt-get` outputs clean, machine-friendly text without ANSI
   terminal formatting, dynamic progress bars, or interactive prompts that corrupt log files
   or hang headless batch runners.
+- **Deterministic Repository Updates (`add-apt-repository -n`)**: When adding PPAs via
+  `add-apt-repository`, always pass `-n` (e.g., `sudo add-apt-repository -y -n ppa:...`)
+  before calling `sudo apt-get update`. Ubuntu's `add-apt-repository` triggers an automatic
+  `apt update` by default; passing `-n` prevents duplicate, back-to-back index refreshes.
 
 ### Rule 10: Every Installer Must Import `utils.sh` (Regardless of Usage)
 Every installer, setup script, and configuration recipe must source `utils.sh` at the very 
