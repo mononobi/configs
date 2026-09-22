@@ -1,6 +1,10 @@
 #!/bin/bash
 
-sudo systemctl stop apache2.service
-sudo systemctl disable apache2.service
+if command -v apache2 >/dev/null 2>&1; then
+    echo "[+] Disabling apache2 service (prevents port conflict with nginx)..."
+    sudo systemctl stop apache2.service
+    sudo systemctl disable apache2.service
+fi
+
 sudo systemctl start nginx
 sudo systemctl enable nginx
