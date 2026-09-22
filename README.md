@@ -8,6 +8,13 @@ automation scripts for Linux environments, development tools, databases, and IDE
 > repository are 100% AI-generated. No humans are to blame for any bugs, anti-patterns,
 > or code design—all code was produced and maintained by AI under human supervision.
 
+> [!IMPORTANT]
+> `AGENTS.md` is a symbolic link (soft link) pointing directly to `README.md`.
+> It exists solely to provide instructions to AI agents in their expected default location.
+> - **Never edit `AGENTS.md` directly**: All documentation changes must be made to `README.md`.
+> - **No comparison or sync needed**: AI agents must never compare `AGENTS.md` and `README.md`
+>   or attempt to synchronize them—`AGENTS.md` automatically reflects `README.md`.
+
 ---
 
 ## The `linux/install` Framework
@@ -471,6 +478,14 @@ strictly adhere to a line length limit:
 - **Max 95 Characters Per Line**: Each line must not exceed 95 characters in length.
 - **Line Breaking**: Lines should be cleanly broken and wrapped at a maximum of 95
   characters.
+
+### Rule 12: `AGENTS.md` is a Symlink to `README.md` (Never Edit Directly)
+`AGENTS.md` is a symbolic link (soft link) pointing directly to `README.md`:
+- **Edit `README.md` Only**: All documentation and framework rule updates must be made
+  directly to `README.md`. Never modify or overwrite `AGENTS.md`.
+- **Do Not Diff or Sync**: Because `AGENTS.md` is a symlink, it automatically reflects
+  `README.md` at all times. AI agents must never compare the two files or check if
+  `AGENTS.md` needs separate modifications.
 
 ---
 
