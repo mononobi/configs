@@ -45,7 +45,7 @@ is_installed "inkscape" --name "Inkscape" && exit 0
 
 echo "[+] Starting installation/setup for inkscape..."
 
-sudo add-apt-repository -y ppa:inkscape.dev/stable
+sudo add-apt-repository -y -n ppa:inkscape.dev/stable
 sudo apt-get update
 sudo apt-get install -y inkscape
 

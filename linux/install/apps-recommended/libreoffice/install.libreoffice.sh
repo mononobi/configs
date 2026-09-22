@@ -45,7 +45,7 @@ is_installed "libreoffice" --name "LibreOffice" && exit 0
 
 echo "[+] Starting installation/setup for libreoffice..."
 
-sudo add-apt-repository -y ppa:libreoffice/ppa
+sudo add-apt-repository -y -n ppa:libreoffice/ppa
 sudo apt-get update
 sudo apt-get install -y libreoffice libreoffice-gtk3
 

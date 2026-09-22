@@ -45,7 +45,7 @@ is_installed "obs" --name "OBS Studio" && exit 0
 
 echo "[+] Starting installation/setup for obs..."
 
-sudo add-apt-repository -y ppa:obsproject/obs-studio
+sudo add-apt-repository -y -n ppa:obsproject/obs-studio
 sudo apt-get update
 sudo apt-get install -y obs-studio
 

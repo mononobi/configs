@@ -50,7 +50,7 @@ if apt-cache show fastfetch >/dev/null 2>&1; then
     sudo apt-get install -y fastfetch
 else
     echo "[+] Fastfetch not in base repositories (Ubuntu <= 22.04). Adding official PPA..."
-    sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+    sudo add-apt-repository -y -n ppa:zhangsongcui3371/fastfetch
     sudo apt-get update
     sudo apt-get install -y fastfetch
 fi

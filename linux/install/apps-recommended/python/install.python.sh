@@ -104,7 +104,7 @@ require_app software-properties-common ca-certificates curl build-essential
 
 # 2. Add deadsnakes PPA for multi-version Python support
 echo "[+] Adding deadsnakes PPA..."
-sudo add-apt-repository -y ppa:deadsnakes/ppa
+sudo add-apt-repository -y -n ppa:deadsnakes/ppa
 sudo apt-get update
 
 # 3. Determine target versions

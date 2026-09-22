@@ -45,7 +45,7 @@ is_installed "mixxx" --name "Mixxx" && exit 0
 
 echo "[+] Starting installation/setup for mixxx..."
 
-sudo add-apt-repository -y ppa:mixxx/mixxx
+sudo add-apt-repository -y -n ppa:mixxx/mixxx
 sudo apt-get update
 sudo apt-get install -y mixxx
 

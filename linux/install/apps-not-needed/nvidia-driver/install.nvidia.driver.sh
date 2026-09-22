@@ -45,7 +45,7 @@ is_installed "nvidia-driver" && exit 0
 
 echo "[+] Starting installation/setup for nvidia-driver..."
 
-sudo add-apt-repository -y ppa:graphics-drivers/ppa
+sudo add-apt-repository -y -n ppa:graphics-drivers/ppa
 sudo apt-get update
 sudo ubuntu-drivers autoinstall
 echo "[+] NVIDIA drivers installed. Please reboot your system to apply changes."

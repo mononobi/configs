@@ -68,7 +68,7 @@ echo "[+] Starting installation/setup for openjdk..."
 require_app software-properties-common ca-certificates
 
 echo "[+] Adding OpenJDK PPA..."
-sudo add-apt-repository -y ppa:openjdk-r/ppa
+sudo add-apt-repository -y -n ppa:openjdk-r/ppa
 sudo apt-get update
 
 if [[ -n "$JDK_VER" ]]; then

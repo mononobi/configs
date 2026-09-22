@@ -45,7 +45,7 @@ is_installed "openshot-qt" --name "OpenShot" && exit 0
 
 echo "[+] Starting installation/setup for openshot..."
 
-sudo add-apt-repository -y ppa:openshot.developers/ppa
+sudo add-apt-repository -y -n ppa:openshot.developers/ppa
 sudo apt-get update
 sudo apt-get install -y openshot-qt
 

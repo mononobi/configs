@@ -48,7 +48,7 @@ echo "[+] Starting installation/setup for appimage..."
 require_app software-properties-common
 
 echo "[+] Adding AppImageLauncher PPA..."
-sudo add-apt-repository -y ppa:appimagelauncher-team/stable
+sudo add-apt-repository -y -n ppa:appimagelauncher-team/stable
 sudo apt-get update
 
 echo "[+] Installing appimagelauncher..."

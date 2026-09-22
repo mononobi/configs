@@ -78,7 +78,7 @@ echo "[+] Starting installation/setup for .NET SDK & Runtimes..."
 require_app software-properties-common ca-certificates curl
 
 echo "[+] Adding official Canonical .NET Backports PPA..."
-sudo add-apt-repository -y ppa:dotnet/backports
+sudo add-apt-repository -y -n ppa:dotnet/backports
 sudo apt-get update
 
 # 2. Determine target .NET version

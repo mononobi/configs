@@ -46,7 +46,7 @@ is_installed "fusermount" --name "FUSE utilities" && exit 0
 echo "[+] Starting installation/setup for fuse..."
 
 echo "[+] Adding universe repository..."
-sudo add-apt-repository -y universe
+sudo add-apt-repository -y -n universe
 sudo apt-get update
 
 echo "[+] Installing FUSE and AppImage runtime libraries..."

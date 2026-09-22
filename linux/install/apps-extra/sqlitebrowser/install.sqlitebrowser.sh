@@ -45,7 +45,7 @@ is_installed "sqlitebrowser" --name "DB Browser for SQLite" && exit 0
 
 echo "[+] Starting installation/setup for sqlitebrowser..."
 
-sudo add-apt-repository -y ppa:linuxgndu/sqlitebrowser
+sudo add-apt-repository -y -n ppa:linuxgndu/sqlitebrowser
 sudo apt-get update
 sudo apt-get install -y sqlitebrowser
 

@@ -45,7 +45,7 @@ is_installed "grub-customizer" --name "GRUB Customizer" && exit 0
 
 echo "[+] Starting installation/setup for grub2-customizer..."
 
-sudo add-apt-repository -y ppa:danielrichter2007/grub-customizer
+sudo add-apt-repository -y -n ppa:danielrichter2007/grub-customizer
 sudo apt-get update
 sudo apt-get install -y grub-customizer
 

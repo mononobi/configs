@@ -45,7 +45,7 @@ is_installed "recoll" --name "Recoll" && exit 0
 
 echo "[+] Starting installation/setup for recoll..."
 
-sudo add-apt-repository -y ppa:recoll-backports/recoll-1.15-on
+sudo add-apt-repository -y -n ppa:recoll-backports/recoll-1.15-on
 sudo apt-get update
 sudo apt-get install -y recoll
 

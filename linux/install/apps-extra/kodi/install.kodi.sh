@@ -45,7 +45,7 @@ is_installed "kodi" --name "Kodi" && exit 0
 
 echo "[+] Starting installation/setup for kodi..."
 
-sudo add-apt-repository -y ppa:team-xbmc/ppa
+sudo add-apt-repository -y -n ppa:team-xbmc/ppa
 sudo apt-get update
 sudo apt-get install -y kodi
 
