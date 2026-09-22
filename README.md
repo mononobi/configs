@@ -29,6 +29,7 @@ and system services.
 - `apps-not-needed/`: Deprecated or redundant alternatives kept for reference.
 - `commands/`, `themes/`, `updates-and-configs/`: Standalone shell scripts, desktop
   themes, and update automation.
+- `utils.sh`, `colors.sh`: Shared installer runtime helpers and centralized UI palette.
 
 ---
 
@@ -66,7 +67,7 @@ The framework centers around a modular runner and individual self-contained reci
 
 ---
 
-## Shared Utilities & Dependency Management (`utils.sh`)
+## Shared Utilities & Dependency Management (`utils.sh`, `colors.sh`)
 
 The framework provides shared helpers in `linux/install/utils.sh` to keep individual
 scripts minimal, robust, and DRY. All installer scripts source this file.
@@ -253,6 +254,19 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
   ```
   Any newly added extension subfolder in `recommended/` is automatically discovered and installed
   without modifying orchestrator manifests.
+
+### 6. Centralized Color Palette & UI Styling (`colors.sh`)
+The framework provides a centralized color and divider library in `linux/install/colors.sh`,
+which is automatically sourced by `utils.sh`:
+- **Standard Palette**: Defines standard ANSI styling variables (`C_RESET`, `C_BOLD`,
+  `C_CYAN`, `C_BLUE`, `C_GREEN`, `C_YELLOW`, `C_RED`) and standard dividers (`DIV_MAIN`,
+  `DIV_SUB`).
+- **TTY & `NO_COLOR` Aware**: Colors are automatically evaluated and suppressed if stdout
+  is redirected (not a TTY via `[[ -t 1 ]]`) or if `NO_COLOR` is defined in the environment.
+- **Universal Availability**: Because `utils.sh` sources `colors.sh`, every recipe and runner
+  inherits the palette automatically without duplicate boilerplate.
+- **Standalone Reusability**: Independent scripts (such as CLI tools in `commands/bin/`) can
+  source `colors.sh` directly without loading the installer engine.
 
 ---
 
