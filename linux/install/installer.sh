@@ -126,22 +126,6 @@ format_duration() {
     fi
 }
 
-# Terminal colors for distinct visual categories (disabled if redirected or NO_COLOR set)
-if [[ -t 1 && -z "${NO_COLOR:-}" ]]; then
-    C_RESET='\033[0m'
-    C_BOLD='\033[1m'
-    C_CYAN='\033[1;36m'
-    C_BLUE='\033[1;34m'
-    C_GREEN='\033[1;32m'
-    C_YELLOW='\033[1;33m'
-    C_RED='\033[1;31m'
-else
-    C_RESET='' C_BOLD='' C_CYAN='' C_BLUE='' C_GREEN='' C_YELLOW='' C_RED=''
-fi
-
-DIV_MAIN="================================================================================"
-DIV_SUB="--------------------------------------------------------------------------------"
-
 # Statistics tracking
 installed_count=0
 ignored_count=0

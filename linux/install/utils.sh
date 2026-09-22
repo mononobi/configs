@@ -10,6 +10,7 @@ _INSTALL_UTILS_LOADED=1
 
 # Resolve the absolute path to linux/install/
 INSTALL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${INSTALL_ROOT}/colors.sh"
 
 # require_app [OPTIONS] <app_name> [app_name2...]
 #
