@@ -599,6 +599,40 @@ except Exception:
     return 0
 }
 
+# resolve_ubuntu_pool_deb <pool_url> <pattern>
+#
+# Scrapes an Ubuntu archive pool directory and resolves the filename of the latest
+# available .deb package matching the specified regex pattern using dpkg version
+# comparison.
+#
+# Arguments:
+#   pool_url   The URL of the package pool directory (e.g. http://archive.ubuntu.com/...)
+#   pattern    Extended regex pattern matching the candidate .deb filenames
+#
+# Output:
+#   Prints the filename of the package with the highest version, or empty if none found.
+resolve_ubuntu_pool_deb() {
+    local pool_url="$1"
+    local pattern="$2"
+    local candidates
+    candidates=$(curl -sL "$pool_url" 2>/dev/null | grep -oE "$pattern" | sort -u || true)
+
+    local best=""
+    local best_ver=""
+    for deb in $candidates; do
+        local ver="${deb#*_}"
+        ver="${ver%_*}"
+        if [[ -z "$best" ]]; then
+            best="$deb"
+            best_ver="$ver"
+        elif dpkg --compare-versions "$ver" gt "$best_ver"; then
+            best="$deb"
+            best_ver="$ver"
+        fi
+    done
+    echo "$best"
+}
+
 export INSTALL_ROOT
 export -f require_app
 export -f conditional_apt_update
@@ -607,3 +641,4 @@ export -f ensure_local_bin_in_path
 export -f check_extension_archive_compatibility
 export -f compare_extension_version
 export -f install_gnome_extension
+export -f resolve_ubuntu_pool_deb

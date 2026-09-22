@@ -272,15 +272,37 @@ if [[ "$IS_COMPAT_NEEDED" == "true" ]]; then
 
         DOWNLOAD_DEBS=()
         if [[ "$NEED_ICU" == "true" ]]; then
-            echo "    -> Fetching libicu74..."
-            curl -fLO --progress-bar "http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu74_74.2-1ubuntu3.1_amd64.deb"
-            DOWNLOAD_DEBS+=("libicu74_74.2-1ubuntu3.1_amd64.deb")
+            echo "    -> Resolving and fetching libicu74..."
+            icu_pool="http://archive.ubuntu.com/ubuntu/pool/main/i/icu/"
+            icu_pattern="libicu74_74\.2-1ubuntu[0-9.]*_amd64\.deb"
+            icu_deb="$(resolve_ubuntu_pool_deb "$icu_pool" "$icu_pattern")"
+            if [[ -n "$icu_deb" ]]; then
+                echo "       Found: $icu_deb"
+                curl -fLO --progress-bar "${icu_pool}${icu_deb}"
+                DOWNLOAD_DEBS+=("$icu_deb")
+            else
+                echo "[!] Error: Failed to resolve libicu74 package from $icu_pool" >&2
+                popd >/dev/null
+                rm -rf "$TEMP_DIR"
+                exit 1
+            fi
         fi
 
         if [[ "$NEED_XML2" == "true" ]]; then
-            echo "    -> Fetching libxml2..."
-            curl -fLO --progress-bar "http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb"
-            DOWNLOAD_DEBS+=("libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb")
+            echo "    -> Resolving and fetching libxml2..."
+            xml2_pool="http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/"
+            xml2_pattern="libxml2_2\.9\.14\+dfsg-1\.3ubuntu[0-9.]*_amd64\.deb"
+            xml2_deb="$(resolve_ubuntu_pool_deb "$xml2_pool" "$xml2_pattern")"
+            if [[ -n "$xml2_deb" ]]; then
+                echo "       Found: $xml2_deb"
+                curl -fLO --progress-bar "${xml2_pool}${xml2_deb}"
+                DOWNLOAD_DEBS+=("$xml2_deb")
+            else
+                echo "[!] Error: Failed to resolve libxml2 package from $xml2_pool" >&2
+                popd >/dev/null
+                rm -rf "$TEMP_DIR"
+                exit 1
+            fi
         fi
 
         if [[ ${#DOWNLOAD_DEBS[@]} -gt 0 ]]; then

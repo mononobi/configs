@@ -30,10 +30,11 @@ These libraries should be manually downloaded & installed:
 
 ```bash
 cd ~/Downloads
+XML_BASE="http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2"
 wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu74_74.2-1ubuntu3.1_amd64.deb
-wget http://archive.ubuntu.com/ubuntu/pool/main/libx/libxml2/libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb
-sudo dpkg -i libicu74_74.2-1ubuntu3.1_amd64.deb libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb
-rm libicu74_74.2-1ubuntu3.1_amd64.deb libxml2_2.9.14+dfsg-1.3ubuntu3.8_amd64.deb
+wget "${XML_BASE}/libxml2_2.9.14+dfsg-1.3ubuntu3.9_amd64.deb"
+sudo dpkg -i libicu74_74.2-1ubuntu3.1_amd64.deb libxml2_2.9.14+dfsg-1.3ubuntu3.9_amd64.deb
+rm libicu74_74.2-1ubuntu3.1_amd64.deb libxml2_2.9.14+dfsg-1.3ubuntu3.9_amd64.deb
 ```
 
 > **Important:** Newer versions of Ubuntu (e.g. 26.04) ship with `libwebkit2gtk-4.1`, but 

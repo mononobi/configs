@@ -255,7 +255,17 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
   Any newly added extension subfolder in `recommended/` is automatically discovered and installed
   without modifying orchestrator manifests.
 
-### 6. Centralized Color Palette & UI Styling (`colors.sh`)
+### 6. `resolve_ubuntu_pool_deb <pool_url> <pattern>`
+Dynamically scrapes an Ubuntu archive or repository pool directory and resolves the filename
+of the highest/latest available `.deb` package matching the given regex pattern using
+`dpkg --compare-versions`:
+```bash
+deb="$(resolve_ubuntu_pool_deb "$pool_url" "$pattern")"
+```
+- Avoids fragile hardcoded micro-revisions on Ubuntu archive pools where older
+  superseded `.deb` packages are regularly pruned when security updates land.
+
+### 7. Centralized Color Palette & UI Styling (`colors.sh`)
 The framework provides a centralized color and divider library in `linux/install/colors.sh`,
 which is automatically sourced by `utils.sh`:
 - **Standard Palette**: Defines standard ANSI styling variables (`C_RESET`, `C_BOLD`,
