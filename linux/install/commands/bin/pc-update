@@ -1,6 +1,63 @@
 #!/usr/bin/env bash
+# Description: Comprehensive system update utility with periodic standalone app updates
+# Note: Updates APT, Flatpak, Snap, and checks standalone tool updates every 10 days.
 
 set -euo pipefail
+
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+# Source shared styling if available; fallback gracefully
+if [[ -f "${SCRIPT_DIR}/../../colors.sh" ]]; then
+    source "${SCRIPT_DIR}/../../colors.sh"
+elif [[ -f "${HOME}/Workspace/configs/linux/install/colors.sh" ]]; then
+    source "${HOME}/Workspace/configs/linux/install/colors.sh"
+else
+    C_RESET='\033[0m'
+    C_BOLD='\033[1m'
+    C_CYAN='\033[1;36m'
+    C_BLUE='\033[1;34m'
+    C_GREEN='\033[1;32m'
+    C_YELLOW='\033[1;33m'
+    C_RED='\033[1;31m'
+    DIV_MAIN="================================================================================"
+    DIV_SUB="--------------------------------------------------------------------------------"
+fi
+
+FORCE_STANDALONE=false
+
+show_help() {
+    cat <<EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Description:
+  Updates APT packages, Flatpak apps, Snap packages, and reloads systemd.
+  Also checks and updates standalone tools (rclone, rust, speedtest, ventoy,
+  antigravity-agent-manager) once every 10 days.
+
+Options:
+  -f, --force, --all    Force update standalone applications now (bypass 10-day wait)
+  -h, --help            Show this help message and exit
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -f|--force|--all|--force-all)
+            FORCE_STANDALONE=true
+            shift
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        *)
+            echo -e "${C_RED}[!] Unknown option: $1${C_RESET}" >&2
+            echo "Use -h or --help for usage information." >&2
+            exit 1
+            ;;
+    esac
+done
 
 sudo_keepalive_pid=""
 
@@ -11,7 +68,12 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-echo "[+] Initializing sudo credentials..."
+echo ""
+echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
+echo -e " ${C_BOLD}Starting System Update (${HOSTNAME:-localhost})${C_RESET}"
+echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
+
+echo -e "${C_BLUE}[+] Initializing sudo credentials...${C_RESET}"
 sudo -v
 
 # Keep sudo timestamp updated in background every 60 seconds
@@ -22,37 +84,183 @@ while true; do
 done < /dev/null > /dev/null 2>&1 &
 sudo_keepalive_pid=$!
 
-echo "[+] Updating APT packages..."
+# 1. APT Update & Upgrade
+echo ""
+echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
+echo -e " ${C_BOLD}[1/5] Updating APT Packages...${C_RESET}"
+echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get autoremove -y
 
+# 2. Flatpak Update
 if command -v flatpak >/dev/null 2>&1; then
-    echo "[+] Updating Flatpak applications..."
+    echo ""
+    echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
+    echo -e " ${C_BOLD}[2/5] Updating Flatpak Applications...${C_RESET}"
+    echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
     sudo flatpak update -y
     sudo flatpak uninstall --unused -y
 fi
 
+# 3. Snap Refresh
 if command -v snap >/dev/null 2>&1; then
-    echo "[+] Refreshing Snap packages..."
+    echo ""
+    echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
+    echo -e " ${C_BOLD}[3/5] Refreshing Snap Packages...${C_RESET}"
+    echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
     sudo snap refresh
 fi
 
+# 4. Service Conflict Prevention & Systemd Reload
 if command -v apache2 >/dev/null 2>&1; then
-    echo "[+] Disabling apache2 service (prevents port conflict with nginx)..."
+    echo -e "${C_YELLOW}[i] Disabling apache2 (prevents port conflict with nginx)...${C_RESET}"
     sudo systemctl stop apache2.service
     sudo systemctl disable apache2.service
 fi
 
-echo "[+] Reloading systemd daemon..."
+echo -e "${C_BLUE}[+] Reloading systemd daemon...${C_RESET}"
 sudo systemctl daemon-reload
 
-echo "[✓] System update completed successfully!"
+# 5. Standalone / Custom Application Updates (Every 10 Days)
+echo ""
+echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
+echo -e " ${C_BOLD}[5/5] Checking Standalone & Custom Applications...${C_RESET}"
+echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 
-########## Optional service overrides (uncomment if needed) ##########
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/pc-update"
+STATE_FILE="${STATE_DIR}/last_standalone_update"
+INTERVAL_DAYS=10
+INTERVAL_SECONDS=$(( INTERVAL_DAYS * 86400 ))
 
-# Disable systemd-resolved service only if you want to use another
-# DNS resolver service such as dnsmasq (Not recommended).
+mkdir -p "$STATE_DIR"
+LAST_RUN="$(cat "$STATE_FILE" 2>/dev/null || echo 0)"
+NOW="$(date +%s)"
+DIFF_SECONDS=$(( NOW - LAST_RUN ))
+DAYS_AGO=$(( DIFF_SECONDS / 86400 ))
 
-#sudo systemctl stop systemd-resolved
-#sudo systemctl disable systemd-resolved
+if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]; then
+    if [[ "$FORCE_STANDALONE" == "true" ]]; then
+        echo -e "${C_BLUE}[+] Running standalone updates (forced via CLI)...${C_RESET}"
+    else
+        echo -e "${C_BLUE}[+] Running 10-day periodic updates (last: ${DAYS_AGO}d ago)...${C_RESET}"
+    fi
+
+    # Determine repository root
+    CONFIGS_DIR="${CONFIGS_DIR:-}"
+    if [[ -z "$CONFIGS_DIR" ]]; then
+        candidate_repo="$(cd "${SCRIPT_DIR}/../../../.." 2>/dev/null && pwd || true)"
+        if [[ -d "${candidate_repo}/linux/install/apps-recommended" ]]; then
+            CONFIGS_DIR="$candidate_repo"
+        elif [[ -d "${HOME}/Workspace/configs/linux/install/apps-recommended" ]]; then
+            CONFIGS_DIR="${HOME}/Workspace/configs"
+        fi
+    fi
+
+    RECIPES_ROOT="${CONFIGS_DIR}/linux/install/apps-recommended"
+
+    # List of standalone apps to check and update
+    MANUAL_UPDATE_APPS=(
+        "antigravity-agent-manager"
+        "rclone"
+        "rust"
+        "speedtest"
+        "ventoy"
+    )
+
+    for app in "${MANUAL_UPDATE_APPS[@]}"; do
+        case "$app" in
+            rust)
+                if command -v rustup >/dev/null 2>&1; then
+                    echo -e "${C_BLUE}[==>] Updating Rust toolchains via rustup...${C_RESET}"
+                    if ! rustup update; then
+                        echo -e "${C_YELLOW}[!] Warning: Rustup update issue, skipping.${C_RESET}"
+                    fi
+                elif command -v rustc >/dev/null 2>&1; then
+                    echo -e "${C_YELLOW}[i] rustc installed without rustup; skipping.${C_RESET}"
+                fi
+                ;;
+            rclone)
+                if command -v rclone >/dev/null 2>&1; then
+                    echo -e "${C_BLUE}[==>] Updating Rclone via selfupdate...${C_RESET}"
+                    if ! sudo rclone selfupdate; then
+                        echo -e "${C_YELLOW}[!] Warning: Rclone selfupdate failed.${C_RESET}"
+                    fi
+                fi
+                ;;
+            speedtest)
+                if command -v speedtest >/dev/null 2>&1 || \
+                   [[ -f "${HOME}/.local/bin/speedtest" ]]; then
+                    app_dir="${RECIPES_ROOT}/${app}"
+                    if [[ -d "$app_dir" ]]; then
+                        script="$(find "$app_dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)"
+                        if [[ -n "$script" && -f "$script" ]]; then
+                            echo -e "${C_BLUE}[==>] Refreshing Speedtest CLI...${C_RESET}"
+                            if ! (cd "$app_dir" && bash "$script" --no-update); then
+                                echo -e "${C_YELLOW}[!] Warning: Speedtest failed.${C_RESET}"
+                            fi
+                        fi
+                    fi
+                fi
+                ;;
+            ventoy)
+                if [[ -d "${HOME}/.local/share/ventoy" ]] || \
+                   command -v ventoy >/dev/null 2>&1 || \
+                   [[ -f "${HOME}/.local/share/applications/ventoy.desktop" ]]; then
+                    app_dir="${RECIPES_ROOT}/${app}"
+                    if [[ -d "$app_dir" ]]; then
+                        script="$(find "$app_dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)"
+                        if [[ -n "$script" && -f "$script" ]]; then
+                            echo -e "${C_BLUE}[==>] Refreshing Ventoy...${C_RESET}"
+                            if ! (cd "$app_dir" && bash "$script" --no-update); then
+                                echo -e "${C_YELLOW}[!] Warning: Ventoy update failed.${C_RESET}"
+                            fi
+                        fi
+                    fi
+                fi
+                ;;
+            antigravity-agent-manager)
+                if [[ -d "${HOME}/.antigravity-manager" ]] || \
+                   [[ -f "${HOME}/.local/share/applications/antigravity.desktop" ]] || \
+                   command -v antigravity >/dev/null 2>&1; then
+                    app_dir="${RECIPES_ROOT}/${app}"
+                    if [[ -d "$app_dir" ]]; then
+                        script="$(find "$app_dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)"
+                        if [[ -n "$script" && -f "$script" ]]; then
+                            echo -e "${C_BLUE}[==>] Refreshing Antigravity Manager...${C_RESET}"
+                            if ! (cd "$app_dir" && bash "$script" --no-update); then
+                                echo -e "${C_YELLOW}[!] Warning: Antigravity failed.${C_RESET}"
+                            fi
+                        fi
+                    fi
+                fi
+                ;;
+            *)
+                app_dir="${RECIPES_ROOT}/${app}"
+                if [[ -d "$app_dir" ]]; then
+                    script="$(find "$app_dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)"
+                    if [[ -n "$script" && -f "$script" ]]; then
+                        echo -e "${C_BLUE}[==>] Updating ${app}...${C_RESET}"
+                        if ! (cd "$app_dir" && bash "$script" --no-update); then
+                            echo -e "${C_YELLOW}[!] Warning: ${app} failed.${C_RESET}"
+                        fi
+                    fi
+                fi
+                ;;
+        esac
+    done
+
+    # Record successful completion timestamp
+    date +%s > "$STATE_FILE"
+    echo -e "${C_GREEN}[✓] Standalone application check completed.${C_RESET}"
+else
+    NEXT_RUN_DAYS=$(( INTERVAL_DAYS - DAYS_AGO ))
+    echo -e "${C_GREEN}[i] Standalone apps are up to date.${C_RESET}"
+    echo -e "    Last checked ${DAYS_AGO}d ago; next in ${NEXT_RUN_DAYS}d."
+    echo -e "    Run 'pc-update -f' or 'pc-update --all' to force check now."
+fi
+
+echo ""
+echo -e "${C_GREEN}${DIV_MAIN}${C_RESET}"
+echo -e " ${C_BOLD}${C_GREEN}[✓] System update completed successfully!${C_RESET}"
+echo -e "${C_GREEN}${DIV_MAIN}${C_RESET}"
