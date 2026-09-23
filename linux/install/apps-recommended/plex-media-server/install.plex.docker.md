@@ -21,7 +21,7 @@ Run the self-contained, idempotent installer script:
 ### Framework Invocation
 Call via `require_app` from any runner script in this repository:
 ```bash
-require_app "plex-media-server/docker"
+require_app "plex-media-server"
 ```
 
 ---

@@ -7,11 +7,15 @@ services:
     shm_size: 16g
 
     environment:
-      - TZ=${TZ:-UTC}
+      - TZ=Europe/Berlin
       - PLEX_UID=${PLEX_UID}
       - PLEX_GID=${PLEX_GID}
       # - PLEX_CLAIM=claim-xxxx  # Optional: Obtain from https://plex.tv/claim
       - ALLOWED_NETWORKS=127.0.0.1,192.168.0.0/16,10.0.0.0/8
+
+    # This is the magic label that invites Watchtower in to update this container
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
     volumes:
       # 1. Host Metadata Store (preserves all settings, databases, and library info)

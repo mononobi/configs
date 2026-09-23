@@ -91,7 +91,7 @@ sudo ufw allow from 172.16.0.0/12
 sudo ufw allow from 10.0.0.0/8
 
 echo "You need to allow access to Grafana dashboard and Prometheus from local machine through SSH tunneling..."
-echo "sudo ufw allow 22"
+echo "Execute this if it is running on a server: sudo ufw allow 22"
 
 # 5. Start the Service
 echo "[+] Starting Conduit services via Docker Compose..."
