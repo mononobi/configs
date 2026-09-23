@@ -17,6 +17,7 @@ Usage: $(basename "$0") [OPTIONS]
 
 Description:
   Sets up and launches Plex Media Server via official Docker container with:
+  - Dynamic user resolution (username, UID, GID, home directory)
   - AMD / Intel GPU hardware decoding & transcoding (/dev/dri)
   - Transcoding in shared RAM (/dev/shm/plex)
   - LAN network discovery (host network mode)
@@ -55,7 +56,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 check_plex_running() {
-    if command -v docker >/dev/null 2>&1; then
+    if is_installed --check "docker"; then
         if docker ps --format '{{.Names}}' 2>/dev/null | grep -qx "plex-media-server"; then
             return 0
         fi
@@ -76,26 +77,28 @@ echo -e "${C_BLUE}${DIV_MAIN}${C_RESET}"
 echo -e "${C_BOLD}[+] Configuring Plex Media Server via Docker Compose...${C_RESET}"
 echo -e "${C_BLUE}${DIV_MAIN}${C_RESET}"
 
-# Ensure Docker is installed and ready
-conditional_apt_update
-require_app docker
+# Dynamically resolve current user, UID, GID, and home directory
+CURRENT_USER="$(id -un)"
+CURRENT_UID="$(id -u)"
+CURRENT_GID="$(id -g)"
+USER_HOME="${HOME:-/home/${CURRENT_USER}}"
 
-CURRENT_USER="${USER:-mono}"
-USER_UID="$(id -u "$CURRENT_USER" 2>/dev/null || id -u)"
-USER_GID="$(id -g "$CURRENT_USER" 2>/dev/null || id -g)"
-
-PLEX_BASE_DIR="${HOME}/.plex"
+PLEX_BASE_DIR="${USER_HOME}/.plex"
 PLEX_DATA_DIR="${PLEX_BASE_DIR}/plexmediaserver"
+PLEX_TEMP_DIR="${PLEX_BASE_DIR}/tmp"
 PLEX_TRANSCODE_DIR="/dev/shm/plex"
 COMPOSE_SRC="${SCRIPT_DIR}/docker-compose.yml"
 COMPOSE_DEST="${PLEX_BASE_DIR}/docker-compose.yml"
 
+# Ensure core dependencies are installed
+require_app docker ufw
+
 echo "[+] Preparing host metadata, downloads temp, and RAM transcode directories..."
 mkdir -p "${PLEX_DATA_DIR}"
-mkdir -p "${PLEX_BASE_DIR}/tmp/downloads"
+mkdir -p "${PLEX_TEMP_DIR}/downloads"
 mkdir -p "${PLEX_TRANSCODE_DIR}"
 
-sudo chown -R "${USER_UID}:${USER_GID}" "${PLEX_BASE_DIR}"
+sudo chown -R "${CURRENT_UID}:${CURRENT_GID}" "${PLEX_BASE_DIR}"
 chmod -R 775 "${PLEX_BASE_DIR}"
 chmod 1777 "${PLEX_TRANSCODE_DIR}"
 
@@ -114,7 +117,7 @@ media_paths=(
 echo "[+] Checking host media library mount points..."
 for path in "${media_paths[@]}"; do
     if [[ ! -d "$path" ]]; then
-        echo -e "${C_YELLOW}[!] Notice: Media directory '${path}' not currently mounted on host.${C_RESET}"
+        echo -e "${C_YELLOW}[!] Notice: Media directory '${path}' not mounted on host.${C_RESET}"
         echo -e "    Creating placeholder directory to avoid Docker bind mount error..."
         sudo mkdir -p "$path"
     fi
@@ -131,26 +134,32 @@ for grp in video render; do
     fi
 done
 
-# Deploy docker-compose.yml to host destination
+# Dynamically fill UID, GID, and user home paths in docker-compose.yml
 if [[ -f "$COMPOSE_SRC" ]]; then
-    if ! cmp -s "$COMPOSE_SRC" "$COMPOSE_DEST" 2>/dev/null; then
-        cp "$COMPOSE_SRC" "$COMPOSE_DEST"
-        echo "[+] Deployed Plex Docker Compose file to ${COMPOSE_DEST}"
+    rendered_compose="$(mktemp)"
+    sed -e "s|\${USER_HOME}|${USER_HOME}|g" \
+        -e "s|\${PLEX_UID}|${CURRENT_UID}|g" \
+        -e "s|\${PLEX_GID}|${CURRENT_GID}|g" \
+        "$COMPOSE_SRC" > "$rendered_compose"
+
+    if ! cmp -s "$rendered_compose" "$COMPOSE_DEST" 2>/dev/null; then
+        cp "$rendered_compose" "$COMPOSE_DEST"
+        echo "[+] Deployed rendered Plex Docker Compose configuration to ${COMPOSE_DEST}"
+        echo "    Configured User: ${CURRENT_USER} (UID: ${CURRENT_UID}, GID: ${CURRENT_GID})"
     else
         echo "[+] Compose configuration in ${COMPOSE_DEST} is already up to date."
     fi
+    rm -f "$rendered_compose"
 else
     echo "[!] Error: Source compose file not found at ${COMPOSE_SRC}" >&2
     exit 1
 fi
 
-# Configure UFW firewall rules if active
-if command -v ufw >/dev/null 2>&1 && sudo ufw status | grep -qw "active"; then
-    echo "[+] Configuring UFW firewall rules for Plex streaming & local LAN discovery..."
-    sudo ufw allow 32400/tcp comment 'Plex Web & Streaming' >/dev/null
-    sudo ufw allow 32410:32414/udp comment 'Plex GDM Discovery' >/dev/null
-    sudo ufw allow 1900/udp comment 'Plex DLNA' >/dev/null
-fi
+# Configure UFW firewall rules for Plex streaming & local discovery
+echo "[+] Configuring UFW firewall rules for Plex streaming & local LAN discovery..."
+sudo ufw allow 32400/tcp comment 'Plex Web & Streaming' >/dev/null
+sudo ufw allow 32410:32414/udp comment 'Plex GDM Discovery' >/dev/null
+sudo ufw allow 1900/udp comment 'Plex DLNA' >/dev/null
 
 # Start or restart Plex container
 echo "[+] Launching Plex Media Server container..."
@@ -165,3 +174,4 @@ echo -e "${C_GREEN}[✓] Plex Media Server (Docker) setup completed successfully
 echo -e "    Web Interface: http://localhost:32400/web (or http://<LAN_IP>:32400/web)"
 echo -e "    Metadata Dir:  ${PLEX_DATA_DIR}"
 echo -e "    Compose File:  ${COMPOSE_DEST}"
+echo -e "    Active User:   ${CURRENT_USER} (UID: ${CURRENT_UID}, GID: ${CURRENT_GID})"

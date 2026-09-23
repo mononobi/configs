@@ -33,9 +33,9 @@ indices to resolve instantly without broken links.
 
 | Host Path                          | Container Path           | Mode | Purpose                    |
 |:-----------------------------------|:-------------------------|:-----|:---------------------------|
-| `/home/mono/.plex/plexmediaserver` | `/config`                | `rw` | Persistent metadata & DB   |
+| `~/.plex/plexmediaserver`          | `/config`                | `rw` | Persistent metadata & DB   |
 | `/dev/shm/plex`                    | `/dev/shm/plex`          | `rw` | 16 GB RAM transcode buffer |
-| `/home/mono/.plex/tmp`             | `/home/mono/.plex/tmp`   | `rw` | Downloads & temp directory |
+| `~/.plex/tmp`                      | `~/.plex/tmp`            | `rw` | Downloads & temp directory |
 | `/mnt/movies-1/Movies-1`           | `/mnt/movies-1/Movies-1` | `ro` | Media library 1            |
 | `/mnt/movies-2/Movies-2`           | `/mnt/movies-2/Movies-2` | `ro` | Media library 2            |
 | `/mnt/movies-3/Movies-3`           | `/mnt/movies-3/Movies-3` | `ro` | Media library 3            |
@@ -46,9 +46,9 @@ indices to resolve instantly without broken links.
 | `/mnt/movies-7/TV-Shows`           | `/mnt/movies-7/TV-Shows` | `ro` | TV shows library           |
 
 > [!TIP]
-> Both `/dev/shm/plex` and `/home/mono/.plex/tmp` match the host filesystem identically.
-> Your existing Plex preferences pointing to `/dev/shm/plex` work immediately without
-> modifying any web settings.
+> Both `/dev/shm/plex` and `~/.plex/tmp` match the host filesystem identically.
+> The installer automatically resolves the executing username, UID, and GID at
+> runtime, populating the compose file so that files are owned by your active user.
 
 > [!NOTE]
 > `shm_size: 16g` is explicitly set in `docker-compose.yml` to remove Docker's default
@@ -61,10 +61,10 @@ Inside the container, Plex looks for:
 ```
 This directly maps to:
 ```text
-/home/mono/.plex/plexmediaserver/Library/Application Support/Plex Media Server
+~/.plex/plexmediaserver/Library/Application Support/Plex Media Server
 ```
 - **Existing Metadata**: Discovered immediately upon container startup.
-- **Fresh Install**: Initialized cleanly under `~/.plex/plexmediaserver/` owned by `mono`.
+- **Fresh Install**: Initialized cleanly under `~/.plex/plexmediaserver/` owned by your user.
 
 ---
 
