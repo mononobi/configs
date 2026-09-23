@@ -487,6 +487,18 @@ strictly adhere to a line length limit:
   `README.md` at all times. AI agents must never compare the two files or check if
   `AGENTS.md` needs separate modifications.
 
+### Rule 13: Documentation & Text Files Must Be Markdown (`.md`)
+Any documentation, guide, reference, or explanatory text file created in this repository
+must be authored as a high-quality Markdown (`.md`) file, not plain `.txt` or any other
+unstructured text format:
+- **Strictly `.md` Extension**: Never create `.txt` files for documentation, guides, or
+  manuals. Always use the `.md` file extension.
+- **High-Quality Formatting**: Fully utilize GitHub Flavored Markdown (GFM) features,
+  including clear headings, tables, code blocks with syntax highlighting, bullet lists,
+  and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, etc.).
+- **Line Length Limit**: All Markdown documents must continue to strictly adhere to
+  Rule 11 (maximum 95 characters per line).
+
 ---
 
 ## Application Types & Extensibility

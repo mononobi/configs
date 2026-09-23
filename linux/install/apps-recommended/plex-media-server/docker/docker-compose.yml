@@ -1,0 +1,39 @@
+services:
+  plex:
+    image: plexinc/pms-docker:latest
+    container_name: plex-media-server
+    restart: unless-stopped
+    network_mode: host
+
+    environment:
+      - TZ=${TZ:-UTC}
+      - PLEX_UID=1000
+      - PLEX_GID=1000
+      # - PLEX_CLAIM=claim-xxxx  # Optional: Obtain from https://plex.tv/claim for initial setup
+      - ALLOWED_NETWORKS=127.0.0.1,192.168.0.0/16,10.0.0.0/8
+
+    volumes:
+      # 1. Host Metadata Store (preserves all settings, databases, and library info)
+      - /home/mono/.plex/plexmediaserver:/config
+
+      # 2. RAM Transcoder (uses 16 GB shared memory in RAM on 32GB system)
+      - /dev/shm/plex:/transcode
+
+      # 3. Media Libraries (1:1 mirror of host filesystem paths)
+      - /mnt/movies-1/Movies-1:/mnt/movies-1/Movies-1:ro
+      - /mnt/movies-2/Movies-2:/mnt/movies-2/Movies-2:ro
+      - /mnt/movies-3/Movies-3:/mnt/movies-3/Movies-3:ro
+      - /mnt/movies-4/Movies-4:/mnt/movies-4/Movies-4:ro
+      - /mnt/movies-5/Movies-5:/mnt/movies-5/Movies-5:ro
+      - /mnt/movies-6/Movies-6:/mnt/movies-6/Movies-6:ro
+      - /mnt/movies-7/Movies-7:/mnt/movies-7/Movies-7:ro
+      - /mnt/movies-7/TV-Shows:/mnt/movies-7/TV-Shows:ro
+
+    # Hardware Decoding & Transcoding: AMD Ryzen 7 7700 iGPU (RDNA 2 / VCN 3.0 via VA-API)
+    devices:
+      - /dev/dri:/dev/dri
+
+    # Ensures container process has access to GPU device nodes on host
+    group_add:
+      - video
+      - render
