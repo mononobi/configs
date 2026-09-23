@@ -197,11 +197,6 @@ if [[ -f "$SCRIPT_DIR/files/ventoy.desktop" ]]; then
     update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
 fi
 
-# 6. Create user bin symlink for CLI/terminal convenience
-ensure_local_bin_in_path
-ln -sf "$VENTOY_DIR/VentoyGUI.x86_64" "$HOME/.local/bin/ventoy-gui"
-ln -sf "$VENTOY_DIR/VentoyWeb.sh" "$HOME/.local/bin/ventoy-web"
-
 echo "[✓] Ventoy successfully installed to: $VENTOY_DIR"
 echo "[✓] Desktop launcher created at: $HOME/.local/share/applications/ventoy.desktop"
 echo "[✓] Icon placed at: $HOME/.local/share/icons/hicolor/512x512/apps/ventoy.png"
