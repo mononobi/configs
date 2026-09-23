@@ -93,8 +93,8 @@ Direct GPU node passthrough is configured in `docker-compose.yml`:
 devices:
   - /dev/dri:/dev/dri
 group_add:
-  - video
-  - render
+  - "${VIDEO_GID}"   # Resolves to host 'video' GID (e.g. 44)
+  - "${RENDER_GID}"  # Resolves to host 'render' GID (e.g. 108)
 ```
 
 ### Plex Web Transcoder Settings

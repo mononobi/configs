@@ -44,7 +44,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
 
-    # Ensures container process has access to GPU device nodes on host
+    # Ensures container process has access to GPU device nodes on host (numeric GIDs)
     group_add:
-      - video
-      - render
+      - "${VIDEO_GID}"
+      - "${RENDER_GID}"

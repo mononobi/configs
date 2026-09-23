@@ -134,18 +134,31 @@ for grp in video render; do
     fi
 done
 
-# Dynamically fill UID, GID, and user home paths in docker-compose.yml
+# Dynamically resolve numeric GPU group IDs to avoid container /etc/group mismatches
+VIDEO_GID="$(getent group video 2>/dev/null | cut -d: -f3 || true)"
+VIDEO_GID="${VIDEO_GID:-44}"
+
+RENDER_GID="$(getent group render 2>/dev/null | cut -d: -f3 || true)"
+if [[ -z "$RENDER_GID" && -e /dev/dri/renderD128 ]]; then
+    RENDER_GID="$(stat -c '%g' /dev/dri/renderD128 2>/dev/null || true)"
+fi
+RENDER_GID="${RENDER_GID:-108}"
+
+# Dynamically fill UID, GID, GPU GIDs, and user home paths in docker-compose.yml
 if [[ -f "$COMPOSE_SRC" ]]; then
     rendered_compose="$(mktemp)"
     sed -e "s|\${USER_HOME}|${USER_HOME}|g" \
         -e "s|\${PLEX_UID}|${CURRENT_UID}|g" \
         -e "s|\${PLEX_GID}|${CURRENT_GID}|g" \
+        -e "s|\${VIDEO_GID}|${VIDEO_GID}|g" \
+        -e "s|\${RENDER_GID}|${RENDER_GID}|g" \
         "$COMPOSE_SRC" > "$rendered_compose"
 
     if ! cmp -s "$rendered_compose" "$COMPOSE_DEST" 2>/dev/null; then
         cp "$rendered_compose" "$COMPOSE_DEST"
         echo "[+] Deployed rendered Plex Docker Compose configuration to ${COMPOSE_DEST}"
         echo "    Configured User: ${CURRENT_USER} (UID: ${CURRENT_UID}, GID: ${CURRENT_GID})"
+        echo "    GPU Groups:      video (${VIDEO_GID}), render (${RENDER_GID})"
     else
         echo "[+] Compose configuration in ${COMPOSE_DEST} is already up to date."
     fi
