@@ -90,8 +90,9 @@ PLEX_TRANSCODE_DIR="/dev/shm/plex"
 COMPOSE_SRC="${SCRIPT_DIR}/docker-compose.yml"
 COMPOSE_DEST="${PLEX_BASE_DIR}/docker-compose.yml"
 
-echo "[+] Preparing host metadata and RAM transcode directories..."
+echo "[+] Preparing host metadata, downloads temp, and RAM transcode directories..."
 mkdir -p "${PLEX_DATA_DIR}"
+mkdir -p "${PLEX_BASE_DIR}/tmp/downloads"
 mkdir -p "${PLEX_TRANSCODE_DIR}"
 
 sudo chown -R "${USER_UID}:${USER_GID}" "${PLEX_BASE_DIR}"

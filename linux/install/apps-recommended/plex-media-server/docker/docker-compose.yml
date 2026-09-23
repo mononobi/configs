@@ -4,22 +4,26 @@ services:
     container_name: plex-media-server
     restart: unless-stopped
     network_mode: host
+    shm_size: 16g
 
     environment:
       - TZ=${TZ:-UTC}
       - PLEX_UID=1000
       - PLEX_GID=1000
-      # - PLEX_CLAIM=claim-xxxx  # Optional: Obtain from https://plex.tv/claim for initial setup
+      # - PLEX_CLAIM=claim-xxxx  # Optional: Obtain from https://plex.tv/claim
       - ALLOWED_NETWORKS=127.0.0.1,192.168.0.0/16,10.0.0.0/8
 
     volumes:
       # 1. Host Metadata Store (preserves all settings, databases, and library info)
       - /home/mono/.plex/plexmediaserver:/config
 
-      # 2. RAM Transcoder (uses 16 GB shared memory in RAM on 32GB system)
-      - /dev/shm/plex:/transcode
+      # 2. RAM Transcoder (1:1 mirror of host /dev/shm/plex)
+      - /dev/shm/plex:/dev/shm/plex
 
-      # 3. Media Libraries (1:1 mirror of host filesystem paths)
+      # 3. Host Temp & Downloads Directory (for offline sync & downloads)
+      - /home/mono/.plex/tmp:/home/mono/.plex/tmp
+
+      # 4. Media Libraries (1:1 mirror of host filesystem paths)
       - /mnt/movies-1/Movies-1:/mnt/movies-1/Movies-1:ro
       - /mnt/movies-2/Movies-2:/mnt/movies-2/Movies-2:ro
       - /mnt/movies-3/Movies-3:/mnt/movies-3/Movies-3:ro

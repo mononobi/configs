@@ -34,7 +34,8 @@ indices to resolve instantly without broken links.
 | Host Path                          | Container Path           | Mode | Purpose                    |
 |:-----------------------------------|:-------------------------|:-----|:---------------------------|
 | `/home/mono/.plex/plexmediaserver` | `/config`                | `rw` | Persistent metadata & DB   |
-| `/dev/shm/plex`                    | `/transcode`             | `rw` | 16 GB RAM transcode buffer |
+| `/dev/shm/plex`                    | `/dev/shm/plex`          | `rw` | 16 GB RAM transcode buffer |
+| `/home/mono/.plex/tmp`             | `/home/mono/.plex/tmp`   | `rw` | Downloads & temp directory |
 | `/mnt/movies-1/Movies-1`           | `/mnt/movies-1/Movies-1` | `ro` | Media library 1            |
 | `/mnt/movies-2/Movies-2`           | `/mnt/movies-2/Movies-2` | `ro` | Media library 2            |
 | `/mnt/movies-3/Movies-3`           | `/mnt/movies-3/Movies-3` | `ro` | Media library 3            |
@@ -45,8 +46,13 @@ indices to resolve instantly without broken links.
 | `/mnt/movies-7/TV-Shows`           | `/mnt/movies-7/TV-Shows` | `ro` | TV shows library           |
 
 > [!TIP]
-> All media libraries are mounted as read-only (`:ro`). This guarantees Plex can stream
-> and index media without any risk of accidental modification or deletion.
+> Both `/dev/shm/plex` and `/home/mono/.plex/tmp` match the host filesystem identically.
+> Your existing Plex preferences pointing to `/dev/shm/plex` work immediately without
+> modifying any web settings.
+
+> [!NOTE]
+> `shm_size: 16g` is explicitly set in `docker-compose.yml` to remove Docker's default
+> 64 MB container shared memory limit, giving Plex access to the full 16 GB host RAM pool.
 
 ### Metadata Directory Layout
 Inside the container, Plex looks for:
@@ -82,7 +88,8 @@ group_add:
 
 ### Plex Web Transcoder Settings
 Navigate to **Settings → Transcoder** in the Plex Web interface:
-1. **Transcoder temporary directory**: Set to `/transcode`.
+1. **Transcoder temporary directory**: Set to `/dev/shm/plex` (matches your existing
+   host configuration).
 2. **Hardware acceleration**: Enable **"Use hardware acceleration when available"**.
 3. **Hardware encoding**: Enable **"Use hardware-accelerated video encoding"**.
 4. **Hardware transcoding device**: Select **AMD Radeon Graphics (VCN)** (or `Auto`).
