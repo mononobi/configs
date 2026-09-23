@@ -10,7 +10,10 @@ services:
       - TZ=Europe/Berlin
       - PLEX_UID=${PLEX_UID}
       - PLEX_GID=${PLEX_GID}
-      # - PLEX_CLAIM=claim-xxxx  # Optional: Obtain from https://plex.tv/claim
+      # Claim token (https://plex.tv/claim) automatically links this server to your plex.tv
+      # account on initial startup. Only needed for first-time automated setup on a fresh
+      # installation; NOT required when reusing existing metadata (saved in Preferences.xml).
+      # - PLEX_CLAIM=claim-xxxx
       - ALLOWED_NETWORKS=127.0.0.1,192.168.0.0/16,10.0.0.0/8
 
     # This is the magic label that invites Watchtower in to update this container

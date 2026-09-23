@@ -6,7 +6,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/../../../utils.sh"
+source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
 FORCE="${FORCE:-false}"
@@ -169,9 +169,20 @@ else
     sudo docker compose -f "${COMPOSE_DEST}" up -d
 fi
 
+# Dynamically detect primary LAN IP
+LAN_IP="$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{print $7; exit}' || true)"
+if [[ -z "$LAN_IP" ]]; then
+    LAN_IP="$(hostname -I 2>/dev/null | awk '{print $1}' || true)"
+fi
+
 echo ""
 echo -e "${C_GREEN}[✓] Plex Media Server (Docker) setup completed successfully!${C_RESET}"
-echo -e "    Web Interface: http://localhost:32400/web (or http://<LAN_IP>:32400/web)"
+if [[ -n "$LAN_IP" && "$LAN_IP" != "127.0.0.1" ]]; then
+    echo -e "    Web Interface: http://${LAN_IP}:32400/web"
+    echo -e "    Local Access:  http://localhost:32400/web"
+else
+    echo -e "    Web Interface: http://localhost:32400/web"
+fi
 echo -e "    Metadata Dir:  ${PLEX_DATA_DIR}"
 echo -e "    Compose File:  ${COMPOSE_DEST}"
 echo -e "    Active User:   ${CURRENT_USER} (UID: ${CURRENT_UID}, GID: ${CURRENT_GID})"

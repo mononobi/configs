@@ -54,6 +54,17 @@ indices to resolve instantly without broken links.
 > `shm_size: 16g` is explicitly set in `docker-compose.yml` to remove Docker's default
 > 64 MB container shared memory limit, giving Plex access to the full 16 GB host RAM pool.
 
+> [!NOTE]
+> **When Does Plex Need Write (`rw`) Access to Media Folders?**
+> Media drives are mounted read-only (`:ro`) by default as a safety precaution. Plex stores
+> all metadata, posters, databases, and on-demand subtitle downloads in `/config`. Plex only
+> requires write (`rw`) access if you explicitly utilize:
+> 1. **Allow media deletion**: Allowing users/clients to delete movies from the UI.
+> 2. **Media Optimization**: Saving optimized copies "In folder with original items".
+> 3. **External Subtitle/Metadata Writers**: Third-party tools (e.g. Bazarr, Radarr) or
+>    legacy agents configured to write local `.srt` or `.nfo` files directly next to
+>    video files.
+
 ### Metadata Directory Layout
 Inside the container, Plex looks for:
 ```text
