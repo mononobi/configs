@@ -7,9 +7,7 @@ set -euo pipefail
 # Resolve canonical script location (dereferences symlinks like ~/.local/bin/pc-update)
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
-
-# Source centralized color palette and visual styling
-source "${SCRIPT_DIR}/../../colors.sh"
+source "${SCRIPT_DIR}/../../utils.sh"
 
 FORCE_STANDALONE=false
 
@@ -46,35 +44,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Helper to check if an application is installed before attempting updates
-is_app_installed() {
-    local app="$1"
-    case "$app" in
-        rust)
-            command -v rustup >/dev/null 2>&1 || command -v rustc >/dev/null 2>&1
-            ;;
-        rclone)
-            command -v rclone >/dev/null 2>&1
-            ;;
-        speedtest)
-            command -v speedtest >/dev/null 2>&1 || [[ -f "${HOME}/.local/bin/speedtest" ]]
-            ;;
-        ventoy)
-            [[ -d "${HOME}/.local/share/ventoy" ]] || \
-            [[ -f "${HOME}/.local/share/applications/ventoy.desktop" ]] || \
-            command -v ventoy >/dev/null 2>&1
-            ;;
-        antigravity-agent-manager)
-            [[ -d "${HOME}/.antigravity-manager" ]] || \
-            [[ -f "${HOME}/.local/share/applications/antigravity.desktop" ]] || \
-            command -v antigravity >/dev/null 2>&1
-            ;;
-        *)
-            command -v "$app" >/dev/null 2>&1
-            ;;
-    esac
-}
-
 sudo_keepalive_pid=""
 
 cleanup() {
@@ -110,7 +79,7 @@ sudo apt-get upgrade -y
 sudo apt-get autoremove -y
 
 # 2. Flatpak Update
-if command -v flatpak >/dev/null 2>&1; then
+if is_installed --check "flatpak"; then
     echo ""
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
     echo -e " ${C_BOLD}[2/5] Updating Flatpak Applications...${C_RESET}"
@@ -120,7 +89,7 @@ if command -v flatpak >/dev/null 2>&1; then
 fi
 
 # 3. Snap Refresh
-if command -v snap >/dev/null 2>&1; then
+if is_installed --check "snap"; then
     echo ""
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
     echo -e " ${C_BOLD}[3/5] Refreshing Snap Packages...${C_RESET}"
@@ -129,7 +98,7 @@ if command -v snap >/dev/null 2>&1; then
 fi
 
 # 4. Service Conflict Prevention & Systemd Reload
-if command -v apache2 >/dev/null 2>&1; then
+if is_installed --check "apache2"; then
     echo -e "${C_YELLOW}[i] Disabling apache2 (prevents port conflict with nginx)...${C_RESET}"
     sudo systemctl stop apache2.service
     sudo systemctl disable apache2.service
@@ -162,18 +131,17 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
         echo -e "${C_BLUE}[+] Running 10-day periodic updates (last: ${DAYS_AGO}d ago)...${C_RESET}"
     fi
 
-    # Recipes root relative to canonical script location
     RECIPES_ROOT="${SCRIPT_DIR}/../../apps-recommended"
 
     # 1. Native CLI updaters
-    if is_app_installed "rust" && command -v rustup >/dev/null 2>&1; then
+    if is_installed --check "rustup"; then
         echo -e "${C_BLUE}[==>] Updating Rust toolchains via rustup...${C_RESET}"
         if ! rustup update; then
             echo -e "${C_YELLOW}[!] Warning: Rustup update issue, skipping.${C_RESET}"
         fi
     fi
 
-    if is_app_installed "rclone" && command -v rclone >/dev/null 2>&1; then
+    if is_installed --check "rclone"; then
         echo -e "${C_BLUE}[==>] Updating Rclone via selfupdate...${C_RESET}"
         if ! sudo rclone selfupdate; then
             echo -e "${C_YELLOW}[!] Warning: Rclone selfupdate failed.${C_RESET}"
@@ -181,38 +149,36 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
     fi
 
     # 2. Dynamic loop for recipe-based standalone tools
+    # Format: "recipe_folder_name:presence_check_target"
     DYNAMIC_RECIPE_APPS=(
-        "antigravity-agent-manager"
-        "speedtest"
-        "ventoy"
+        "antigravity-agent-manager:${HOME}/.antigravity-manager"
+        "speedtest:speedtest"
+        "ventoy:${HOME}/.local/share/ventoy"
     )
 
-    if [[ -n "$RECIPES_ROOT" && -d "$RECIPES_ROOT" ]]; then
-        for app in "${DYNAMIC_RECIPE_APPS[@]}"; do
-            # Skip if the application is not installed on this system
-            if ! is_app_installed "$app"; then
-                continue
+    if [[ -d "$RECIPES_ROOT" ]]; then
+        for entry in "${DYNAMIC_RECIPE_APPS[@]}"; do
+            app="${entry%%:*}"
+            check_target="${entry#*:}"
+
+            # Only update if the application is currently installed on the host
+            if [[ "$check_target" == /* ]]; then
+                [[ -e "$check_target" ]] || continue
+            else
+                is_installed --check "$check_target" || continue
             fi
 
-            # Skip if recipe directory does not exist in repository
             app_dir="${RECIPES_ROOT}/${app}"
-            if [[ ! -d "$app_dir" ]]; then
-                continue
-            fi
+            [[ -d "$app_dir" ]] || continue
 
-            # Locate installer script inside the recipe folder
             script="$(find "$app_dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)"
-            if [[ -z "$script" || ! -f "$script" ]]; then
-                continue
-            fi
+            [[ -n "$script" && -f "$script" ]] || continue
 
             echo -e "${C_BLUE}[==>] Refreshing ${app}...${C_RESET}"
             if ! (cd "$app_dir" && bash "$script" --no-update); then
                 echo -e "${C_YELLOW}[!] Warning: Update failed for ${app}, continuing...${C_RESET}"
             fi
         done
-    else
-        echo -e "${C_YELLOW}[i] Recipes root not found; skipping recipe-based updates.${C_RESET}"
     fi
 
     # Record successful completion timestamp
