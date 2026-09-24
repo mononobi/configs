@@ -149,24 +149,26 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
     fi
 
     # 2. Dynamic loop for recipe-based standalone tools
-    # Format: "recipe_folder_name:presence_check_target"
     DYNAMIC_RECIPE_APPS=(
-        "antigravity-agent-manager:${HOME}/.antigravity-manager"
-        "speedtest:speedtest"
-        "ventoy:${HOME}/.local/share/ventoy"
+        "antigravity-agent-manager"
+        "speedtest"
+        "ventoy"
     )
 
     if [[ -d "$RECIPES_ROOT" ]]; then
-        for entry in "${DYNAMIC_RECIPE_APPS[@]}"; do
-            app="${entry%%:*}"
-            check_target="${entry#*:}"
-
+        for app in "${DYNAMIC_RECIPE_APPS[@]}"; do
             # Only update if the application is currently installed on the host
-            if [[ "$check_target" == /* ]]; then
-                [[ -e "$check_target" ]] || continue
-            else
-                is_installed --check "$check_target" || continue
-            fi
+            case "$app" in
+                speedtest)
+                    is_installed --check "speedtest" || continue
+                    ;;
+                antigravity-agent-manager)
+                    [[ -d "${HOME}/.antigravity-manager" ]] || continue
+                    ;;
+                ventoy)
+                    [[ -d "${HOME}/.local/share/ventoy" ]] || continue
+                    ;;
+            esac
 
             app_dir="${RECIPES_ROOT}/${app}"
             [[ -d "$app_dir" ]] || continue
