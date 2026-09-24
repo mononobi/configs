@@ -72,7 +72,7 @@ sudo_keepalive_pid=$!
 # 1. APT Update & Upgrade
 echo ""
 echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
-echo -e " ${C_BOLD}[1/5] Updating APT Packages...${C_RESET}"
+echo -e " ${C_BOLD}[1/4] Updating APT Packages...${C_RESET}"
 echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -82,7 +82,7 @@ sudo apt-get autoremove -y
 if is_installed --check "flatpak"; then
     echo ""
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
-    echo -e " ${C_BOLD}[2/5] Updating Flatpak Applications...${C_RESET}"
+    echo -e " ${C_BOLD}[2/4] Updating Flatpak Applications...${C_RESET}"
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
     sudo flatpak update -y
     sudo flatpak uninstall --unused -y
@@ -92,7 +92,7 @@ fi
 if is_installed --check "snap"; then
     echo ""
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
-    echo -e " ${C_BOLD}[3/5] Refreshing Snap Packages...${C_RESET}"
+    echo -e " ${C_BOLD}[3/4] Refreshing Snap Packages...${C_RESET}"
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
     sudo snap refresh
 fi
@@ -110,7 +110,7 @@ sudo systemctl daemon-reload
 # 5. Standalone / Custom Application Updates (Every 10 Days)
 echo ""
 echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
-echo -e " ${C_BOLD}[5/5] Checking Standalone & Custom Applications...${C_RESET}"
+echo -e " ${C_BOLD}[4/4] Checking Standalone & Custom Applications...${C_RESET}"
 echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/pc-update"
