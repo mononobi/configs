@@ -115,7 +115,7 @@ echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/pc-update"
 STATE_FILE="${STATE_DIR}/last_standalone_update"
-INTERVAL_DAYS=10
+INTERVAL_DAYS=5
 INTERVAL_SECONDS=$(( INTERVAL_DAYS * 86400 ))
 
 mkdir -p "$STATE_DIR"
