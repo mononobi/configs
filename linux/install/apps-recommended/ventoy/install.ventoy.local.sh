@@ -123,9 +123,6 @@ else
         if [[ "$FORCE" != "true" && -n "$CURRENT_VERSION" && -n "$LATEST_VERSION" && "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
             if [[ -x "$VENTOY_DIR/VentoyGUI.x86_64" && -f "$HOME/.local/share/applications/ventoy.desktop" ]]; then
                 echo "[✓] Ventoy is already installed and up to date (v${CURRENT_VERSION})."
-                ensure_local_bin_in_path
-                ln -sf "$VENTOY_DIR/VentoyGUI.x86_64" "$HOME/.local/bin/ventoy-gui"
-                ln -sf "$VENTOY_DIR/VentoyWeb.sh" "$HOME/.local/bin/ventoy-web"
                 exit 0
             fi
         fi

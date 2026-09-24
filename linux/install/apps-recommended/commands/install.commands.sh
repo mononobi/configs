@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Install custom command-line utilities into ~/.local/bin
-# Note: Copies physical files (resolving symlinks) from files/ into ~/.local/bin and ensures PATH is configured.
+# Note: Installs symlinks pointing to canonical bin/ utilities in ~/.local/bin.
 
 set -euo pipefail
 
@@ -97,7 +97,7 @@ for src in "${file_entries[@]}"; do
             echo "[!] Warning: Symlink target for '${cmd_name}' not found (${real_file:-broken}), skipping." >&2
             continue
         fi
-        cp -f "$real_file" "$dest"
+        ln -sf "$real_file" "$dest"
     elif [[ -f "$src" ]]; then
         cp -f "$src" "$dest"
     else
