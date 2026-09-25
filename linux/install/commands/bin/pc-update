@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Comprehensive system update utility with periodic standalone app updates
-# Note: Updates APT, Flatpak, Snap, and checks standalone tool updates every 10 days.
+# Note: Updates APT, Flatpak, Snap, and checks standalone tool updates every 5 days.
 
 set -euo pipefail
 
@@ -18,10 +18,10 @@ Usage: $(basename "$0") [OPTIONS]
 Description:
   Updates APT packages, Flatpak apps, Snap packages, and reloads systemd.
   Also checks and updates standalone tools (rclone, rust, speedtest, ventoy,
-  antigravity-agent-manager) once every 10 days.
+  antigravity-agent-manager) once every 5 days.
 
 Options:
-  -f, --force, --all    Force update standalone applications now (bypass 10-day wait)
+  -f, --force, --all    Force update standalone applications now (bypass 5-day wait)
   -h, --help            Show this help message and exit
 EOF
 }
@@ -107,7 +107,7 @@ fi
 echo -e "${C_BLUE}[+] Reloading systemd daemon...${C_RESET}"
 sudo systemctl daemon-reload
 
-# 5. Standalone / Custom Application Updates (Every 10 Days)
+# 5. Standalone / Custom Application Updates (Every 5 Days)
 echo ""
 echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 echo -e " ${C_BOLD}[4/4] Checking Standalone & Custom Applications...${C_RESET}"
@@ -128,7 +128,7 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
     if [[ "$FORCE_STANDALONE" == "true" ]]; then
         echo -e "${C_BLUE}[+] Running standalone updates (forced via CLI)...${C_RESET}"
     else
-        echo -e "${C_BLUE}[+] Running 10-day periodic updates (last: ${DAYS_AGO}d ago)...${C_RESET}"
+        echo -e "${C_BLUE}[+] Running 5-day periodic updates (last: ${DAYS_AGO}d ago)...${C_RESET}"
     fi
 
     RECIPES_ROOT="${SCRIPT_DIR}/../../apps-recommended"
@@ -138,6 +138,13 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
         echo -e "${C_BLUE}[==>] Updating Rust toolchains via rustup...${C_RESET}"
         if ! rustup update; then
             echo -e "${C_YELLOW}[!] Warning: Rustup update issue, skipping.${C_RESET}"
+        fi
+    fi
+
+    if is_installed --check "uv"; then
+        echo -e "${C_BLUE}[==>] Updating uv via self update...${C_RESET}"
+        if ! uv self update; then
+            echo -e "${C_YELLOW}[!] Warning: uv update issue, skipping.${C_RESET}"
         fi
     fi
 
