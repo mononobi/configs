@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Description: Generic runner to discover and install applications within a specified category directory
-# Note: Iterates over first-level subfolders in the target directory and executes any *.sh script found.
+# Note: Iterates over first-level subfolders, executes *.sh scripts, features smart APT lock detection,
+#       and automatically retries failed installations in a second round.
 
 set -euo pipefail
 
@@ -16,6 +17,8 @@ Description:
   subfolders of the specified target directory.
   Each installer is run from its own subfolder to ensure local asset resolution.
   Subfolders containing an 'ignore' file are skipped automatically.
+  Features smart APT lock detection to wait for background OS updates, and a
+  built-in 2nd round retry loop for any scripts that fail on the first pass.
   Collects and displays final statistics on processed, installed, ignored, and failed apps.
 
 Arguments:
@@ -129,6 +132,24 @@ format_duration() {
     fi
 }
 
+wait_for_apt_lock() {
+    local first=true
+    while sudo fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 || \
+          sudo fuser /var/lib/dpkg/lock >/dev/null 2>&1 || \
+          sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1 || \
+          sudo fuser /var/cache/apt/archives/lock >/dev/null 2>&1; do
+        if $first; then
+            echo -e "${C_YELLOW}[i] APT is currently locked by another process. Waiting for lock to be released...${C_RESET}"
+            first=false
+        fi
+        sleep 5
+    done
+    if ! $first; then
+        echo -e "${C_GREEN}[i] APT lock released. Continuing...${C_RESET}"
+    fi
+}
+
+
 # Statistics tracking
 installed_count=0
 ignored_count=0
@@ -140,6 +161,9 @@ declare -a failed_apps=()
 declare -a failed_scripts=()
 declare -a failed_codes=()
 declare -a failed_messages=()
+declare -a failed_dirs_round1=()
+declare -a failed_apps_round1=()
+declare -a failed_scripts_round1=()
 
 current_log_file=""
 sudo_keepalive_pid=""
@@ -174,6 +198,7 @@ echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
 ensure_local_bin_in_path
 
 if [[ "$SKIP_UPDATE" != "true" ]]; then
+    wait_for_apt_lock
     echo "[+] Running apt update once before batch installation..."
     sudo apt-get update
 fi
@@ -231,20 +256,73 @@ for subfolder in "${TARGET_DIR}"/*/; do
             ((installed_count++)) || true
             echo -e "${C_GREEN}[✓] Successfully installed: ${app_name}${C_RESET}"
         else
-            ((failed_count++)) || true
-            err_msg="$(extract_error_message "$current_log_file" "$exit_code")"
-            failed_apps+=("$app_name")
-            failed_scripts+=("$script_name")
-            failed_codes+=("$exit_code")
-            failed_messages+=("$err_msg")
-            echo -e "${C_RED}[✗] Failed: ${app_name} (${script_name})" \
-                "[Exit code: ${exit_code}]${C_RESET}"
+            if grep -qEi "Could not get lock|Unable to acquire the dpkg" "$current_log_file"; then
+                echo -e "${C_YELLOW}[!] APT lock error detected during installation of ${app_name}.${C_RESET}"
+                wait_for_apt_lock
+            fi
+            
+            failed_dirs_round1+=("$subfolder")
+            failed_apps_round1+=("$app_name")
+            failed_scripts_round1+=("$script_name")
+            echo -e "${C_YELLOW}[!] Failed: ${app_name} (${script_name}). Will retry in round 2.${C_RESET}"
         fi
 
         rm -f "$current_log_file"
         current_log_file=""
     done
 done
+
+if [[ ${#failed_apps_round1[@]} -gt 0 ]]; then
+    echo ""
+    echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
+    echo -e " ${C_BOLD}Retrying Failed Applications (${#failed_apps_round1[@]})${C_RESET}"
+    echo -e "${C_CYAN}${DIV_MAIN}${C_RESET}"
+    
+    for i in "${!failed_apps_round1[@]}"; do
+        app_name="${failed_apps_round1[i]}"
+        script_name="${failed_scripts_round1[i]}"
+        subfolder="${failed_dirs_round1[i]}"
+        
+        echo ""
+        echo -e "${C_BLUE}${DIV_SUB}${C_RESET}"
+        echo -e "${C_BLUE}[==>] Retrying:${C_RESET}" \
+            "${C_BOLD}${app_name}${C_RESET} (${script_name})"
+        echo -e "${C_BLUE}${DIV_SUB}${C_RESET}"
+
+        current_log_file="$(mktemp)"
+
+        set +e
+        (cd "$subfolder" && ./"$script_name" --no-update) 2>&1 | tee "$current_log_file"
+        exit_code=${PIPESTATUS[0]}
+        set -e
+
+        # Check for user cancellation (Ctrl+C)
+        if [[ $exit_code -eq 130 ]] || [[ $exit_code -eq 2 ]]; then
+            echo ""
+            echo -e "${C_RED}[!] Interrupted by user (SIGINT)." \
+                "Aborting installation run.${C_RESET}" >&2
+            rm -f "$current_log_file"
+            exit 130
+        fi
+
+        if [[ $exit_code -eq 0 ]]; then
+            ((installed_count++)) || true
+            echo -e "${C_GREEN}[✓] Successfully installed on retry: ${app_name}${C_RESET}"
+        else
+            ((failed_count++)) || true
+            err_msg="$(extract_error_message "$current_log_file" "$exit_code")"
+            failed_apps+=("$app_name")
+            failed_scripts+=("$script_name")
+            failed_codes+=("$exit_code")
+            failed_messages+=("$err_msg")
+            echo -e "${C_RED}[✗] Failed on retry: ${app_name} (${script_name})" \
+                "[Exit code: ${exit_code}]${C_RESET}"
+        fi
+
+        rm -f "$current_log_file"
+        current_log_file=""
+    done
+fi
 
 total_processed=$((installed_count + ignored_count + failed_count))
 end_time=$(date +%s)
