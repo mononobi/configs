@@ -63,13 +63,19 @@ The framework centers around a modular runner and individual self-contained reci
    - **Interactive Batch Runner (`install-ignored.sh`)**: The framework provides 
      `install-ignored.sh` to perform an interactive batch installation across all ignored 
      applications, asking the user one-by-one (`[y/N]`) whether to install each one.
-6. **Execution Logging & Summary**: The runner captures stdout/stderr per application,
-   reports clear visual progress, and prints an end-of-run summary with exact failure
-   diagnostics if an error occurs.
-7. **Single Upfront APT Update**: Batch runners perform a single `apt update` at the start
+6. **Execution Logging, Smart Retries & Summary**: The runner captures stdout/stderr per 
+   application and reports clear visual progress. If an installation script fails, it is 
+   placed in a temporary queue and automatically retried in a second pass once all other 
+   applications have been processed. The runner prints a final end-of-run summary with exact 
+   failure diagnostics for any apps that fail twice.
+7. **Smart APT Lock Detection**: If the background OS update process grabs the `dpkg` or 
+   `apt` lock, the runner dynamically detects this error, safely pauses execution 
+   (checking every 5 seconds), and waits for the lock to be released before continuing. 
+   This prevents subsequent scripts from instantly failing.
+8. **Single Upfront APT Update**: Batch runners perform a single `apt update` at the start
    and pass `--no-update` to every subscript by default. This avoids redundant index
    downloads for each app, unless an app adds a custom repository that requires refreshing.
-8. **Strict Idempotency**: Every recipe is idempotent—safe to execute repeatedly without
+9. **Strict Idempotency**: Every recipe is idempotent—safe to execute repeatedly without
    unintended side effects, corrupted states, duplicate configurations, or redundant downloads.
 
 ---
