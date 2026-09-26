@@ -633,6 +633,48 @@ resolve_ubuntu_pool_deb() {
     echo "$best"
 }
 
+# check_os_compatibility
+# 
+# Validates the host OS matches the expected tested environment (Ubuntu 26.04)
+# Warns the user otherwise and prompts to continue or abort.
+check_os_compatibility() {
+    local expected_os="ubuntu"
+    local expected_version="26.04"
+
+    local os_id="unknown"
+    local os_version="unknown"
+    local os_pretty_name="Unknown OS"
+
+    if [[ -f /etc/os-release ]]; then
+        os_id="$(source /etc/os-release && echo "${ID:-}")"
+        os_version="$(source /etc/os-release && echo "${VERSION_ID:-}")"
+        os_pretty_name="$(source /etc/os-release && echo "${PRETTY_NAME:-}")"
+    fi
+
+    if [[ "$os_id" != "$expected_os" || "$os_version" != "$expected_version" ]]; then
+        echo ""
+        echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
+        echo -e " ${C_BOLD}${C_YELLOW}[!] OS Compatibility Warning${C_RESET}"
+        echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
+        echo -e " These installers are guaranteed to work on ${C_BOLD}Ubuntu ${expected_version}${C_RESET}."
+        echo -e " While most applications may also install successfully on other"
+        echo -e " Ubuntu-based distributions (like Linux Mint, Pop!_OS, Debian)"
+        echo -e " or older versions (like 24.04), not all are guaranteed to work."
+        echo -e ""
+        echo -e " Current OS detected: ${C_BOLD}${os_pretty_name}${C_RESET}"
+        echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
+        
+        echo -ne " Do you want to continue anyway? [y/N]: "
+        local user_choice
+        read -r user_choice || true
+        if [[ "${user_choice,,}" != "y" && "${user_choice,,}" != "yes" ]]; then
+            echo -e "${C_RED}Aborting installation.${C_RESET}"
+            exit 1
+        fi
+        echo ""
+    fi
+}
+
 export INSTALL_ROOT
 export -f require_app
 export -f conditional_apt_update
@@ -642,3 +684,4 @@ export -f check_extension_archive_compatibility
 export -f compare_extension_version
 export -f install_gnome_extension
 export -f resolve_ubuntu_pool_deb
+export -f check_os_compatibility

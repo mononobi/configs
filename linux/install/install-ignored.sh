@@ -109,6 +109,8 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
+check_os_compatibility
+
 if ! sudo -n true 2>/dev/null; then
     echo "[+] Initializing sudo credentials..."
     if [[ -t 0 ]]; then

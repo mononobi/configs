@@ -176,41 +176,7 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-# OS Version Compatibility Check
-EXPECTED_OS="ubuntu"
-EXPECTED_VERSION="26.04"
-
-if [[ -f /etc/os-release ]]; then
-    OS_ID="$(source /etc/os-release && echo "${ID:-}")"
-    OS_VERSION="$(source /etc/os-release && echo "${VERSION_ID:-}")"
-    OS_PRETTY_NAME="$(source /etc/os-release && echo "${PRETTY_NAME:-}")"
-else
-    OS_ID="unknown"
-    OS_VERSION="unknown"
-    OS_PRETTY_NAME="Unknown OS"
-fi
-
-if [[ "$OS_ID" != "$EXPECTED_OS" || "$OS_VERSION" != "$EXPECTED_VERSION" ]]; then
-    echo ""
-    echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
-    echo -e " ${C_BOLD}${C_YELLOW}[!] OS Compatibility Warning${C_RESET}"
-    echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
-    echo -e " These installers are guaranteed to work on ${C_BOLD}Ubuntu ${EXPECTED_VERSION}${C_RESET}."
-    echo -e " While most applications may also install successfully on other"
-    echo -e " Debian-based distributions (like Linux Mint, Pop!_OS, Debian)"
-    echo -e " or older versions (like 24.04), not all are guaranteed to work."
-    echo -e ""
-    echo -e " Current OS detected: ${C_BOLD}${OS_PRETTY_NAME}${C_RESET}"
-    echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
-    
-    echo -ne " Do you want to continue anyway? [y/N]: "
-    read -r user_choice || true
-    if [[ "${user_choice,,}" != "y" && "${user_choice,,}" != "yes" ]]; then
-        echo -e "${C_RED}Aborting installation.${C_RESET}"
-        exit 1
-    fi
-    echo ""
-fi
+check_os_compatibility
 
 start_time=$(date +%s)
 
