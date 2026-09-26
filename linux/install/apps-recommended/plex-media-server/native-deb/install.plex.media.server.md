@@ -1,111 +1,135 @@
-# NOTE:
-# change 'mono' to your own username in this guide.
-# change '/home/mono/.plex' to your own root path for custom plex data store.
+# Plex Media Server Installation and Configuration (Native .deb)
 
-# you should download the plex media server from here:
-# https://www.plex.tv/media-server-downloads/
-# then go to download path and execute:
+> [!NOTE]
+> - Replace `mono` with your own system username throughout this guide.
+> - Replace `/home/mono/.plex` with your desired root path for custom Plex data storage.
 
-sudo dpkg -i file_name.deb
+---
 
-# then check status:
+## 1. Installation
 
-sudo systemctl status plexmediaserver
+1. Download the latest Plex Media Server `.deb` package from the [official Plex Downloads page](https://www.plex.tv/media-server-downloads/).
+2. Navigate to your download directory and install the package:
+   ```bash
+   sudo dpkg -i file_name.deb
+   ```
+3. Check the service status to verify it is active:
+   ```bash
+   sudo systemctl status plexmediaserver
+   ```
+4. If the service is not running, start it manually:
+   ```bash
+   sudo systemctl start plexmediaserver
+   ```
+5. Enable the service to launch automatically on system boot:
+   ```bash
+   sudo systemctl enable plexmediaserver
+   ```
 
-# if it is not running, execute following command to run it:
+---
 
-sudo systemctl start plexmediaserver
+## 2. Automatic Updates via APT
 
-# execute this command:
+1. List the installed files to identify the Plex APT source list configuration:
+   ```bash
+   sudo dpkg -L plexmediaserver
+   ```
+   The source list file is typically located at:
+   `/etc/apt/sources.list.d/plexmediaserver.list`
 
-sudo systemctl enable plexmediaserver
+2. Open the file above in an editor and uncomment the last line.
 
-# execute the following command to see the source list file name of plex:
+3. Import the signing key if running older distributions:
+   > [!IMPORTANT]
+   > Run the following command only if you are **not** on Ubuntu 20.04+ or Debian 10+:
+   ```bash
+   wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo tee /etc/apt/trusted.gpg.d/plexmediaserver.asc
+   ```
 
-sudo dpkg -L plexmediaserver
+4. Refresh repository indexes:
+   ```bash
+   sudo apt update
+   ```
+   Plex Media Server will now be updated automatically alongside standard OS package upgrades.
 
-# the file is something like this:
-# /etc/apt/sources.list.d/plexmediaserver.list
+---
 
-# open the above file and uncomment the last line of it.
+## 3. Relocating Metadata & Restoring Data
 
-############ RUN THE BELOW COMMAND IF YOU ARE NOT ON UBUNTU 20+ OR DEBIAN 10+ ############
+Follow these steps if you want to store all Plex metadata and indices in a custom directory (e.g., `/home/mono/.plex`), or if you are restoring existing metadata after reinstalling the operating system.
 
-wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo tee /etc/apt/trusted.gpg.d/plexmediaserver.asc
+1. **Stop the Plex Media Server service:**
+   ```bash
+   sudo systemctl stop plexmediaserver
+   ```
 
-############ RUN THE ABOVE COMMAND IF YOU ARE NOT ON UBUNTU 20+ OR DEBIAN 10+ ############
+2. **Create target directories (for clean/initial installations):**
+   If this is a new setup without existing metadata, create the required folder hierarchy:
+   ```bash
+   mkdir -p /home/mono/.plex/plexmediaserver/Library/'Application Support'
+   mkdir /home/mono/.plex/tmp
+   ```
 
-sudo apt update
+3. **Set permissions and ownership:**
+   Ensure your user account owns the custom data directory with appropriate permissions:
+   ```bash
+   sudo chown -R mono:mono /home/mono/.plex
+   sudo chmod -R 775 /home/mono/.plex
+   ```
 
-# now plex media server will be updated through normal os updates.
+4. **Remove the default metadata directory:**
+   ```bash
+   sudo rm -r /var/lib/plexmediaserver
+   ```
 
-# if you want to have all plex metadata and indices folder in another place than the default one, or
-# you want to restore all your metadata after changing the OS you can do the following:
+5. **Deploy the systemd drop-in override:**
+   Copy `override.conf` into the systemd service override directory (remember to adjust `mono` and `/home/mono/.plex` inside `override.conf` to match your actual username and root path):
+   ```bash
+   sudo mkdir -p /etc/systemd/system/plexmediaserver.service.d
+   sudo cp override.conf /etc/systemd/system/plexmediaserver.service.d
+   sudo systemctl daemon-reload
+   ```
 
-# stop the plex server:
+6. **Start and re-enable the service:**
+   ```bash
+   sudo systemctl enable plexmediaserver
+   sudo systemctl start plexmediaserver
+   ```
 
-sudo systemctl stop plexmediaserver
+---
 
-# we assume that the root path that we want to store plex data in, is as follows:
+## 4. Firewall & Network Settings
 
-/home/mono/.plex
+1. **Open the default Plex port in UFW:**
+   ```bash
+   sudo ufw allow 32400
+   ```
 
-# if it is your initial installation, and you don't have any metadata yet, create these folders:
+2. **Configure Allowed Client Networks:**
+   In the Plex Web interface, navigate to **Settings > Network** and add client IPs allowed to connect to the server without authentication. For example, if your default gateway is `192.168.178.1`, add:
+   ```text
+   localhost, 127.0.0.1, 192.168.178.0/24
+   ```
 
-mkdir -p /home/mono/.plex/plexmediaserver/Library/'Application Support'
-mkdir /home/mono/.plex/tmp
+---
 
-# note that if you already have those folders, your user must be the owner of those
-# folders, if it's not, execute these commands:
+## 5. Performance Optimization: Transcoding in RAM
 
-sudo chown -R mono:mono /home/mono/.plex
-sudo chmod -R 775 /home/mono/.plex
+If the host system running Plex has **8 GB or more of RAM**, you can relocate temporary transcode directories to shared memory (`/dev/shm`) for faster disk I/O and reduced SSD wear:
 
-# delete the default metadata folder:
+1. Open the Plex Web interface.
+2. Go to **Settings > Transcoder**.
+3. Set the following options:
+   - **Transcoder temporary directory:** `/dev/shm/plex`
+   - **Downloads temporary directory:** `/home/mono/.plex/tmp/downloads`
 
-sudo rm -r /var/lib/plexmediaserver
+---
 
-# copy the 'override.conf' file into this location with these commands
-# (change 'mono' and '/home/mono/.plex' to your own username and root path in the file):
+## 6. Default System Paths Reference
 
-sudo mkdir -p /etc/systemd/system/plexmediaserver.service.d
-sudo cp override.conf /etc/systemd/system/plexmediaserver.service.d
-sudo systemctl daemon-reload
-
-# start the plex server:
-
-sudo systemctl enable plexmediaserver
-sudo systemctl start plexmediaserver
-
-# allow the 32400 port in ufw:
-
-sudo ufw allow 32400
-
-# add all client IPs which want to connect to the server in plex 'Network' settings.
-# for example if your default gateway is '192.168.178.1', add these to the allowed IPs:
-# localhost, 127.0.0.1, 192.168.178.0/24
-
-# PERFORMANCE IMPROVEMENT:
-
-# If the system on which the Plex server is running has 8GB or more RAM, do this to
-# make transcoding temp data be stored on RAM for fast data access:
-
-# Go to Plex web interface.
-# Go to Settings -> Transcoder.
-# Set these two values:
-# Transcoder temporary directory -> /dev/shm/plex
-# Downloads temporary directory -> /home/mono/.plex/tmp/downloads
-
-# DEFAULT PATHS:
-
-# plex media server default metadata and index folder is:
-/var/lib/plexmediaserver
-
-# plex media server executables directory is:
-/usr/lib/plexmediaserver
-
-# plex media server service file is:
-/lib/systemd/system/plexmediaserver.service
-
-# plex media server service drop-in file must be created in:
-/etc/systemd/system/plexmediaserver.service.d/override.conf
+| Component | Path |
+| :--- | :--- |
+| **Default Metadata & Index Folder** | `/var/lib/plexmediaserver` |
+| **Executables Directory** | `/usr/lib/plexmediaserver` |
+| **Systemd Service Unit** | `/lib/systemd/system/plexmediaserver.service` |
+| **Systemd Service Drop-In Override** | `/etc/systemd/system/plexmediaserver.service.d/override.conf` |
