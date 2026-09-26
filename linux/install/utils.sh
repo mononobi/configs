@@ -658,7 +658,7 @@ check_os_compatibility() {
         echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
         echo -e " These installers are guaranteed to work on ${C_BOLD}Ubuntu ${expected_version}${C_RESET}."
         echo -e " While most applications may also install successfully on other"
-        echo -e " Ubuntu-based distributions (like Linux Mint, Pop!_OS, Debian)"
+        echo -e " Ubuntu or Debian-based distributions (like Linux Mint, Pop!_OS, Debian)"
         echo -e " or older versions (like 24.04), not all are guaranteed to work."
         echo -e ""
         echo -e " Current OS detected: ${C_BOLD}${os_pretty_name}${C_RESET}"
