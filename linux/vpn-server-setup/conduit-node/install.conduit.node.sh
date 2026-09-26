@@ -73,6 +73,14 @@ cp "${FILES_DIR}/docker-compose.yml" "${TARGET_DIR}/"
 cp "${FILES_DIR}/prometheus.yml" "${TARGET_DIR}/"
 cp -r "${FILES_DIR}/grafana-provisioning" "${TARGET_DIR}/"
 
+echo "[+] Installing conduit-status CLI tool..."
+cp "${FILES_DIR}/conduit-status" "${TARGET_DIR}/"
+sed -i "s|REPLACE_ME_HOME|${HOME}|g" "${TARGET_DIR}/conduit-status"
+chmod +x "${TARGET_DIR}/conduit-status"
+
+ensure_local_bin_in_path
+ln -sf "${TARGET_DIR}/conduit-status" "${HOME}/.local/bin/conduit-status"
+
 # 3. Dynamically set user in docker-compose.yml
 CURRENT_UID="$(id -u)"
 CURRENT_GID="$(id -g)"

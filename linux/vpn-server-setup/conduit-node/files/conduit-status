@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd "REPLACE_ME_HOME/.conduit-node" || exit 1
+docker compose logs --tail 25 conduit

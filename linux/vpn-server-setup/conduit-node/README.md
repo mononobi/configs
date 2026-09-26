@@ -129,26 +129,3 @@ sudo ufw allow from 10.0.0.0/8
 # Allow access to Grafana dashboard and Prometheus from your local machine through SSH tunneling
 sudo ufw allow 22
 ```
-
-### Final Note (Not Recommended - See Below)
-
-You can also use the `conduit-stats` command to see some basic stats about the Conduit node,
-such as the number of connected clients, connection history, and CPU/RAM usage.
-This command is a wrapper around `docker stats` and `docker logs` to provide a more user-friendly
-output.
-
-#### Copy the `conduit-stats` script to your local bin directory and make it executable:
-
-```bash
-cp conduit-stats ~/.local/bin
-chmod +x ~/.local/bin/conduit-stats
-```
-
-#### Run the `conduit-stats` command to see the stats:
-
-```bash
-conduit-stats
-```
-
-> NOTE: The `conduit-stats` command has not been maintained for a long time and may not work 
-> as expected. This is because the structure of Conduit logs changes with every new release.
