@@ -1,3 +1,0 @@
-# shotwell is a photo management app and can be used to set slideshow wallpapers.
-
-sudo apt-get install shotwell

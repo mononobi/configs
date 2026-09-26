@@ -1,5 +1,0 @@
-snap install atom --classic --channel=latest/stable
-
-# always check for the latest channel before installing:
-
-snap info atom

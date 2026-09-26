@@ -1,7 +1,0 @@
-# this is recommended:
-
-sudo apt-get install gnome-weather
-
-# this is not recommended:
-
-flatpak install flathub org.gnome.Weather

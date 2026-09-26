@@ -1,3 +1,0 @@
-# This extension lets you pick color from anywhere on the screen and get it in all color formats.
-
-https://extensions.gnome.org/extension/3396/color-picker/

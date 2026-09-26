@@ -1,9 +1,0 @@
-# this is recommended:
-
-sudo apt-get install gnome-maps
-
-# this is not recommended:
-
-flatpak install flathub org.gnome.Maps
-
-# note that maps needs a vpn connection in countries such as iran.

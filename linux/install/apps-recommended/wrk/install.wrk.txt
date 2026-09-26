@@ -1,3 +1,0 @@
-# wrk is a tool for making batch requests to a server.
-
-sudo apt-get install wrk

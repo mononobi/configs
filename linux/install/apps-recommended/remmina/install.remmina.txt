@@ -1,3 +1,0 @@
-# remmina is a remote desktop client.
-
-sudo apt-get install remmina

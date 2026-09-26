@@ -1,3 +1,0 @@
-# sysbench is a cpu and memory benchmarking tool.
-
-sudo apt-get install sysbench

@@ -1,3 +1,0 @@
-# radeontop is a tool to monitor GPU usage and statistics directly from AMD GPU.
-
-sudo apt-get install radeontop

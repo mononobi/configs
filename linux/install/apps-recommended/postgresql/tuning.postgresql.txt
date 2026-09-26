@@ -1,3 +1,0 @@
-# visit this page to get a postgresql config suggestion based
-# on your hardware and application type:
-# https://pgtune.leopard.in.ua

@@ -1,3 +1,0 @@
-# catfish is a file and content search gui.
-
-sudo apt-get install catfish

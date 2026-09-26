@@ -1,3 +1,0 @@
-# nvtop is a tool to monitor GPU usage and statistics from GPU driver.
-
-sudo apt-get install nvtop

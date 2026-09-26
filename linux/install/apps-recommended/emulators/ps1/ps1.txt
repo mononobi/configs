@@ -1,7 +1,0 @@
-# this is a PS1 (PSX) emulator:
-
-flatpak install flathub org.duckstation.DuckStation
-
-# after installing, copy and extract PS1 BIOS files into application's bios directory.
-# 'Settings -> BIOS -> BIOS Directory'
-# files/ps1.bios.zip

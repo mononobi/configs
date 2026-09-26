@@ -1,3 +1,0 @@
-# this is a PSP (PlayStation Portable) emulator:
-
-flatpak install flathub org.ppsspp.PPSSPP

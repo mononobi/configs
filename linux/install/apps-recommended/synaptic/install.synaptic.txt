@@ -1,3 +1,0 @@
-# synaptic is a gui app for apt package manager.
-
-sudo apt-get install synaptic

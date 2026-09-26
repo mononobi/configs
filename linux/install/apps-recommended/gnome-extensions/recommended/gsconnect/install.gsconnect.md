@@ -1,0 +1,36 @@
+# GSConnect
+
+> **Note:** This is the GNOME implementation of KDE Connect and has much better integration than KDE Connect on the GNOME Shell.
+
+## Installation
+
+Go to the [GSConnect extension page](https://extensions.gnome.org/extension/1319/gsconnect/) and toggle the install icon.
+
+## Configuration
+
+### Sharing
+- **Clipboard Sync:** To & From Device
+- **Volume Control:** On
+- **Receive Files:** On
+
+### Battery
+- **Low Battery Notification:** On
+- **Charge Up to Custom Level Notification:** On (90%)
+- **Fully Charged Notification:** On
+
+### Telephony
+- **Pause Media (Both):** On
+- **Mute Microphone:** On
+
+### Advanced
+- **Battery:** On
+- **Clipboard:** On
+- **Connectivity Report:** On
+- **Contacts:** On
+- **Find My Phone:** On
+- **Ping:** On
+- **Share:** On
+- **SMS:** On
+- **System Volume:** On
+- **Telephony:** On
+- **Everything else (SFTP Automount, SFTP, MPRIS, Notifications...):** Off

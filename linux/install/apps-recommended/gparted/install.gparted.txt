@@ -1,3 +1,0 @@
-# this is an app for storage disk and partitioning management.
-
-sudo apt-get install gparted

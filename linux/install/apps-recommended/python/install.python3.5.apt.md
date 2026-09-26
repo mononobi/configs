@@ -1,0 +1,13 @@
+# Python 3.5 Installation via APT
+
+To install Python 3.5 and `pip` using the deadsnakes PPA, run the following commands:
+
+```bash
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt install python3.5
+python3.5 --version
+sudo apt-get install python3-pip
+pip3 --version
+```

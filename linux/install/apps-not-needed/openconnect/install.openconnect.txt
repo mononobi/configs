@@ -1,2 +1,0 @@
-sudo /sbin/modprobe tun
-sudo apt-get install openconnect

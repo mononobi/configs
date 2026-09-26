@@ -1,7 +1,0 @@
-# Install as PWA web app (Recommended):
-
-https://teams.cloud.microsoft
-
-# Install using Flatpak (Not Recommended):
-
-flatpak install -y flathub com.github.IsmaelMartinez.teams_for_linux

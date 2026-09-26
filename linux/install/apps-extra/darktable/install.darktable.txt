@@ -1,3 +1,0 @@
-# darktable is a virtual darkroom for photographers.
-
-sudo apt-get install darktable
