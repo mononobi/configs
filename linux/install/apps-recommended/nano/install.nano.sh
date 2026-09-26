@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Description: Install and configure poetry
-# Note: Modernized for Ubuntu with best practices.
+# Description: Install nano text editor
+# Note: Basic lightweight command-line text editor.
 
 set -euo pipefail
 
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
+
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
 
 show_help() {
@@ -14,7 +14,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Python Poetry packaging and dependency manager using the official installer.
+  Installs the nano text editor via APT.
 
 Options:
   --no-update   Skip apt update before installation
@@ -41,17 +41,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "poetry" --name "Poetry" && exit 0
+is_installed "nano" --name "Nano" && exit 0
 
-echo "[+] Starting installation/setup for poetry..."
+echo -e "${C_BLUE}[+] Starting installation of Nano...${C_RESET}"
 
-require_app curl
-require_app python --fast
+conditional_apt_update
 
-echo "[+] Running official Poetry installer..."
-curl -sSL https://install.python-poetry.org | python3 -
+sudo apt-get install -y nano
 
-ensure_local_bin_in_path
-poetry --version || true
-
-echo "[✓] poetry setup completed successfully!"
+echo -e "${C_GREEN}[✓] Nano setup completed successfully!${C_RESET}"
