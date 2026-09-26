@@ -1,19 +1,34 @@
 # obs is a screen recording tool.
 
-# you need opengl 3.3 or higher:
+# TROUBLESHOOTING: OBS requires OpenGL 3.3 or higher (GPU Hardware Acceleration).
+# (OpenGL 3.3 is from 2010, so virtually all modern computers natively have it!)
+# Note: You cannot "apt install opengl". It is provided by your GPU drivers.
+# - NVIDIA: Install proprietary drivers (e.g., sudo ubuntu-drivers autoinstall)
+# - Virtual Machines: Enable "3D Acceleration" in your VM display settings.
+#
+# To check your current OpenGL version, install mesa-utils:
 
 sudo apt install mesa-utils
 
-# execute this to see the installed opengl version:
+# Then execute this command:
 
 glxinfo | grep "OpenGL"
 
-# if your system have opengl >= 3.3 you can continue installation:
+# If your system has OpenGL >= 3.3, OBS will launch successfully.
 
+# (Optional) Install full FFmpeg toolkit for Advanced Custom FFmpeg outputs.
+# Note: Basic OBS usage automatically pulls in the necessary background libraries.
 sudo apt install ffmpeg
+
+# (Optional) Install Virtual Camera support.
+# WARNING: v4l2loopback-dkms is known to occasionally cause kernel panics! 
+# Only install this if you specifically need the "Start Virtual Camera" feature.
 sudo apt install v4l2loopback-dkms
 
+# (Optional) Enable multiverse repo for proprietary media codecs and hardware encoders (e.g., NVENC).
+# Note: Most desktop Ubuntu versions have this enabled by default.
 sudo add-apt-repository multiverse
+
 sudo add-apt-repository ppa:obsproject/obs-studio
 sudo apt update
 sudo apt install obs-studio
