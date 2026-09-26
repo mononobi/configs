@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Description: Install and setup Psiphon Conduit Node container
 # Note: Sets up ~/.conduit-node, configures dynamic UID:GID, configures UFW firewall, and starts services.
+# Update Behavior: Safe to re-run. Overwrites configs but preserves persistent data. 
+#                  Docker Compose automatically ensures zero-downtime by only restarting containers if configs changed.
 
 set -euo pipefail
 
