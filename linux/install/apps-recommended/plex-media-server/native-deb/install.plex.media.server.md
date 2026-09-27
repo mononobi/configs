@@ -127,9 +127,9 @@ If the host system running Plex has **8 GB or more of RAM**, you can relocate te
 
 ## 6. Default System Paths Reference
 
-| Component | Path |
-| :--- | :--- |
-| **Default Metadata & Index Folder** | `/var/lib/plexmediaserver` |
-| **Executables Directory** | `/usr/lib/plexmediaserver` |
-| **Systemd Service Unit** | `/lib/systemd/system/plexmediaserver.service` |
+| Component                            | Path                                                          |
+|:-------------------------------------|:--------------------------------------------------------------|
+| **Default Metadata & Index Folder**  | `/var/lib/plexmediaserver`                                    |
+| **Executables Directory**            | `/usr/lib/plexmediaserver`                                    |
+| **Systemd Service Unit**             | `/lib/systemd/system/plexmediaserver.service`                 |
 | **Systemd Service Drop-In Override** | `/etc/systemd/system/plexmediaserver.service.d/override.conf` |
