@@ -270,7 +270,7 @@ persists it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 - **Modular Subfolder Architecture**: Each recommended extension lives in its own
   dedicated directory under
   `apps-recommended/gnome-extensions/recommended/<extension-name>/` (containing its
-  installer script and reference `.txt`).
+  installer script and reference `.md`).
 - **4-Level Relative Depth**: Because extension recipes reside 4 directory levels below
   `linux/install/`, they source `utils.sh` with 4 parent traversals:
   ```bash
@@ -524,14 +524,19 @@ functions**:
   without obscure "command not found" errors caused by a missing import.
 - **Mandatory for All Recipes**: No installer may omit sourcing `utils.sh`.
 
-### Rule 11: Text File Line Length Limit (Max 95 Characters)
+### Rule 11: Markdown Line Length Limit (Max 95 Characters)
 
-Any text file (`.md`, `.txt`, etc.) when created or modified in this repository must
-strictly adhere to a line length limit:
+All Markdown (`.md`) files created or modified in this repository must strictly adhere to
+a line length limit:
 
 - **Max 95 Characters Per Line**: Each line must not exceed 95 characters in length.
 - **Line Breaking**: Lines should be cleanly broken and wrapped at a maximum of 95
   characters.
+- **Automated Formatting via Prettier**: Run `scripts/format-markdown.sh` (see Rule 14) to
+  automatically format and wrap lines to standard limits.
+- **Strictly `.md` Files Only**: Only Markdown (`.md`) files may be created for
+  documentation and text files; `.txt` files are strictly disallowed as all documentation
+  files in the repository have been converted to `.md` (see Rule 13).
 
 ### Rule 12: `AGENTS.md` is a Symlink to `README.md` (Never Edit Directly)
 
@@ -550,12 +555,30 @@ must be authored as a high-quality Markdown (`.md`) file, not plain `.txt` or an
 unstructured text format:
 
 - **Strictly `.md` Extension**: Never create `.txt` files for documentation, guides, or
-  manuals. Always use the `.md` file extension.
+  manuals. Always use the `.md` file extension. All legacy `.txt` documentation files in
+  the repository have been replaced with `.md` files.
 - **High-Quality Formatting**: Fully utilize GitHub Flavored Markdown (GFM) features,
   including clear headings, tables, code blocks with syntax highlighting, bullet lists,
   and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, etc.).
 - **Line Length Limit**: All Markdown documents must continue to strictly adhere to Rule
-  11 (maximum 95 characters per line).
+  11 (maximum 95 characters per line). Format them with `scripts/format-markdown.sh` (Rule
+  14).
+
+### Rule 14: Format All Markdown Files via `format-markdown.sh`
+
+Every Markdown (`.md`) file added, created, or modified in this repository must be
+formatted using the `scripts/format-markdown.sh` script:
+
+- **Mandatory Execution on Changes**: Whenever a `.md` file is added or edited,
+  `scripts/format-markdown.sh` must be executed to format the file, standardize Markdown
+  syntax, and enforce consistent line lengths across the repository.
+- **Line Length & Prettier Enforcement**: The script invokes Prettier across all Markdown
+  documents in the project, automatically wrapping prose and formatting content to comply
+  with the project's line length limit (Rule 11).
+- **Execution Command**: Run the script from the repository root:
+  ```bash
+  ./scripts/format-markdown.sh
+  ```
 
 ---
 
