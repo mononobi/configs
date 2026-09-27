@@ -1,6 +1,0 @@
-# this docker-compose file will deploy both backend and frontend instances of osrm.
-# for each service configuration, see the related folder (backend, frontend).
-
-# start the compose file:
-
-docker-compose up -d

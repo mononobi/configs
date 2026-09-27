@@ -1,7 +1,0 @@
-# default application icon paths:
-
-/usr/share/pixmaps
-/usr/share/icons
-/usr/share/APP_NAME
-~/.local/share/icons
-~/.icons

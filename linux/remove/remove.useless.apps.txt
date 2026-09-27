@@ -1,7 +1,0 @@
-sudo apt autoremove aisleriot -y
-sudo apt autoremove gnome-sudoku -y
-sudo apt autoremove gnome-mines -y
-sudo apt autoremove gnome-mahjongg -y
-sudo apt autoremove thunderbird -y
-sudo apt autoremove rhythmbox -y
-sudo snap remove firefox

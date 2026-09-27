@@ -1,3 +1,0 @@
-sudo apt-get purge [openjdk-\*] -> [package-name]
-
-sudo apt remove package_name

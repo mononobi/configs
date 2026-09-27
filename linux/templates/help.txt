@@ -1,2 +1,0 @@
-# copy the contents of 'files' folder into '~/Templates' folder to add
-# them into right click context menu.

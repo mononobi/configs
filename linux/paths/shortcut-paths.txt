@@ -1,7 +1,0 @@
-# default application shortcut (.desktop file) paths:
-
-/usr/share/applications
-~/.local/share/applications
-/var/lib/flatpak/exports/share/applications
-~/.gnome/apps
-~/.local/share/flatpak/exports/share/applications
