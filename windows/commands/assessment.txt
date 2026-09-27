@@ -1,3 +1,0 @@
-# execute this command in cmd as admin to perform windows assessment:
-
-winsat formal
