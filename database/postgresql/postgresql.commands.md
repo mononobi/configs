@@ -1,13 +1,14 @@
 # PostgreSQL CLI & Service Commands Cheat Sheet
 
-Essential CLI commands for checking service status, managing daemon lifecycle, user authentication, and psql operations.
+Essential CLI commands for checking service status, managing daemon lifecycle, user
+authentication, and psql operations.
 
 ---
 
 ## Service Management
 
 | Action                          | Command                             |
-|:--------------------------------|:------------------------------------|
+| :------------------------------ | :---------------------------------- |
 | **Check Port Listening (5432)** | `sudo ss -tunelp \| grep 5432`      |
 | **Start Service**               | `sudo systemctl start postgresql`   |
 | **Stop Service**                | `sudo systemctl stop postgresql`    |

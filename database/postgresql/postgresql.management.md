@@ -6,12 +6,12 @@ System paths, cluster lifecycle tools, and version inspection commands.
 
 ## System File Locations
 
-| Component | Path |
-| :--- | :--- |
+| Component               | Path                                 |
+| :---------------------- | :----------------------------------- |
 | **Binaries & Clusters** | `/usr/lib/postgresql/<VERSION_NUM>/` |
-| **Configurations** | `/etc/postgresql/<VERSION_NUM>/` |
-| **Data Directory** | `/var/lib/postgresql/<VERSION_NUM>/` |
-| **Log Files** | `/var/log/postgresql/` |
+| **Configurations**      | `/etc/postgresql/<VERSION_NUM>/`     |
+| **Data Directory**      | `/var/lib/postgresql/<VERSION_NUM>/` |
+| **Log Files**           | `/var/log/postgresql/`               |
 
 ---
 

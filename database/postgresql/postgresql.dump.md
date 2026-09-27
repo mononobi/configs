@@ -1,32 +1,38 @@
 # PostgreSQL Backup & Restore Guide (`pg_dump`)
 
-Commands for exporting and restoring PostgreSQL databases, schema structures, and table subsets.
+Commands for exporting and restoring PostgreSQL databases, schema structures, and table
+subsets.
 
 ---
 
 ## 1. Exporting Backups (`pg_dump`)
 
 Switch to the `postgres` user before running dumps:
+
 ```bash
 sudo su - postgres
 ```
 
 ### Full Database Backup (Schema & Data)
+
 ```bash
 pg_dump -U postgres -d <existing_db_name> -f dump.sql
 ```
 
 ### Specific Tables Backup (Schema & Data)
+
 ```bash
 pg_dump -U postgres -d <existing_db_name> -t <table1> -t <table2> -f dump.sql
 ```
 
 ### Data Only (No Schema / DDL, using Column Inserts)
+
 ```bash
 pg_dump -U postgres --column-inserts -a -d <existing_db_name> -f dump.sql
 ```
 
 ### Data Only for Specific Tables
+
 ```bash
 pg_dump -U postgres --column-inserts -a -t <table1> -t <table2> -d <existing_db_name> -f dump.sql
 ```

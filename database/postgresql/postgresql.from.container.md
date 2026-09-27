@@ -1,6 +1,7 @@
 # Connecting Docker Containers to Local PostgreSQL Host
 
-Configure a host PostgreSQL service to accept incoming database connections from Docker container networks.
+Configure a host PostgreSQL service to accept incoming database connections from Docker
+container networks.
 
 ---
 
@@ -23,7 +24,8 @@ Configure a host PostgreSQL service to accept incoming database connections from
    ```bash
    sudo nano /etc/postgresql/<VERSION_NUM>/main/pg_hba.conf
    ```
-2. Under the IPv4 local connections section, add records for the Docker bridge network and local LAN:
+2. Under the IPv4 local connections section, add records for the Docker bridge network and
+   local LAN:
    ```text
    # Docker container bridge network
    host    all             all             172.18.0.0/16           md5
@@ -31,7 +33,8 @@ Configure a host PostgreSQL service to accept incoming database connections from
    # Local subnet
    host    all             all             192.168.0.0/16          md5
    ```
-   *(Adjust authentication method to match your system standard, e.g., `scram-sha-256` or `md5`).*
+   _(Adjust authentication method to match your system standard, e.g., `scram-sha-256` or
+   `md5`)._
 
 ---
 
@@ -56,6 +59,7 @@ sudo ufw allow from 172.18.0.0/16 to any port 5432
 ```
 
 Verify firewall status:
+
 ```bash
 sudo ufw status
 ```

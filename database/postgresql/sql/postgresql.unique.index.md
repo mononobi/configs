@@ -9,7 +9,7 @@ SQL syntax for enforcing column uniqueness.
 Standard SQL table constraint:
 
 ```sql
-ALTER TABLE table_name 
+ALTER TABLE table_name
 ADD CONSTRAINT constraint_name UNIQUE (column1, column2);
 ```
 
@@ -20,6 +20,6 @@ ADD CONSTRAINT constraint_name UNIQUE (column1, column2);
 Direct unique index creation:
 
 ```sql
-CREATE UNIQUE INDEX index_name 
+CREATE UNIQUE INDEX index_name
 ON table_name (column1, column2);
 ```

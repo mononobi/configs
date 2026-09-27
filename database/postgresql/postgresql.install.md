@@ -31,16 +31,19 @@ sudo apt -y install postgresql-11
 ## 2. Server Tuning & Configuration (`postgresql.conf`)
 
 Open the configuration file:
+
 ```bash
 sudo vim /etc/postgresql/11/main/postgresql.conf
 ```
 
 ### Network Connections
+
 ```ini
 listen_addresses = '*'
 ```
 
 ### Client Defaults
+
 ```ini
 datestyle = 'iso, ymd'
 timezone = 'UTC'
@@ -50,6 +53,7 @@ default_transaction_isolation = 'read committed'
 ```
 
 ### Logging Configuration
+
 ```ini
 logging_collector = on
 log_directory = '/var/log/postgresql'
@@ -85,6 +89,7 @@ sudo -u postgres psql
 ```
 
 Execute SQL provisioning commands:
+
 ```sql
 CREATE DATABASE mydb;
 CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypass';
@@ -99,5 +104,5 @@ GRANT ALL PRIVILEGES ON DATABASE mydb TO myuser;
 sudo apt install -y pgadmin4
 ```
 
-> [!TIP]
-> For cluster major version upgrades, refer to [GoRails PostgreSQL Upgrade Guide](https://gorails.com/guides/upgrading-postgresql-version-on-ubuntu-server).
+> [!TIP] For cluster major version upgrades, refer to
+> [GoRails PostgreSQL Upgrade Guide](https://gorails.com/guides/upgrading-postgresql-version-on-ubuntu-server).

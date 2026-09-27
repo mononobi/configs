@@ -1,13 +1,14 @@
 # PostgreSQL Table Duplication & Data Transfer
 
-SQL patterns for copying table schemas, cloning rows, inserting between tables, and joining updates.
+SQL patterns for copying table schemas, cloning rows, inserting between tables, and
+joining updates.
 
 ---
 
 ## 1. Clone Table with Data and Structure
 
 ```sql
-CREATE TABLE new_table AS 
+CREATE TABLE new_table AS
 TABLE existing_table;
 ```
 
@@ -16,8 +17,8 @@ TABLE existing_table;
 ## 2. Clone Table Structure Only (Empty Table)
 
 ```sql
-CREATE TABLE new_table AS 
-TABLE existing_table 
+CREATE TABLE new_table AS
+TABLE existing_table
 WITH NO DATA;
 ```
 
@@ -26,9 +27,9 @@ WITH NO DATA;
 ## 3. Clone Table Structure with Filtered Data
 
 ```sql
-CREATE TABLE new_table AS 
-SELECT * 
-FROM existing_table 
+CREATE TABLE new_table AS
+SELECT *
+FROM existing_table
 WHERE condition;
 ```
 

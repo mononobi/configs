@@ -12,4 +12,6 @@ Apply a custom system-wide interface font across Windows.
 4. Log out and log back in or restart your computer.
 
 ### Restoring Default Fonts
-To restore the default Windows system font (Segoe UI), double-click and execute `restore.default.windows.font.reg`.
+
+To restore the default Windows system font (Segoe UI), double-click and execute
+`restore.default.windows.font.reg`.

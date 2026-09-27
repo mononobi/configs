@@ -1,6 +1,7 @@
 # Windows Time Service (`w32time`) Synchronization & Triggers
 
-Commands for repairing, re-registering, and forcing synchronization of the Windows Time service (`w32time`) via elevated Command Prompt (`cmd.exe`).
+Commands for repairing, re-registering, and forcing synchronization of the Windows Time
+service (`w32time`) via elevated Command Prompt (`cmd.exe`).
 
 ---
 
@@ -21,7 +22,8 @@ w32tm /resync
 
 ## Network State Triggers
 
-Configure the time service to automatically start when connected to a network and stop on network disconnect:
+Configure the time service to automatically start when connected to a network and stop on
+network disconnect:
 
 ```cmd
 :: Add network state triggers

@@ -1,6 +1,7 @@
 # Microsoft SQL Server Post-Installation Configuration
 
-Enable TCP/IP networking protocols and restart services following a fresh SQL Server installation.
+Enable TCP/IP networking protocols and restart services following a fresh SQL Server
+installation.
 
 ---
 

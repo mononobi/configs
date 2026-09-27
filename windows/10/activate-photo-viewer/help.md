@@ -6,5 +6,7 @@ Registry scripts to restore the classic Windows Photo Viewer application in Wind
 
 ## Instructions
 
-- **To Activate**: Double-click and execute `activate.photo.viewer.win.10.reg`, then confirm the registry import prompt.
-- **To Deactivate**: Double-click and execute `deactivate.photo.viewer.win.10.reg` to revert registry associations.
+- **To Activate**: Double-click and execute `activate.photo.viewer.win.10.reg`, then
+  confirm the registry import prompt.
+- **To Deactivate**: Double-click and execute `deactivate.photo.viewer.win.10.reg` to
+  revert registry associations.

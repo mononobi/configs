@@ -1,6 +1,7 @@
 # Windows Service Management CLI Commands
 
-Command-line utilities for managing, starting, stopping, and triggering Windows background services via elevated Command Prompt (`cmd.exe`).
+Command-line utilities for managing, starting, stopping, and triggering Windows background
+services via elevated Command Prompt (`cmd.exe`).
 
 ---
 
