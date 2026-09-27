@@ -1,6 +1,7 @@
 # OBS Studio
 
-OBS (Open Broadcaster Software) is a powerful, open-source tool for screen recording and live streaming.
+OBS (Open Broadcaster Software) is a powerful, open-source tool for screen recording and
+live streaming.
 
 ## Installation
 
@@ -17,7 +18,8 @@ sudo apt install obs-studio
 ### Optional Dependencies
 
 **Multiverse Repository**  
-Enable the multiverse repository to access proprietary media codecs and hardware encoders (e.g., NVENC).
+Enable the multiverse repository to access proprietary media codecs and hardware encoders
+(e.g., NVENC).
 
 > Note: Most desktop Ubuntu versions have this enabled by default.
 
@@ -37,7 +39,8 @@ sudo apt install ffmpeg
 **Virtual Camera Support**  
 Install this package if you specifically need the "Start Virtual Camera" feature.
 
-> **WARNING**: `v4l2loopback-dkms` is known to occasionally cause kernel panics! Only install this if you specifically need the "Start Virtual Camera" feature.
+> **WARNING**: `v4l2loopback-dkms` is known to occasionally cause kernel panics! Only
+> install this if you specifically need the "Start Virtual Camera" feature.
 
 ```bash
 sudo apt install v4l2loopback-dkms
@@ -45,9 +48,11 @@ sudo apt install v4l2loopback-dkms
 
 ## Troubleshooting
 
-OBS requires OpenGL 3.3 or higher (GPU Hardware Acceleration). OpenGL 3.3 is from 2010, so virtually all modern computers natively have it!
+OBS requires OpenGL 3.3 or higher (GPU Hardware Acceleration). OpenGL 3.3 is from 2010, so
+virtually all modern computers natively have it!
 
 > Note: You cannot `apt install opengl`. It is provided by your GPU drivers.
+>
 > - **NVIDIA**: Install proprietary drivers (e.g., `sudo ubuntu-drivers autoinstall`)
 > - **Virtual Machines**: Enable "3D Acceleration" in your VM display settings.
 

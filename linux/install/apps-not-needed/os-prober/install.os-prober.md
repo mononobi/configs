@@ -1,6 +1,7 @@
 # Fixing Dual-Boot OS Detection
 
-When you have a dual-boot system, it might occasionally happen that after installing certain Linux distributions, the other operating system does not appear in the boot menu. 
+When you have a dual-boot system, it might occasionally happen that after installing
+certain Linux distributions, the other operating system does not appear in the boot menu.
 
 To resolve this issue, execute the following commands:
 
@@ -13,7 +14,7 @@ sudo update-grub
 
 ## Alternate Method
 
-*(Note: This method may not always work)*
+_(Note: This method may not always work)_
 
 ```bash
 sudo apt update

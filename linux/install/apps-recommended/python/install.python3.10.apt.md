@@ -1,6 +1,7 @@
 # Python 3.10 Installation Guide (APT)
 
-Run the following commands to install Python 3.10 and its associated tools via APT using the Deadsnakes PPA:
+Run the following commands to install Python 3.10 and its associated tools via APT using
+the Deadsnakes PPA:
 
 ```bash
 sudo apt update

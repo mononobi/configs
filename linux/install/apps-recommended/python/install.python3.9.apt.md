@@ -1,6 +1,7 @@
 # Python 3.9 Installation Guide (APT)
 
-This guide provides the steps to install Python 3.9 and its related tools using the `apt` package manager via the `deadsnakes` PPA.
+This guide provides the steps to install Python 3.9 and its related tools using the `apt`
+package manager via the `deadsnakes` PPA.
 
 ## Installation Steps
 

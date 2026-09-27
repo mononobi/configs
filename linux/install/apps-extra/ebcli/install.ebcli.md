@@ -1,6 +1,7 @@
 # AWS Elastic Beanstalk CLI (EB CLI)
 
-Download the code from: [aws/aws-elastic-beanstalk-cli-setup](https://github.com/aws/aws-elastic-beanstalk-cli-setup)
+Download the code from:
+[aws/aws-elastic-beanstalk-cli-setup](https://github.com/aws/aws-elastic-beanstalk-cli-setup)
 
 ## Install Dependencies
 

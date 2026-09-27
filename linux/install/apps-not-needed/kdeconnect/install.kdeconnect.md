@@ -1,6 +1,7 @@
 # KDE Connect Installation
 
-> **Note:** If you're using GNOME Shell, it is recommended to install the `gsconnect` GNOME extension instead.
+> **Note:** If you're using GNOME Shell, it is recommended to install the `gsconnect`
+> GNOME extension instead.
 
 ## Installation
 
@@ -12,7 +13,8 @@ sudo apt install kdeconnect
 
 ## Startup Configuration
 
-To run the KDE Connect indicator on startup, add a new entry in the `Startup Applications` app and set the command to:
+To run the KDE Connect indicator on startup, add a new entry in the `Startup Applications`
+app and set the command to:
 
 ```bash
 /usr/bin/kdeconnect-indicator

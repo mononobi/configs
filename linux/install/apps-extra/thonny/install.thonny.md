@@ -10,7 +10,8 @@ flatpak install org.thonny.Thonny
 
 ## Install using APT (Not Recommended)
 
-> **Warning:** This method is not recommended as the APT repository typically contains an older version.
+> **Warning:** This method is not recommended as the APT repository typically contains an
+> older version.
 
 ```bash
 sudo apt install thonny

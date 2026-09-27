@@ -1,7 +1,8 @@
 # Desktop Icons NG (DING)
 
 [Desktop Icons NG (DING)](https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/)  
-**UUID:** `ding@rastersoft.com`
+**UUID:**
+`ding@rastersoft.com`
 
 ## Configured settings:
 

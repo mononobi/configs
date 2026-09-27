@@ -1,6 +1,7 @@
 # Install GNOME Tweaks
 
-This guide provides the commands to install the GNOME Tweaks tool on various versions of Ubuntu.
+This guide provides the commands to install the GNOME Tweaks tool on various versions of
+Ubuntu.
 
 ## On Ubuntu 20.04 and Lower
 

@@ -1,6 +1,7 @@
 # Install CA Certificates
 
-This guide provides the necessary command to install the `ca-certificates` package on Debian/Ubuntu-based systems.
+This guide provides the necessary command to install the `ca-certificates` package on
+Debian/Ubuntu-based systems.
 
 ## Installation
 

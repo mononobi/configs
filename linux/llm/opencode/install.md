@@ -1,11 +1,10 @@
 # OpenCode
 
-OpenCode is an open source AI coding agent that can connect to various AI models, specifically
-cloud-based models.
+OpenCode is an open source AI coding agent that can connect to various AI models,
+specifically cloud-based models.
 
-> **Important:**
-> OpenCode does not work very well with local models. It is great for cloud-based models, though.
-> For local models use the `Aider` tool.
+> **Important:** OpenCode does not work very well with local models. It is great for
+> cloud-based models, though. For local models use the `Aider` tool.
 
 ## Installation
 
@@ -26,17 +25,18 @@ cp opencode.json ~/.config/opencode/
 
 - In the chat prompt, type the command: `/connect`
 - Use the arrow keys to scroll down the list of providers and select GitHub Copilot.
-- OpenCode will generate a device code and provide a URL (usually github.com/login/device).
+- OpenCode will generate a device code and provide a URL (usually
+  github.com/login/device).
 - Open that link in your Firefox or Chrome browser, paste the code, and click Authorize.
 - Back in the OpenCode TUI, type: `/models`
-- You will now see models prefixed with `github-copilot/`
-  (for example, `github-copilot/claude-3.5-sonnet` or `github-copilot/gpt-4o`).
+- You will now see models prefixed with `github-copilot/` (for example,
+  `github-copilot/claude-3.5-sonnet` or `github-copilot/gpt-4o`).
 - Select the one you want to use for your current session.
 
 ### Set a GitHub Copilot model as the default model
 
-Edit the `opencode.json` file and set the `model` key to the exact ID of your
-preferred Copilot model:
+Edit the `opencode.json` file and set the `model` key to the exact ID of your preferred
+Copilot model:
 
 ```json
 {

@@ -1,6 +1,7 @@
 # Install G++
 
-This document provides the command to install the GNU C++ compiler (`g++`) on Debian-based systems.
+This document provides the command to install the GNU C++ compiler (`g++`) on Debian-based
+systems.
 
 ## Installation
 

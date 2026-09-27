@@ -1,9 +1,10 @@
 # NetSpeed Extension Installation (GNOME <= 42)
 
-> **NOTE:**
-> Newer GNOME versions have a system extension that does exactly the same thing. It is called **'System Monitor'** in the extensions list.
+> **NOTE:** Newer GNOME versions have a system extension that does exactly the same thing.
+> It is called **'System Monitor'** in the extensions list.
 
-Go to the [NetSpeed Extension Page](https://extensions.gnome.org/extension/104/netspeed/) and toggle the install icon.
+Go to the [NetSpeed Extension Page](https://extensions.gnome.org/extension/104/netspeed/)
+and toggle the install icon.
 
 ## Recommended Settings:
 

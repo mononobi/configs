@@ -18,7 +18,8 @@ sudo apt-get install transmission-gtk transmission-common
 
 ## Latest Client with Remote and CLI Access (Ubuntu <= 20.10)
 
-To install the latest client along with remote and command-line access tools on Ubuntu 20.10 or older:
+To install the latest client along with remote and command-line access tools on Ubuntu
+20.10 or older:
 
 ```bash
 sudo add-apt-repository ppa:transmissionbt/ppa

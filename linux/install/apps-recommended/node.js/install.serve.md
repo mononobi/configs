@@ -1,6 +1,7 @@
 # Serve
 
-> **Note:** `serve` is a simple HTTP server which allows you to run your pre-built JavaScript app (React, Angular, etc.) in production mode for testing.
+> **Note:** `serve` is a simple HTTP server which allows you to run your pre-built
+> JavaScript app (React, Angular, etc.) in production mode for testing.
 
 ## Prerequisites: Build Your App
 
@@ -20,7 +21,8 @@ yarn build
 
 ## Running the App with Serve
 
-Now, execute this command to install and run `serve` as a temporary package without installing it permanently:
+Now, execute this command to install and run `serve` as a temporary package without
+installing it permanently:
 
 ```bash
 npx serve -s BUILD_FOLDER_NAME
@@ -28,7 +30,8 @@ npx serve -s BUILD_FOLDER_NAME
 
 Now the app is running on the port which `serve` will provide (probably `3000`).
 
-> **Note:** `BUILD_FOLDER_NAME` will probably be `dist` or `build`, depending on which tool you used to build the app.
+> **Note:** `BUILD_FOLDER_NAME` will probably be `dist` or `build`, depending on which
+> tool you used to build the app.
 
 ## Alternative: Global Installation (Not Recommended)
 

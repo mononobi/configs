@@ -43,10 +43,12 @@ rustup self uninstall
 ## Directory Paths
 
 The Rust toolchain and package manager installation paths are located at:
+
 - `~/.rustup`
 - `~/.cargo`
 
-For more information, please visit the [official Rust installation page](https://www.rust-lang.org/tools/install).
+For more information, please visit the
+[official Rust installation page](https://www.rust-lang.org/tools/install).
 
 ## Useful Subcommands
 

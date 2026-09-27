@@ -1,6 +1,6 @@
 # Nvtop Installation
 
-`nvtop` is a tool to monitor GPU usage and statistics from the GPU driver. 
+`nvtop` is a tool to monitor GPU usage and statistics from the GPU driver.
 
 To install it, run the following command:
 

@@ -4,7 +4,8 @@ This guide explains how to install the Graphite GTK Theme.
 
 ## Prerequisites
 
-First, ensure you install the dependencies outlined in the `install.gtk.dependencies.txt` file.
+First, ensure you install the dependencies outlined in the `install.gtk.dependencies.txt`
+file.
 
 ## Installation Steps
 

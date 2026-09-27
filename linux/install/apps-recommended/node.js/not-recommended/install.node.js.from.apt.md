@@ -1,7 +1,6 @@
 # Install Node.js from APT
 
-> **Warning**
-> This installation method is not recommended.
+> **Warning** This installation method is not recommended.
 
 ## Installation Commands
 

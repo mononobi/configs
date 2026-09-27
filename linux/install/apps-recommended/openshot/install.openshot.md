@@ -4,7 +4,8 @@ OpenShot is a video editing and mixing tool.
 
 ## Installation
 
-Run the following commands to add the official PPA, update your package list, and install OpenShot:
+Run the following commands to add the official PPA, update your package list, and install
+OpenShot:
 
 ```bash
 sudo add-apt-repository ppa:openshot.developers/ppa

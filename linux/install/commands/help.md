@@ -1,6 +1,7 @@
 # Custom Commands Setup
 
-The `bin` folder contains some shortcut commands which can be copied into the `.local` directory in your user's home directory.
+The `bin` folder contains some shortcut commands which can be copied into the `.local`
+directory in your user's home directory.
 
 ## Installation
 

@@ -12,7 +12,9 @@ sudo apt-get install libncurses5
 
 ## Installation
 
-Go to the [PassMark Linux Download Page](https://www.passmark.com/products/pt_linux/index.php) and download the Linux version.
+Go to the
+[PassMark Linux Download Page](https://www.passmark.com/products/pt_linux/index.php) and
+download the Linux version.
 
 Execute this command to make the downloaded file executable:
 

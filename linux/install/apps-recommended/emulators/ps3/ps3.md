@@ -12,10 +12,13 @@ flatpak install flathub net.rpcs3.RPCS3
 
 ## Firmware Setup
 
-> **Note:** You must download the official PS3 firmware from Sony and install it within the application.
+> **Note:** You must download the official PS3 firmware from Sony and install it within
+> the application.
 
-1. Download the firmware from the [official PlayStation support page](https://www.playstation.com/en-us/support/hardware/ps3/system-software/).
-2. After the application installation is complete, install the downloaded firmware by navigating to **File -> Install Firmware** in the application menu.
+1. Download the firmware from the
+   [official PlayStation support page](https://www.playstation.com/en-us/support/hardware/ps3/system-software/).
+2. After the application installation is complete, install the downloaded firmware by
+   navigating to **File -> Install Firmware** in the application menu.
 
 ## Game Directory Structure
 
@@ -30,6 +33,7 @@ Game Title/
 ```
 
 **Example:**
+
 ```
 WRC 5/
 └── BLES02242/
@@ -46,4 +50,5 @@ WRC 5/
 
 ## Adding Games to the Emulator
 
-When adding games to the emulator application, you must select the **Game Title** folder (the parent directory containing the Region ID folder).
+When adding games to the emulator application, you must select the **Game Title** folder
+(the parent directory containing the Region ID folder).

@@ -22,7 +22,8 @@ Extract the AppImage to get the icon and `.desktop` files from it:
 ./FILE.AppImage --appimage-extract
 ```
 
-This will create a folder named `squashfs-root`. Navigate to this folder and open the `.desktop` file. 
+This will create a folder named `squashfs-root`. Navigate to this folder and open the
+`.desktop` file.
 
 Edit these lines in the file to point to the AppImage and the icon:
 
@@ -43,7 +44,8 @@ Locate the app icon inside the `squashfs-root` directory and execute this:
 sudo cp ICON_NAME.png /usr/share/pixmaps/
 ```
 
-Now press `Alt + F2`, type `r`, and press **Enter** (to restart the GNOME Shell). The app icon will now be visible in the application menu.
+Now press `Alt + F2`, type `r`, and press **Enter** (to restart the GNOME Shell). The app
+icon will now be visible in the application menu.
 
 ## Automated Method
 
@@ -61,4 +63,5 @@ Run the installed package:
 sudo appimagelauncher
 ```
 
-Once it is running, executing any AppImage will prompt you with an option to create a shortcut for it automatically.
+Once it is running, executing any AppImage will prompt you with an option to create a
+shortcut for it automatically.

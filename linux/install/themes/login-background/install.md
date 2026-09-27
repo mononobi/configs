@@ -1,6 +1,7 @@
 # Change Login Background (Legacy Method)
 
-> **Warning:** This method no longer works on Ubuntu 22.04 and later. Use the guide in the `install.gdm.settings.txt` file for current Ubuntu versions.
+> **Warning:** This method no longer works on Ubuntu 22.04 and later. Use the guide in the
+> `install.gdm.settings.txt` file for current Ubuntu versions.
 
 ## Installation and Usage
 
@@ -16,7 +17,8 @@ Then, execute the script to change the login background:
 sudo ./ubuntu-gdm-set-background --image /PATH/TO/IMAGE.jpg
 ```
 
-Now, press `Ctrl + Alt + F1` to view the login page. If the changes do not take effect immediately, reboot your system.
+Now, press `Ctrl + Alt + F1` to view the login page. If the changes do not take effect
+immediately, reboot your system.
 
 > **Note:** There are two sample images in the `images` folder that you can use.
 

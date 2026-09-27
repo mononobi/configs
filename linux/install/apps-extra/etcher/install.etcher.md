@@ -2,8 +2,7 @@
 
 Etcher is a bootable USB creator application.
 
-> [!WARNING]
-> You may need a VPN to install this software in some countries.
+> [!WARNING] You may need a VPN to install this software in some countries.
 
 To install Balena Etcher, run the following commands:
 

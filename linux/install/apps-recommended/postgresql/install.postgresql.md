@@ -21,7 +21,8 @@ Change `VERSION` to the version you want to install (e.g., `17`):
 sudo apt -y install postgresql-VERSION
 ```
 
-After the installation has finished, you can copy the provided `db.conf` file into the PostgreSQL `conf.d` folder to modify the required configs:
+After the installation has finished, you can copy the provided `db.conf` file into the
+PostgreSQL `conf.d` folder to modify the required configs:
 
 ```bash
 sudo cp db.conf /etc/postgresql/VERSION/main/conf.d
@@ -29,9 +30,11 @@ sudo cp db.conf /etc/postgresql/VERSION/main/conf.d
 
 ## Setup Independent Database User Login (Not Recommended)
 
-> **Warning:** This will prevent any non-interactive access to the database (such as cronjobs, replication, etc.).
+> **Warning:** This will prevent any non-interactive access to the database (such as
+> cronjobs, replication, etc.).
 
-If you want to login as any user in the database without having the relevant user in your Linux system, open the `pg_hba.conf` file:
+If you want to login as any user in the database without having the relevant user in your
+Linux system, open the `pg_hba.conf` file:
 
 ```bash
 sudo nano /etc/postgresql/VERSION/main/pg_hba.conf
@@ -61,7 +64,8 @@ With this line:
 local   all             all                                     md5
 ```
 
-Save the file. Now you can login to any database user without the need to switch to the relevant user in the terminal:
+Save the file. Now you can login to any database user without the need to switch to the
+relevant user in the terminal:
 
 ```bash
 psql -U DB_USERNAME
@@ -95,7 +99,9 @@ sudo ss -tunelp | grep 5432
 sudo systemctl status postgresql
 ```
 
-If you didn't change the `pg_hba.conf` file, you can connect to PostgreSQL using the terminal this way. Note that you should have a relevant user with the same username as the database user on your Linux system:
+If you didn't change the `pg_hba.conf` file, you can connect to PostgreSQL using the
+terminal this way. Note that you should have a relevant user with the same username as the
+database user on your Linux system:
 
 ```bash
 sudo su DB_USERNAME

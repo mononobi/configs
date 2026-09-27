@@ -1,5 +1,4 @@
-> NOTE: 
-> You must first install Node and NPM
+> NOTE: You must first install Node and NPM
 
 ```bash
 keyring='/usr/share/keyrings'

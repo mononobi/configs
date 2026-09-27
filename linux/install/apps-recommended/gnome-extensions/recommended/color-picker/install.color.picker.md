@@ -1,6 +1,7 @@
 # Install Color Picker GNOME Extension
 
-This extension allows you to pick a color from anywhere on your screen and outputs it in various color formats.
+This extension allows you to pick a color from anywhere on your screen and outputs it in
+various color formats.
 
 ## Installation Link
 

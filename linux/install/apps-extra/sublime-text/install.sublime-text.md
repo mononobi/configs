@@ -1,6 +1,7 @@
 # Install Sublime Text
 
-To install Sublime Text on your system, run the following commands sequentially in your terminal:
+To install Sublime Text on your system, run the following commands sequentially in your
+terminal:
 
 ```bash
 wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -

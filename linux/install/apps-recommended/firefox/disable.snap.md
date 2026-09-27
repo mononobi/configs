@@ -1,8 +1,9 @@
 # Diable Snap Installation for Firefox
 
 ## 1. Block the Ubuntu Firefox transition package
-This assigns a negative priority specifically to Firefox packages originating from Ubuntu's 
-repositories, completely preventing the Snap trigger:
+
+This assigns a negative priority specifically to Firefox packages originating from
+Ubuntu's repositories, completely preventing the Snap trigger:
 
 ```bash
 sudo tee /etc/apt/preferences.d/firefox-no-snap.pref <<EOF
@@ -13,7 +14,8 @@ EOF
 ```
 
 ## 2. Ensure the Mozilla repository is prioritized
-If you haven't already, confirm your Mozilla preference file is set correctly to 
+
+If you haven't already, confirm your Mozilla preference file is set correctly to
 prioritize their official packages:
 
 ```bash

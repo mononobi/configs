@@ -10,7 +10,8 @@ flatpak install flathub com.getpostman.Postman
 
 ### Troubleshooting Certificate Errors
 
-If Postman crashes when clicking on its icon and does not open at all, run this to see the error:
+If Postman crashes when clicking on its icon and does not open at all, run this to see the
+error:
 
 ```bash
 flatpak run com.getpostman.Postman
@@ -27,7 +28,8 @@ Now the app should start without any issues.
 
 ## Snap Installation (Not Recommended)
 
-> **Warning:** You can also install using Snap, but it's not recommended at all as it has terrible performance.
+> **Warning:** You can also install using Snap, but it's not recommended at all as it has
+> terrible performance.
 
 ```bash
 snap install postman --classic --channel=v9/stable

@@ -1,6 +1,7 @@
 # tmux Installation and Usage Guide
 
-`tmux` is a tool that lets you run a command in the background and attach to it later for monitoring.
+`tmux` is a tool that lets you run a command in the background and attach to it later for
+monitoring.
 
 ## Installation
 

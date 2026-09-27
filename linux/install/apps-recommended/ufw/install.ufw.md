@@ -1,6 +1,7 @@
 # Install UFW (Uncomplicated Firewall)
 
-To install UFW and set the default policy to allow outgoing traffic, run the following commands:
+To install UFW and set the default policy to allow outgoing traffic, run the following
+commands:
 
 ```bash
 sudo apt-get install ufw

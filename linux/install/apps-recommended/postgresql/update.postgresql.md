@@ -19,6 +19,6 @@ sudo apt -y install postgresql-VERSION
 
 ## Additional Resources
 
-> **Note**
-> To update and/or remove the old cluster (if required, with caution), visit this page:
+> **Note** To update and/or remove the old cluster (if required, with caution), visit this
+> page:
 > [Upgrading PostgreSQL Version on Ubuntu Server](https://gorails.com/guides/upgrading-postgresql-version-on-ubuntu-server)

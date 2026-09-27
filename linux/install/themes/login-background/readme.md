@@ -2,19 +2,20 @@
 
 Download the script with below command (it is already downloaded)
 
-
-````
+```
 wget -qO - https://github.com/PRATAP-KUMAR/ubuntu-gdm-set-background/archive/main.tar.gz | tar zx --strip-components=1 ubuntu-gdm-set-background-main/ubuntu-gdm-set-background
-````
+```
 
 there are four options
+
 1. background with image
 2. background with color
 3. background with gradient horizontal ( requires two valid hex color inputs)
 4. background with gradient vertical ( requires two valid hex color inputs)
 
-tip: be ready with valid hex color code in place of below example like #aAbBcC or #dDeEfF. Change them to your preferred hex color codes.
-you may choose colors from https://www.color-hex.com/
+tip: be ready with valid hex color code in place of below example like #aAbBcC or #dDeEfF.
+Change them to your preferred hex color codes. you may choose colors from
+https://www.color-hex.com/
 
 Example Commands:
 
@@ -32,10 +33,10 @@ RESCUE_MODE, Example Commands:
 3. `sudo ./ubuntu-gdm-set-background --gradient horizontal \#aAbBcC \#dDeEfF rescue`
 4. `sudo ./ubuntu-gdm-set-background --gradient vertical \#aAbBcC \#dDeEfF rescue`
 
-Why RESCUE_MODE?
-It is when you try to change the background with some other scripts and then interacted with this script,
-there will be some conflicts. In case you ran other scripts to change the background and then tried this script,
-found conflicts? then add 'rescue' to the end of the command as mentioned above.
+Why RESCUE_MODE? It is when you try to change the background with some other scripts and
+then interacted with this script, there will be some conflicts. In case you ran other
+scripts to change the background and then tried this script, found conflicts? then add
+'rescue' to the end of the command as mentioned above.
 
 Please note that for 'RESCUE_MODE' active internet connection is necessary
 

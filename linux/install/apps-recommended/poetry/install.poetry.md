@@ -1,10 +1,12 @@
 # Poetry Installation Guide
 
-Poetry is a Python package and dependency manager. It serves as an alternative to tools like Pipenv.
+Poetry is a Python package and dependency manager. It serves as an alternative to tools
+like Pipenv.
 
 ## Prerequisites
 
-> **Important:** You must install the required dependencies first; otherwise, the Poetry installation will fail.
+> **Important:** You must install the required dependencies first; otherwise, the Poetry
+> installation will fail.
 
 ```bash
 sudo apt-get install python3-venv
@@ -48,7 +50,8 @@ curl -sSL https://install.python-poetry.org | python3 - --uninstall
 
 ### Adding Dependencies
 
-To add dependencies via the command line, execute the following command while inside an active virtual environment:
+To add dependencies via the command line, execute the following command while inside an
+active virtual environment:
 
 ```bash
 poetry add DEPENDENCY_NAME

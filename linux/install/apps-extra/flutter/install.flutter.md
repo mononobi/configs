@@ -12,9 +12,11 @@ sudo apt-get install bash curl file git unzip xz-utils zip libglu1-mesa
 
 ## Manual Installation
 
-> **Note:** Installing Flutter using Snap (`sudo snap install flutter --classic`) does not work. Use manual installation instead.
+> **Note:** Installing Flutter using Snap (`sudo snap install flutter --classic`) does not
+> work. Use manual installation instead.
 
-1. **Download a stable release** from the [Flutter SDK Releases page](https://flutter.dev/docs/development/tools/sdk/releases?tab=linux).
+1. **Download a stable release** from the
+   [Flutter SDK Releases page](https://flutter.dev/docs/development/tools/sdk/releases?tab=linux).
 
    For example:
 
@@ -37,7 +39,8 @@ sudo apt-get install bash curl file git unzip xz-utils zip libglu1-mesa
    vi ~/.bashrc
    ```
 
-   Add the following line into the file. Replace `[PATH_OF_FLUTTER_GIT_DIRECTORY]` with the directory path of your SDK.
+   Add the following line into the file. Replace `[PATH_OF_FLUTTER_GIT_DIRECTORY]` with
+   the directory path of your SDK.
 
    ```bash
    export PATH="$PATH:[PATH_OF_FLUTTER_GIT_DIRECTORY]/bin"
@@ -121,7 +124,8 @@ flutter config
   flutter upgrade
   ```
 
-- To only update the dependency packages that your app is using and not Flutter itself, run the following command from the root directory of your project:
+- To only update the dependency packages that your app is using and not Flutter itself,
+  run the following command from the root directory of your project:
 
   ```bash
   flutter pub upgrade

@@ -43,7 +43,7 @@ cp files/antigravity.png ~/.local/share/icons/hicolor/512x512/apps/
 
 ## Important
 
-If the app does not open after closing it, run this to kill the background process and 
+If the app does not open after closing it, run this to kill the background process and
 reopen the app:
 
 ```bash

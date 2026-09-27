@@ -2,7 +2,8 @@
 
 ## Install Using Official Docker APT (Recommended)
 
-This approach will install both `docker` and `docker compose` from the official Docker APT repository, which always provides the latest versions.
+This approach will install both `docker` and `docker compose` from the official Docker APT
+repository, which always provides the latest versions.
 
 ```bash
 sudo apt-get update
@@ -39,7 +40,8 @@ The following steps apply to both installation methods.
 sudo apt-get install gnupg2 pass
 ```
 
-After installation, execute the following command to be able to run Docker commands without root access. Replace `USER_NAME` with your actual username:
+After installation, execute the following command to be able to run Docker commands
+without root access. Replace `USER_NAME` with your actual username:
 
 ```bash
 sudo usermod -aG docker USER_NAME

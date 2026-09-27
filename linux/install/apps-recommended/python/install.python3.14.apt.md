@@ -4,7 +4,8 @@ This guide outlines the steps to install Python 3.14 on Ubuntu using the deadsna
 
 ## Installation Steps
 
-Run the following commands sequentially to set up the PPA and install Python 3.14 along with its associated tools:
+Run the following commands sequentially to set up the PPA and install Python 3.14 along
+with its associated tools:
 
 ```bash
 sudo apt update

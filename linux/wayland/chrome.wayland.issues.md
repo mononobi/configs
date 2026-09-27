@@ -2,35 +2,35 @@
 
 ## The Issue
 
-On Ubuntu with Wayland with AMD Ryzen iGPUs, Google Chrome often displays a solid 
-white screen where the video should be (YouTube, Plex, Netflix, etc.), even though the 
-audio plays correctly. This is caused by a conflict between Chrome's GPU compositing and 
-the AMD Wayland driver.
+On Ubuntu with Wayland with AMD Ryzen iGPUs, Google Chrome often displays a solid white
+screen where the video should be (YouTube, Plex, Netflix, etc.), even though the audio
+plays correctly. This is caused by a conflict between Chrome's GPU compositing and the AMD
+Wayland driver.
 
 ## Important Note Before Continuing
 
 The above issue is almost certainly caused by enabling `Vulkan` flag, so just disable this
-flag and check if the issue is solved. 
-Generally, it is much better not to modify any of the Chrome flags and just use the default setup.
+flag and check if the issue is solved. Generally, it is much better not to modify any of
+the Chrome flags and just use the default setup.
 
 If disabling the `Vulkan` flag did not solve the issue, continue reading.
 
 ## The Solution (GPU Decoding + CPU Compositing)
 
-This guide uses `dpkg-divert` to permanently inject the `--disable-gpu-compositing` flag into 
-all Chrome instances on Ubuntu. This fix survives `apt` updates and applies to all Web Apps 
-(Netflix, YouTube, etc.) and system shortcuts.
+This guide uses `dpkg-divert` to permanently inject the `--disable-gpu-compositing` flag
+into all Chrome instances on Ubuntu. This fix survives `apt` updates and applies to all
+Web Apps (Netflix, YouTube, etc.) and system shortcuts.
 
 ## Prerequisites
 
-* You are using the Google Chrome `.deb` package.
-* You have `sudo` privileges.
+- You are using the Google Chrome `.deb` package.
+- You have `sudo` privileges.
 
 ## Step 1: Divert the Binaries
 
-First, we tell Ubuntu to "divert" the official Google Chrome files. When Chrome 
-updates, `apt` will now automatically install the official scripts to a `.real` filename 
-instead of overwriting the custom ones.
+First, we tell Ubuntu to "divert" the official Google Chrome files. When Chrome updates,
+`apt` will now automatically install the official scripts to a `.real` filename instead of
+overwriting the custom ones.
 
 Run these two commands:
 
@@ -46,8 +46,9 @@ sudo dpkg-divert --add --rename --divert /opt/google/chrome/google-chrome.real /
 
 ## Step 2: Create the Persistent Wrappers
 
-Now we create the custom scripts in the original locations. These scripts call the "real" binaries
-but inject the required flag while preserving any other arguments (like `--app-id`).
+Now we create the custom scripts in the original locations. These scripts call the "real"
+binaries but inject the required flag while preserving any other arguments (like
+`--app-id`).
 
 ### A. Create the `/usr/bin` wrapper
 
@@ -90,12 +91,13 @@ sudo chmod +x /opt/google/chrome/google-chrome
 
 ## How it works
 
-* **`$@` Propagation**: The "`$@`" at the end of the scripts ensures that any arguments passed 
-  by the Web Apps (like `--profile-directory` or `--app-id`) are passed through correctly.
-* **`exec`**: We use `exec` so that the wrapper script replaces itself with the Chrome process,
-  ensuring there's no extra "zombie" shell process hanging around.
-* **Update Proof**: When you run `sudo apt upgrade`, Ubuntu will see the diversion and move 
-  Google's new script to the `.real` path, leaving the custom wrappers untouched.
+- **`$@` Propagation**: The "`$@`" at the end of the scripts ensures that any arguments
+  passed by the Web Apps (like `--profile-directory` or `--app-id`) are passed through
+  correctly.
+- **`exec`**: We use `exec` so that the wrapper script replaces itself with the Chrome
+  process, ensuring there's no extra "zombie" shell process hanging around.
+- **Update Proof**: When you run `sudo apt upgrade`, Ubuntu will see the diversion and
+  move Google's new script to the `.real` path, leaving the custom wrappers untouched.
 
 ## How to Undo (If the bug is fixed in a future update)
 

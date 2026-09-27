@@ -1,36 +1,43 @@
 # Enable and Configure System Extensions
 
-> [!NOTE]
-> All of these might not be available immediately when you install the OS. After installing all other custom extensions and restarting the system, they will show up as system extensions.
+> [!NOTE] All of these might not be available immediately when you install the OS. After
+> installing all other custom extensions and restarting the system, they will show up as
+> system extensions.
 
 ## Ubuntu Dock
 
 ### Position and Size Tab
-*   **Show on all monitors:** On
-*   **Position on screen:** Bottom
-*   **Panel mode: extend to the screen edge:** On
-*   **Fixed icon size: scroll to reveal other icons:** On (dash-max-icon-size: 40)
+
+- **Show on all monitors:** On
+- **Position on screen:** Bottom
+- **Panel mode: extend to the screen edge:** On
+- **Fixed icon size: scroll to reveal other icons:** On (dash-max-icon-size: 40)
 
 ### Launchers Tab
-*   **Show open windows' previews:** On
-*   **Show trash can:** Off
-*   **Show volumes and devices:** Off
+
+- **Show open windows' previews:** On
+- **Show trash can:** Off
+- **Show volumes and devices:** Off
 
 ### Behavior Tab
-*   **Click action:** Minimize or show previews
-*   **Click action customization:**
-    *   **Shift + Click:** Launch new instance
-    *   **MiddleClick:** Minimize window
-    *   **Shift + MiddleClick:** Minimize window
+
+- **Click action:** Minimize or show previews
+- **Click action customization:**
+  - **Shift + Click:** Launch new instance
+  - **MiddleClick:** Minimize window
+  - **Shift + MiddleClick:** Minimize window
 
 ### Appearance Tab
-*   **Shrink the dash:** On
-*   **Show overview on startup:** Off
-*   **Customize opacity:** Fixed
-*   **Opacity:** 65%
+
+- **Shrink the dash:** On
+- **Show overview on startup:** Off
+- **Customize opacity:** Fixed
+- **Opacity:** 65%
 
 ## Ubuntu AppIndicators
-*   Enabled via `enable.system.extensions.sh` (`ubuntu-appindicators@ubuntu.com`)
+
+- Enabled via `enable.system.extensions.sh` (`ubuntu-appindicators@ubuntu.com`)
 
 ## Ubuntu Tiling Assistant
-*   Enabled via `enable.system.extensions.sh` (`tiling-assistant@ubuntu.com`)
+
+- Enabled via `enable.system.extensions.sh` (`tiling-assistant@ubuntu.com`)

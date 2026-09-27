@@ -12,7 +12,8 @@ sudo apt install inxi
 
 ## Usage
 
-To view system information, including detailed audio information, execute the following command:
+To view system information, including detailed audio information, execute the following
+command:
 
 ```bash
 inxi -SMA

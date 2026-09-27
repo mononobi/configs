@@ -1,6 +1,8 @@
 # .NET 9 Installation
 
-Use the following commands to install the .NET 9 SDK, ASP.NET Core Runtime, and .NET Runtime, as well as configure developer certificates and install the MAUI Android workload.
+Use the following commands to install the .NET 9 SDK, ASP.NET Core Runtime, and .NET
+Runtime, as well as configure developer certificates and install the MAUI Android
+workload.
 
 ## 1. Install .NET 9 SDK and Runtimes
 

@@ -1,6 +1,7 @@
 # Install Pass
 
-This guide explains how to install `pass`, which is a credential store. It can be utilized for various use cases, such as managing credentials with Docker.
+This guide explains how to install `pass`, which is a credential store. It can be utilized
+for various use cases, such as managing credentials with Docker.
 
 ## Installation
 

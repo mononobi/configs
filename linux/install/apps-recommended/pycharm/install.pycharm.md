@@ -2,7 +2,8 @@
 
 ## Install Using JetBrains Toolbox App (RECOMMENDED)
 
-Go to the [JetBrains Toolbox App](https://www.jetbrains.com/toolbox-app/) page and download the latest Linux version.
+Go to the [JetBrains Toolbox App](https://www.jetbrains.com/toolbox-app/) page and
+download the latest Linux version.
 
 Extract the downloaded file with this command:
 
@@ -25,7 +26,8 @@ To start the application, open a terminal, `cd` into the directory, and type:
 This will initialize various Toolbox application files in the application directory:
 `~/.local/share/JetBrains/Toolbox`
 
-> **Note:** It may show an error at the end, which you can safely ignore. You can close the terminal.
+> **Note:** It may show an error at the end, which you can safely ignore. You can close
+> the terminal.
 
 Now, open the Toolbox App from the Ubuntu application launcher menu.
 
@@ -33,7 +35,8 @@ Now, open the Toolbox App from the Ubuntu application launcher menu.
 
 Install the dependencies found in the `install.fuse.appimage.txt` file.
 
-Go to the [JetBrains Toolbox App](https://www.jetbrains.com/toolbox-app/) page and download the latest Linux version.
+Go to the [JetBrains Toolbox App](https://www.jetbrains.com/toolbox-app/) page and
+download the latest Linux version.
 
 Extract the downloaded file with this command:
 
@@ -47,7 +50,8 @@ Go to the extracted folder and execute this command:
 ./FILE_NAME
 ```
 
-Now the Toolbox App is installed. Open it from the applications menu or taskbar, and install PyCharm from it.
+Now the Toolbox App is installed. Open it from the applications menu or taskbar, and
+install PyCharm from it.
 
 ## Install Using Snap (NOT RECOMMENDED)
 
@@ -104,12 +108,20 @@ sysctl fs.inotify.max_user_watches
 ## No Longer Needed Plugins
 
 - **EnvFile (Borys Pierov):** It is supported by the IDE natively now.
-- **Settings Repository (JetBrains):** Deprecated and does not work anymore. The Settings Sync feature provided by the IDE is now free to use.
+- **Settings Repository (JetBrains):** Deprecated and does not work anymore. The Settings
+  Sync feature provided by the IDE is now free to use.
 
 ## Sync IDE Settings (No Longer Needed)
 
-To be able to synchronize your IDE settings, you can create a GitHub repository (preferably private). Then you should install the **Settings Repository** plugin. From the file menu, select **Manage IDE Settings -> Settings Repository...**. Add the URL of your new repository (use the `https` URL, not `ssh`), and then click on one of these options based on what you want to do:
+To be able to synchronize your IDE settings, you can create a GitHub repository
+(preferably private). Then you should install the **Settings Repository** plugin. From the
+file menu, select **Manage IDE Settings -> Settings Repository...**. Add the URL of your
+new repository (use the `https` URL, not `ssh`), and then click on one of these options
+based on what you want to do:
 
-- **OVERWRITE REMOTE:** If you have just created a settings repository and want to initialize it with your current local settings.
-- **OVERWRITE LOCAL:** If you have installed a new IDE and you want to get all the settings from a remote repository which has already been initialized.
-- **MERGE:** If you want to synchronize your current local settings with remote settings on the repository which has already been initialized.
+- **OVERWRITE REMOTE:** If you have just created a settings repository and want to
+  initialize it with your current local settings.
+- **OVERWRITE LOCAL:** If you have installed a new IDE and you want to get all the
+  settings from a remote repository which has already been initialized.
+- **MERGE:** If you want to synchronize your current local settings with remote settings
+  on the repository which has already been initialized.

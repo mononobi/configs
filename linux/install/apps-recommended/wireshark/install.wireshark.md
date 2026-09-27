@@ -12,7 +12,8 @@ sudo apt-get install wireshark
 
 ## Post-Installation Setup
 
-Execute the following command after installation to be able to inspect the network from the GUI without root access:
+Execute the following command after installation to be able to inspect the network from
+the GUI without root access:
 
 ```bash
 sudo dpkg-reconfigure wireshark-common

@@ -28,7 +28,8 @@ sudo apt-get install pgadmin4
 
 ## 4. Post-Installation
 
-After the installation completes, stop and disable the Apache server, which gets installed alongside pgAdmin 4 by default:
+After the installation completes, stop and disable the Apache server, which gets installed
+alongside pgAdmin 4 by default:
 
 ```bash
 sudo systemctl stop apache2

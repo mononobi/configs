@@ -1,6 +1,7 @@
 # Install Shotcut
 
-Shotcut is a video editor with the ability to increase video quality and perform noise reduction.
+Shotcut is a video editor with the ability to increase video quality and perform noise
+reduction.
 
 Install it using Flatpak with the following command:
 

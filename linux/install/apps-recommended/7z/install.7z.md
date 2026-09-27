@@ -1,6 +1,7 @@
 # Install 7-Zip
 
 > **Warning:** The following line may break your system. Use with caution.
+>
 > ```bash
 > # sudo add-apt-repository universe
 > ```
@@ -25,7 +26,8 @@ sudo apt install p7zip-full p7zip-rar
 
 ## Extracting Archives via Terminal
 
-If the archive manager cannot open an archive, try this command to extract it using the terminal:
+If the archive manager cannot open an archive, try this command to extract it using the
+terminal:
 
 ```bash
 7z e ARCHIVE_FILE_NAME

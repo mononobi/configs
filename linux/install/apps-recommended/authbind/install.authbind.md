@@ -1,6 +1,7 @@
 # Authbind
 
-Authbind allows you to perform commands which will bind to ports below 1024 without root access.
+Authbind allows you to perform commands which will bind to ports below 1024 without root
+access.
 
 ## Installation
 

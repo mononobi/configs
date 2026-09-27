@@ -1,6 +1,7 @@
 # GRUB2 Themes Installation Help
 
-To install the theme, extract the `grub2-themes.zip` file, and then execute the following command inside the extracted theme folder:
+To install the theme, extract the `grub2-themes.zip` file, and then execute the following
+command inside the extracted theme folder:
 
 ```bash
 sudo ./install.sh

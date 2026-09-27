@@ -1,6 +1,7 @@
 # Plex Media Server Nginx Configuration
 
-If you want to put the Plex server behind Nginx to set a custom URL for it, follow these steps:
+If you want to put the Plex server behind Nginx to set a custom URL for it, follow these
+steps:
 
 1. Open the `/etc/hosts` file:
 
@@ -14,7 +15,8 @@ If you want to put the Plex server behind Nginx to set a custom URL for it, foll
    127.0.0.1 localhost plex
    ```
 
-   > **Note:** You can use any name you want instead of `plex`. However, if you change it here, you must also update the name in the `plex.conf` file accordingly.
+   > **Note:** You can use any name you want instead of `plex`. However, if you change it
+   > here, you must also update the name in the `plex.conf` file accordingly.
 
 3. Save the file and exit the editor.
 

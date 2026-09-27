@@ -1,14 +1,19 @@
 # PipeWire
 
-> **Note:** From Ubuntu 24.04, PipeWire is in use by default and there is no need for this.
+> **Note:** From Ubuntu 24.04, PipeWire is in use by default and there is no need for
+> this.
 
-> **WARNING:** INSTALL PIPEWIRE AT YOUR OWN RISK. IT DOES NOT WORK CORRECTLY AFTER A FEW UPDATES. IT WILL ALSO REMOVE YOUR GNOME DESKTOP IF YOU UNINSTALL IT.
+> **WARNING:** INSTALL PIPEWIRE AT YOUR OWN RISK. IT DOES NOT WORK CORRECTLY AFTER A FEW
+> UPDATES. IT WILL ALSO REMOVE YOUR GNOME DESKTOP IF YOU UNINSTALL IT.
 
-PipeWire is an audio server which has better quality than PulseAudio, which is the default on Ubuntu and most other distros.
+PipeWire is an audio server which has better quality than PulseAudio, which is the default
+on Ubuntu and most other distros.
 
-`wireplumber` is the recommended library over `pipewire-media-session`. Note that only one of `wireplumber` or `pipewire-media-session` should be installed.
+`wireplumber` is the recommended library over `pipewire-media-session`. Note that only one
+of `wireplumber` or `pipewire-media-session` should be installed.
 
-To enable PipeWire and disable PulseAudio, execute these commands. Note that you should not execute all commands with `sudo`, only some of them:
+To enable PipeWire and disable PulseAudio, execute these commands. Note that you should
+not execute all commands with `sudo`, only some of them:
 
 ```bash
 sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream
@@ -109,7 +114,8 @@ systemctl --user daemon-reload
 systemctl --user --now enable pulseaudio.service pulseaudio.socket
 ```
 
-If you did execute the above commands and GUI got disappeared, execute the remaining commands from CLI and then execute this:
+If you did execute the above commands and GUI got disappeared, execute the remaining
+commands from CLI and then execute this:
 
 ```bash
 sudo apt-get install --reinstall ubuntu-desktop

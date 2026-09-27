@@ -1,7 +1,8 @@
 # Install pgAdmin 4 (Local Version via APT)
 
-> **Note:** You can install the normal version using the Ubuntu package manager. However, it is recommended to use the `pgadmin4-local` script to run it and prevent further problems.
-> Make sure you have installed PostgreSQL before proceeding.
+> **Note:** You can install the normal version using the Ubuntu package manager. However,
+> it is recommended to use the `pgadmin4-local` script to run it and prevent further
+> problems. Make sure you have installed PostgreSQL before proceeding.
 
 ## Installation Steps
 
@@ -32,7 +33,7 @@
    ```
 
 2. **Set permissions and ownership:**
-   
+
    > **Note:** Replace `YOUR_USER:YOUR_USER` with your actual username and group.
 
    ```bash
@@ -41,15 +42,16 @@
    ```
 
 3. **Configure server mode:**
-   
+
    Change `SERVER_MODE=False` in `/usr/share/pgadmin4/web/config.py`.
 
 4. **Create cache directory:**
-   
+
    Execute the following command:
 
    ```bash
    sudo mkdir /var/cache/pgadmin
    ```
 
-> **Tip:** You can now put `pgadmin-local` into your startup commands to make pgAdmin 4 available on boot.
+> **Tip:** You can now put `pgadmin-local` into your startup commands to make pgAdmin 4
+> available on boot.

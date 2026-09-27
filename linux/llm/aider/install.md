@@ -1,11 +1,12 @@
 # Aider
 
-Aider is an open source AI coding agent that can connect to various AI models, specifically
-local models.
+Aider is an open source AI coding agent that can connect to various AI models,
+specifically local models.
 
 ## Installation
 
-Install `pipx` and ensure its binaries are added to the system path, then install `Aider` itself.
+Install `pipx` and ensure its binaries are added to the system path, then install `Aider`
+itself.
 
 ```bash
 sudo apt update && sudo apt install pipx -y
@@ -18,14 +19,15 @@ pipx install aider-chat
 
 ## Configurations
 
-Copy the `aider.conf.yml` file and then set your default model and modify other values if needed.
+Copy the `aider.conf.yml` file and then set your default model and modify other values if
+needed.
 
 ```bash
 cp aider.conf.yml ~/.aider.conf.yml
 ```
 
-> Note: This file is a global configuration file. If you want to use different configurations
-> for different projects, create separate files in the project directory
+> Note: This file is a global configuration file. If you want to use different
+> configurations for different projects, create separate files in the project directory
 > (It can also be pushed to the Git repo).
 
 ## Running
@@ -57,25 +59,28 @@ When `Aider` is active, type `/` and you will see all the available commands.
 
 - **/add <folder>/**: Adds all supported files within a specific directory.
 
-- **/add *.py**: You can use standard terminal wildcards to add multiple files of a specific type.
+- *_/add *.py*_: You can use standard terminal wildcards to add multiple files of a
+  specific type.
 
 - **/read-only <filename>**: Adds a file as read-only. (e.g., /read-only instructions.md)
 
 - **/read-only <folder>/**: Adds a whole directory as read-only context.
 
-- **/drop <filename>**: Removes a specific file from the active chat memory. (e.g., /drop app.py)
+- **/drop <filename>**: Removes a specific file from the active chat memory. (e.g., /drop
+  app.py)
 
 - **/drop <folder>/**: Removes all previously added files from that specific folder.
 
 - **/reset**: Drops all files (both added and read) and completely wipes the chat history.
 
-- **/undo**: Instantly performs a git reset --hard to roll back your files exactly
-  to how they were before the model's last response.
+- **/undo**: Instantly performs a git reset --hard to roll back your files exactly to how
+  they were before the model's last response.
 
 - **/diff**: If you want to see exactly what lines Aider just changed before you decide to
   undo, type this to see a standard terminal Git diff.
 
- - **/run <command>**: It will run a command, it can apply fixes based on the command output.
+- **/run <command>**: It will run a command, it can apply fixes based on the command
+  output.
 
-> Multiline mode is enabled by default. `Enter` adds a new line. To submit the prompt
-> use `Alt + Enter`.
+> Multiline mode is enabled by default. `Enter` adds a new line. To submit the prompt use
+> `Alt + Enter`.
