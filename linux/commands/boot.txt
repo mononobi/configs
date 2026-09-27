@@ -1,3 +1,0 @@
-# show list of boot entries:
-
-sudo bootctl status

@@ -1,3 +1,0 @@
-grep -R word path                                                   [search file contents in the path recursively for word]
-grep -rnwl '/path/to/somewhere/' -e 'pattern_or_word'               [find file names which contain given pattern or word]
-find path file_name                                                 [search for files with given name in given path]

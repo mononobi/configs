@@ -1,4 +1,0 @@
-stat FILE-OR-DIR-NAME                               [shows given file or directory info]
-du -h FILE-OR-DIR-NAME                              [shows file or directory size]
-df -h                                               [shows mounted partitions info]
-ls DIRECTORY_PATH | wc -l                           [count files inside a directory]

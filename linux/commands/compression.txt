@@ -1,2 +1,0 @@
-tar -czf compressed-name original-file-name      [compress the original file with given name]
-tar -xf compressed-file-name                     [extract the given compressed file]

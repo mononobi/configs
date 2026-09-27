@@ -1,2 +1,0 @@
-# refresh ui shell:
-# press "Alt + F2" and type "r" in the command window and hit enter.
