@@ -1,0 +1,24 @@
+#!/bin/bash
+# format-code.sh
+
+# Resolve the root directory (one levels up from this script)
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+echo "Running Prettier on all Markdown files..."
+
+# We create a temporary directory to install Prettier and its plugins.
+TMP_DIR=$(mktemp -d)
+cd "$TMP_DIR" || exit
+
+npm init -y > /dev/null 2>&1
+npm install prettier @prettier/plugin-xml > /dev/null 2>&1
+
+npx prettier --write --ignore-path "$ROOT_DIR/.prettierignore" --plugin=@prettier/plugin-xml \
+  "$ROOT_DIR/**/*.{md}" \
+  "$ROOT_DIR/README.md"
+
+# Clean up
+rm -rf "$TMP_DIR"
+cd "$ROOT_DIR" || exit
+
+echo "Formatting complete."
