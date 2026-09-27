@@ -15,8 +15,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Antigravity CLI (agy) using Google's official bootstrapper installer
-  and configures dark mode in ~/.gemini/antigravity-cli/settings.json.
+  Installs Antigravity CLI (agy) using Google's official bootstrapper installer.
   The binary is placed in ~/.local/bin/agy and self-updates automatically.
 
 Options:
@@ -67,35 +66,5 @@ fi
 
 # Execute official Google Antigravity CLI bootstrapper installer
 curl -fsSL --compressed https://antigravity.google/cli/install.sh | bash
-
-configure_dark_mode() {
-    local config_dir="${HOME}/.gemini/antigravity-cli"
-    local settings_file="${config_dir}/settings.json"
-
-    mkdir -p "$config_dir"
-
-    python3 -c "
-import json, os, sys
-
-path = sys.argv[1]
-data = {}
-if os.path.exists(path) and os.path.getsize(path) > 0:
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-    except Exception:
-        data = {}
-
-data['colorScheme'] = 'dark'
-
-with open(path, 'w', encoding='utf-8') as f:
-    json.dump(data, f, indent=2)
-    f.write('\n')
-" "$settings_file"
-
-    echo "[+] Configured dark mode in ${settings_file}"
-}
-
-configure_dark_mode
 
 echo "[✓] Antigravity CLI (agy) setup completed successfully!"

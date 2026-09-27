@@ -48,15 +48,6 @@ Settings are stored in:
 ~/.gemini/antigravity-cli/settings.json
 ```
 
-The installer automatically activates **dark mode** (`"colorScheme": "dark"`) upon
-installation while preserving any existing custom settings:
-
-```json
-{
-  "colorScheme": "dark"
-}
-```
-
 ## Documentation & References
 
 - Documentation: [https://antigravity.google/docs](https://antigravity.google/docs)
