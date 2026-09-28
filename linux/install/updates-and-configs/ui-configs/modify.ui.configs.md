@@ -51,7 +51,8 @@ value for screen to lock after going blank (5 is the value in seconds), and enab
 lock after the screen goes blank.
 
 > **Note:** If these commands issue any errors or warnings, try to install
-> `install.dbus.x11.txt` first and then execute these commands.
+> [`install.dbus.x11.md`](/linux/install/apps-not-needed/dbus-x11/install.dbus.x11.md)
+> first and then execute these commands.
 
 ```bash
 gsettings set org.gnome.desktop.session idle-delay 3600

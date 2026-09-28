@@ -33,7 +33,9 @@ Now, open the Toolbox App from the Ubuntu application launcher menu.
 
 ## Install Using JetBrains Toolbox App (OLD VERSIONS)
 
-Install the dependencies found in the `install.fuse.appimage.txt` file.
+Install the dependencies found in the
+[`install.fuse.appimage.md`](/linux/install/apps-recommended/fuse/install.fuse.appimage.md)
+file.
 
 Go to the [JetBrains Toolbox App](https://www.jetbrains.com/toolbox-app/) page and
 download the latest Linux version.

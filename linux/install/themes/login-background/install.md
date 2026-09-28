@@ -1,7 +1,8 @@
 # Change Login Background (Legacy Method)
 
 > **Warning:** This method no longer works on Ubuntu 22.04 and later. Use the guide in the
-> `install.gdm.settings.txt` file for current Ubuntu versions.
+> [`install.gdm.settings.md`](/linux/install/apps-recommended/gdm-settings/install.gdm.settings.md)
+> file for current Ubuntu versions.
 
 ## Installation and Usage
 

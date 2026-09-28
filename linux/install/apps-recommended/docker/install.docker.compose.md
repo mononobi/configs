@@ -2,10 +2,11 @@
 
 ## Best Approach (Recommended)
 
-If you have followed the recommended installation approach from the `install.docker.txt`
-file, Docker Compose has already been installed and is accessible using the
-`docker compose` command. With that approach, you get both Docker and Docker Compose with
-the latest versions and automatic updates through regular system updates.
+If you have followed the recommended installation approach from the
+[`install.docker.md`](/linux/install/apps-recommended/docker/install.docker.md) file,
+Docker Compose has already been installed and is accessible using the `docker compose`
+command. With that approach, you get both Docker and Docker Compose with the latest
+versions and automatic updates through regular system updates.
 
 ## Manual Installation
 
