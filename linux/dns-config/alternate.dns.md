@@ -16,11 +16,12 @@ changes.
 
 ## 1. DNS-over-HTTPS (DoH) — Encrypted
 
-> [!TIP]
-> **Recommended for VPN apps and web browsers.** In regions subject to ISP-level
-> DNS manipulation, spoofing, or censorship, raw unencrypted DNS queries on UDP port 53
-> are frequently poisoned. Use DoH over an active VPN tunnel or within your browser to
-> protect query privacy.
+> [!TIP]  
+>
+> **Recommended for VPN apps and web browsers.** In regions subject to ISP-level DNS
+> manipulation, spoofing, or censorship, raw unencrypted DNS queries on UDP port 53 are
+> frequently poisoned. Use DoH over an active VPN tunnel or within your browser to protect
+> query privacy.
 
 ### Google Public DNS (DoH)
 
@@ -32,7 +33,8 @@ changes.
 
 ## 2. Cisco OpenDNS
 
-> [!NOTE]
+> [!NOTE]  
+>
 > **Recommended as a fallback system DNS resolver.**
 
 - **IPv4**:
@@ -46,7 +48,8 @@ changes.
 
 ## 3. Google Public DNS
 
-> [!NOTE]
+> [!NOTE]  
+>
 > **Recommended for permanent system-wide DNS.**
 
 - **IPv4**:

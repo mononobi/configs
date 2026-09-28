@@ -3,10 +3,11 @@
 If you have configured your account for automatic login and want to prevent being prompted
 for the keyring password every time the system starts, follow the steps below.
 
-> [!WARNING]
-> Disabling the keyring password requirement is a security risk. All stored
-> passwords and credentials will be saved unencrypted and accessible to anyone with
-> physical access to your logged-in session.
+> [!WARNING]  
+>
+> Disabling the keyring password requirement is a security risk. All stored passwords and
+> credentials will be saved unencrypted and accessible to anyone with physical access to
+> your logged-in session.
 
 ## Steps to Disable the Keyring Password
 

@@ -21,9 +21,10 @@ environment:
   - OSRM_BACKEND=http://routing-backend:5000
 ```
 
-> [!IMPORTANT] 
-> If the frontend and backend are hosted on separate domains or ports, ensure
-> CORS headers are properly handled on the backend or via your reverse proxy.
+> [!IMPORTANT]  
+>
+> If the frontend and backend are hosted on separate domains or ports, ensure CORS headers
+> are properly handled on the backend or via your reverse proxy.
 
 ---
 

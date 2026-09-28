@@ -26,10 +26,10 @@ When exporting an OpenVPN client profile generated on Linux to non-Linux operati
 ; dhcp-option DOMAIN-ROUTE .
 ```
 
-> [!NOTE] 
-> On Linux clients, ensure **one** of the above pairs remains uncommented
-> (typically the first pair) so DNS servers pushed by the server are bound to the tunnel
-> interface.
+> [!NOTE]  
+>
+> On Linux clients, ensure **one** of the above pairs remains uncommented (typically the
+> first pair) so DNS servers pushed by the server are bound to the tunnel interface.
 
 ---
 

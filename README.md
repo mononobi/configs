@@ -3,16 +3,16 @@
 A curated collection of production-tested configurations, setup guidelines, and automation
 scripts for Linux environments, development tools, databases, and IDEs.
 
-> [!NOTE] 
-> The entire installation framework, automation scripts, and configurations in
-> this repository are 100% AI-generated. No humans are to blame for any bugs,
-> anti-patterns, or code design—all code was produced and maintained by AI under human
-> supervision.
+> [!NOTE]  
+>
+> The entire installation framework, automation scripts, and configurations in this
+> repository are 100% AI-generated. No humans are to blame for any bugs, anti-patterns, or
+> code design—all code was produced and maintained by AI under human supervision.
 
-> [!IMPORTANT] 
-> `AGENTS.md` is a symbolic link (soft link) pointing directly to
-> `README.md`. It exists solely to provide instructions to AI agents in their expected
-> default location.
+> [!IMPORTANT]  
+>
+> `AGENTS.md` is a symbolic link (soft link) pointing directly to `README.md`. It exists
+> solely to provide instructions to AI agents in their expected default location.
 >
 > - **Never edit `AGENTS.md` directly**: All documentation changes must be made to
 >   `README.md`.
@@ -559,9 +559,22 @@ unstructured text format:
 - **Strictly `.md` Extension**: Never create `.txt` files for documentation, guides, or
   manuals. Always use the `.md` file extension. All legacy `.txt` documentation files in
   the repository have been replaced with `.md` files.
-- **High-Quality Formatting**: Fully utilize GitHub Flavored Markdown (GFM) features,
-  including clear headings, tables, code blocks with syntax highlighting, bullet lists,
-  and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, etc.).
+- **High-Quality Formatting & Alert Callout Syntax**: Fully utilize GitHub Flavored
+  Markdown (GFM) features, including clear headings, tables, code blocks with syntax
+  highlighting, bullet lists, and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`,
+  `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`).
+- **Dedicated Lines for GitHub Alert Callouts**: Alert tags must always be placed on their
+  own separate line at the start of the blockquote, with the title or description text on
+  following lines:
+  <!-- prettier-ignore -->
+  ```markdown
+  > [!TIP]
+  > Title
+  > Description
+  ```
+  Alert tags must **never** be placed on the same line as the text (e.g.,
+  `> [!TIP] Title`), as GitHub Flavored Markdown will fail to render them as callout boxes
+  and will instead display them literally as plain characters.
 - **Line Length Limit**: All Markdown documents must continue to strictly adhere to Rule
   11 (maximum 95 characters per line). Format them with `scripts/format-markdown.sh` (Rule
   14).
@@ -577,6 +590,10 @@ formatted using the `scripts/format-markdown.sh` script:
 - **Line Length & Prettier Enforcement**: The script invokes Prettier across all Markdown
   documents in the project, automatically wrapping prose and formatting content to comply
   with the project's line length limit (Rule 11).
+- **Automatic Alert Callout Preservation**: The formatting script automatically normalizes
+  GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, etc.), ensuring the alert tags stay on
+  their own dedicated lines with Markdown hard line breaks so that Prettier does not
+  collapse them onto the same line as the text.
 - **Execution Command**: Run the script from the repository root:
   ```bash
   ./scripts/format-markdown.sh
@@ -677,7 +694,8 @@ To add a new tool or application:
 
 #### Sourcing `utils.sh` by Directory Depth
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
+>
 > **Mandatory Import for Every Installer**: Every single installer, script, or
 > configuration recipe must source `utils.sh` at the beginning, regardless of whether it
 > currently calls any utility functions. This ensures all shared helpers (`require_app`,
@@ -705,7 +723,8 @@ Ensure the relative path to `utils.sh` matches the script's directory depth from
   SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
   SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
   ```
-  > [!IMPORTANT]
+  > [!IMPORTANT]  
+  >
   > Because `readlink -f` dereferences symlinks to the **canonical target location outside
   > `install/`**, `SCRIPT_DIR` resolves to the physical directory on disk, **not the
   > symlink path** inside `apps-recommended/` or `apps-extra/`.

@@ -4,9 +4,10 @@ Production-ready Plex Media Server deployment running on Docker Compose with bar
 hardware acceleration, RAM-buffered transcoding, local LAN discovery, and 1:1 host media
 path mapping.
 
-> [!NOTE] 
-> Tailored for the **AMD Ryzen 7 7700** processor (RDNA 2 / VCN 3.0 iGPU) with 32
-> GB RAM, leveraging host network mode and native Linux shared memory (`/dev/shm`).
+> [!NOTE]  
+>
+> Tailored for the **AMD Ryzen 7 7700** processor (RDNA 2 / VCN 3.0 iGPU) with 32 GB RAM,
+> leveraging host network mode and native Linux shared memory (`/dev/shm`).
 
 ---
 
@@ -49,21 +50,23 @@ indices to resolve instantly without broken links.
 | `/mnt/movies-7/Movies-7`  | `/mnt/movies-7/Movies-7` | `ro` | Media library 7            |
 | `/mnt/movies-7/TV-Shows`  | `/mnt/movies-7/TV-Shows` | `ro` | TV shows library           |
 
-> [!TIP] 
+> [!TIP]  
+>
 > Both `/dev/shm/plex` and `~/.plex/tmp` match the host filesystem identically. The
 > installer automatically resolves the executing username, UID, and GID at runtime,
 > populating the compose file so that files are owned by your active user.
 
-> [!NOTE] 
-> `shm_size: 16g` is explicitly set in `docker-compose.yml` to remove Docker's
-> default 64 MB container shared memory limit, giving Plex access to the full 16 GB host
-> RAM pool.
+> [!NOTE]  
+>
+> `shm_size: 16g` is explicitly set in `docker-compose.yml` to remove Docker's default 64
+> MB container shared memory limit, giving Plex access to the full 16 GB host RAM pool.
 
-> [!NOTE] 
-> **When Does Plex Need Write (`rw`) Access to Media Folders?** Media drives are
-> mounted read-only (`:ro`) by default as a safety precaution. Plex stores all metadata,
-> posters, databases, and on-demand subtitle downloads in `/config`. Plex only requires
-> write (`rw`) access if you explicitly utilize:
+> [!NOTE]  
+>
+> **When Does Plex Need Write (`rw`) Access to Media Folders?** Media drives are mounted
+> read-only (`:ro`) by default as a safety precaution. Plex stores all metadata, posters,
+> databases, and on-demand subtitle downloads in `/config`. Plex only requires write
+> (`rw`) access if you explicitly utilize:
 >
 > 1. **Allow media deletion**: Allowing users/clients to delete movies from the UI.
 > 2. **Media Optimization**: Saving optimized copies "In folder with original items".
@@ -122,10 +125,10 @@ Navigate to **Settings → Transcoder** in the Plex Web interface:
 3. **Hardware encoding**: Enable **"Use hardware-accelerated video encoding"**.
 4. **Hardware transcoding device**: Select **AMD Radeon Graphics (VCN)** (or `Auto`).
 
-> [!IMPORTANT] 
-> Hardware transcoding requires an active **Plex Pass** subscription. Without
-> Plex Pass, the Ryzen 7 7700 will transcode via high-performance multi-threaded software
-> decoding.
+> [!IMPORTANT]  
+>
+> Hardware transcoding requires an active **Plex Pass** subscription. Without Plex Pass,
+> the Ryzen 7 7700 will transcode via high-performance multi-threaded software decoding.
 
 ---
 

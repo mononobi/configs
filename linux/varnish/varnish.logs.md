@@ -29,6 +29,7 @@ Filter logs by HTTP response code (e.g., investigating `503 Service Unavailable`
 varnishlog -q 'RespStatus == 503' -g request
 ```
 
-> [!NOTE] 
-> All `varnishlog` queries stream real-time output from shared memory. Press
-> `Ctrl + C` to exit.
+> [!NOTE]  
+>
+> All `varnishlog` queries stream real-time output from shared memory. Press `Ctrl + C` to
+> exit.

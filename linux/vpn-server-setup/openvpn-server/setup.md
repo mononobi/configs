@@ -147,9 +147,10 @@ mkdir -p ~/client-configs/keys
 chmod -R 700 ~/client-configs
 ```
 
-> [!NOTE] 
-> Repeat the following key generation block for each client (replacing `client1`
-> with your desired client identifier):
+> [!NOTE]  
+>
+> Repeat the following key generation block for each client (replacing `client1` with your
+> desired client identifier):
 
 ```bash
 cd ~/easy-rsa
