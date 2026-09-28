@@ -563,18 +563,23 @@ unstructured text format:
   Markdown (GFM) features, including clear headings, tables, code blocks with syntax
   highlighting, bullet lists, and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`,
   `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`).
-- **Dedicated Lines for GitHub Alert Callouts**: Alert tags must always be placed on their
-  own separate line at the start of the blockquote, with the title or description text on
-  following lines:
+- **Dedicated Lines & Hard Line Breaks for Alert Callouts**: Alert tags must always be
+  placed on their own separate line at the start of the blockquote and must end with a
+  **hard line break** (two trailing spaces `  `), followed by the title or description
+  text on the next line:
   <!-- prettier-ignore -->
   ```markdown
-  > [!TIP]
+  > [!TIP]  
   > Title
   > Description
   ```
-  Alert tags must **never** be placed on the same line as the text (e.g.,
-  `> [!TIP] Title`), as GitHub Flavored Markdown will fail to render them as callout boxes
-  and will instead display them literally as plain characters.
+  - **No Inline Tags**: Alert tags must **never** share a line with the content text
+    (e.g., `> [!TIP] Title`), as GitHub Flavored Markdown will fail to render them as
+    callout boxes and will instead display them literally as plain characters.
+  - **Why Two Trailing Spaces (Hard Line Break)**: In CommonMark and GFM, two trailing
+    spaces at the end of a line define a hard line break (`<br>`). This prevents Prettier
+    and other Markdown formatters from collapsing the alert tag and content onto the same
+    line during prose wrapping.
 - **Line Length Limit**: All Markdown documents must continue to strictly adhere to Rule
   11 (maximum 95 characters per line). Format them with `scripts/format-markdown.sh` (Rule
   14).
@@ -592,8 +597,8 @@ formatted using the `scripts/format-markdown.sh` script:
   with the project's line length limit (Rule 11).
 - **Automatic Alert Callout Preservation**: The formatting script automatically normalizes
   GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, etc.), ensuring the alert tags stay on
-  their own dedicated lines with Markdown hard line breaks so that Prettier does not
-  collapse them onto the same line as the text.
+  their own dedicated lines with Markdown hard line breaks (two trailing spaces) so that
+  Prettier does not collapse them onto the same line as the text.
 - **Execution Command**: Run the script from the repository root:
   ```bash
   ./scripts/format-markdown.sh
