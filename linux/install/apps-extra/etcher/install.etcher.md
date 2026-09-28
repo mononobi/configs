@@ -2,7 +2,7 @@
 
 Etcher is a bootable USB creator application.
 
-> [!WARNING]  
+> [!WARNING]
 >
 > You may need a VPN to install this software in some countries.
 

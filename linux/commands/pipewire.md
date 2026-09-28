@@ -39,7 +39,7 @@ pactl set-card-profile bluez_card.64_A2_F9_FE_EB_39 headset-head-unit-msbc
 pactl set-card-profile bluez_card.64_A2_F9_FE_EB_39 a2dp-sink-aptx
 ```
 
-> [!NOTE]  
+> [!NOTE]
 >
 > Obtain `<DEVICE_NAME>` and supported `<PROFILE_NAME>` values from the output of
 > `pactl list cards`.

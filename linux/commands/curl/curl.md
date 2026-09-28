@@ -44,7 +44,7 @@ curl -w "@curl-time.txt" -o /dev/null -s https://example.com/api/info \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9DeyJpZCI6NSwibmFtZSI6Ik1vbm8gT"
 ```
 
-> [!NOTE]  
+> [!NOTE]
 >
 > Ensure that `curl-time.txt` is located in your current working directory, or specify its
 > absolute path (e.g.,

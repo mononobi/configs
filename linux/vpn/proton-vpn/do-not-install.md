@@ -1,6 +1,6 @@
 # Warning: Avoid Official ProtonVPN Linux Desktop & CLI Apps
 
-> [!WARNING]  
+> [!WARNING]
 >
 > **Do Not Install Official ProtonVPN Desktop or CLI Packages on Linux.**
 >

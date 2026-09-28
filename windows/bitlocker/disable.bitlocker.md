@@ -18,7 +18,7 @@ Disable-BitLocker -MountPoint "<DRIVE_LETTER>:"
 Disable-BitLocker -MountPoint "C:"
 ```
 
-> [!NOTE]  
+> [!NOTE]
 >
 > Drive decryption operates asynchronously in the background. The process takes time
 > depending on partition size and disk speed; monitor progress using

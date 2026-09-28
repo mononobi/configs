@@ -4,7 +4,7 @@ This guide provides a comprehensive setup for configuring a permanent, leak-proo
 DNS caching resolver using `dnsmasq`. It eliminates DNS leaks when connected to VPN
 tunnels and accelerates browsing via localized response caching.
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 >
 > **Captive Portal / ISP Activation Note**: By following this guide, you may temporarily
 > lose access to ISP-specific captive portals or captive web activation pages (e.g.,
@@ -47,7 +47,7 @@ tunnels and accelerates browsing via localized response caching.
    sudo reboot
    ```
 
-   > [!NOTE]  
+   > [!NOTE]
    >
    > Major system updates may re-enable `systemd-resolved`. If this occurs, disable it
    > again. The `pc-update` maintenance script in this repository automates this check.
@@ -77,7 +77,7 @@ hosts:          files mdns4_minimal [NOTFOUND=return] dns mymachines
 
 Save and exit.
 
-> [!NOTE]  
+> [!NOTE]
 >
 > Once `systemd-resolved` is disabled, DNS servers configured via the NetworkManager GUI
 > will no longer be utilized.

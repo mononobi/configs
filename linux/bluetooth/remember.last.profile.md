@@ -3,7 +3,7 @@
 This guide configures PulseAudio to remember the last profile in use (e.g., A2DP vs.
 HSP/HFP) for connected Bluetooth devices.
 
-> [!NOTE]  
+> [!NOTE]
 >
 > Starting with Ubuntu 24.04, this configuration is no longer required because PipeWire is
 > used by default and automatically remembers device profiles.
@@ -28,7 +28,7 @@ HSP/HFP) for connected Bluetooth devices.
    load-module module-card-restore restore_bluetooth_profile=true
    ```
 
-   > [!NOTE]  
+   > [!NOTE]
    >
    > If the line `load-module module-card-restore` does not exist in the file, add the
    > complete line at the end:

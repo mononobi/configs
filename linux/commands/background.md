@@ -3,7 +3,7 @@
 Instructions for running detached background commands that continue running after terminal
 closure.
 
-> [!TIP]  
+> [!TIP]
 >
 > The recommended tool for long-running processes is `tmux` (or `screen`). `nohup` can
 > occasionally be interrupted or terminate unexpectedly if the parent shell exits

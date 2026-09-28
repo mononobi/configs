@@ -115,7 +115,7 @@ cp nekoray.desktop ~/.local/share/applications/
 
 ## 6. Linux DNS Leak Troubleshooting
 
-> [!CAUTION]  
+> [!CAUTION]
 >
 > On Linux, `systemd-resolved` often bypasses routing tables, sending DNS queries directly
 > to the physical gateway instead of the `nekoray-tun` interface.

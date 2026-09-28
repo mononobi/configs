@@ -3,13 +3,13 @@
 A curated collection of production-tested configurations, setup guidelines, and automation
 scripts for Linux environments, development tools, databases, and IDEs.
 
-> [!NOTE]  
+> [!NOTE]
 >
 > The entire installation framework, automation scripts, and configurations in this
 > repository are 100% AI-generated. No humans are to blame for any bugs, anti-patterns, or
 > code design—all code was produced and maintained by AI under human supervision.
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 >
 > `AGENTS.md` is a symbolic link (soft link) pointing directly to `README.md`. It exists
 > solely to provide instructions to AI agents in their expected default location.
@@ -559,27 +559,20 @@ unstructured text format:
 - **Strictly `.md` Extension**: Never create `.txt` files for documentation, guides, or
   manuals. Always use the `.md` file extension. All legacy `.txt` documentation files in
   the repository have been replaced with `.md` files.
-- **High-Quality Formatting & Alert Callout Syntax**: Fully utilize GitHub Flavored
-  Markdown (GFM) features, including clear headings, tables, code blocks with syntax
-  highlighting, bullet lists, and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`,
-  `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`).
-- **Dedicated Lines & Hard Line Breaks for Alert Callouts**: Alert tags must always be
-  placed on their own separate line at the start of the blockquote and must end with a
-  **hard line break** (two trailing spaces `  `), followed by the title or description
-  text on the next line:
-  <!-- prettier-ignore -->
+- **High-Quality Formatting & Alert Callouts**: Fully utilize GitHub Flavored Markdown
+  (GFM) features, including clear headings, tables, code blocks with syntax highlighting,
+  bullet lists, and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`,
+  `> [!WARNING]`, `> [!CAUTION]`).
+- **Alert Callouts Must Have an Empty Line**: Alert tags must always be on their own line
+  and followed by an empty blockquote line (`>`) before the text:
   ```markdown
-  > [!TIP]  
-  > Title
-  > Description
+  > [!TIP]
+  >
+  > Title or description text
   ```
-  - **No Inline Tags**: Alert tags must **never** share a line with the content text
-    (e.g., `> [!TIP] Title`), as GitHub Flavored Markdown will fail to render them as
-    callout boxes and will instead display them literally as plain characters.
-  - **Why Two Trailing Spaces (Hard Line Break)**: In CommonMark and GFM, two trailing
-    spaces at the end of a line define a hard line break (`<br>`). This prevents Prettier
-    and other Markdown formatters from collapsing the alert tag and content onto the same
-    line during prose wrapping.
+  Never place text on the same line as the alert tag (e.g. `> [!TIP] Title`), or without
+  the empty line, as Prettier will merge them into a single line and break GitHub's
+  callout rendering.
 - **Line Length Limit**: All Markdown documents must continue to strictly adhere to Rule
   11 (maximum 95 characters per line). Format them with `scripts/format-markdown.sh` (Rule
   14).
@@ -595,10 +588,6 @@ formatted using the `scripts/format-markdown.sh` script:
 - **Line Length & Prettier Enforcement**: The script invokes Prettier across all Markdown
   documents in the project, automatically wrapping prose and formatting content to comply
   with the project's line length limit (Rule 11).
-- **Automatic Alert Callout Preservation**: The formatting script automatically normalizes
-  GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, etc.), ensuring the alert tags stay on
-  their own dedicated lines with Markdown hard line breaks (two trailing spaces) so that
-  Prettier does not collapse them onto the same line as the text.
 - **Execution Command**: Run the script from the repository root:
   ```bash
   ./scripts/format-markdown.sh
@@ -699,7 +688,7 @@ To add a new tool or application:
 
 #### Sourcing `utils.sh` by Directory Depth
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 >
 > **Mandatory Import for Every Installer**: Every single installer, script, or
 > configuration recipe must source `utils.sh` at the beginning, regardless of whether it
@@ -728,7 +717,7 @@ Ensure the relative path to `utils.sh` matches the script's directory depth from
   SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
   SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
   ```
-  > [!IMPORTANT]  
+  > [!IMPORTANT]
   >
   > Because `readlink -f` dereferences symlinks to the **canonical target location outside
   > `install/`**, `SCRIPT_DIR` resolves to the physical directory on disk, **not the

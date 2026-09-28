@@ -28,7 +28,7 @@ backlight will immediately power off into DPMS standby.
 
 ## Option 2: Custom Keyboard Shortcut (Alternative)
 
-> [!NOTE]  
+> [!NOTE]
 >
 > This workaround only triggers when locking the screen manually using the custom
 > shortcut. It does not apply to idle timeouts or menu locks.

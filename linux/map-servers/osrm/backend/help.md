@@ -53,7 +53,7 @@ paths, turn-by-turn navigation, and distance matrices.
    docker-compose up -d
    ```
 
-> [!NOTE]  
+> [!NOTE]
 >
 > This container runs the standalone OSRM routing daemon. A reverse proxy (e.g., Nginx) is
 > recommended for production deployments.

@@ -12,7 +12,7 @@ Automated issuance and renewal of trusted SSL/TLS certificates using Certbot and
   - [Certbot Staging Environment](https://letsencrypt.org/docs/staging-environment)
   - [Certbot FAQ](https://certbot.eff.org/faq)
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 >
 > The target domain (and subdomains) must have public DNS `A` records resolving directly
 > to your server's public IP address before issuing certificates, or domain validation
