@@ -563,8 +563,9 @@ unstructured text format:
   (GFM) features, including clear headings, tables, code blocks with syntax highlighting,
   bullet lists, and GitHub alert callouts (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`,
   `> [!WARNING]`, `> [!CAUTION]`).
-- **Alert Callouts Must Have an Empty Line**: Alert tags must always be on their own line
-  and followed by an empty blockquote line (`>`) before the text:
+- **Alert Callouts Must Be Root-Level & Have an Empty Line**: Alert tags (`> [!NOTE]`,
+  `> [!TIP]`, etc.) are only supported at the document root level (column 0, unindented)
+  and must always be followed by an empty blockquote line (`>`) before the content:
   ```markdown
   > [!TIP]
   >
@@ -573,6 +574,19 @@ unstructured text format:
   Never place text on the same line as the alert tag (e.g. `> [!TIP] Title`), or without
   the empty line, as Prettier will merge them into a single line and break GitHub's
   callout rendering.
+- **Never Use Alert Tags in Nested Contexts (Lists / Indented Blocks)**: GitHub only
+  processes root-level blockquotes as alert callouts. If an alert is indented inside a
+  list or sub-item, GitHub will fail to render the alert box and will print the literal
+  `[!NOTE]` text instead (even if IDEs like PyCharm render it locally). In any nested or
+  indented context, **do not use alert tags**—use a standard blockquote (`>`) with a bold
+  label instead:
+  ```markdown
+  1. Step one
+  2. Step two:
+
+     > **Note**: This simple blockquote renders properly inside a list item with a clean
+     > vertical quote line and does not break list continuity.
+  ```
 - **Line Length Limit**: All Markdown documents must continue to strictly adhere to Rule
   11 (maximum 95 characters per line). Format them with `scripts/format-markdown.sh` (Rule
   14).
@@ -717,11 +731,9 @@ Ensure the relative path to `utils.sh` matches the script's directory depth from
   SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
   SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
   ```
-  > [!IMPORTANT]
-  >
-  > Because `readlink -f` dereferences symlinks to the **canonical target location outside
-  > `install/`**, `SCRIPT_DIR` resolves to the physical directory on disk, **not the
-  > symlink path** inside `apps-recommended/` or `apps-extra/`.
+  > **Important**: Because `readlink -f` dereferences symlinks to the **canonical target
+  > location outside `install/`**, `SCRIPT_DIR` resolves to the physical directory on
+  > disk, **not the symlink path** inside `apps-recommended/` or `apps-extra/`.
   >
   > Therefore, relative paths to `utils.sh` (as well as relative paths to config files and
   > local assets) **must always be calculated from the real file location**, targeting

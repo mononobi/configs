@@ -38,10 +38,8 @@ This guide explains how to set permanent DNS servers using `resolvconf`.
    nameserver IPv6
    ```
 
-   > [!NOTE]
-   >
-   > `resolvconf` supports a maximum of 3 nameserver entries. Any additional entries
-   > beyond the third will be ignored.
+   > **Note**: `resolvconf` supports a maximum of 3 nameserver entries. Any additional
+   > entries beyond the third will be ignored.
 
 3. **Restart the Service**:
 

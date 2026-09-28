@@ -28,10 +28,8 @@ HSP/HFP) for connected Bluetooth devices.
    load-module module-card-restore restore_bluetooth_profile=true
    ```
 
-   > [!NOTE]
-   >
-   > If the line `load-module module-card-restore` does not exist in the file, add the
-   > complete line at the end:
+   > **Note**: If the line `load-module module-card-restore` does not exist in the file,
+   > add the complete line at the end:
    >
    > ```text
    > load-module module-card-restore restore_bluetooth_profile=true

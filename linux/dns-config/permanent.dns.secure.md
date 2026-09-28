@@ -47,10 +47,9 @@ tunnels and accelerates browsing via localized response caching.
    sudo reboot
    ```
 
-   > [!NOTE]
-   >
-   > Major system updates may re-enable `systemd-resolved`. If this occurs, disable it
-   > again. The `pc-update` maintenance script in this repository automates this check.
+   > **Note**: Major system updates may re-enable `systemd-resolved`. If this occurs,
+   > disable it again. The `pc-update` maintenance script in this repository automates
+   > this check.
 
 ---
 
