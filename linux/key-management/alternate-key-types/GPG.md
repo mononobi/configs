@@ -96,7 +96,8 @@ gpg --delete-secret-key "KEY_USER_NAME"
 gpg --delete-key "KEY_USER_NAME"
 ```
 
-> [!NOTE] GPG stores configuration, keyrings, and trust databases in `~/.gnupg`.
+> [!NOTE] 
+> GPG stores configuration, keyrings, and trust databases in `~/.gnupg`.
 
 ---
 

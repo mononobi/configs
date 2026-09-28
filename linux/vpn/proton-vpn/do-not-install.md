@@ -1,6 +1,7 @@
 # Warning: Avoid Official ProtonVPN Linux Desktop & CLI Apps
 
-> [!WARNING] **Do Not Install Official ProtonVPN Desktop or CLI Packages on Linux.**
+> [!WARNING] 
+> **Do Not Install Official ProtonVPN Desktop or CLI Packages on Linux.**
 >
 > The official ProtonVPN Linux applications (GUI, CLI, and community Python wrappers) have
 > severe instability issues. They frequently crash, experience memory leaks, and often

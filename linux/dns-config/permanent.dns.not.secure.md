@@ -2,7 +2,8 @@
 
 This guide explains how to set permanent DNS servers using `resolvconf`.
 
-> [!WARNING] This method **does not prevent DNS leaks when connected to a VPN**. If you
+> [!WARNING]
+> This method **does not prevent DNS leaks when connected to a VPN**. If you
 > require complete protection against DNS leaks and query spoofing, refer to
 > [permanent.dns.secure.md](file:///home/mono/Workspace/configs/linux/dns-config/permanent.dns.secure.md)
 > instead.
@@ -36,7 +37,8 @@ This guide explains how to set permanent DNS servers using `resolvconf`.
    nameserver IPv6
    ```
 
-   > [!NOTE] `resolvconf` supports a maximum of 3 nameserver entries. Any additional
+   > [!NOTE]
+   > `resolvconf` supports a maximum of 3 nameserver entries. Any additional
    > entries beyond the third will be ignored.
 
 3. **Restart the Service**:

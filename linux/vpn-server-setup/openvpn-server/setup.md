@@ -147,7 +147,8 @@ mkdir -p ~/client-configs/keys
 chmod -R 700 ~/client-configs
 ```
 
-> [!NOTE] Repeat the following key generation block for each client (replacing `client1`
+> [!NOTE] 
+> Repeat the following key generation block for each client (replacing `client1`
 > with your desired client identifier):
 
 ```bash

@@ -104,5 +104,6 @@ GRANT ALL PRIVILEGES ON DATABASE mydb TO myuser;
 sudo apt install -y pgadmin4
 ```
 
-> [!TIP] For cluster major version upgrades, refer to
+> [!TIP] 
+> For cluster major version upgrades, refer to
 > [GoRails PostgreSQL Upgrade Guide](https://gorails.com/guides/upgrading-postgresql-version-on-ubuntu-server).

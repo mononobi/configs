@@ -1,6 +1,7 @@
 # Enable and Configure System Extensions
 
-> [!NOTE] All of these might not be available immediately when you install the OS. After
+> [!NOTE]
+> All of these might not be available immediately when you install the OS. After
 > installing all other custom extensions and restarting the system, they will show up as
 > system extensions.
 

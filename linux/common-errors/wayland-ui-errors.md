@@ -3,10 +3,11 @@
 If you experience a UI crash or unresponsiveness on a Wayland session, use the following
 methods to recover.
 
-> [!CAUTION] **Never execute `Alt + F2` then `r` on Wayland.** In Wayland, the display
-> server and the compositor/UI (GNOME Shell) run inside the same process. Restarting or
-> terminating that process immediately terminates your entire user session and closes all
-> running applications.
+> [!CAUTION]
+> **Never execute `Alt + F2` then `r` on Wayland.** In Wayland, the display server and the
+> compositor/UI (GNOME Shell) run inside the same process. Restarting or terminating that
+> process immediately terminates your entire user session and closes all running
+> applications.
 
 ---
 

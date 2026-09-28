@@ -1,7 +1,6 @@
 # Plex Media Server Installation and Configuration (Native .deb)
 
 > [!NOTE]
->
 > - Replace `mono` with your own system username throughout this guide.
 > - Replace `/home/mono/.plex` with your desired root path for custom Plex data storage.
 
@@ -45,7 +44,8 @@
 
 3. Import the signing key if running older distributions:
 
-   > [!IMPORTANT] Run the following command only if you are **not** on Ubuntu 20.04+ or
+   > [!IMPORTANT] 
+   > Run the following command only if you are **not** on Ubuntu 20.04+ or
    > Debian 10+:
 
    ```bash

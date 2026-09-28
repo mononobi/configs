@@ -3,12 +3,14 @@
 A curated collection of production-tested configurations, setup guidelines, and automation
 scripts for Linux environments, development tools, databases, and IDEs.
 
-> [!NOTE] The entire installation framework, automation scripts, and configurations in
+> [!NOTE] 
+> The entire installation framework, automation scripts, and configurations in
 > this repository are 100% AI-generated. No humans are to blame for any bugs,
 > anti-patterns, or code design—all code was produced and maintained by AI under human
 > supervision.
 
-> [!IMPORTANT] `AGENTS.md` is a symbolic link (soft link) pointing directly to
+> [!IMPORTANT] 
+> `AGENTS.md` is a symbolic link (soft link) pointing directly to
 > `README.md`. It exists solely to provide instructions to AI agents in their expected
 > default location.
 >
@@ -675,11 +677,12 @@ To add a new tool or application:
 
 #### Sourcing `utils.sh` by Directory Depth
 
-> [!IMPORTANT] **Mandatory Import for Every Installer**: Every single installer, script,
-> or configuration recipe must source `utils.sh` at the beginning, regardless of whether
-> it currently calls any utility functions. This ensures all shared helpers
-> (`require_app`, `is_installed`, `conditional_apt_update`, etc.) are always in scope,
-> preventing failures when utility functions are used.
+> [!IMPORTANT]
+> **Mandatory Import for Every Installer**: Every single installer, script, or
+> configuration recipe must source `utils.sh` at the beginning, regardless of whether it
+> currently calls any utility functions. This ensures all shared helpers (`require_app`,
+> `is_installed`, `conditional_apt_update`, etc.) are always in scope, preventing failures
+> when utility functions are used.
 
 Ensure the relative path to `utils.sh` matches the script's directory depth from
 `linux/install/`:
@@ -702,9 +705,10 @@ Ensure the relative path to `utils.sh` matches the script's directory depth from
   SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
   SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
   ```
-  > [!IMPORTANT] Because `readlink -f` dereferences symlinks to the **canonical target
-  > location outside `install/`**, `SCRIPT_DIR` resolves to the physical directory on
-  > disk, **not the symlink path** inside `apps-recommended/` or `apps-extra/`.
+  > [!IMPORTANT]
+  > Because `readlink -f` dereferences symlinks to the **canonical target location outside
+  > `install/`**, `SCRIPT_DIR` resolves to the physical directory on disk, **not the
+  > symlink path** inside `apps-recommended/` or `apps-extra/`.
   >
   > Therefore, relative paths to `utils.sh` (as well as relative paths to config files and
   > local assets) **must always be calculated from the real file location**, targeting

@@ -3,7 +3,8 @@
 This guide enables battery level reporting for connected Bluetooth devices in the GNOME
 Settings Power menu.
 
-> [!NOTE] Starting with Ubuntu 24.04, this configuration is no longer required because
+> [!NOTE]
+> Starting with Ubuntu 24.04, this configuration is no longer required because
 > PipeWire and modern BlueZ handle Bluetooth battery reporting out of the box.
 
 ## Configuration Steps
