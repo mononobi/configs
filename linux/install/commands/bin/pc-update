@@ -17,8 +17,8 @@ Usage: $(basename "$0") [OPTIONS]
 
 Description:
   Updates APT packages, Flatpak apps, Snap packages, and reloads systemd.
-  Also checks and updates standalone tools (rclone, rust, speedtest, ventoy,
-  antigravity-agent-manager) once every 5 days.
+  Also checks and updates standalone tools (rclone, rust, uv, antigravity-cli,
+  speedtest, ventoy, antigravity-agent-manager) once every 5 days.
 
 Options:
   -f, --force, --all    Force update standalone applications now (bypass 5-day wait)
@@ -145,6 +145,13 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
         echo -e "${C_BLUE}[==>] Updating uv via self update...${C_RESET}"
         if ! uv self update; then
             echo -e "${C_YELLOW}[!] Warning: uv update issue, skipping.${C_RESET}"
+        fi
+    fi
+
+    if is_installed --check "agy"; then
+        echo -e "${C_BLUE}[==>] Updating Antigravity CLI via agy update...${C_RESET}"
+        if ! agy update; then
+            echo -e "${C_YELLOW}[!] Warning: Antigravity CLI update issue, skipping.${C_RESET}"
         fi
     fi
 
