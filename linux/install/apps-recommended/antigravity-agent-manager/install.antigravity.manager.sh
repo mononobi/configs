@@ -106,12 +106,14 @@ try:
     with open(sys.argv[1], 'rb') as f:
         f.seek(4)
         header_size = struct.unpack('<I', f.read(4))[0]
-        f.seek(16)
-        header_bytes = f.read(header_size - 8)
+        payload_start = 8 + header_size
+        f.seek(12)
+        json_len = struct.unpack('<I', f.read(4))[0]
+        header_bytes = f.read(json_len)
         header = json.loads(header_bytes.decode('utf-8'))
         pkg_info = header.get('files', {}).get('package.json', {})
         if 'offset' in pkg_info and 'size' in pkg_info:
-            f.seek(16 + header_size - 8 + int(pkg_info['offset']))
+            f.seek(payload_start + int(pkg_info['offset']))
             pkg = json.loads(f.read(pkg_info['size']).decode('utf-8'))
             print(pkg.get('version', ''))
 except Exception:
@@ -132,13 +134,25 @@ if [[ "$CUSTOM_URL" != "true" ]]; then
         DOWNLOAD_URL="${BASE_URL}Antigravity.tar.gz"
     fi
 
+    if [[ -n "$LATEST_VERSION" ]]; then
+        echo "[+] Latest release detected: v${LATEST_VERSION}"
+    fi
+
     CURRENT_VERSION=$(get_installed_version)
+    if [[ -n "$CURRENT_VERSION" ]]; then
+        echo "[i] Currently installed version: v${CURRENT_VERSION}"
+    fi
+
     if [[ "$FORCE" != "true" && -n "$CURRENT_VERSION" && -n "$LATEST_VERSION" && "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
         if [[ -x "${INSTALL_DIR}/Antigravity-x64/antigravity" && -f "$DEST_DESKTOP" ]]; then
-            echo "[✓] Antigravity Agent Manager is already installed and up to date (v${CURRENT_VERSION})."
+            echo "[✓] Antigravity Agent Manager is already at latest version (v${CURRENT_VERSION}), skipping download."
             exit 0
         fi
     fi
+else
+    # Extract version from custom URL if present
+    URL_VERSION=$(echo "$DOWNLOAD_URL" | grep -Po '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 || true)
+    [[ -n "$URL_VERSION" ]] && LATEST_VERSION="$URL_VERSION"
 fi
 
 # If auto-detection fails and still not set, ask user interactively
@@ -184,14 +198,22 @@ cleanup() {
 trap cleanup EXIT
 TEMP_TARBALL="${TEMP_DIR}/Antigravity.tar.gz"
 
-echo "==> Downloading Antigravity tarball..."
+if [[ -n "$LATEST_VERSION" ]]; then
+    echo "==> Downloading Antigravity tarball (v${LATEST_VERSION})..."
+else
+    echo "==> Downloading Antigravity tarball..."
+fi
 curl -fL --progress-bar "$DOWNLOAD_URL" -o "$TEMP_TARBALL"
 
 # Step 2: Create installation directory
 mkdir -p "$INSTALL_DIR"
 
 # Step 3: Extract archive into installation directory
-echo "==> Extracting archive..."
+if [[ -n "$LATEST_VERSION" ]]; then
+    echo "==> Extracting archive (v${LATEST_VERSION})..."
+else
+    echo "==> Extracting archive..."
+fi
 tar -xzf "$TEMP_TARBALL" -C "$INSTALL_DIR"
 
 # Step 4: Set required permissions and ownership on chrome-sandbox
@@ -216,15 +238,21 @@ mkdir -p "${HICOLOR_DIR}/512x512/apps"
 cp "$ICON_SRC" "$DEST_ICON"
 
 # Step 8: Record installed version and refresh desktop databases
-if [[ -n "$LATEST_VERSION" ]]; then
-    echo "$LATEST_VERSION" > "${INSTALL_DIR}/.version"
-else
+INSTALLED_VER="${LATEST_VERSION:-}"
+if [[ -z "$INSTALLED_VER" ]]; then
     INSTALLED_VER=$(get_installed_version)
-    [[ -n "$INSTALLED_VER" ]] && echo "$INSTALLED_VER" > "${INSTALL_DIR}/.version"
+fi
+
+if [[ -n "$INSTALLED_VER" ]]; then
+    echo "$INSTALLED_VER" > "${INSTALL_DIR}/.version"
 fi
 update-desktop-database "$APP_DIR" 2>/dev/null || true
 gtk-update-icon-cache -f -t "$HICOLOR_DIR" 2>/dev/null || true
 
-echo "[✓] Antigravity Agent Manager successfully installed to: ${INSTALL_DIR}"
+if [[ -n "$INSTALLED_VER" ]]; then
+    echo "[✓] Antigravity Agent Manager (v${INSTALLED_VER}) successfully installed to: ${INSTALL_DIR}"
+else
+    echo "[✓] Antigravity Agent Manager successfully installed to: ${INSTALL_DIR}"
+fi
 echo "[✓] Desktop launcher created at: ${DEST_DESKTOP}"
 echo "[✓] Icon placed at: ${DEST_ICON}"
