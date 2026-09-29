@@ -131,8 +131,6 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
         echo -e "${C_BLUE}[+] Running 5-day periodic updates (last: ${DAYS_AGO}d ago)...${C_RESET}"
     fi
 
-    RECIPES_ROOT="${SCRIPT_DIR}/../../apps-recommended"
-
     # 1. Native CLI updaters
     if is_installed --check "rustup"; then
         echo -e "${C_BLUE}[==>] Updating Rust toolchains via rustup...${C_RESET}"
@@ -169,33 +167,25 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
         "ventoy"
     )
 
-    if [[ -d "$RECIPES_ROOT" ]]; then
-        for app in "${DYNAMIC_RECIPE_APPS[@]}"; do
-            # Only update if the application is currently installed on the host
-            case "$app" in
-                speedtest)
-                    is_installed --check "speedtest" || continue
-                    ;;
-                antigravity-agent-manager)
-                    [[ -d "${HOME}/.antigravity-manager" ]] || continue
-                    ;;
-                ventoy)
-                    [[ -d "${HOME}/.local/share/ventoy" ]] || continue
-                    ;;
-            esac
+    for app in "${DYNAMIC_RECIPE_APPS[@]}"; do
+        # Only update if the application is currently installed on the host
+        case "$app" in
+            speedtest)
+                is_installed --check "speedtest" || continue
+                ;;
+            antigravity-agent-manager)
+                [[ -d "${HOME}/.antigravity-manager" ]] || continue
+                ;;
+            ventoy)
+                [[ -d "${HOME}/.local/share/ventoy" ]] || continue
+                ;;
+        esac
 
-            app_dir="${RECIPES_ROOT}/${app}"
-            [[ -d "$app_dir" ]] || continue
-
-            script="$(find "$app_dir" -maxdepth 1 -name "*.sh" 2>/dev/null | head -n 1)"
-            [[ -n "$script" && -f "$script" ]] || continue
-
-            echo -e "${C_BLUE}[==>] Refreshing ${app}...${C_RESET}"
-            if ! (cd "$app_dir" && bash "$script" --no-update); then
-                echo -e "${C_YELLOW}[!] Warning: Update failed for ${app}, continuing...${C_RESET}"
-            fi
-        done
-    fi
+        echo -e "${C_BLUE}[==>] Refreshing ${app}...${C_RESET}"
+        if ! require_app "$app" --no-update; then
+            echo -e "${C_YELLOW}[!] Warning: Update failed for ${app}, continuing...${C_RESET}"
+        fi
+    done
 
     # Record successful completion timestamp
     date +%s > "$STATE_FILE"
