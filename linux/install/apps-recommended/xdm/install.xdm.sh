@@ -82,14 +82,37 @@ else
     exit 1
 fi
 
-# Configure OpenJ9 Java shared class cache to live under ~/.cache/xdman instead of ~/javasharedresources
-if [[ -f "/opt/xdman/xdman" ]]; then
-    echo "[+] Configuring Java shared class cache under ~/.cache/xdman..."
-    if ! grep -q "cacheDir=" /opt/xdman/xdman; then
-        sudo sed -i 's|/opt/xdman/jre/bin/java|/opt/xdman/jre/bin/java -Xshareclasses:cacheDir="${HOME}/.cache/xdman"|g' /opt/xdman/xdman
+# Wrap OpenJ9 Java binary so ALL invocations (manual launch, CLI, autostart on boot, or native messaging)
+# redirect the shared class cache to ~/.cache/xdman instead of ~/javasharedresources
+JRE_BIN="/opt/xdman/jre/bin"
+if [[ -d "$JRE_BIN" ]]; then
+    echo "[+] Configuring OpenJ9 Java binary wrapper for cache relocation..."
+    if [[ -f "${JRE_BIN}/java" && ! -f "${JRE_BIN}/java.bin" ]]; then
+        sudo mv "${JRE_BIN}/java" "${JRE_BIN}/java.bin"
+    elif [[ -f "${JRE_BIN}/java" ]] && file "${JRE_BIN}/java" | grep -q "ELF"; then
+        sudo mv -f "${JRE_BIN}/java" "${JRE_BIN}/java.bin"
     fi
-    mkdir -p "${HOME}/.cache/xdman"
-    rm -rf "${HOME}/javasharedresources"
+
+    sudo tee "${JRE_BIN}/java" > /dev/null << 'EOF'
+#!/usr/bin/env bash
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/xdman"
+mkdir -p "$CACHE_DIR" 2>/dev/null || true
+exec "$(dirname "$0")/java.bin" -Xshareclasses:cacheDir="$CACHE_DIR" "$@"
+EOF
+    sudo chmod 755 "${JRE_BIN}/java"
+    sudo chown root:root "${JRE_BIN}/java"
 fi
+
+# Ensure /opt/xdman/xdman forwards arguments and /usr/bin/xdman links to it
+if [[ -f "/opt/xdman/xdman" ]]; then
+    if ! grep -q '\$@' /opt/xdman/xdman; then
+        sudo sed -i 's|/opt/xdman/xdman.jar|/opt/xdman/xdman.jar "$@"|g' /opt/xdman/xdman
+    fi
+    sudo ln -sf /opt/xdman/xdman /usr/bin/xdman
+fi
+
+# Ensure cache directory exists and purge legacy directory
+mkdir -p "${HOME}/.cache/xdman"
+rm -rf "${HOME}/javasharedresources"
 
 echo "[✓] XDM (Xtreme Download Manager) setup completed successfully!"
