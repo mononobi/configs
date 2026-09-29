@@ -36,19 +36,20 @@ require_app "plex-media-server"
 All media paths match the host 1:1, allowing existing Plex SQLite databases and library
 indices to resolve instantly without broken links.
 
-| Host Path                 | Container Path           | Mode | Purpose                    |
-| :------------------------ | :----------------------- | :--- | :------------------------- |
-| `~/.plex/plexmediaserver` | `/config`                | `rw` | Persistent metadata & DB   |
-| `/dev/shm/plex`           | `/dev/shm/plex`          | `rw` | 16 GB RAM transcode buffer |
-| `~/.plex/tmp`             | `~/.plex/tmp`            | `rw` | Downloads & temp directory |
-| `/mnt/movies-1/Movies-1`  | `/mnt/movies-1/Movies-1` | `ro` | Media library 1            |
-| `/mnt/movies-2/Movies-2`  | `/mnt/movies-2/Movies-2` | `ro` | Media library 2            |
-| `/mnt/movies-3/Movies-3`  | `/mnt/movies-3/Movies-3` | `ro` | Media library 3            |
-| `/mnt/movies-4/Movies-4`  | `/mnt/movies-4/Movies-4` | `ro` | Media library 4            |
-| `/mnt/movies-5/Movies-5`  | `/mnt/movies-5/Movies-5` | `ro` | Media library 5            |
-| `/mnt/movies-6/Movies-6`  | `/mnt/movies-6/Movies-6` | `ro` | Media library 6            |
-| `/mnt/movies-7/Movies-7`  | `/mnt/movies-7/Movies-7` | `ro` | Media library 7            |
-| `/mnt/movies-7/TV-Shows`  | `/mnt/movies-7/TV-Shows` | `ro` | TV shows library           |
+| Host Path                 | Container Path           | Mode | Purpose                               |
+| :------------------------ | :----------------------- | :--- | :------------------------------------ |
+| `~/.plex/plexmediaserver` | `/config`                | `rw` | Persistent metadata & DB              |
+| `/dev/shm/plex`           | `/dev/shm/plex`          | `rw` | 16 GB RAM transcode buffer            |
+| `/dev/shm/plex`           | `/transcode`             | `rw` | Conventional transcode alias (in RAM) |
+| `~/.plex/tmp`             | `~/.plex/tmp`            | `rw` | Downloads & temp directory            |
+| `/mnt/movies-1/Movies-1`  | `/mnt/movies-1/Movies-1` | `ro` | Media library 1                       |
+| `/mnt/movies-2/Movies-2`  | `/mnt/movies-2/Movies-2` | `ro` | Media library 2                       |
+| `/mnt/movies-3/Movies-3`  | `/mnt/movies-3/Movies-3` | `ro` | Media library 3                       |
+| `/mnt/movies-4/Movies-4`  | `/mnt/movies-4/Movies-4` | `ro` | Media library 4                       |
+| `/mnt/movies-5/Movies-5`  | `/mnt/movies-5/Movies-5` | `ro` | Media library 5                       |
+| `/mnt/movies-6/Movies-6`  | `/mnt/movies-6/Movies-6` | `ro` | Media library 6                       |
+| `/mnt/movies-7/Movies-7`  | `/mnt/movies-7/Movies-7` | `ro` | Media library 7                       |
+| `/mnt/movies-7/TV-Shows`  | `/mnt/movies-7/TV-Shows` | `ro` | TV shows library                      |
 
 > [!TIP]
 >
@@ -119,8 +120,8 @@ group_add:
 
 Navigate to **Settings → Transcoder** in the Plex Web interface:
 
-1. **Transcoder temporary directory**: Set to `/dev/shm/plex` (matches your existing host
-   configuration).
+1. **Transcoder temporary directory**: Set to `/dev/shm/plex` (or `/transcode`—both map
+   directly to host RAM).
 2. **Hardware acceleration**: Enable **"Use hardware acceleration when available"**.
 3. **Hardware encoding**: Enable **"Use hardware-accelerated video encoding"**.
 4. **Hardware transcoding device**: Select **AMD Radeon Graphics (VCN)** (or `Auto`).

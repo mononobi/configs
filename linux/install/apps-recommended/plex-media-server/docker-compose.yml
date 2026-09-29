@@ -24,8 +24,9 @@ services:
       # 1. Host Metadata Store (preserves all settings, databases, and library info)
       - ${USER_HOME}/.plex/plexmediaserver:/config
 
-      # 2. RAM Transcoder (1:1 mirror of host /dev/shm/plex)
+      # 2. RAM Transcoder (1:1 mirror of host /dev/shm/plex & /transcode alias)
       - /dev/shm/plex:/dev/shm/plex
+      - /dev/shm/plex:/transcode
 
       # 3. Host Temp & Downloads Directory (for offline sync & downloads)
       - ${USER_HOME}/.plex/tmp:${USER_HOME}/.plex/tmp
