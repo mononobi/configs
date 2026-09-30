@@ -14,7 +14,8 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Rclone official binary, FUSE 3 mount utilities, and systemd mount support.
+  Installs Rclone official binary, FUSE 3 mount utilities, configures Google Drive
+  remote, sets up systemd auto-mount service, and adds Nautilus bookmark.
 
 Options:
   --no-update   Skip apt update before installation
@@ -75,20 +76,70 @@ fi
 
 rclone version
 
+# Configure Google Drive remote
+if rclone listremotes 2>/dev/null | grep -q '^gdrive:$'; then
+    echo "[i] Rclone remote 'gdrive:' is already configured."
+else
+    echo ""
+    echo "[+] Configuring 'gdrive' remote..."
+    echo "[i] Prerequisites (from install.rclone.md Step 1):"
+    echo "    1. Go to https://console.cloud.google.com"
+    echo "    2. Create OAuth 2.0 Desktop App credentials for Google Drive API"
+    echo ""
+
+    read -rp "Enter your Google Drive Client ID: " client_id
+    if [[ -z "$client_id" ]]; then
+        echo "[!] Error: Client ID cannot be empty." >&2
+        exit 1
+    fi
+
+    read -rp "Enter your Google Drive Client Secret: " client_secret
+    if [[ -z "$client_secret" ]]; then
+        echo "[!] Error: Client Secret cannot be empty." >&2
+        exit 1
+    fi
+
+    echo "[+] Creating remote 'gdrive' and opening browser for authorization..."
+    rclone config create gdrive drive \
+        client_id "$client_id" \
+        client_secret "$client_secret" \
+        scope "drive" \
+        team_drive ""
+
+    if ! rclone listremotes 2>/dev/null | grep -q '^gdrive:$'; then
+        echo "[!] Error: Failed to configure 'gdrive:' remote." >&2
+        exit 1
+    fi
+    echo "[✓] Google Drive remote 'gdrive:' configured successfully!"
+fi
+
 # Create mount directory
 echo "[+] Creating mount directory at $HOME/Google-Drive..."
 mkdir -p "$HOME/Google-Drive"
 
-# Copy systemd service file to user systemd directory (without enabling it)
+# Copy systemd service file and enable/start it
 mkdir -p "$HOME/.config/systemd/user"
 
 if [[ -f "$SCRIPT_DIR/files/rclone-gdrive.service" ]]; then
-    echo "[+] Copying rclone-gdrive.service to $HOME/.config/systemd/user/..."
+    echo "[+] Installing and starting rclone-gdrive.service..."
     cp "$SCRIPT_DIR/files/rclone-gdrive.service" "$HOME/.config/systemd/user/rclone-gdrive.service"
-    systemctl --user daemon-reload 2>/dev/null || true
-    echo "[+] Service file placed at $HOME/.config/systemd/user/rclone-gdrive.service (not enabled)."
-    echo "    After configuring your 'gdrive' remote via 'rclone config', enable it with:"
-    echo "    systemctl --user enable --now rclone-gdrive.service"
+    systemctl --user daemon-reload
+    systemctl --user enable --now rclone-gdrive.service
+    echo "[✓] rclone-gdrive.service is enabled and started."
+fi
+
+# Bookmark in Nautilus
+BOOKMARK_DIR="$HOME/.config/gtk-3.0"
+BOOKMARK_FILE="$BOOKMARK_DIR/bookmarks"
+BOOKMARK_ENTRY="file://${HOME}/Google-Drive Google-Drive"
+
+mkdir -p "$BOOKMARK_DIR"
+touch "$BOOKMARK_FILE"
+if ! grep -Fxq "$BOOKMARK_ENTRY" "$BOOKMARK_FILE"; then
+    echo "$BOOKMARK_ENTRY" >> "$BOOKMARK_FILE"
+    echo "[+] Added Google-Drive bookmark to Nautilus sidebar."
+else
+    echo "[i] Nautilus bookmark for Google-Drive already exists."
 fi
 
 echo "[✓] Rclone setup completed successfully!"

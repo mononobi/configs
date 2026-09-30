@@ -6,6 +6,14 @@ storages as local drives with automatic syncing.
 
 ## Installation
 
+Run the automated installer script:
+
+```bash
+./install.rclone.sh
+```
+
+Or install manually via the official script:
+
 ```bash
 sudo -v ; curl https://rclone.org/install.sh | sudo bash
 ```
@@ -51,6 +59,13 @@ sudo -v ; curl https://rclone.org/install.sh | sudo bash
 > days after deletion.
 
 ### Step 2: Configure Rclone
+
+> [!TIP] The installer script `./install.rclone.sh` automatically performs this
+> configuration, prompting only for your `Client ID` and `Client Secret`, while
+> pre-configuring all other settings (scope, team drive, browser OAuth, mount directory,
+> systemd service, and Nautilus bookmark).
+>
+> If you prefer to configure or reconfigure manually, run:
 
 ```bash
 rclone config
@@ -121,6 +136,6 @@ systemctl --user status rclone-gdrive.service
 ## Add a Link To a Folder That is Shared With You
 
 To add a link to a folder that is shared with you by another user, go to the Google Drive
-web app, right-click on that folder, select `Organise` and then `Add shortcut`. Navigate
+web app, right-click on that folder, select `Organize` and then `Add shortcut`. Navigate
 to the `My Drive` folder or any subfolder under it and add the shortcut there. Now in your
 local mount, the shortcut will be visible and Rclone can correctly navigate to it.
