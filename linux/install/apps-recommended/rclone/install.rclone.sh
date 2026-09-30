@@ -15,7 +15,7 @@ Usage: $(basename "$0") [OPTIONS]
 
 Description:
   Installs Rclone official binary, FUSE 3 mount utilities, configures Google Drive
-  remote, sets up systemd auto-mount service, and adds Nautilus bookmark.
+  remote and sets up systemd auto-mount service.
 
 Options:
   --no-update   Skip apt update before installation
