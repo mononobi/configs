@@ -128,18 +128,4 @@ if [[ -f "$SCRIPT_DIR/files/rclone-gdrive.service" ]]; then
     echo "[✓] rclone-gdrive.service is enabled and started."
 fi
 
-# Bookmark in Nautilus
-BOOKMARK_DIR="$HOME/.config/gtk-3.0"
-BOOKMARK_FILE="$BOOKMARK_DIR/bookmarks"
-BOOKMARK_ENTRY="file://${HOME}/Google-Drive Google-Drive"
-
-mkdir -p "$BOOKMARK_DIR"
-touch "$BOOKMARK_FILE"
-if ! grep -Fxq "$BOOKMARK_ENTRY" "$BOOKMARK_FILE"; then
-    echo "$BOOKMARK_ENTRY" >> "$BOOKMARK_FILE"
-    echo "[+] Added Google-Drive bookmark to Nautilus sidebar."
-else
-    echo "[i] Nautilus bookmark for Google-Drive already exists."
-fi
-
 echo "[✓] Rclone setup completed successfully!"
