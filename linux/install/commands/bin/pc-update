@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Comprehensive system update utility with periodic standalone app updates
-# Note: Updates APT, Flatpak, Snap, and checks standalone tool updates every 5 days.
+# Note: Updates APT, Flatpak, Snap, and checks standalone tool updates every INTERVAL_DAYS days.
 
 set -euo pipefail
 
@@ -18,10 +18,10 @@ Usage: $(basename "$0") [OPTIONS]
 Description:
   Updates APT packages, Flatpak apps, Snap packages, and reloads systemd.
   Also checks and updates standalone tools (rclone, rust, uv, antigravity-cli,
-  speedtest, ventoy, antigravity-agent-manager) once every 5 days.
+  speedtest, ventoy, antigravity-agent-manager) once every INTERVAL_DAYS days.
 
 Options:
-  -f, --force, --all    Force update standalone applications now (bypass 5-day wait)
+  -f, --force, --all    Force update standalone applications now (bypass INTERVAL_DAYS-day wait)
   -h, --help            Show this help message and exit
 EOF
 }
@@ -107,7 +107,7 @@ fi
 echo -e "${C_BLUE}[+] Reloading systemd daemon...${C_RESET}"
 sudo systemctl daemon-reload
 
-# 5. Standalone / Custom Application Updates (Every 5 Days)
+# 5. Standalone / Custom Application Updates (Every INTERVAL_DAYS Days)
 echo ""
 echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 echo -e " ${C_BOLD}[4/4] Checking Standalone & Custom Applications...${C_RESET}"
@@ -115,7 +115,7 @@ echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
 
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/pc-update"
 STATE_FILE="${STATE_DIR}/last_standalone_update"
-INTERVAL_DAYS=5
+INTERVAL_DAYS=1
 INTERVAL_SECONDS=$(( INTERVAL_DAYS * 86400 ))
 
 mkdir -p "$STATE_DIR"
@@ -128,7 +128,7 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
     if [[ "$FORCE_STANDALONE" == "true" ]]; then
         echo -e "${C_BLUE}[+] Running standalone updates (forced via CLI)...${C_RESET}"
     else
-        echo -e "${C_BLUE}[+] Running 5-day periodic updates (last: ${DAYS_AGO}d ago)...${C_RESET}"
+        echo -e "${C_BLUE}[+] Running ${INTERVAL_DAYS}-day periodic updates (last: ${DAYS_AGO}d ago)...${C_RESET}"
     fi
 
     # 1. Native CLI updaters
