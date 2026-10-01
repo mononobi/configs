@@ -120,12 +120,12 @@ chmod +x ./scripts/openvpn-add
 chmod +x ./scripts/openvpn-bulk-add
 ```
 
-Copy the both scripts into the local `bin` folder to be able to run them as a command from
+Create symbolic links for both scripts into the local `bin` folder to run them as commands from
 anywhere:
 
 ```bash
-cp ./scripts/openvpn-add ~/.local/bin/
-cp ./scripts/openvpn-bulk-add ~/.local/bin/
+ln -sf "$(pwd)/scripts/openvpn-add" ~/.local/bin/
+ln -sf "$(pwd)/scripts/openvpn-bulk-add" ~/.local/bin/
 ```
 
 Run this command to add a single profile:

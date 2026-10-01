@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Install and configure ExpressVPN OpenVPN profiles and scripts
-# Note: Sets up ~/.expressvpn/{profiles,keys}, installs CLI helper scripts to ~/.local/bin,
+# Note: Sets up ~/.expressvpn/{profiles,keys}, links CLI helper scripts into ~/.local/bin,
 #       ensures PATH, and imports profiles automatically with credentials.
 
 set -euo pipefail
@@ -16,8 +16,8 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs ExpressVPN OpenVPN profiles and keys to ~/.expressvpn, installs
-  the openvpn-add and openvpn-bulk-add helper commands into ~/.local/bin,
+  Installs ExpressVPN OpenVPN profiles and keys to ~/.expressvpn, creates
+  symbolic links for openvpn-add and openvpn-bulk-add in ~/.local/bin,
   and imports all profiles automatically into NetworkManager.
 
   Interactive input is only requested for your VPN username and password.
@@ -83,12 +83,12 @@ echo "[+] Copying profile and key files..."
 cp -f "${FILES_DIR}/profiles/"*.ovpn "$PROFILES_DIR/"
 cp -f "${FILES_DIR}/keys/"* "$KEYS_DIR/"
 
-# 5. Install scripts into ~/.local/bin
+# 5. Link scripts into ~/.local/bin
 SCRIPTS_DIR="${SCRIPT_DIR}/scripts"
-echo "[+] Installing CLI helper scripts into ${BIN_DIR}..."
-cp -f "${SCRIPTS_DIR}/openvpn-add" "$BIN_DIR/"
-cp -f "${SCRIPTS_DIR}/openvpn-bulk-add" "$BIN_DIR/"
-chmod +x "${BIN_DIR}/openvpn-add" "${BIN_DIR}/openvpn-bulk-add"
+echo "[+] Linking CLI helper scripts into ${BIN_DIR}..."
+chmod +x "${SCRIPTS_DIR}/openvpn-add" "${SCRIPTS_DIR}/openvpn-bulk-add"
+ln -sf "${SCRIPTS_DIR}/openvpn-add" "${BIN_DIR}/openvpn-add"
+ln -sf "${SCRIPTS_DIR}/openvpn-bulk-add" "${BIN_DIR}/openvpn-bulk-add"
 
 # 6. Prompt for VPN Credentials (only interactive input)
 echo ""
