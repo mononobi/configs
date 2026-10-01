@@ -63,7 +63,7 @@ sudo -v ; curl https://rclone.org/install.sh | sudo bash
 > [!TIP] The installer script `./install.rclone.sh` automatically performs this
 > configuration, prompting only for your `Client ID` and `Client Secret`, while
 > pre-configuring all other settings (scope, team drive, browser OAuth, mount directory,
-> systemd service, and Nautilus bookmark).
+> and systemd service).
 >
 > If you prefer to configure or reconfigure manually, run:
 
