@@ -4,7 +4,8 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
@@ -14,7 +15,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Bitwarden Desktop client via Flatpak and unlock helper.
+  Installs Bitwarden Desktop client via Flatpak and links unlock helper into ~/.local/bin.
 
 Options:
   --no-update   Skip apt update before installation
@@ -41,7 +42,14 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "com.bitwarden.desktop" --type flatpak --name "Bitwarden" && exit 0
+if is_installed "com.bitwarden.desktop" --type flatpak --name "Bitwarden"; then
+    if [[ -f "$SCRIPT_DIR/bitwarden-unlock" && ! -L "$HOME/.local/bin/bitwarden-unlock" ]]; then
+        ensure_local_bin_in_path
+        chmod +x "$SCRIPT_DIR/bitwarden-unlock"
+        ln -sf "$SCRIPT_DIR/bitwarden-unlock" "$HOME/.local/bin/bitwarden-unlock"
+    fi
+    exit 0
+fi
 
 echo "[+] Starting installation/setup for Bitwarden..."
 
@@ -52,11 +60,11 @@ echo "[+] Installing Bitwarden Desktop from Flathub..."
 flatpak install -y flathub com.bitwarden.desktop
 
 # 2. Setup bitwarden-unlock helper script if present
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -f "$SCRIPT_DIR/bitwarden-unlock" ]]; then
-    mkdir -p "$HOME/.local/bin"
-    install -m 755 "$SCRIPT_DIR/bitwarden-unlock" "$HOME/.local/bin/bitwarden-unlock"
-    echo "[+] Installed bitwarden-unlock helper to $HOME/.local/bin/bitwarden-unlock"
+    ensure_local_bin_in_path
+    chmod +x "$SCRIPT_DIR/bitwarden-unlock"
+    ln -sf "$SCRIPT_DIR/bitwarden-unlock" "$HOME/.local/bin/bitwarden-unlock"
+    echo "[+] Linked bitwarden-unlock helper into $HOME/.local/bin/bitwarden-unlock"
 fi
 
 echo "[✓] Bitwarden setup completed successfully!"

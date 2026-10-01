@@ -100,16 +100,16 @@ sudo rm ~/.bitwarden/bitwarden-info
 > different places. Make sure to apply the same set of permissions to all copies of the
 > GPG file as mentioned above.
 
-> Note: You can copy the `bitwarden-unlock` script into the local `bin` folder to be able
-> to unlock the GPG file by a single command from anywhere.
+> Note: You can create a symbolic link for the `bitwarden-unlock` script in your local `bin`
+> folder to be able to unlock the GPG file by a single command from anywhere.
 
 > Note: When you decrypt the GPG file once, it will remain unlocked for the next 15
 > minutes. So on consecutive usages of the decryption command within 15 minutes, you will
 > only need to enter your user's password for the `sudo` command.
 
 ```bash
-cp bitwarden-unlock ~/.local/bin/
-chmod +x ~/.local/bin/bitwarden-unlock
+chmod +x bitwarden-unlock
+ln -sf "$(pwd)/bitwarden-unlock" ~/.local/bin/
 ```
 
 Run this command in the terminal from anywhere to unlock the master password GPG file:
