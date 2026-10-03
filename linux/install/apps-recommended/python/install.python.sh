@@ -2,6 +2,7 @@
 # Description: Install and configure Python versions (from 3.8 up to latest stable)
 # Note: Installs Python runtimes with -dev and -full packages; links default python
 # without python3-is-python. Checks each component (runtime, -dev, -full) independently.
+# Only installs stable Python versions (filters out pre-release alpha/beta/rc tags).
 
 set -euo pipefail
 
@@ -19,14 +20,15 @@ Usage: $(basename "$0") [OPTIONS] [VERSIONS...]
 
 Description:
   Installs Python versions starting from 3.8, 3.9 up to current latest stable
-  version (e.g. 3.14). For each version, the runtime, development package (-dev),
-  and complete runtime (-full / -venv) are checked and installed independently.
-  Configures default /usr/bin/python and /usr/bin/python-config symlinks to point
-  to the latest installed Python version without requiring python3-is-python.
+  version (e.g. 3.14). Excludes pre-release / development versions (e.g. alpha, beta, rc).
+  For each version, the runtime, development package (-dev), and complete runtime
+  (-full / -venv) are checked and installed independently. Configures default
+  /usr/bin/python and /usr/bin/python-config symlinks to point to the highest
+  installed Python version without requiring python3-is-python.
 
 Arguments:
   VERSIONS              Optional specific Python version(s) to install (e.g. 3.12 3.14).
-                        Default: all versions from 3.8 up to latest available in repo.
+                        Default: all stable versions from 3.8 up to latest stable in repo.
 
 Options:
   --fast                Quickly check if base Python runtime is installed and exit immediately
@@ -35,11 +37,28 @@ Options:
   -h, --help            Show this help message and exit
 
 Examples:
-  $(basename "$0")              # Installs 3.8 through latest and links python
+  $(basename "$0")              # Installs 3.8 through latest stable (e.g. 3.14)
   $(basename "$0") --fast       # Fast-exits if base python3 runtime is already installed
   $(basename "$0") 3.12         # Installs runtime, dev, and full packages for Python 3.12
   $(basename "$0") 3.12 --fast  # Fast-exits if base python3.12 runtime is already installed
 EOF
+}
+
+# Helper: check whether a python package candidate is a stable release
+# (excludes pre-release versions with letters, tildes, alpha/beta/rc tags in upstream version)
+is_stable_python_package() {
+    local pkg="$1"
+    local raw_ver
+    raw_ver=$(apt-cache madison "$pkg" 2>/dev/null | head -n 1 | awk -F'|' '{gsub(/ /, "", $2); print $2}')
+    [[ -z "$raw_ver" ]] && return 1
+
+    local upstream="${raw_ver%%-*}"
+    upstream="${upstream#*:}"
+
+    if [[ "$upstream" =~ ^[0-9]+(\.[0-9]+)+$ ]]; then
+        return 0
+    fi
+    return 1
 }
 
 # Parse arguments
@@ -98,24 +117,35 @@ if [[ "$FAST" == "true" && "$FORCE" != "true" ]]; then
     fi
 fi
 
-# Determine target versions
+# Determine target versions (filtering out any unstable pre-release versions)
 TARGET_VERSIONS=()
 if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
-    TARGET_VERSIONS=("${CUSTOM_VERSIONS[@]}")
+    for ver in "${CUSTOM_VERSIONS[@]}"; do
+        if [[ "$ver" == "3" ]] || is_stable_python_package "python${ver}"; then
+            TARGET_VERSIONS+=("$ver")
+        else
+            echo "[!] Skipping pre-release/unstable Python version: ${ver}"
+        fi
+    done
 else
-    # Target versions from 3.8 up to at least 3.14 (or higher if newer exists)
+    # Target versions starting from 3.8 up to the highest available stable release
     MAX_MINOR=14
-    DETECTED_MAX=$(
-        apt-cache search "^python3\.[0-9]+$" 2>/dev/null | awk '{print $1}' \
-            | grep -Po '3\.\K[0-9]+' | sort -n | tail -1 || true
-    )
-    if [[ -n "$DETECTED_MAX" ]] && (( DETECTED_MAX > MAX_MINOR )); then
-        MAX_MINOR="$DETECTED_MAX"
-    fi
+    for (( m=15; m<=25; m++ )); do
+        if is_stable_python_package "python3.${m}"; then
+            MAX_MINOR="$m"
+        else
+            break
+        fi
+    done
 
     for (( m=8; m<=MAX_MINOR; m++ )); do
         TARGET_VERSIONS+=("3.$m")
     done
+fi
+
+if [[ ${#TARGET_VERSIONS[@]} -eq 0 ]]; then
+    echo "[!] No valid stable Python versions specified or found."
+    exit 1
 fi
 
 # Fast-path check for full installation: check if all components are already installed
@@ -234,9 +264,18 @@ if [[ -n "$HIGHEST_INSTALLED_MINOR" && -x "/usr/bin/python3.${HIGHEST_INSTALLED_
     fi
 fi
 
-# 5. Verify installation
+# 5. Verify installation and print accurate report
 echo "[+] Verification:"
 python --version
 pip3 --version || true
 
-echo "[✓] Python versions (${TARGET_VERSIONS[*]}) setup completed successfully!"
+VERIFIED_VERSIONS=()
+for ver in "${TARGET_VERSIONS[@]}"; do
+    if is_installed --check "python${ver}"; then
+        VERIFIED_VERSIONS+=("${ver}")
+    fi
+done
+
+if [[ ${#VERIFIED_VERSIONS[@]} -gt 0 ]]; then
+    echo "[✓] Successfully installed and verified Python versions: ${VERIFIED_VERSIONS[*]}"
+fi
