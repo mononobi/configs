@@ -255,6 +255,11 @@ container_owns_port() {
     return 1
 }
 
+# Ensure base directory ~/.postgres exists and has full user permissions upfront
+mkdir -p "$HOME/.postgres"
+sudo chown -R "${USER}:${USER}" "$HOME/.postgres"
+sudo setfacl -R -m "u:${USER}:rwx,d:u:${USER}:rwx" "$HOME/.postgres"
+
 # Track if this is the first instance being processed in this run
 is_first_instance=true
 
@@ -357,6 +362,9 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         cp "${SCRIPT_DIR}/files/db.conf" "${TARGET_DIR}/config/conf.d/db.conf"
     fi
 
+    if [[ -d "${TARGET_DIR}/config/pg_hba.conf" ]]; then
+        sudo rm -rf "${TARGET_DIR}/config/pg_hba.conf"
+    fi
     if [[ ! -f "${TARGET_DIR}/config/pg_hba.conf" ]]; then
         echo "[+] Installing default pg_hba.conf to ${TARGET_DIR}/config/pg_hba.conf..."
         cp "${SCRIPT_DIR}/files/pg_hba.conf" "${TARGET_DIR}/config/pg_hba.conf"
