@@ -10,12 +10,8 @@ services:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
       - POSTGRES_DB=${PG_DB}
       - PGDATA=/var/lib/postgresql/data/pgdata
-      - PUID=${HOST_UID}
-      - PGID=${HOST_GID}
     command:
       - "postgres"
-      - "-c"
-      - "include_dir=/etc/postgresql/conf.d"
       - "-c"
       - "hba_file=/etc/postgresql/pg_hba.conf"
     volumes:

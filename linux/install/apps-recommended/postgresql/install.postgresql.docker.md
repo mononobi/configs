@@ -31,8 +31,11 @@ Compose.
 - **Zero-Friction Host CLI**: Automatically equips the host system with `postgresql-client` so
   `psql`, `pg_dump`, and `pg_restore` work directly in your terminal without requiring
   `docker exec`.
-- **Easy Config Access**: Custom server configurations (`db.conf`, `pg_hba.conf`, and `.conf`
-  drops) are mounted in user space and editable without `sudo`.
+- **Easy Config & User-Space Access**: Custom server configurations (`db.conf`, `pg_hba.conf`,
+  and `.conf` drops) are mounted in user space and editable without `sudo`. All files in
+  `~/.postgres/<version>/` are granted user permissions via POSIX ACLs (`setfacl`) so your
+  regular user can inspect logs, manage configs, and backup data directories directly without
+  `sudo`.
 - **PostGIS Support**: One-flag deployment of spatial databases via official `postgis/postgis`
   images.
 - **Automated UFW Firewall**: Opens instance listening ports in UFW automatically.

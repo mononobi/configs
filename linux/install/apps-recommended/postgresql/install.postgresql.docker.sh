@@ -135,8 +135,9 @@ done
 
 echo "[+] Starting PostgreSQL Docker setup..."
 
-# 1. Require framework dependencies: Docker and UFW
-require_app docker ufw
+# 1. Require framework dependencies
+require_app docker ufw acl curl
+require_app python --fast
 
 # 2. Ensure lightweight host client tools (psql, pg_dump) are available
 if ! is_installed --check "psql"; then
@@ -364,6 +365,16 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         cp "${SCRIPT_DIR}/files/pg_hba.conf" "${TARGET_DIR}/config/pg_hba.conf"
     fi
 
+    # Copy initdb script to inject include_dir into postgresql.conf during initialization
+    if [[ ! -f "${TARGET_DIR}/initdb.d/00-init-conf.sh" ]]; then
+        echo "[+] Installing 00-init-conf.sh to ${TARGET_DIR}/initdb.d/..."
+        cp "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
+        chmod +x "${TARGET_DIR}/initdb.d/00-init-conf.sh"
+    elif [[ "$FORCE" == "true" ]]; then
+        cp "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
+        chmod +x "${TARGET_DIR}/initdb.d/00-init-conf.sh"
+    fi
+
     # Detect host UID and GID dynamically to embed into docker-compose
     HOST_UID="$(id -u)"
     HOST_GID="$(id -g)"
@@ -384,8 +395,6 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         -e "s|\${PG_USER}|${PG_USER}|g" \
         -e "s|\${PG_PASSWORD}|${PG_PASSWORD}|g" \
         -e "s|\${PG_DB}|${PG_DB}|g" \
-        -e "s|\${HOST_UID}|${HOST_UID}|g" \
-        -e "s|\${HOST_GID}|${HOST_GID}|g" \
         "${SCRIPT_DIR}/files/docker-compose.template.yml")
 
     if [[ ! -f "$COMPOSE_FILE" ]] || [[ "$FORCE" == "true" ]]; then
@@ -395,6 +404,17 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         CURRENT_COMPOSE=$(cat "$COMPOSE_FILE" 2>/dev/null || true)
         if [[ "$CURRENT_COMPOSE" != "$NEW_COMPOSE" ]]; then
             echo "$NEW_COMPOSE" > "$COMPOSE_FILE"
+        fi
+    fi
+
+    # If cluster already initialized, ensure include_dir is in postgresql.conf
+    PGDATA_CONF="${TARGET_DIR}/data/pgdata/postgresql.conf"
+    if [[ -f "$PGDATA_CONF" ]]; then
+        if ! grep -q "include_dir = '/etc/postgresql/conf.d'" "$PGDATA_CONF" 2>/dev/null; then
+            echo "[+] Adding include_dir directive to existing ${PGDATA_CONF}..."
+            echo "" | sudo tee -a "$PGDATA_CONF" >/dev/null
+            echo "# Custom configuration drops" | sudo tee -a "$PGDATA_CONF" >/dev/null
+            echo "include_dir = '/etc/postgresql/conf.d'" | sudo tee -a "$PGDATA_CONF" >/dev/null
         fi
     fi
 
@@ -419,6 +439,13 @@ for VER in "${TARGET_VERSIONS[@]}"; do
             sleep 1
         done
     fi
+
+    # Ensure host user has full read/write access to ~/.postgres/<version>/ without sudo
+    echo "[+] Ensuring user access permissions on ${TARGET_DIR}..."
+    if command -v setfacl >/dev/null 2>&1; then
+        sudo setfacl -R -m "u:${USER}:rwx,d:u:${USER}:rwx" "$TARGET_DIR" 2>/dev/null || true
+    fi
+    sudo chmod -R u+rwX,g+rX "$TARGET_DIR" 2>/dev/null || true
 
     # Mandatory UFW firewall rule for the instance port
     echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
