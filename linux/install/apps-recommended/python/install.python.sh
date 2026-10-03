@@ -154,7 +154,8 @@ if [[ "$FORCE" != "true" ]]; then
     for ver in "${TARGET_VERSIONS[@]}"; do
         if ! is_installed --check "python${ver}" || \
            ! is_installed --check "python${ver}-dev" || \
-           (! is_installed --check "python${ver}-full" && ! is_installed --check "python${ver}-venv"); then
+           (has_apt_candidate "python${ver}-full" && ! is_installed --check "python${ver}-full") || \
+           (has_apt_candidate "python${ver}-venv" && ! is_installed --check "python${ver}-venv"); then
             all_installed=false
             break
         fi
@@ -202,16 +203,21 @@ for ver in "${TARGET_VERSIONS[@]}"; do
         fi
     fi
 
-    # Component C: Full environment / venv
-    if ! is_installed "python${ver}-full" && ! is_installed "python${ver}-venv"; then
+    # Component C: Full environment (-full)
+    if ! is_installed "python${ver}-full"; then
         if has_apt_candidate "python${ver}-full"; then
             PKGS+=("python${ver}-full")
-        elif has_apt_candidate "python${ver}-venv"; then
+        fi
+    fi
+
+    # Component D: Virtual environment (-venv)
+    if ! is_installed "python${ver}-venv"; then
+        if has_apt_candidate "python${ver}-venv"; then
             PKGS+=("python${ver}-venv")
         fi
     fi
 
-    # Component D: Distutils (only for legacy Python versions <= 3.11 where distutils existed)
+    # Component E: Distutils (only for legacy Python versions <= 3.11 where distutils existed)
     minor="${ver#3.}"
     if [[ "$ver" != "3" && "$minor" =~ ^[0-9]+$ && "$minor" -le 11 ]]; then
         if has_apt_candidate "python${ver}-distutils"; then
