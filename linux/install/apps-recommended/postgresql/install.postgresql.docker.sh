@@ -508,11 +508,14 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     echo "${DIV_MAIN}"
 done
 
-# Ensure psql-connect helper is executable and linked into ~/.local/bin
+# Ensure container CLI helper tools are executable and linked into ~/.local/bin
 ensure_local_bin_in_path
-chmod +x "${SCRIPT_DIR}/files/psql-connect"
-ln -sf "${SCRIPT_DIR}/files/psql-connect" "${HOME}/.local/bin/psql-connect"
-echo "[+] Linked psql-connect utility to ${HOME}/.local/bin/psql-connect"
+
+for tool in "pg-docker-cli" "psql-d" "pg_dump-d" "pg_restore-d"; do
+    chmod +x "${SCRIPT_DIR}/files/${tool}"
+    ln -sf "${SCRIPT_DIR}/files/${tool}" "${HOME}/.local/bin/${tool}"
+done
+echo "[+] Linked CLI utilities (psql-d, pg_dump-d, pg_restore-d) to ${HOME}/.local/bin/"
 
 echo ""
 echo "[✓] All PostgreSQL Docker instances processed successfully!"

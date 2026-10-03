@@ -150,19 +150,53 @@ Unless customized with flags, all instances default to standard local developmen
 - **Username**: `postgres`
 - **Password**: `123`
 
-### 2. Interactive CLI Connector (`psql-connect`)
+### 2. Container-Native CLI Tools (`psql-d`, `pg_dump-d`, `pg_restore-d`)
 
-The installer provides and symlinks the `psql-connect` utility into
-`~/.local/bin/psql-connect`:
+The installer provides and symlinks matching `-d` CLI tools into `~/.local/bin/`. They execute
+directly inside the target container via `docker exec`, guaranteeing **exact 1:1
+client-to-server version matches**, zero catalog/version mismatch warnings, and full support
+for all flags and piped input/output:
 
-- **Single Version Installed**: Detects the only version in `~/.postgres/` and connects
-  directly via `psql`.
-- **Multiple Versions Installed**: Displays an interactive numbered menu showing container
-  names, versions, and ports, and connects to your choice:
+- **Single Version Installed**: Detects the only version in `~/.postgres/` and executes
+  immediately.
+- **Multiple Versions Installed**: Displays an interactive numbered menu on stderr (preserving
+  clean stdout redirections for backups) and runs against your selected container.
+
+#### `psql-d` (Interactive & Query Execution)
 
 ```bash
-# Run from anywhere in terminal:
-psql-connect
+# Connect interactively to PostgreSQL:
+psql-d
+
+# Execute one-liner queries or backslash commands:
+psql-d -c "\l"
+psql-d -c "SELECT version();"
+
+# Pipe SQL scripts or run migrations:
+psql-d < migration.sql
+```
+
+#### `pg_dump-d` (1:1 Schema & Data Backup)
+
+```bash
+# Full database plain text backup:
+pg_dump-d > backup.sql
+
+# Compressed custom archive format:
+pg_dump-d -Fc -f backup.dump
+
+# Dump specific database or table:
+pg_dump-d -d my_db -t my_table > table_backup.sql
+```
+
+#### `pg_restore-d` (1:1 Archive Restore)
+
+```bash
+# Restore custom archive into database:
+pg_restore-d -d my_db backup.dump
+
+# Clean and recreate tables before restoring:
+pg_restore-d --clean --if-exists -d my_db backup.dump
 ```
 
 ### 3. Direct Terminal CLI (`psql`)

@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Description: Interactive CLI connector for PostgreSQL multi-version Docker containers
-# Note: Connects directly if only 1 version exists; presents a numbered selection list if multiple.
+# Description: Shared execution dispatcher for PostgreSQL container CLI tools (psql, pg_dump, pg_restore)
+# Note: Connects directly if only 1 version exists; presents a numbered selection menu if multiple.
 
 set -euo pipefail
+
+COMMAND_NAME="${1:-psql}"
+shift || true
 
 # Resolve true directory of this script (supporting symlinks in ~/.local/bin)
 TARGET_FILE="${BASH_SOURCE[0]}"
@@ -49,15 +52,12 @@ for inst_dir in "${instances[@]}"; do
     compose_file="${inst_dir}/docker-compose.yml"
     ver="$(basename "$inst_dir")"
 
-    # Extract container name
     c_name=$(grep -E '^\s*container_name:' "$compose_file" | head -n 1 | awk '{print $2}' || true)
     [[ -z "$c_name" ]] && c_name="postgres-${ver}"
 
-    # Extract host port
     c_port=$(grep -oE '[0-9]+:5432' "$compose_file" | head -n 1 | cut -d: -f1 || true)
     [[ -z "$c_port" ]] && c_port="5432"
 
-    # Extract user, password, and db
     c_user=$(grep -E 'POSTGRES_USER=' "$compose_file" | head -n 1 | cut -d= -f2- | tr -d ' "' || true)
     [[ -z "$c_user" ]] && c_user="postgres"
 
@@ -75,8 +75,7 @@ for inst_dir in "${instances[@]}"; do
     c_versions+=("$ver")
 done
 
-# Helper function to launch psql connection
-connect_to() {
+execute_in_container() {
     local idx="$1"
     shift
     local name="${c_names[$idx]}"
@@ -86,43 +85,63 @@ connect_to() {
     local db="${c_dbs[$idx]}"
     local ver="${c_versions[$idx]}"
 
-    echo -e "${C_GREEN}[+] Connecting to ${C_BOLD}${name}${C_RESET}${C_GREEN} (PG ${ver}) on port ${C_BOLD}${port}${C_RESET}..."
-    export PGPASSWORD="$pass"
-    exec psql -h localhost -p "$port" -U "$user" -d "$db" "$@"
+    local docker_flags="-i"
+    # Use interactive TTY only when both stdin/stdout are terminals and not dumping/redirecting output
+    if [[ -t 0 && -t 1 && "$COMMAND_NAME" == "psql" ]]; then
+        docker_flags="-it"
+    fi
+
+    # Print connection notice to stderr so it does not corrupt stdout dumps (e.g. pg_dump-d > backup.sql)
+    echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (PG ${ver}, port ${port})...${C_RESET}" >&2
+
+    case "$COMMAND_NAME" in
+        psql)
+            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" psql -U "$user" -d "$db" "$@"
+            ;;
+        pg_dump)
+            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" pg_dump -U "$user" -d "$db" "$@"
+            ;;
+        pg_restore)
+            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" pg_restore -U "$user" -d "$db" "$@"
+            ;;
+        *)
+            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" "$COMMAND_NAME" -U "$user" -d "$db" "$@"
+            ;;
+    esac
 }
 
-# Single instance: connect automatically
+# Single instance: execute automatically
 if [[ ${#instances[@]} -eq 1 ]]; then
-    connect_to 0 "$@"
+    execute_in_container 0 "$@"
 fi
 
-# Multiple instances: present interactive menu
-echo ""
-echo -e "${C_BOLD}${C_CYAN}Available PostgreSQL Instances:${C_RESET}"
-echo "$DIV_SUB"
-printf "  ${C_BOLD}%-4s %-22s %-10s %-8s %-12s${C_RESET}\n" "#" "Container" "Version" "Port" "Database"
-echo "$DIV_SUB"
+# Multiple instances: present interactive menu on stderr so stdout redirection stays clean
+echo "" >&2
+echo -e "${C_BOLD}${C_CYAN}Available PostgreSQL Instances for ${COMMAND_NAME}:${C_RESET}" >&2
+echo "$DIV_SUB" >&2
+printf "  ${C_BOLD}%-4s %-22s %-10s %-8s %-12s${C_RESET}\n" "#" "Container" "Version" "Port" "Database" >&2
+echo "$DIV_SUB" >&2
 
 for i in "${!instances[@]}"; do
     num=$((i + 1))
     printf "  [%s]  %-22s %-10s %-8s %-12s\n" \
-        "$num" "${c_names[$i]}" "${c_versions[$i]}" "${c_ports[$i]}" "${c_dbs[$i]}"
+        "$num" "${c_names[$i]}" "${c_versions[$i]}" "${c_ports[$i]}" "${c_dbs[$i]}" >&2
 done
-echo "$DIV_SUB"
+echo "$DIV_SUB" >&2
 
 while true; do
-    echo -ne "${C_YELLOW}Select instance [1-${#instances[@]}] (or 'q' to quit): ${C_RESET}"
-    read -r choice || { echo ""; exit 0; }
+    echo -ne "${C_YELLOW}Select instance [1-${#instances[@]}] (or 'q' to quit): ${C_RESET}" >&2
+    read -r choice || { echo "" >&2; exit 0; }
 
     if [[ "$choice" =~ ^[qQ]$ ]]; then
-        echo "Cancelled."
+        echo "Cancelled." >&2
         exit 0
     fi
 
     if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#instances[@]} )); then
         selected_idx=$((choice - 1))
-        connect_to "$selected_idx" "$@"
+        execute_in_container "$selected_idx" "$@"
     else
-        echo -e "${C_RED}[!] Invalid selection. Please enter a number between 1 and ${#instances[@]}.${C_RESET}"
+        echo -e "${C_RED}[!] Invalid selection. Please enter a number between 1 and ${#instances[@]}.${C_RESET}" >&2
     fi
 done
