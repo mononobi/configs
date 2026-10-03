@@ -136,7 +136,7 @@ done
 echo "[+] Starting PostgreSQL Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker ufw acl curl
+require_app docker ufw acl lsof curl
 require_app python --fast
 
 # 2. Ensure lightweight host client tools (psql, pg_dump) are available
@@ -239,8 +239,8 @@ is_port_in_use() {
     if ss -tuln "sport = :${port}" 2>/dev/null | grep -q ":${port} "; then
         return 0
     fi
-    if command -v lsof >/dev/null 2>&1; then
-        lsof -iTCP:"$port" -sTCP:LISTEN -n -P >/dev/null 2>&1 && return 0
+    if lsof -iTCP:"$port" -sTCP:LISTEN -n -P >/dev/null 2>&1; then
+        return 0
     fi
     return 1
 }
@@ -442,10 +442,8 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 
     # Ensure host user has full read/write access to ~/.postgres/<version>/ without sudo
     echo "[+] Ensuring user access permissions on ${TARGET_DIR}..."
-    if command -v setfacl >/dev/null 2>&1; then
-        sudo setfacl -R -m "u:${USER}:rwx,d:u:${USER}:rwx" "$TARGET_DIR" 2>/dev/null || true
-    fi
-    sudo chmod -R u+rwX,g+rX "$TARGET_DIR" 2>/dev/null || true
+    sudo setfacl -R -m "u:${USER}:rwx,d:u:${USER}:rwx" "$TARGET_DIR"
+    sudo chmod -R u+rwX,g+rX "$TARGET_DIR"
 
     # Mandatory UFW firewall rule for the instance port
     echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
