@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Description: Install and configure Python versions (from 3.8 up to latest stable)
 # Note: Installs Python runtimes with -dev and -full packages; links default python
-# without python3-is-python.
+# without python3-is-python. Checks each component (runtime, -dev, -full) independently.
 
 set -euo pipefail
 
@@ -19,25 +19,26 @@ Usage: $(basename "$0") [OPTIONS] [VERSIONS...]
 
 Description:
   Installs Python versions starting from 3.8, 3.9 up to current latest stable
-  version (e.g. 3.14). For each version, both the development package (-dev)
-  and the complete runtime (-full) are installed. Configures default /usr/bin/python
-  and /usr/bin/python-config symlinks to point to the latest installed Python version
-  without requiring the python3-is-python package.
+  version (e.g. 3.14). For each version, the runtime, development package (-dev),
+  and complete runtime (-full / -venv) are checked and installed independently.
+  Configures default /usr/bin/python and /usr/bin/python-config symlinks to point
+  to the latest installed Python version without requiring python3-is-python.
 
 Arguments:
   VERSIONS              Optional specific Python version(s) to install (e.g. 3.12 3.14).
                         Default: all versions from 3.8 up to latest available in repo.
 
 Options:
-  --fast                Quickly check if target Python is installed and exit immediately
+  --fast                Quickly check if base Python runtime is installed and exit immediately
   --no-update           Skip apt update before installation
   -f, --force           Force installation even if already installed
   -h, --help            Show this help message and exit
 
 Examples:
   $(basename "$0")              # Installs 3.8 through latest and links python
-  $(basename "$0") --fast       # Fast-exits if python3 is already installed
-  $(basename "$0") 3.12 3.14    # Installs only Python 3.12 and 3.14
+  $(basename "$0") --fast       # Fast-exits if base python3 runtime is already installed
+  $(basename "$0") 3.12         # Installs runtime, dev, and full packages for Python 3.12
+  $(basename "$0") 3.12 --fast  # Fast-exits if base python3.12 runtime is already installed
 EOF
 }
 
@@ -76,7 +77,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Fast-path check: if --fast is specified, exit or narrow target versions
+# Fast-path check: if --fast is specified, only check base runtime binary and exit
 if [[ "$FAST" == "true" && "$FORCE" != "true" ]]; then
     if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
         missing_versions=()
@@ -90,10 +91,55 @@ if [[ "$FAST" == "true" && "$FORCE" != "true" ]]; then
             exit 0
         fi
 
-        # Narrow custom versions to only those that need to be installed
+        # Narrow custom versions to only those missing the base runtime
         CUSTOM_VERSIONS=("${missing_versions[@]}")
     else
         is_installed "python3" && exit 0
+    fi
+fi
+
+# Determine target versions
+TARGET_VERSIONS=()
+if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
+    TARGET_VERSIONS=("${CUSTOM_VERSIONS[@]}")
+else
+    # Target versions from 3.8 up to at least 3.14 (or higher if newer exists)
+    MAX_MINOR=14
+    DETECTED_MAX=$(
+        apt-cache search "^python3\.[0-9]+$" 2>/dev/null | awk '{print $1}' \
+            | grep -Po '3\.\K[0-9]+' | sort -n | tail -1 || true
+    )
+    if [[ -n "$DETECTED_MAX" ]] && (( DETECTED_MAX > MAX_MINOR )); then
+        MAX_MINOR="$DETECTED_MAX"
+    fi
+
+    for (( m=8; m<=MAX_MINOR; m++ )); do
+        TARGET_VERSIONS+=("3.$m")
+    done
+fi
+
+# Fast-path check for full installation: check if all components are already installed
+if [[ "$FORCE" != "true" ]]; then
+    all_installed=true
+    for ver in "${TARGET_VERSIONS[@]}"; do
+        if ! is_installed --check "python${ver}" || \
+           ! is_installed --check "python${ver}-dev" || \
+           (! is_installed --check "python${ver}-full" && ! is_installed --check "python${ver}-venv"); then
+            all_installed=false
+            break
+        fi
+    done
+
+    for pkg in "python3" "python3-dev" "python3-pip" "python3-venv" "python3-setuptools"; do
+        if ! is_installed --check "$pkg"; then
+            all_installed=false
+            break
+        fi
+    done
+
+    if [[ "$all_installed" == "true" ]]; then
+        echo "[i] All components for Python (${TARGET_VERSIONS[*]}) are already installed, skipping..."
+        exit 0
     fi
 fi
 
@@ -107,64 +153,64 @@ echo "[+] Adding deadsnakes PPA..."
 sudo add-apt-repository -y -n ppa:deadsnakes/ppa
 sudo apt-get update
 
-# 3. Determine target versions
-TARGET_VERSIONS=()
-if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
-    TARGET_VERSIONS=("${CUSTOM_VERSIONS[@]}")
-else
-    # Target versions from 3.8 up to at least 3.14 (or higher if newer exists)
-    MAX_MINOR=14
-    DETECTED_MAX=$(
-        apt-cache search "^python3\.[0-9]+$" | awk '{print $1}' \
-            | grep -Po '3\.\K[0-9]+' | sort -n | tail -1
-    )
-    if [[ -n "$DETECTED_MAX" ]] && (( DETECTED_MAX > MAX_MINOR )); then
-        MAX_MINOR="$DETECTED_MAX"
-    fi
+echo "[+] Target Python versions to process: ${TARGET_VERSIONS[*]}"
 
-    for (( m=8; m<=MAX_MINOR; m++ )); do
-        TARGET_VERSIONS+=("3.$m")
-    done
-fi
-
-echo "[+] Target Python versions to install: ${TARGET_VERSIONS[*]}"
-
-# 4. Assemble package list for each version (runtime, -dev, -full)
+# 3. Assemble package list for each version by checking each component independently
 PKGS=()
 for ver in "${TARGET_VERSIONS[@]}"; do
-    is_installed --check "python${ver}" && continue
-
-    PKGS+=("python${ver}" "python${ver}-dev")
-
-    if apt-cache show "python${ver}-full" >/dev/null 2>&1; then
-        PKGS+=("python${ver}-full")
-    else
-        PKGS+=("python${ver}-venv")
+    # Component A: Base runtime
+    if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}"; then
+        PKGS+=("python${ver}")
     fi
 
+    # Component B: Development headers (-dev)
+    if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}-dev"; then
+        if apt-cache show "python${ver}-dev" >/dev/null 2>&1; then
+            PKGS+=("python${ver}-dev")
+        fi
+    fi
+
+    # Component C: Full environment / venv
+    if [[ "$FORCE" == "true" ]] || (! is_installed --check "python${ver}-full" && ! is_installed --check "python${ver}-venv"); then
+        if apt-cache show "python${ver}-full" >/dev/null 2>&1; then
+            PKGS+=("python${ver}-full")
+        elif apt-cache show "python${ver}-venv" >/dev/null 2>&1; then
+            PKGS+=("python${ver}-venv")
+        fi
+    fi
+
+    # Component D: Distutils (for older versions if available)
     if apt-cache show "python${ver}-distutils" >/dev/null 2>&1; then
-        PKGS+=("python${ver}-distutils")
+        if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}-distutils"; then
+            PKGS+=("python${ver}-distutils")
+        fi
     fi
 done
 
-# Also install general tools (pip, venv), but NOT python3-is-python
+# General tools (pip, venv, setuptools), but NOT python3-is-python
 GENERAL_PKGS=()
 for pkg in "python3" "python3-dev" "python3-pip" "python3-venv" "python3-setuptools"; do
-    if ! is_installed --check "$pkg"; then
+    if [[ "$FORCE" == "true" ]] || ! is_installed --check "$pkg"; then
         GENERAL_PKGS+=("$pkg")
     fi
 done
 
-TO_INSTALL=("${PKGS[@]}" "${GENERAL_PKGS[@]}")
+TO_INSTALL=()
+# Deduplicate packages
+for p in "${PKGS[@]}" "${GENERAL_PKGS[@]}"; do
+    if [[ ! " ${TO_INSTALL[*]:-} " =~ " ${p} " ]]; then
+        TO_INSTALL+=("$p")
+    fi
+done
 
 if [[ ${#TO_INSTALL[@]} -gt 0 ]]; then
-    echo "[+] Installing packages: ${TO_INSTALL[*]}..."
+    echo "[+] Installing missing Python packages: ${TO_INSTALL[*]}..."
     sudo apt-get install -y "${TO_INSTALL[@]}"
 else
-    echo "[+] All target Python versions and tools are already installed."
+    echo "[+] All components for target Python versions and tools are already installed."
 fi
 
-# 5. Point /usr/bin/python and /usr/bin/python-config to the latest installed version
+# 4. Point /usr/bin/python and /usr/bin/python-config to the latest installed version
 LATEST_VER=""
 for (( i=${#TARGET_VERSIONS[@]}-1; i>=0; i-- )); do
     v="${TARGET_VERSIONS[i]}"
@@ -184,7 +230,7 @@ if [[ -n "$LATEST_VER" ]]; then
     fi
 fi
 
-# 6. Verify installation
+# 5. Verify installation
 echo "[+] Verification:"
 python --version
 pip3 --version || true

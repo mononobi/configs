@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Description: Install and configure psycopg2
-# Note: Modernized for Ubuntu with best practices.
+# Description: Install and configure psycopg2 build dependencies (libpq-dev, python3-dev)
+# Note: Installs C toolchain, libpq, and Python headers required to compile psycopg2 from source.
 
 set -euo pipefail
-
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
@@ -14,10 +13,12 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs C development dependencies required for compiling psycopg2 and PostgreSQL drivers.
+  Installs C development dependencies (build-essential, libpq-dev, python3-dev)
+  required for compiling psycopg2 and PostgreSQL drivers from source.
 
 Options:
   --no-update   Skip apt update before installation
+  --skip-update Alias for --no-update
   -h, --help    Show this help message and exit
 EOF
 }
@@ -41,14 +42,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "libpq-dev" --name "psycopg2 build dependencies" && exit 0
+if is_installed --check "libpq-dev" && is_installed --check "python3-dev"; then
+    is_installed "libpq-dev" --name "psycopg2 build dependencies" && exit 0
+fi
 
-echo "[+] Starting installation/setup for psycopg2..."
+echo "[+] Starting installation/setup for psycopg2 build dependencies..."
 
-require_app python --fast
+require_app python --args 3
 require_app build-essential
 
 conditional_apt_update
 sudo apt-get install -y libpq-dev
 
-echo "[✓] psycopg2 setup completed successfully!"
+echo "[✓] psycopg2 build dependencies (libpq-dev, python3-dev) setup completed successfully!"
