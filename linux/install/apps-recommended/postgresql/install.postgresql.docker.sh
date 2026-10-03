@@ -327,8 +327,14 @@ for VER in "${TARGET_VERSIONS[@]}"; do
             fi
         else
             # Default behavior when --port is not provided:
-            # Primary instance uses DEFAULT_PORT (5432) and fails if busy
-            if [[ "$is_first_instance" == "true" ]]; then
+            # Check how many existing instances already exist on the system (excluding current version)
+            existing_subfolder_count=0
+            if [[ -d "$HOME/.postgres" ]]; then
+                existing_subfolder_count=$(find "$HOME/.postgres" -mindepth 1 -maxdepth 1 -type d ! -name "$TAG" | wc -l)
+            fi
+
+            # Truly the first instance on the system only if no other instance subfolders exist AND it is first in this run
+            if [[ "$is_first_instance" == "true" && "$existing_subfolder_count" -eq 0 ]]; then
                 PORT="$DEFAULT_PORT"
                 if is_port_in_use "$PORT"; then
                     if ! container_owns_port "$CONTAINER_BASE" "$PORT"; then
@@ -338,12 +344,8 @@ for VER in "${TARGET_VERSIONS[@]}"; do
                     fi
                 fi
             else
-                # Calculate port for secondary versions: 5432 + subfolder_count, incrementing if busy
-                subfolder_count=0
-                if [[ -d "$HOME/.postgres" ]]; then
-                    subfolder_count=$(find "$HOME/.postgres" -mindepth 1 -maxdepth 1 -type d ! -name "$TAG" | wc -l)
-                fi
-                candidate_port=$((DEFAULT_PORT + subfolder_count))
+                # Other instances already exist: find first free port starting from DEFAULT_PORT + existing_subfolder_count
+                candidate_port=$((DEFAULT_PORT + existing_subfolder_count))
                 while is_port_in_use "$candidate_port"; do
                     if container_owns_port "$CONTAINER_BASE" "$candidate_port"; then
                         break
