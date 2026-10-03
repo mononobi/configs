@@ -290,7 +290,25 @@ deb="$(resolve_ubuntu_pool_deb "$pool_url" "$pattern")"
 - Avoids fragile hardcoded micro-revisions on Ubuntu archive pools where older superseded
   `.deb` packages are regularly pruned when security updates land.
 
-### 7. Centralized Color Palette & UI Styling (`colors.sh`)
+### 7. `has_apt_candidate <package_name>`
+
+Inspects the APT policy cache to verify whether a package actually has an installable candidate
+in the repository indexes:
+
+```bash
+if has_apt_candidate "python3-dev"; then
+    sudo apt-get install -y python3-dev
+fi
+```
+
+- **Candidate vs. Virtual Stub Detection**: Distinguishes real installable `.deb` packages from
+  purely virtual or obsoleted stubs (such as `python3-distutils` on Ubuntu 24.04+, where
+  `apt-cache show` exits `0` with an informational notice, but `apt-get install` fails with
+  `has no installation candidate`).
+- **Safe Pre-Flight Checks**: Guarantees that dynamically assembled package lists only include
+  packages that APT can actually download and install.
+
+### 8. Centralized Color Palette & UI Styling (`colors.sh`)
 
 The framework provides a centralized color and divider library in `linux/install/colors.sh`,
 which is automatically sourced by `utils.sh`:

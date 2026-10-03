@@ -633,6 +633,20 @@ resolve_ubuntu_pool_deb() {
     echo "$best"
 }
 
+# has_apt_candidate <package_name>
+#
+# Inspects the APT policy cache to check if a package actually has an installable candidate.
+# Distinguishes real installable packages from purely virtual or obsoleted stubs (where
+# apt-cache show returns 0 but apt-get install fails with 'has no installation candidate').
+#
+# Returns:
+#   0 if an installable candidate exists, 1 otherwise.
+has_apt_candidate() {
+    local pkg="${1:-}"
+    [[ -z "$pkg" ]] && return 1
+    apt-cache policy "$pkg" 2>/dev/null | grep -q 'Candidate: [^(]'
+}
+
 # check_os_compatibility
 # 
 # Validates the host OS matches the expected tested environment (Ubuntu 26.04)

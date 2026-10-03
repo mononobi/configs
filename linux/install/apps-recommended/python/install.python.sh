@@ -160,29 +160,34 @@ PKGS=()
 for ver in "${TARGET_VERSIONS[@]}"; do
     # Component A: Base runtime
     if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}"; then
-        PKGS+=("python${ver}")
+        if has_apt_candidate "python${ver}"; then
+            PKGS+=("python${ver}")
+        fi
     fi
 
     # Component B: Development headers (-dev)
     if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}-dev"; then
-        if apt-cache show "python${ver}-dev" >/dev/null 2>&1; then
+        if has_apt_candidate "python${ver}-dev"; then
             PKGS+=("python${ver}-dev")
         fi
     fi
 
     # Component C: Full environment / venv
     if [[ "$FORCE" == "true" ]] || (! is_installed --check "python${ver}-full" && ! is_installed --check "python${ver}-venv"); then
-        if apt-cache show "python${ver}-full" >/dev/null 2>&1; then
+        if has_apt_candidate "python${ver}-full"; then
             PKGS+=("python${ver}-full")
-        elif apt-cache show "python${ver}-venv" >/dev/null 2>&1; then
+        elif has_apt_candidate "python${ver}-venv"; then
             PKGS+=("python${ver}-venv")
         fi
     fi
 
-    # Component D: Distutils (for older versions if available)
-    if apt-cache show "python${ver}-distutils" >/dev/null 2>&1; then
-        if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}-distutils"; then
-            PKGS+=("python${ver}-distutils")
+    # Component D: Distutils (only for legacy Python versions <= 3.11 where distutils existed)
+    minor="${ver#3.}"
+    if [[ "$ver" != "3" && "$minor" =~ ^[0-9]+$ && "$minor" -le 11 ]]; then
+        if has_apt_candidate "python${ver}-distutils"; then
+            if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}-distutils"; then
+                PKGS+=("python${ver}-distutils")
+            fi
         fi
     fi
 done
@@ -191,7 +196,9 @@ done
 GENERAL_PKGS=()
 for pkg in "python3" "python3-dev" "python3-pip" "python3-venv" "python3-setuptools"; do
     if [[ "$FORCE" == "true" ]] || ! is_installed --check "$pkg"; then
-        GENERAL_PKGS+=("$pkg")
+        if has_apt_candidate "$pkg"; then
+            GENERAL_PKGS+=("$pkg")
+        fi
     fi
 done
 
