@@ -12,26 +12,27 @@ Compose.
   stable major version (e.g. `18`) and pins the instance to that concrete major release
   (`~/.postgres/18/` with `postgres:18`).
 - **Data Safety Against Breaking Upgrades**:
-  - Because major versions are pinned, Watchtower and Docker Compose only apply **safe minor and
-    security updates** (e.g. `18.0` $\rightarrow$ `18.1` $\rightarrow$ `18.2`), which are 100%
-    binary-compatible with your existing data files.
-  - Future major releases (e.g., PostgreSQL 19) will **never** automatically overwrite or corrupt
-    your PostgreSQL 18 cluster.
+  - Because major versions are pinned, Watchtower and Docker Compose only apply **safe minor
+    and security updates** (e.g. `18.0` $\rightarrow$ `18.1` $\rightarrow$ `18.2`), which are
+    100% binary-compatible with your existing data files.
+  - Future major releases (e.g., PostgreSQL 19) will **never** automatically overwrite or
+    corrupt your PostgreSQL 18 cluster.
 - **Clean Fallback Cleanup**: If the installer ever pulls a temporary `:latest` image during
-  inspection fallback, it immediately deletes that temporary image so no dangling tags or storage
-  remain on your system.
+  inspection fallback, it immediately deletes that temporary image so no dangling tags or
+  storage remain on your system.
 - **OS Reinstall Resilience**: All database data and configurations persist directly under
-  `~/.postgres/<version>/` in user space. If your `/home` partition is preserved or restored after an
-  OS reinstallation, your databases, schemas, and configurations remain 100% intact.
+  `~/.postgres/<version>/` in user space. If your `/home` partition is preserved or restored
+  after an OS reinstallation, your databases, schemas, and configurations remain 100% intact.
 - **Multiple Concurrent Versions**: Run multiple major PostgreSQL versions (e.g., `18`, `17`,
   `16`) side-by-side without port collisions or conflicting shared system libraries.
 - **Identical Connectivity**: Exposes standard ports on `localhost` so database GUI clients
-  (DBeaver, TablePlus, DataGrip, pgAdmin) and programming languages (Node.js, Python, Go, Rust) connect
-  identically to native installations.
+  (DBeaver, TablePlus, DataGrip, pgAdmin) and programming languages (Node.js, Python, Go, Rust)
+  connect identically to native installations.
 - **Zero-Friction Host CLI**: Automatically equips the host system with `postgresql-client` so
-  `psql`, `pg_dump`, and `pg_restore` work directly in your terminal without requiring `docker exec`.
-- **Easy Config Access**: Custom server configurations (`db.conf`, `pg_hba.conf`, and `.conf` drops)
-  are mounted in user space and editable without `sudo`.
+  `psql`, `pg_dump`, and `pg_restore` work directly in your terminal without requiring
+  `docker exec`.
+- **Easy Config Access**: Custom server configurations (`db.conf`, `pg_hba.conf`, and `.conf`
+  drops) are mounted in user space and editable without `sudo`.
 - **PostGIS Support**: One-flag deployment of spatial databases via official `postgis/postgis`
   images.
 - **Automated UFW Firewall**: Opens instance listening ports in UFW automatically.
@@ -40,7 +41,8 @@ Compose.
 
 ## Directory Structure
 
-Each provisioned PostgreSQL instance is isolated in its own home subfolder named after its major version:
+Each provisioned PostgreSQL instance is isolated in its own home subfolder named after its
+major version:
 
 ```text
 ~/.postgres/
@@ -69,8 +71,8 @@ Run the unattended installer from `linux/install/apps-recommended/postgresql/`:
 
 ### 1. Default Installation (Latest Stable)
 
-Auto-detects the current latest stable major version (e.g. `18`), creates `~/.postgres/18/`, and binds
-to default port `5432`:
+Auto-detects the current latest stable major version (e.g. `18`), creates `~/.postgres/18/`,
+and binds to default port `5432`:
 
 ```bash
 ./install.postgresql.docker.sh
@@ -110,13 +112,13 @@ To deploy instances with PostGIS pre-installed and ready:
 
 Unless customized with flags, all instances default to standard local development credentials:
 
-| Parameter | Default Value | Notes |
-| :--- | :--- | :--- |
-| **Superuser** | `postgres` | Configurable via `-u, --user` |
-| **Password** | `123` | Configurable via `-p, --password` |
-| **Default Database** | `postgres` | Configurable via `-d, --database` |
-| **Default Port** | `5432` | Reserved for primary instance (aborts if occupied) |
-| **Secondary Ports** | `5433+` | Automatically incremented for additional versions |
+| Parameter            | Default Value | Notes                                              |
+| :------------------- | :------------ | :------------------------------------------------- |
+| **Superuser**        | `postgres`    | Configurable via `-u, --user`                      |
+| **Password**         | `123`         | Configurable via `-p, --password`                  |
+| **Default Database** | `postgres`    | Configurable via `-d, --database`                  |
+| **Default Port**     | `5432`        | Reserved for primary instance (aborts if occupied) |
+| **Secondary Ports**  | `5433+`       | Automatically incremented for additional versions  |
 
 ---
 
@@ -168,8 +170,8 @@ docker compose -f ~/.postgres/18/docker-compose.yml restart
 
 ### Adding Initialization Scripts
 
-Place any `.sql` or `.sh` script into `~/.postgres/<version>/initdb.d/`. Scripts run automatically in
-alphabetical order the very first time the database cluster initializes.
+Place any `.sql` or `.sh` script into `~/.postgres/<version>/initdb.d/`. Scripts run
+automatically in alphabetical order the very first time the database cluster initializes.
 
 ---
 
