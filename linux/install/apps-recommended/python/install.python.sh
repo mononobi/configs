@@ -217,23 +217,27 @@ else
     echo "[+] All components for target Python versions and tools are already installed."
 fi
 
-# 4. Point /usr/bin/python and /usr/bin/python-config to the latest installed version
-LATEST_VER=""
-for (( i=${#TARGET_VERSIONS[@]}-1; i>=0; i-- )); do
-    v="${TARGET_VERSIONS[i]}"
-    if is_installed --check "python${v}"; then
-        LATEST_VER="$v"
-        break
-    fi
-done
+# 4. Point /usr/bin/python and /usr/bin/python-config to the highest installed Python version on the system
+HIGHEST_INSTALLED_MINOR=$(
+    find /usr/bin -maxdepth 1 \( -name "python3.[0-9]*" ! -name "*config*" ! -name "*m" \) 2>/dev/null \
+        | grep -Po "python3\.\K[0-9]+$" | sort -n | tail -1 || true
+)
 
-if [[ -n "$LATEST_VER" ]]; then
-    echo "[+] Configuring default /usr/bin/python -> /usr/bin/python${LATEST_VER}..."
-    sudo ln -sf "/usr/bin/python${LATEST_VER}" /usr/bin/python
+if [[ -n "$HIGHEST_INSTALLED_MINOR" && -x "/usr/bin/python3.${HIGHEST_INSTALLED_MINOR}" ]]; then
+    LATEST_SYSTEM_VER="3.${HIGHEST_INSTALLED_MINOR}"
+elif command -v python3 >/dev/null 2>&1; then
+    LATEST_SYSTEM_VER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "3")
+else
+    LATEST_SYSTEM_VER=""
+fi
 
-    if [[ -f "/usr/bin/python${LATEST_VER}-config" ]]; then
-        echo "[+] Configuring /usr/bin/python-config -> /usr/bin/python${LATEST_VER}-config..."
-        sudo ln -sf "/usr/bin/python${LATEST_VER}-config" /usr/bin/python-config
+if [[ -n "$LATEST_SYSTEM_VER" ]]; then
+    echo "[+] Configuring default /usr/bin/python -> /usr/bin/python${LATEST_SYSTEM_VER}..."
+    sudo ln -sf "/usr/bin/python${LATEST_SYSTEM_VER}" /usr/bin/python
+
+    if [[ -f "/usr/bin/python${LATEST_SYSTEM_VER}-config" ]]; then
+        echo "[+] Configuring /usr/bin/python-config -> /usr/bin/python${LATEST_SYSTEM_VER}-config..."
+        sudo ln -sf "/usr/bin/python${LATEST_SYSTEM_VER}-config" /usr/bin/python-config
     fi
 fi
 
