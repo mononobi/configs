@@ -97,7 +97,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Fast-path check: if --fast is specified, only check base runtime binary and exit
-if [[ "$FAST" == "true" && "$FORCE" != "true" ]]; then
+if [[ "$FAST" == "true" ]]; then
     if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
         missing_versions=()
         for ver in "${CUSTOM_VERSIONS[@]}"; do
@@ -189,21 +189,21 @@ echo "[+] Target Python versions to process: ${TARGET_VERSIONS[*]}"
 PKGS=()
 for ver in "${TARGET_VERSIONS[@]}"; do
     # Component A: Base runtime
-    if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}"; then
+    if ! is_installed "python${ver}"; then
         if has_apt_candidate "python${ver}"; then
             PKGS+=("python${ver}")
         fi
     fi
 
     # Component B: Development headers (-dev)
-    if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}-dev"; then
+    if ! is_installed "python${ver}-dev"; then
         if has_apt_candidate "python${ver}-dev"; then
             PKGS+=("python${ver}-dev")
         fi
     fi
 
     # Component C: Full environment / venv
-    if [[ "$FORCE" == "true" ]] || (! is_installed --check "python${ver}-full" && ! is_installed --check "python${ver}-venv"); then
+    if ! is_installed "python${ver}-full" && ! is_installed "python${ver}-venv"; then
         if has_apt_candidate "python${ver}-full"; then
             PKGS+=("python${ver}-full")
         elif has_apt_candidate "python${ver}-venv"; then
@@ -215,7 +215,7 @@ for ver in "${TARGET_VERSIONS[@]}"; do
     minor="${ver#3.}"
     if [[ "$ver" != "3" && "$minor" =~ ^[0-9]+$ && "$minor" -le 11 ]]; then
         if has_apt_candidate "python${ver}-distutils"; then
-            if [[ "$FORCE" == "true" ]] || ! is_installed --check "python${ver}-distutils"; then
+            if ! is_installed "python${ver}-distutils"; then
                 PKGS+=("python${ver}-distutils")
             fi
         fi
@@ -225,7 +225,7 @@ done
 # General tools (pip, venv, setuptools), but NOT python3-is-python
 GENERAL_PKGS=()
 for pkg in "python3" "python3-dev" "python3-pip" "python3-venv" "python3-setuptools"; do
-    if [[ "$FORCE" == "true" ]] || ! is_installed --check "$pkg"; then
+    if ! is_installed "$pkg"; then
         if has_apt_candidate "$pkg"; then
             GENERAL_PKGS+=("$pkg")
         fi
