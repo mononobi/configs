@@ -6,7 +6,7 @@ set -euo pipefail
 
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/../../utils.sh"
+source "${SCRIPT_DIR}/../../../utils.sh"
 PG_VERSION=""
 PG_PASSWORD="123"
 
@@ -121,10 +121,10 @@ sudo apt-get install -y postgis "postgresql-${PG_VERSION}-postgis-3" "postgresql
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONF_D="/etc/postgresql/${PG_VERSION}/main/conf.d"
 
-if [[ -f "$SCRIPT_DIR/db.conf" ]]; then
+if [[ -f "$SCRIPT_DIR/../files/db.conf" ]]; then
     sudo mkdir -p "$CONF_D"
     echo "[+] Copying db.conf to $CONF_D/db.conf..."
-    sudo cp "$SCRIPT_DIR/db.conf" "$CONF_D/db.conf"
+    sudo cp "$SCRIPT_DIR/../files/db.conf" "$CONF_D/db.conf"
     sudo chown postgres:postgres "$CONF_D/db.conf"
     sudo chmod 644 "$CONF_D/db.conf"
 fi

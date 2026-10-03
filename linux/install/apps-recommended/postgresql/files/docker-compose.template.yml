@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: ${PG_IMAGE}
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - "${PG_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DB}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - PUID=${HOST_UID}
+      - PGID=${HOST_GID}
+    command:
+      - "postgres"
+      - "-c"
+      - "include_dir=/etc/postgresql/conf.d"
+      - "-c"
+      - "hba_file=/etc/postgresql/pg_hba.conf"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./config/conf.d:/etc/postgresql/conf.d
+      - ./config/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - ./logs:/var/log/postgresql
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
