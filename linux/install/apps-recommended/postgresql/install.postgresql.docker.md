@@ -150,7 +150,22 @@ Unless customized with flags, all instances default to standard local developmen
 - **Username**: `postgres`
 - **Password**: `123`
 
-### 2. Terminal CLI (`psql`)
+### 2. Interactive CLI Connector (`psql-connect`)
+
+The installer provides and symlinks the `psql-connect` utility into
+`~/.local/bin/psql-connect`:
+
+- **Single Version Installed**: Detects the only version in `~/.postgres/` and connects
+  directly via `psql`.
+- **Multiple Versions Installed**: Displays an interactive numbered menu showing container
+  names, versions, and ports, and connects to your choice:
+
+```bash
+# Run from anywhere in terminal:
+psql-connect
+```
+
+### 3. Direct Terminal CLI (`psql`)
 
 Because `postgresql-client` is installed on your host system:
 
@@ -162,7 +177,7 @@ psql -h localhost -p 5432 -U postgres -d postgres
 psql -h localhost -p 5433 -U postgres -d postgres
 ```
 
-### 3. Connection URIs for Programming Languages
+### 4. Connection URIs for Programming Languages
 
 ```text
 postgresql://postgres:123@localhost:5432/postgres

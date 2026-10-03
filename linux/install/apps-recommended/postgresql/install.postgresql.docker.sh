@@ -508,5 +508,11 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     echo "${DIV_MAIN}"
 done
 
+# Ensure psql-connect helper is executable and linked into ~/.local/bin
+ensure_local_bin_in_path
+chmod +x "${SCRIPT_DIR}/files/psql-connect"
+ln -sf "${SCRIPT_DIR}/files/psql-connect" "${HOME}/.local/bin/psql-connect"
+echo "[+] Linked psql-connect utility to ${HOME}/.local/bin/psql-connect"
+
 echo ""
 echo "[✓] All PostgreSQL Docker instances processed successfully!"
