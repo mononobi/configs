@@ -11,6 +11,7 @@ PG_USER="postgres"
 PG_PASSWORD="123"
 PG_DB="postgres"
 DEFAULT_PORT=5432
+CUSTOM_PORT=""
 USE_POSTGIS=false
 FORCE=false
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
@@ -34,6 +35,9 @@ Arguments:
 
 Options:
   -v, --version VER     Specify PostgreSQL version (can be specified multiple times)
+  --port PORT           Specify base host port. Used for the first instance (aborts if busy).
+                        For multiple instances, subsequent versions increment from this port
+                        and automatically select the next available free port.
   -p, --password PASS   Set password for the postgres superuser (default: 123)
   -u, --user USER       Set default database superuser (default: postgres)
   -d, --database DB     Set default database name (default: postgres)
@@ -46,6 +50,8 @@ Options:
 Examples:
   $(basename "$0")                  # Auto-detects latest (e.g. 18) and installs on port 5432
   $(basename "$0") 18               # Installs PostgreSQL 18
+  $(basename "$0") 18 --port 5435   # Installs PostgreSQL 18 on custom port 5435
+  $(basename "$0") 18 16 --port 5440 # Installs 18 on 5440, and 16 on next free port (>=5441)
   $(basename "$0") 18 16 --postgis  # Installs PostGIS 18 and 16 on incrementing ports
   $(basename "$0") -p mysecret      # Installs latest with custom password
 EOF
@@ -76,6 +82,15 @@ while [[ $# -gt 0 ]]; do
                 shift 2
             else
                 echo "[!] Error: -v/--version requires an argument" >&2
+                exit 1
+            fi
+            ;;
+        --port)
+            if [[ $# -ge 2 ]]; then
+                CUSTOM_PORT="$2"
+                shift 2
+            else
+                echo "[!] Error: --port requires an argument" >&2
                 exit 1
             fi
             ;;
@@ -266,30 +281,58 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     fi
 
     if [[ -z "$PORT" ]]; then
-        # Check if port 5432 should be used for primary instance
-        if [[ "$is_first_instance" == "true" ]]; then
-            PORT="$DEFAULT_PORT"
-            if is_port_in_use "$PORT"; then
-                if ! container_owns_port "$CONTAINER_BASE" "$PORT"; then
-                    echo "[!] Error: Default port ${PORT} is already in use by another process." >&2
-                    echo "[!] Cannot install primary PostgreSQL instance on ${PORT}. Halting." >&2
-                    exit 1
+        # If --port was specified by user, use it as the base port
+        if [[ -n "$CUSTOM_PORT" ]]; then
+            if [[ "$is_first_instance" == "true" ]]; then
+                # First instance must strictly use the specified --port, fail if busy
+                PORT="$CUSTOM_PORT"
+                if is_port_in_use "$PORT"; then
+                    if ! container_owns_port "$CONTAINER_BASE" "$PORT"; then
+                        echo "[!] Error: Specified port ${PORT} is already in use by another process." >&2
+                        echo "[!] Cannot install PostgreSQL instance on ${PORT}. Halting." >&2
+                        exit 1
+                    fi
                 fi
+                next_available_port=$((CUSTOM_PORT + 1))
+            else
+                # Subsequent instances increment starting from the custom port and find the next free port without failure
+                candidate_port="$next_available_port"
+                while is_port_in_use "$candidate_port"; do
+                    if container_owns_port "$CONTAINER_BASE" "$candidate_port"; then
+                        break
+                    fi
+                    candidate_port=$((candidate_port + 1))
+                done
+                PORT="$candidate_port"
+                next_available_port=$((candidate_port + 1))
             fi
         else
-            # Calculate port for secondary versions: 5432 + subfolder_count, incrementing if busy
-            subfolder_count=0
-            if [[ -d "$HOME/.postgres" ]]; then
-                subfolder_count=$(find "$HOME/.postgres" -mindepth 1 -maxdepth 1 -type d ! -name "$TAG" | wc -l)
-            fi
-            candidate_port=$((DEFAULT_PORT + subfolder_count))
-            while is_port_in_use "$candidate_port"; do
-                if container_owns_port "$CONTAINER_BASE" "$candidate_port"; then
-                    break
+            # Default behavior when --port is not provided:
+            # Primary instance uses DEFAULT_PORT (5432) and fails if busy
+            if [[ "$is_first_instance" == "true" ]]; then
+                PORT="$DEFAULT_PORT"
+                if is_port_in_use "$PORT"; then
+                    if ! container_owns_port "$CONTAINER_BASE" "$PORT"; then
+                        echo "[!] Error: Default port ${PORT} is already in use by another process." >&2
+                        echo "[!] Cannot install primary PostgreSQL instance on ${PORT}. Halting." >&2
+                        exit 1
+                    fi
                 fi
-                candidate_port=$((candidate_port + 1))
-            done
-            PORT="$candidate_port"
+            else
+                # Calculate port for secondary versions: 5432 + subfolder_count, incrementing if busy
+                subfolder_count=0
+                if [[ -d "$HOME/.postgres" ]]; then
+                    subfolder_count=$(find "$HOME/.postgres" -mindepth 1 -maxdepth 1 -type d ! -name "$TAG" | wc -l)
+                fi
+                candidate_port=$((DEFAULT_PORT + subfolder_count))
+                while is_port_in_use "$candidate_port"; do
+                    if container_owns_port "$CONTAINER_BASE" "$candidate_port"; then
+                        break
+                    fi
+                    candidate_port=$((candidate_port + 1))
+                done
+                PORT="$candidate_port"
+            fi
         fi
     fi
 

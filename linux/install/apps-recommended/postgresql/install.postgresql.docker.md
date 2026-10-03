@@ -100,7 +100,21 @@ To deploy instances with PostGIS pre-installed and ready:
 ./install.postgresql.docker.sh 18 --postgis
 ```
 
-### 4. Custom Credentials & Databases
+### 4. Custom Host Port (`--port`)
+
+Specify a custom base port for the primary instance (aborts if occupied). If installing
+multiple versions, subsequent versions automatically increment from this port and bind to the
+next free available port without failure:
+
+```bash
+# Install on specific port 5435
+./install.postgresql.docker.sh 18 --port 5435
+
+# Install multiple versions: 18 binds to 5440, and 16 binds to next free port (>= 5441)
+./install.postgresql.docker.sh 18 16 --port 5440
+```
+
+### 5. Custom Credentials & Databases
 
 ```bash
 ./install.postgresql.docker.sh -p "mysecurepass" -u "developer" -d "production_dev"
@@ -112,13 +126,13 @@ To deploy instances with PostGIS pre-installed and ready:
 
 Unless customized with flags, all instances default to standard local development credentials:
 
-| Parameter            | Default Value | Notes                                              |
-| :------------------- | :------------ | :------------------------------------------------- |
-| **Superuser**        | `postgres`    | Configurable via `-u, --user`                      |
-| **Password**         | `123`         | Configurable via `-p, --password`                  |
-| **Default Database** | `postgres`    | Configurable via `-d, --database`                  |
-| **Default Port**     | `5432`        | Reserved for primary instance (aborts if occupied) |
-| **Secondary Ports**  | `5433+`       | Automatically incremented for additional versions  |
+| Parameter            | Default Value | Notes                                                               |
+| :------------------- | :------------ | :------------------------------------------------------------------ |
+| **Superuser**        | `postgres`    | Configurable via `-u, --user`                                       |
+| **Password**         | `123`         | Configurable via `-p, --password`                                   |
+| **Default Database** | `postgres`    | Configurable via `-d, --database`                                   |
+| **Host Port**        | `5432`        | Configurable via `--port <port>` (primary aborts if occupied)       |
+| **Secondary Ports**  | `5433+`       | Automatically incremented to next free port for additional versions |
 
 ---
 
