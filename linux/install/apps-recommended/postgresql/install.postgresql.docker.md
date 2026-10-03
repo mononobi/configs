@@ -7,10 +7,23 @@ Compose.
 
 ## Key Features
 
+- **Automated Major Version Pinning**: When executed without arguments, the installer inspects
+  official Docker metadata (via the Registry API or fallback inspection) to resolve the latest
+  stable major version (e.g. `18`) and pins the instance to that concrete major release
+  (`~/.postgres/18/` with `postgres:18`).
+- **Data Safety Against Breaking Upgrades**:
+  - Because major versions are pinned, Watchtower and Docker Compose only apply **safe minor and
+    security updates** (e.g. `18.0` $\rightarrow$ `18.1` $\rightarrow$ `18.2`), which are 100%
+    binary-compatible with your existing data files.
+  - Future major releases (e.g., PostgreSQL 19) will **never** automatically overwrite or corrupt
+    your PostgreSQL 18 cluster.
+- **Clean Fallback Cleanup**: If the installer ever pulls a temporary `:latest` image during
+  inspection fallback, it immediately deletes that temporary image so no dangling tags or storage
+  remain on your system.
 - **OS Reinstall Resilience**: All database data and configurations persist directly under
-  `~/.postgres/<tag>/` in user space. If your `/home` partition is preserved or restored after an OS
-  reinstallation, your databases, schemas, and configurations remain 100% intact.
-- **Multiple Concurrent Versions**: Run multiple major PostgreSQL versions (e.g., `latest`, `18`,
+  `~/.postgres/<version>/` in user space. If your `/home` partition is preserved or restored after an
+  OS reinstallation, your databases, schemas, and configurations remain 100% intact.
+- **Multiple Concurrent Versions**: Run multiple major PostgreSQL versions (e.g., `18`, `17`,
   `16`) side-by-side without port collisions or conflicting shared system libraries.
 - **Identical Connectivity**: Exposes standard ports on `localhost` so database GUI clients
   (DBeaver, TablePlus, DataGrip, pgAdmin) and programming languages (Node.js, Python, Go, Rust) connect
@@ -27,11 +40,11 @@ Compose.
 
 ## Directory Structure
 
-Each provisioned PostgreSQL instance is isolated in its own home subfolder:
+Each provisioned PostgreSQL instance is isolated in its own home subfolder named after its major version:
 
 ```text
 ~/.postgres/
-├── latest/
+├── 18/
 │   ├── config/
 │   │   ├── conf.d/
 │   │   │   └── db.conf           # Custom server tuning & query logging
@@ -39,13 +52,13 @@ Each provisioned PostgreSQL instance is isolated in its own home subfolder:
 │   ├── data/                     # Database cluster files (persists across OS reinstalls)
 │   ├── initdb.d/                 # First-boot SQL & shell initialization scripts
 │   ├── logs/                     # Query and statement rotation logs
-│   └── docker-compose.yml        # Docker Compose service definition
-└── 18/
+│   └── docker-compose.yml        # Docker Compose service definition (image: postgres:18)
+└── 17/
     ├── config/
     ├── data/
     ├── initdb.d/
     ├── logs/
-    └── docker-compose.yml
+    └── docker-compose.yml        # Docker Compose service definition (image: postgres:17)
 ```
 
 ---
@@ -54,9 +67,10 @@ Each provisioned PostgreSQL instance is isolated in its own home subfolder:
 
 Run the unattended installer from `linux/install/apps-recommended/postgresql/`:
 
-### 1. Default Installation (`latest`)
+### 1. Default Installation (Latest Stable)
 
-Deploys the official `postgres:latest` image on the default port `5432` with development defaults:
+Auto-detects the current latest stable major version (e.g. `18`), creates `~/.postgres/18/`, and binds
+to default port `5432`:
 
 ```bash
 ./install.postgresql.docker.sh
@@ -96,13 +110,13 @@ To deploy instances with PostGIS pre-installed and ready:
 
 Unless customized with flags, all instances default to standard local development credentials:
 
-| Parameter            | Default Value | Notes                                             |
-|:---------------------|:--------------|:--------------------------------------------------|
-| **Superuser**        | `postgres`    | Configurable via `-u, --user`                     |
-| **Password**         | `123`         | Configurable via `-p, --password`                 |
-| **Default Database** | `postgres`    | Configurable via `-d, --database`                 |
-| **Default Port**     | `5432`        | Reserved for `latest` (aborts if occupied)        |
-| **Secondary Ports**  | `5433+`       | Automatically incremented for additional versions |
+| Parameter | Default Value | Notes |
+| :--- | :--- | :--- |
+| **Superuser** | `postgres` | Configurable via `-u, --user` |
+| **Password** | `123` | Configurable via `-p, --password` |
+| **Default Database** | `postgres` | Configurable via `-d, --database` |
+| **Default Port** | `5432` | Reserved for primary instance (aborts if occupied) |
+| **Secondary Ports** | `5433+` | Automatically incremented for additional versions |
 
 ---
 
@@ -140,21 +154,21 @@ postgresql://postgres:123@localhost:5432/postgres
 
 ### Modifying Server Settings (`db.conf`)
 
-Edit `~/.postgres/<tag>/config/conf.d/db.conf` directly with your favorite editor:
+Edit `~/.postgres/<version>/config/conf.d/db.conf` directly with your favorite editor:
 
 ```bash
-nano ~/.postgres/latest/config/conf.d/db.conf
+nano ~/.postgres/18/config/conf.d/db.conf
 ```
 
 Restart the instance to apply changes:
 
 ```bash
-docker compose -f ~/.postgres/latest/docker-compose.yml restart
+docker compose -f ~/.postgres/18/docker-compose.yml restart
 ```
 
 ### Adding Initialization Scripts
 
-Place any `.sql` or `.sh` script into `~/.postgres/<tag>/initdb.d/`. Scripts run automatically in
+Place any `.sql` or `.sh` script into `~/.postgres/<version>/initdb.d/`. Scripts run automatically in
 alphabetical order the very first time the database cluster initializes.
 
 ---
@@ -165,17 +179,17 @@ All instances run with `restart: unless-stopped` and resume automatically across
 
 ```bash
 # Check status
-docker compose -f ~/.postgres/latest/docker-compose.yml ps
+docker compose -f ~/.postgres/18/docker-compose.yml ps
 
 # View live logs
-docker compose -f ~/.postgres/latest/docker-compose.yml logs -f
+docker compose -f ~/.postgres/18/docker-compose.yml logs -f
 
 # Stop instance
-docker compose -f ~/.postgres/latest/docker-compose.yml stop
+docker compose -f ~/.postgres/18/docker-compose.yml stop
 
 # Start instance
-docker compose -f ~/.postgres/latest/docker-compose.yml start
+docker compose -f ~/.postgres/18/docker-compose.yml start
 
-# Remove container (data in ~/.postgres/latest/data remains completely safe)
-docker compose -f ~/.postgres/latest/docker-compose.yml down
+# Remove container (data in ~/.postgres/18/data remains completely safe)
+docker compose -f ~/.postgres/18/docker-compose.yml down
 ```

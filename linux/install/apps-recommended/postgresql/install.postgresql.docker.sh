@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Install and configure PostgreSQL multi-version instances via Docker Compose
-# Note: Persists data and configs under ~/.postgres/<tag>/ and applies unattended defaults.
+# Note: Persists data and configs under ~/.postgres/<version>/ and pins concrete major versions.
 
 set -euo pipefail
 
@@ -24,12 +24,13 @@ Usage: $(basename "$0") [OPTIONS] [VERSION...]
 Description:
   Installs and configures PostgreSQL (or PostGIS) instances using Docker Compose.
   Each instance is completely isolated, persists database data and configuration
-  in ~/.postgres/<tag>/, runs with restart: unless-stopped, and is protected by UFW.
-  If no version is specified, it defaults to the official 'latest' image on port 5432.
+  in ~/.postgres/<version>/, runs with restart: unless-stopped, and is protected by UFW.
+  If no version is specified, it auto-detects the latest stable major version via Docker
+  metadata (e.g. 18) and pins the instance to that concrete major version.
 
 Arguments:
-  VERSION               PostgreSQL version(s) to install (e.g. 'latest', '18', '16').
-                        Default: 'latest'
+  VERSION               PostgreSQL major version(s) to install (e.g. 18, 17, 16).
+                        Default: auto-detects latest stable major version
 
 Options:
   -v, --version VER     Specify PostgreSQL version (can be specified multiple times)
@@ -43,7 +44,7 @@ Options:
   -h, --help            Show this help message and exit
 
 Examples:
-  $(basename "$0")                  # Installs PostgreSQL 'latest' on default port 5432
+  $(basename "$0")                  # Auto-detects latest (e.g. 18) and installs on port 5432
   $(basename "$0") 18               # Installs PostgreSQL 18
   $(basename "$0") 18 16 --postgis  # Installs PostGIS 18 and 16 on incrementing ports
   $(basename "$0") -p mysecret      # Installs latest with custom password
@@ -117,11 +118,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# If no target version was provided, default to 'latest'
-if [[ ${#TARGET_VERSIONS[@]} -eq 0 ]]; then
-    TARGET_VERSIONS=("latest")
-fi
-
 echo "[+] Starting PostgreSQL Docker setup..."
 
 # 1. Require framework dependencies: Docker and UFW
@@ -132,6 +128,93 @@ if ! is_installed --check "psql"; then
     echo "[+] Installing postgresql-client on host for terminal CLI access..."
     conditional_apt_update
     sudo apt-get install -y postgresql-client
+fi
+
+# Helper: Detect latest stable major version via Docker metadata with clean fallback
+detect_latest_major_version() {
+    local detected=""
+
+    # Tier 1: Query Docker Registry v2 API directly for OCI annotations (no layer downloads)
+    local repo="library/postgres"
+    local token
+    token=$(curl -fsSL "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull" 2>/dev/null | jq -r .token || true)
+    if [[ -n "$token" && "$token" != "null" ]]; then
+        detected=$(curl -fsSL -H "Authorization: Bearer ${token}" \
+            -H "Accept: application/vnd.docker.distribution.manifest.v2+json,application/vnd.oci.image.index.v1+json" \
+            "https://registry-1.docker.io/v2/${repo}/manifests/latest" 2>/dev/null \
+            | jq -r '.. | .["org.opencontainers.image.version"]? // empty' 2>/dev/null | head -n 1 | cut -d. -f1 || true)
+    fi
+
+    if [[ -n "$detected" && "$detected" =~ ^[0-9]+$ ]]; then
+        echo "$detected"
+        return 0
+    fi
+
+    # Tier 2: Fallback to pulling temporary :latest image, inspecting PG_MAJOR, and removing it
+    local temp_image="postgres:latest"
+    if docker pull -q "$temp_image" >/dev/null 2>&1; then
+        detected=$(docker inspect "$temp_image" --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null \
+            | grep '^PG_MAJOR=' | cut -d= -f2 | head -n 1 || true)
+        # Clean up temporary :latest image immediately
+        docker rmi "$temp_image" >/dev/null 2>&1 || true
+        if [[ -n "$detected" && "$detected" =~ ^[0-9]+$ ]]; then
+            echo "$detected"
+            return 0
+        fi
+    fi
+
+    # Tier 3: Query postgresql.org API or default fallback
+    local api_ver
+    api_ver=$(python3 -c '
+import urllib.request, json
+try:
+    with urllib.request.urlopen("https://www.postgresql.org/versions.json", timeout=3) as r:
+        for v in json.loads(r.read().decode()):
+            if v.get("current"):
+                print(v["major"])
+                break
+except Exception:
+    pass
+' 2>/dev/null || true)
+
+    if [[ -n "$api_ver" && "$api_ver" =~ ^[0-9]+$ ]]; then
+        echo "$api_ver"
+        return 0
+    fi
+
+    echo "18"
+}
+
+# Helper: Resolve appropriate PostGIS tag for a major version
+resolve_postgis_tag() {
+    local major="$1"
+    if curl -fsSL "https://hub.docker.com/v2/repositories/postgis/postgis/tags/${major}" >/dev/null 2>&1; then
+        echo "${major}"
+        return 0
+    fi
+    local matched
+    matched=$(curl -fsSL "https://hub.docker.com/v2/repositories/postgis/postgis/tags?page_size=20" 2>/dev/null \
+        | jq -r '.results[].name' 2>/dev/null | grep -E "^${major}-[0-9.]+$" | head -n 1 || true)
+    if [[ -n "$matched" ]]; then
+        echo "$matched"
+        return 0
+    fi
+    echo "${major}"
+}
+
+# Resolve target versions: replace missing or 'latest' with detected major version
+if [[ ${#TARGET_VERSIONS[@]} -eq 0 ]]; then
+    echo "[+] Auto-detecting latest stable PostgreSQL major version..."
+    LATEST_MAJOR=$(detect_latest_major_version)
+    echo "[+] Detected latest stable PostgreSQL major version: ${LATEST_MAJOR}"
+    TARGET_VERSIONS=("${LATEST_MAJOR}")
+else
+    for i in "${!TARGET_VERSIONS[@]}"; do
+        if [[ "${TARGET_VERSIONS[$i]}" == "latest" ]]; then
+            LATEST_MAJOR=$(detect_latest_major_version)
+            TARGET_VERSIONS[$i]="$LATEST_MAJOR"
+        fi
+    done
 fi
 
 # Helper: Check if a TCP port is currently listening
@@ -156,16 +239,14 @@ container_owns_port() {
     return 1
 }
 
+# Track if this is the first instance being processed in this run
+is_first_instance=true
+
 # Process each target version
 for VER in "${TARGET_VERSIONS[@]}"; do
     TAG="$VER"
-    if [[ "$TAG" == "latest" ]]; then
-        CONTAINER_BASE="postgres-latest"
-        [[ "$USE_POSTGIS" == "true" ]] && CONTAINER_BASE="postgis-latest"
-    else
-        CONTAINER_BASE="postgres-${TAG}"
-        [[ "$USE_POSTGIS" == "true" ]] && CONTAINER_BASE="postgis-${TAG}"
-    fi
+    CONTAINER_BASE="postgres-${TAG}"
+    [[ "$USE_POSTGIS" == "true" ]] && CONTAINER_BASE="postgis-${TAG}"
 
     TARGET_DIR="$HOME/.postgres/${TAG}"
 
@@ -185,7 +266,8 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     fi
 
     if [[ -z "$PORT" ]]; then
-        if [[ "$TAG" == "latest" ]]; then
+        # Check if port 5432 should be used for primary instance
+        if [[ "$is_first_instance" == "true" ]]; then
             PORT="$DEFAULT_PORT"
             if is_port_in_use "$PORT"; then
                 if ! container_owns_port "$CONTAINER_BASE" "$PORT"; then
@@ -210,6 +292,8 @@ for VER in "${TARGET_VERSIONS[@]}"; do
             PORT="$candidate_port"
         fi
     fi
+
+    is_first_instance=false
 
     echo "[+] Assigned host port: ${PORT}"
 
@@ -242,7 +326,8 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     HOST_GID="$(id -g)"
 
     if [[ "$USE_POSTGIS" == "true" ]]; then
-        PG_IMAGE="postgis/postgis:${TAG}"
+        POSTGIS_TAG=$(resolve_postgis_tag "$TAG")
+        PG_IMAGE="postgis/postgis:${POSTGIS_TAG}"
     else
         PG_IMAGE="postgres:${TAG}"
     fi
