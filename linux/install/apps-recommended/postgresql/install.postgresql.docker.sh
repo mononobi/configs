@@ -136,7 +136,7 @@ done
 echo "[+] Starting PostgreSQL Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker ufw acl lsof curl
+require_app docker ufw lsof curl
 require_app python --fast
 
 # 2. Ensure lightweight host client tools (psql, pg_dump) are available
@@ -255,10 +255,23 @@ container_owns_port() {
     return 1
 }
 
-# Ensure base directory ~/.postgres exists and has full user permissions upfront
+# Ensure the container database group (postgres: 999) exists on the host
+PG_CONTAINER_GID=999
+if ! getent group "$PG_CONTAINER_GID" >/dev/null 2>&1; then
+    sudo groupadd -g "$PG_CONTAINER_GID" postgres 2>/dev/null || sudo groupadd postgres 2>/dev/null || true
+fi
+PG_GROUP_NAME=$(getent group "$PG_CONTAINER_GID" | cut -d: -f1 || echo "postgres")
+
+# Add current host user to the database group so both share access
+if ! id -nG "$USER" | grep -qw "$PG_GROUP_NAME"; then
+    echo "[+] Adding ${USER} to database group (${PG_GROUP_NAME})..."
+    sudo usermod -aG "$PG_GROUP_NAME" "$USER"
+fi
+
+# Ensure base directory ~/.postgres exists and is accessible to both user and database group
 mkdir -p "$HOME/.postgres"
-sudo chown -R "${USER}:${USER}" "$HOME/.postgres"
-sudo setfacl -R -m "u:${USER}:rwx,d:u:${USER}:rwx" "$HOME/.postgres"
+sudo chown -R "${USER}:${PG_GROUP_NAME}" "$HOME/.postgres"
+sudo chmod -R 775 "$HOME/.postgres"
 
 # Track if this is the first instance being processed in this run
 is_first_instance=true
@@ -353,24 +366,34 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     mkdir -p "${TARGET_DIR}/initdb.d"
     mkdir -p "${TARGET_DIR}/logs"
 
+    # Ensure target directory structure is owned by user and postgres group with group write permissions
+    sudo chown -R "${USER}:${PG_GROUP_NAME}" "${TARGET_DIR}"
+    sudo chmod -R 775 "${TARGET_DIR}"
+
+    CONFIG_UPDATED=false
+
     # Copy template configuration files idempotently
     if [[ ! -f "${TARGET_DIR}/config/conf.d/db.conf" ]] || [[ "$FORCE" == "true" ]]; then
         echo "[+] Installing db.conf to ${TARGET_DIR}/config/conf.d/db.conf..."
         cp "${SCRIPT_DIR}/files/db.conf" "${TARGET_DIR}/config/conf.d/db.conf"
+        CONFIG_UPDATED=true
     elif ! cmp -s "${SCRIPT_DIR}/files/db.conf" "${TARGET_DIR}/config/conf.d/db.conf"; then
         echo "[+] Updating ${TARGET_DIR}/config/conf.d/db.conf with updated settings..."
         cp "${SCRIPT_DIR}/files/db.conf" "${TARGET_DIR}/config/conf.d/db.conf"
+        CONFIG_UPDATED=true
     fi
 
     if [[ -d "${TARGET_DIR}/config/pg_hba.conf" ]]; then
         sudo rm -rf "${TARGET_DIR}/config/pg_hba.conf"
     fi
-    if [[ ! -f "${TARGET_DIR}/config/pg_hba.conf" ]]; then
-        echo "[+] Installing default pg_hba.conf to ${TARGET_DIR}/config/pg_hba.conf..."
+    if [[ ! -f "${TARGET_DIR}/config/pg_hba.conf" ]] || [[ "$FORCE" == "true" ]]; then
+        echo "[+] Installing pg_hba.conf to ${TARGET_DIR}/config/pg_hba.conf..."
         cp "${SCRIPT_DIR}/files/pg_hba.conf" "${TARGET_DIR}/config/pg_hba.conf"
-    elif [[ "$FORCE" == "true" ]]; then
-        echo "[+] Force-updating ${TARGET_DIR}/config/pg_hba.conf..."
+        CONFIG_UPDATED=true
+    elif ! cmp -s "${SCRIPT_DIR}/files/pg_hba.conf" "${TARGET_DIR}/config/pg_hba.conf"; then
+        echo "[+] Updating ${TARGET_DIR}/config/pg_hba.conf with updated rules..."
         cp "${SCRIPT_DIR}/files/pg_hba.conf" "${TARGET_DIR}/config/pg_hba.conf"
+        CONFIG_UPDATED=true
     fi
 
     # Copy initdb script to inject include_dir into postgresql.conf during initialization
@@ -378,7 +401,7 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         echo "[+] Installing 00-init-conf.sh to ${TARGET_DIR}/initdb.d/..."
         cp "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
         chmod +x "${TARGET_DIR}/initdb.d/00-init-conf.sh"
-    elif [[ "$FORCE" == "true" ]]; then
+    elif [[ "$FORCE" == "true" ]] || ! cmp -s "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"; then
         cp "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
         chmod +x "${TARGET_DIR}/initdb.d/00-init-conf.sh"
     fi
@@ -407,11 +430,13 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 
     if [[ ! -f "$COMPOSE_FILE" ]] || [[ "$FORCE" == "true" ]]; then
         echo "$NEW_COMPOSE" > "$COMPOSE_FILE"
+        CONFIG_UPDATED=true
     else
         # Only rewrite if content actually changed
         CURRENT_COMPOSE=$(cat "$COMPOSE_FILE" 2>/dev/null || true)
         if [[ "$CURRENT_COMPOSE" != "$NEW_COMPOSE" ]]; then
             echo "$NEW_COMPOSE" > "$COMPOSE_FILE"
+            CONFIG_UPDATED=true
         fi
     fi
 
@@ -423,6 +448,7 @@ for VER in "${TARGET_VERSIONS[@]}"; do
             echo "" | sudo tee -a "$PGDATA_CONF" >/dev/null
             echo "# Custom configuration drops" | sudo tee -a "$PGDATA_CONF" >/dev/null
             echo "include_dir = '/etc/postgresql/conf.d'" | sudo tee -a "$PGDATA_CONF" >/dev/null
+            CONFIG_UPDATED=true
         fi
     fi
 
@@ -432,26 +458,31 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         IS_RUNNING=true
     fi
 
-    if [[ "$IS_RUNNING" == "true" && "$FORCE" != "true" ]]; then
-        echo "[i] Container ${CONTAINER_BASE} is already active and running, skipping compose up..."
+    if [[ "$IS_RUNNING" == "true" ]]; then
+        if [[ "$CONFIG_UPDATED" == "true" || "$FORCE" == "true" ]]; then
+            echo "[+] Configurations updated; restarting container ${CONTAINER_BASE} to reload changes..."
+            (cd "$TARGET_DIR" && docker compose restart)
+        else
+            echo "[i] Container ${CONTAINER_BASE} is already active with latest configuration, skipping..."
+        fi
     else
         echo "[+] Launching container ${CONTAINER_BASE} via Docker Compose..."
         (cd "$TARGET_DIR" && docker compose up -d)
-
-        # Wait up to 15 seconds for postgres service readiness
-        echo "[+] Verifying database service readiness..."
-        for _ in {1..15}; do
-            if docker exec "${CONTAINER_BASE}" pg_isready -U "${PG_USER}" >/dev/null 2>&1; then
-                break
-            fi
-            sleep 1
-        done
     fi
 
-    # Ensure host user has full read/write access to ~/.postgres/<version>/ without sudo
-    echo "[+] Ensuring user access permissions on ${TARGET_DIR}..."
-    sudo setfacl -R -m "u:${USER}:rwx,d:u:${USER}:rwx" "$TARGET_DIR"
-    sudo chmod -R u+rwX,g+rX "$TARGET_DIR"
+    # Wait up to 15 seconds for postgres service readiness
+    echo "[+] Verifying database service readiness..."
+    for _ in {1..15}; do
+        if docker exec "${CONTAINER_BASE}" pg_isready -U "${PG_USER}" >/dev/null 2>&1; then
+            break
+        fi
+        sleep 1
+    done
+
+    # Ensure host user and database group retain read/write access to ~/.postgres/<version>/
+    echo "[+] Ensuring user and group access permissions on ${TARGET_DIR}..."
+    sudo chown -R "${USER}:${PG_GROUP_NAME}" "$TARGET_DIR"
+    sudo chmod -R 775 "$TARGET_DIR"
 
     # Mandatory UFW firewall rule for the instance port
     echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."

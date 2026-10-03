@@ -32,9 +32,10 @@ Compose.
   `psql`, `pg_dump`, and `pg_restore` work directly in your terminal without requiring
   `docker exec`.
 - **Easy Config & User-Space Access**: Custom server configurations (`db.conf`, `pg_hba.conf`,
-  and `.conf` drops) are mounted in user space and editable without `sudo`. All files in
-  `~/.postgres/<version>/` are granted user permissions via POSIX ACLs (`setfacl`) so your
-  regular user can inspect logs, manage configs, and backup data directories directly without
+  and `.conf` drops) are mounted in user space and editable without `sudo`. The host user is
+  automatically added to the database system group (`postgres:999`) and all directories in
+  `~/.postgres/<version>/` are maintained with standard group permissions (`775`), allowing
+  your user to inspect logs, manage configs, and backup data directories directly without
   `sudo`.
 - **PostGIS Support**: One-flag deployment of spatial databases via official `postgis/postgis`
   images.
