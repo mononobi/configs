@@ -14,7 +14,7 @@ done
 SCRIPT_DIR="$(cd -P "$(dirname "$TARGET_FILE")" && pwd)"
 
 # Source centralized framework colors
-source "${SCRIPT_DIR}/../../colors.sh"
+source "${SCRIPT_DIR}/../../../colors.sh"
 
 POSTGRES_DIR="${HOME}/.postgres"
 
@@ -78,6 +78,7 @@ done
 # Helper function to launch psql connection
 connect_to() {
     local idx="$1"
+    shift
     local name="${c_names[$idx]}"
     local port="${c_ports[$idx]}"
     local user="${c_users[$idx]}"
