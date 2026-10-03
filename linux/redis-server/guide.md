@@ -1,7 +1,6 @@
 # Redis Server Setup & Systemd Optimization Guide
 
-Comprehensive configuration, connection commands, and systemd service fixes for Redis
-server.
+Comprehensive configuration, connection commands, and systemd service fixes for Redis server.
 
 ---
 
@@ -71,8 +70,7 @@ containers or local LAN machines:
    bind 127.0.0.1 192.168.2.104
    ```
 
-   _(Replace `192.168.2.104` with your machine's static IP. Remove `::1` if IPv6 is
-   disabled)._
+   _(Replace `192.168.2.104` with your machine's static IP. Remove `::1` if IPv6 is disabled)._
 
 3. Restart the service:
    ```bash

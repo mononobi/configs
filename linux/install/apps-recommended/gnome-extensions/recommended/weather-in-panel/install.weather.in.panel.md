@@ -1,7 +1,7 @@
 # Weather in the Clock Extension
 
-To install the extension, navigate to the corresponding page based on your GNOME version
-and toggle the install icon:
+To install the extension, navigate to the corresponding page based on your GNOME version and
+toggle the install icon:
 
 - For **GNOME 40**, visit:
   [Weather in the Clock](https://extensions.gnome.org/extension/1380/weather-in-the-clock/)

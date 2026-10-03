@@ -1,10 +1,9 @@
 # exFAT Support Installation
 
-To add support for exFAT file systems, run the following commands based on your Ubuntu
-version.
+To add support for exFAT file systems, run the following commands based on your Ubuntu version.
 
-> **WARNING**: The following command to add the universe repository may break your system.
-> Use with caution if needed:
+> **WARNING**: The following command to add the universe repository may break your system. Use
+> with caution if needed:
 >
 > ```bash
 > # sudo add-apt-repository universe

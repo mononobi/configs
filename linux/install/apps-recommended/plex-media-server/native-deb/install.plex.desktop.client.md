@@ -1,7 +1,7 @@
 # Plex Desktop Client Installation
 
-> **Note**: This client is not recommended as it does not work as expected. You can access
-> Plex using a web browser instead if you prefer.
+> **Note**: This client is not recommended as it does not work as expected. You can access Plex
+> using a web browser instead if you prefer.
 
 ## Installation Command
 

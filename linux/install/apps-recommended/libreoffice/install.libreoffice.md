@@ -2,8 +2,8 @@
 
 ## Installation
 
-If you are on a distribution that already includes LibreOffice (e.g., Ubuntu-based), you
-should first remove the current version.
+If you are on a distribution that already includes LibreOffice (e.g., Ubuntu-based), you should
+first remove the current version.
 
 ### 1. Remove the Existing Version
 

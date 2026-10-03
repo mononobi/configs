@@ -8,8 +8,7 @@ paths, turn-by-turn navigation, and distance matrices.
 ## References & Map Data
 
 - **Docker Hub**: [osrm/osrm-backend](https://hub.docker.com/r/osrm/osrm-backend)
-- **Source Code**:
-  [Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend)
+- **Source Code**: [Project-OSRM/osrm-backend](https://github.com/Project-OSRM/osrm-backend)
 - **Map Downloads**: [Geofabrik OpenStreetMap Extracts](https://download.geofabrik.de)
 
 ---

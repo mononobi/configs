@@ -14,8 +14,8 @@
 nmcli connection show
 ```
 
-Look for the "NAME" column and identify your OpenVPN connection. This is the name you
-should use in your systemd service file.
+Look for the "NAME" column and identify your OpenVPN connection. This is the name you should
+use in your systemd service file.
 
 ### 2. Create a systemd Service File
 
@@ -27,8 +27,7 @@ sudo nano /etc/systemd/system/openvpn-startup.service
 
 ### 3. Add Service Configuration
 
-Paste the following content (replace `YOUR_PROFILE_NAME` with your actual profile
-filename):
+Paste the following content (replace `YOUR_PROFILE_NAME` with your actual profile filename):
 
 ```ini
 [Unit]
@@ -69,10 +68,10 @@ Check connection:
 ip addr show
 ```
 
-> Note: When an OpenVPN connection is established, it typically creates a new virtual
-> network interface (e.g., tun0 or tap0). This command will display all network
-> interfaces, including this new VPN interface and its assigned IP address, which helps
-> confirm that the VPN tunnel is active and has successfully obtained an IP address.
+> Note: When an OpenVPN connection is established, it typically creates a new virtual network
+> interface (e.g., tun0 or tap0). This command will display all network interfaces, including
+> this new VPN interface and its assigned IP address, which helps confirm that the VPN tunnel
+> is active and has successfully obtained an IP address.
 
 ## Disable Auto-Connect
 

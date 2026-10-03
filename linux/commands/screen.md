@@ -1,7 +1,6 @@
 # GNU Screen Terminal Multiplexer Cheat Sheet
 
-Commands and keybindings to manage persistent, detach-safe terminal sessions with GNU
-Screen.
+Commands and keybindings to manage persistent, detach-safe terminal sessions with GNU Screen.
 
 ---
 

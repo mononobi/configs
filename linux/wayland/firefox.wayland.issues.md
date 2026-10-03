@@ -5,8 +5,8 @@
 
 ## Force Firefox to Use Wayland
 
-If Firefox is using "x11" or "xWayland", you should manually force it to use "Wayland".
-Run Firefox with this environment variable to test:
+If Firefox is using "x11" or "xWayland", you should manually force it to use "Wayland". Run
+Firefox with this environment variable to test:
 
 ```bash
 MOZ_ENABLE_WAYLAND=1 firefox

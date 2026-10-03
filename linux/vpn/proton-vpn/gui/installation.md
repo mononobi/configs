@@ -10,8 +10,7 @@ Download the official Debian installer package from Proton:
 
 - [ProtonVPN Linux Setup](https://protonvpn.com/support/linux-ubuntu-vpn-setup/)
 
-_(If blocked by ISP censorship, a copy of the installer `.deb` is kept in this
-repository)._
+_(If blocked by ISP censorship, a copy of the installer `.deb` is kept in this repository)._
 
 ---
 

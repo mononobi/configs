@@ -6,8 +6,8 @@ Jami is a distributed communication application without a central server.
 
 ## Install using APT
 
-Go to the [Jami Linux Download Page](https://jami.net/download-jami-linux/), choose your
-OS version, and replace `ubuntu_21.10` in the commands below with your correct OS version.
+Go to the [Jami Linux Download Page](https://jami.net/download-jami-linux/), choose your OS
+version, and replace `ubuntu_21.10` in the commands below with your correct OS version.
 
 ```bash
 sudo apt install gnupg dirmngr ca-certificates curl --no-install-recommends

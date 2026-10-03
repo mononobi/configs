@@ -1,7 +1,7 @@
 # Process & Port Management Cheat Sheet
 
-Commands for querying running processes, monitoring system resources, and terminating
-processes on specific network ports.
+Commands for querying running processes, monitoring system resources, and terminating processes
+on specific network ports.
 
 | Action                                    | Command                         |
 | :---------------------------------------- | :------------------------------ |

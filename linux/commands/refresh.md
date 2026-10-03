@@ -9,6 +9,5 @@ To reload the GNOME Shell user interface and restart extensions without logging 
 > [!NOTE]
 >
 > This command works in **X11** sessions. On **Wayland**, restarting the compositor will
-> terminate your session; see
-> [wayland-ui-errors.md](/linux/common-errors/wayland-ui-errors.md) for Wayland recovery
-> procedures.
+> terminate your session; see [wayland-ui-errors.md](/linux/common-errors/wayland-ui-errors.md)
+> for Wayland recovery procedures.

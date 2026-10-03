@@ -66,8 +66,8 @@ ffmpeg -version
 
 ### Updating the Compiled Version
 
-To update the compiled version, first remove the current build and then repeat the steps
-in Method 2:
+To update the compiled version, first remove the current build and then repeat the steps in
+Method 2:
 
 ```bash
 rm -rf ~/ffmpeg ~/ffmpeg_build ~/bin/{ffmpeg,ffprobe,ffplay,x264,x265}

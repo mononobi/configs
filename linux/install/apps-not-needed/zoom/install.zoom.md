@@ -1,10 +1,9 @@
 # Zoom Installation
 
-Download the Zoom package from the
-[official Zoom download page](https://zoom.us/download).
+Download the Zoom package from the [official Zoom download page](https://zoom.us/download).
 
-To install the downloaded package, execute the following command (replace `file_name.deb`
-with the actual name of the downloaded file):
+To install the downloaded package, execute the following command (replace `file_name.deb` with
+the actual name of the downloaded file):
 
 ```bash
 sudo dpkg -i file_name.deb

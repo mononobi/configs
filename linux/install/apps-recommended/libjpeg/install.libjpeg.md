@@ -1,7 +1,7 @@
 # libjpeg Installation Guide
 
-> **Note:** If you want to use the Pillow image processing Python package, you must
-> install `libjpeg` before Pillow.
+> **Note:** If you want to use the Pillow image processing Python package, you must install
+> `libjpeg` before Pillow.
 
 ```bash
 sudo apt-get install libjpeg-dev

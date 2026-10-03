@@ -26,8 +26,8 @@ Follow these steps to manually install the Oracle JDK:
    sudo tar xvzf jdk-8u51-linux-x64.tar.gz
    ```
 
-5. Update your system PATH. Open `/etc/profile` in a text editor and add the following
-   lines at the end:
+5. Update your system PATH. Open `/etc/profile` in a text editor and add the following lines at
+   the end:
 
    ```bash
    JAVA_HOME=/usr/local/java/jdk1.8.0_51

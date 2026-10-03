@@ -1,7 +1,7 @@
 # Multi-User Shared Directory Configuration
 
-Create a shared filesystem directory where all local users belonging to a shared group
-have read, write, and execute permissions with `setgid` inheritance.
+Create a shared filesystem directory where all local users belonging to a shared group have
+read, write, and execute permissions with `setgid` inheritance.
 
 ---
 
@@ -36,10 +36,10 @@ have read, write, and execute permissions with `setgid` inheritance.
    ```bash
    sudo chmod -R 2770 /home/share
    ```
-   - `2` (setgid bit): Ensures newly created files and subdirectories automatically
-     inherit the `share_group` group ownership.
-   - `770`: Owner and group members receive read, write, and directory execution access;
-     other users have no access.
+   - `2` (setgid bit): Ensures newly created files and subdirectories automatically inherit the
+     `share_group` group ownership.
+   - `770`: Owner and group members receive read, write, and directory execution access; other
+     users have no access.
 
-6. **Apply Membership**: Users must log out and log back in for new group membership to
-   take effect.
+6. **Apply Membership**: Users must log out and log back in for new group membership to take
+   effect.

@@ -1,7 +1,7 @@
 # OpenVPN Profile Cross-Platform Adjustments & SOCKS Proxy
 
-Important configuration modifications for `.ovpn` client profiles when running across
-Linux and non-Linux operating systems.
+Important configuration modifications for `.ovpn` client profiles when running across Linux and
+non-Linux operating systems.
 
 ---
 
@@ -28,8 +28,8 @@ When exporting an OpenVPN client profile generated on Linux to non-Linux operati
 
 > [!NOTE]
 >
-> On Linux clients, ensure **one** of the above pairs remains uncommented (typically the
-> first pair) so DNS servers pushed by the server are bound to the tunnel interface.
+> On Linux clients, ensure **one** of the above pairs remains uncommented (typically the first
+> pair) so DNS servers pushed by the server are bound to the tunnel interface.
 
 ---
 

@@ -1,8 +1,8 @@
 # Install PostGIS
 
-PostGIS is an extension which allows working with spatial data in a PostgreSQL database.
-Please refer to the [official documentation](https://postgis.net) for complete information
-on PostGIS usage.
+PostGIS is an extension which allows working with spatial data in a PostgreSQL database. Please
+refer to the [official documentation](https://postgis.net) for complete information on PostGIS
+usage.
 
 ## Installation
 
@@ -14,8 +14,8 @@ on PostGIS usage.
 
 2. **Install PostgreSQL-specific packages:**
 
-   For each version of PostgreSQL that you have and want to enable PostGIS on, you may
-   also need to execute these commands with the relevant version:
+   For each version of PostgreSQL that you have and want to enable PostGIS on, you may also
+   need to execute these commands with the relevant version:
 
    ```bash
    sudo apt-get install postgresql-{DB_VERSION}-postgis-{LAST_POSTGIS_MAJOR_VERSION}-scripts

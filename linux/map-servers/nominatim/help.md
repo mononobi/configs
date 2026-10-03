@@ -1,7 +1,7 @@
 # Nominatim Geocoding Server Setup (Docker Compose)
 
-Nominatim provides search and reverse geocoding (converting addresses/names to
-geographical coordinates and vice-versa).
+Nominatim provides search and reverse geocoding (converting addresses/names to geographical
+coordinates and vice-versa).
 
 ---
 
@@ -16,14 +16,13 @@ geographical coordinates and vice-versa).
 
 ## Configuration Guidelines (`docker-compose.yml`)
 
-1. **Volume Mounts**: Update host mount paths (`host:container`) to existing directories
-   on your host server.
-2. **Database Credentials**: Replace `DATABASE_PASSWORD_OF_YOUR_CHOICE` with a strong
-   password.
+1. **Volume Mounts**: Update host mount paths (`host:container`) to existing directories on
+   your host server.
+2. **Database Credentials**: Replace `DATABASE_PASSWORD_OF_YOUR_CHOICE` with a strong password.
 3. **Map Source (`PBF_URL` vs `PBF_PATH`)**:
    - To download during initialization: Specify `PBF_URL` and `REPLICATION_URL`.
-   - If pre-downloaded: Comment out `PBF_URL`, uncomment `PBF_PATH`, and mount the
-     directory containing the file.
+   - If pre-downloaded: Comment out `PBF_URL`, uncomment `PBF_PATH`, and mount the directory
+     containing the file.
    - _Note: Do not configure both `PBF_URL` and `PBF_PATH` simultaneously._
 4. **Shared Memory (`shm_size`)**: Recommended to set to **half of available system RAM**.
 5. **Import Styles (`IMPORT_STYLE`)**:
@@ -31,11 +30,9 @@ geographical coordinates and vice-versa).
    - `street`: Administrative boundaries, places, and streets.
    - `address`: All data required for address computation down to house number level.
    - `full` _(Default)_: Full dataset including points of interest.
-   - `extratags`: Full dataset plus OpenStreetMap tags preserved in the `extratags`
-     column.
-6. **Continuous Replication**: Uncomment `REPLICATION_URL` and
-   `REPLICATION_RECHECK_INTERVAL` to enable ongoing updates. _(Note: Significantly
-   increases storage usage)._
+   - `extratags`: Full dataset plus OpenStreetMap tags preserved in the `extratags` column.
+6. **Continuous Replication**: Uncomment `REPLICATION_URL` and `REPLICATION_RECHECK_INTERVAL`
+   to enable ongoing updates. _(Note: Significantly increases storage usage)._
 
 ---
 
@@ -51,9 +48,8 @@ docker-compose up -d
 
 ### Post-Import Storage Optimization (Freeze Database)
 
-If continuous updates are **not** needed, you can reclaim over 50% of the PostgreSQL
-database storage by freezing the imported data once processing finishes and queries start
-serving:
+If continuous updates are **not** needed, you can reclaim over 50% of the PostgreSQL database
+storage by freezing the imported data once processing finishes and queries start serving:
 
 1. Open an interactive shell inside the container:
 

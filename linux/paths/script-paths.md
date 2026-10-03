@@ -1,7 +1,7 @@
 # Standard Linux Script & Executable Paths
 
-Recommended filesystem directories for placing custom shell scripts and binaries, along
-with required permissions.
+Recommended filesystem directories for placing custom shell scripts and binaries, along with
+required permissions.
 
 ---
 

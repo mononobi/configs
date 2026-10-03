@@ -1,8 +1,8 @@
 # Plex Media Server (Docker Compose Edition)
 
 Production-ready Plex Media Server deployment running on Docker Compose with bare-metal
-hardware acceleration, RAM-buffered transcoding, local LAN discovery, and 1:1 host media
-path mapping.
+hardware acceleration, RAM-buffered transcoding, local LAN discovery, and 1:1 host media path
+mapping.
 
 > [!NOTE]
 >
@@ -33,8 +33,8 @@ require_app "plex-media-server"
 
 ## 2. Architecture & Volume Mappings
 
-All media paths match the host 1:1, allowing existing Plex SQLite databases and library
-indices to resolve instantly without broken links.
+All media paths match the host 1:1, allowing existing Plex SQLite databases and library indices
+to resolve instantly without broken links.
 
 | Host Path                 | Container Path           | Mode | Purpose                               |
 | :------------------------ | :----------------------- | :--- | :------------------------------------ |
@@ -53,27 +53,26 @@ indices to resolve instantly without broken links.
 
 > [!TIP]
 >
-> Both `/dev/shm/plex` and `~/.plex/tmp` match the host filesystem identically. The
-> installer automatically resolves the executing username, UID, and GID at runtime,
-> populating the compose file so that files are owned by your active user.
+> Both `/dev/shm/plex` and `~/.plex/tmp` match the host filesystem identically. The installer
+> automatically resolves the executing username, UID, and GID at runtime, populating the
+> compose file so that files are owned by your active user.
 
 > [!NOTE]
 >
-> `shm_size: 16g` is explicitly set in `docker-compose.yml` to remove Docker's default 64
-> MB container shared memory limit, giving Plex access to the full 16 GB host RAM pool.
+> `shm_size: 16g` is explicitly set in `docker-compose.yml` to remove Docker's default 64 MB
+> container shared memory limit, giving Plex access to the full 16 GB host RAM pool.
 
 > [!NOTE]
 >
 > **When Does Plex Need Write (`rw`) Access to Media Folders?** Media drives are mounted
 > read-only (`:ro`) by default as a safety precaution. Plex stores all metadata, posters,
-> databases, and on-demand subtitle downloads in `/config`. Plex only requires write
-> (`rw`) access if you explicitly utilize:
+> databases, and on-demand subtitle downloads in `/config`. Plex only requires write (`rw`)
+> access if you explicitly utilize:
 >
 > 1. **Allow media deletion**: Allowing users/clients to delete movies from the UI.
 > 2. **Media Optimization**: Saving optimized copies "In folder with original items".
-> 3. **External Subtitle/Metadata Writers**: Third-party tools (e.g. Bazarr, Radarr) or
->    legacy agents configured to write local `.srt` or `.nfo` files directly next to video
->    files.
+> 3. **External Subtitle/Metadata Writers**: Third-party tools (e.g. Bazarr, Radarr) or legacy
+>    agents configured to write local `.srt` or `.nfo` files directly next to video files.
 
 ### Metadata Directory Layout
 
@@ -90,15 +89,13 @@ This directly maps to:
 ```
 
 - **Existing Metadata**: Discovered immediately upon container startup.
-- **Fresh Install**: Initialized cleanly under `~/.plex/plexmediaserver/` owned by your
-  user.
+- **Fresh Install**: Initialized cleanly under `~/.plex/plexmediaserver/` owned by your user.
 
 ---
 
 ## 3. Hardware Decoding: AMD Ryzen 7 7700 (VCN 3.0)
 
-The AMD Ryzen 7 7700 iGPU features Video Core Next (VCN 3.0) with native hardware support
-for:
+The AMD Ryzen 7 7700 iGPU features Video Core Next (VCN 3.0) with native hardware support for:
 
 - **HEVC / H.265** (8-bit and 10-bit HDR)
 - **H.264 / AVC**
@@ -128,19 +125,19 @@ Navigate to **Settings → Transcoder** in the Plex Web interface:
 
 > [!IMPORTANT]
 >
-> Hardware transcoding requires an active **Plex Pass** subscription. Without Plex Pass,
-> the Ryzen 7 7700 will transcode via high-performance multi-threaded software decoding.
+> Hardware transcoding requires an active **Plex Pass** subscription. Without Plex Pass, the
+> Ryzen 7 7700 will transcode via high-performance multi-threaded software decoding.
 
 ---
 
 ## 4. Local Area Network (LAN) & Auto-Discovery
 
-The service operates in `network_mode: host` to bind directly to the server's physical
-network interfaces:
+The service operates in `network_mode: host` to bind directly to the server's physical network
+interfaces:
 
 - **Zero NAT Overhead**: Direct line-rate gigabit streaming for 4K remuxes.
-- **GDM Discovery**: Auto-discovery on UDP ports `32410`–`32414` for Smart TVs, Apple TV,
-  Roku, and Plex mobile apps on the local subnet.
+- **GDM Discovery**: Auto-discovery on UDP ports `32410`–`32414` for Smart TVs, Apple TV, Roku,
+  and Plex mobile apps on the local subnet.
 - **DLNA**: Standard DLNA broadcast discovery on UDP port `1900`.
 
 ### Firewall Ports (`ufw`)

@@ -8,8 +8,8 @@ sudo apt install pgadmin4
 
 ## Installation on Distributions without Official Packages
 
-Use this method on distributions where the official package is not available yet (for
-example, right after a new major OS release).
+Use this method on distributions where the official package is not available yet (for example,
+right after a new major OS release).
 
 First, install the necessary dependencies:
 
@@ -74,8 +74,8 @@ python lib/python3.8/site-packages/pgadmin4/pgAdmin4.py
 
 ### Running with a Single Command
 
-You can save the following commands as a script in `/usr/local/sbin` to run the
-application easily:
+You can save the following commands as a script in `/usr/local/sbin` to run the application
+easily:
 
 ```bash
 #!/bin/bash

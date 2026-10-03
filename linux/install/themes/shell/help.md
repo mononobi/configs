@@ -1,8 +1,7 @@
 # Material Shell Themes for GNOME 40
 
 > **Note:** The zip file contains 3 material shell themes for GNOME 40. The blue theme is
-> revised and works perfectly, but the black and mint themes must be revised to fit
-> correctly.
+> revised and works perfectly, but the black and mint themes must be revised to fit correctly.
 
 ## Installation Instructions
 
@@ -13,8 +12,8 @@
 
 ## Revising a Theme
 
-To revise a theme, open its `gnome-shell.css` file. Search for the following values and
-correct the related CSS attributes:
+To revise a theme, open its `gnome-shell.css` file. Search for the following values and correct
+the related CSS attributes:
 
 ```css
 /* Top Bar */

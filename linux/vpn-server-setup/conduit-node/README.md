@@ -1,7 +1,7 @@
 ## Conduit Node
 
-Execute these commands to copy the necessary files and directories to the
-`~/.conduit-node` directory from the `files` directory:
+Execute these commands to copy the necessary files and directories to the `~/.conduit-node`
+directory from the `files` directory:
 
 ```bash
 mkdir -p ~/.conduit-node/data
@@ -67,23 +67,22 @@ docker compose stop
 
 ### Access the Grafana Dashboard and Prometheus Running on a Remote Server:
 
-To access the Grafana dashboard and Prometheus on a remote server, you can use SSH
-tunneling to forward the ports from the remote server to your local machine:
+To access the Grafana dashboard and Prometheus on a remote server, you can use SSH tunneling to
+forward the ports from the remote server to your local machine:
 
 ```bash
 ssh -L 3031:localhost:3030 -L 9092:localhost:9091 remote_user@remote_server_ip
 ```
 
-If you have set up SSH key to access the server, you can use the following command
-instead:
+If you have set up SSH key to access the server, you can use the following command instead:
 
 ```bash
 ssh -L 3031:localhost:3030 -L 9092:localhost:9091 ssh_server_alias
 ```
 
-You can add the following configuration to your `~/.ssh/config` file to create an alias
-for the remote server and to automatically open the Grafana dashboard in your default
-browser when you connect:
+You can add the following configuration to your `~/.ssh/config` file to create an alias for the
+remote server and to automatically open the Grafana dashboard in your default browser when you
+connect:
 
 ```text
 Host SSH_SERVER_ALIAS
@@ -103,8 +102,7 @@ Now you can simply open the Grafana dashboard using the alias:
 ssh SSH_SERVER_ALIAS
 ```
 
-The default browser will automatically open the Grafana dashboard at
-`http://localhost:3031`.
+The default browser will automatically open the Grafana dashboard at `http://localhost:3031`.
 
 Keep the terminal open while you want to access the Grafana dashboard and Prometheus.
 
@@ -121,9 +119,8 @@ You can also manually open the following URLs in your local browser after tunnel
 
 ### Firewall Rules
 
-Make sure these rules are defined in your firewall to allow access from Grafana to
-Prometheus and to allow access to the Grafana dashboard and Prometheus from your local
-machine:
+Make sure these rules are defined in your firewall to allow access from Grafana to Prometheus
+and to allow access to the Grafana dashboard and Prometheus from your local machine:
 
 ```bash
 # Allow access from Grafana to Prometheus in the Docker network

@@ -27,8 +27,8 @@ sudo apt list --installed
 
 ## Switching Repository Mirrors (Regional to Main)
 
-Switching from localized regional mirrors (e.g., `us.archive.ubuntu.com`) to canonical
-mirrors (`archive.ubuntu.com`) resolves localized mirror outages and sync lag.
+Switching from localized regional mirrors (e.g., `us.archive.ubuntu.com`) to canonical mirrors
+(`archive.ubuntu.com`) resolves localized mirror outages and sync lag.
 
 1. Open `/etc/apt/sources.list` (or files in `/etc/apt/sources.list.d/` on modern Ubuntu
    releases):

@@ -1,10 +1,9 @@
 # GDM Settings
 
-This application provides a way to customize the login screen on GNOME-based
-distributions.
+This application provides a way to customize the login screen on GNOME-based distributions.
 
-> **Note:** You must be using `gdm` as your desktop manager to use this application (it is
-> the default desktop manager on Ubuntu).
+> **Note:** You must be using `gdm` as your desktop manager to use this application (it is the
+> default desktop manager on Ubuntu).
 
 ## Recommended Installation (All Ubuntu Versions)
 

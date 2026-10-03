@@ -1,7 +1,7 @@
 # cURL API Testing & Latency Benchmarking
 
-Templates and examples for issuing authenticated API requests and measuring request
-latency with `curl`.
+Templates and examples for issuing authenticated API requests and measuring request latency
+with `curl`.
 
 ---
 
@@ -47,5 +47,4 @@ curl -w "@curl-time.txt" -o /dev/null -s https://example.com/api/info \
 > [!NOTE]
 >
 > Ensure that `curl-time.txt` is located in your current working directory, or specify its
-> absolute path (e.g.,
-> `-w "@/home/mono/Workspace/configs/linux/commands/curl/curl-time.txt"`).
+> absolute path (e.g., `-w "@/home/mono/Workspace/configs/linux/commands/curl/curl-time.txt"`).

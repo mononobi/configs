@@ -1,7 +1,6 @@
 # Disabling Linux Swap File
 
-Instructions for disabling active swap and removing swap files permanently from
-`/etc/fstab`.
+Instructions for disabling active swap and removing swap files permanently from `/etc/fstab`.
 
 ---
 

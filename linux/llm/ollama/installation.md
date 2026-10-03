@@ -1,7 +1,7 @@
 ## Ollama Installation Guide
 
-Ollama is a local LLM (Large Language Model) server that allows you to run and manage LLMs
-on your own machine. This guide will walk you through the installation process for Ollama.
+Ollama is a local LLM (Large Language Model) server that allows you to run and manage LLMs on
+your own machine. This guide will walk you through the installation process for Ollama.
 
 ### Install Ollama
 
@@ -30,10 +30,9 @@ docker compose down
 - Ollama API: `http://localhost:11434`
 - Ollama Web UI: `http://localhost:3020`
 
-> Note: Instead of using `localhost`, you can also use your machine's LAN IP address to
-> access the Ollama API and Web UI from other devices on the same network. For example,
-> `http://192.168.X.Y`. To find your machine's IP address, you can use the following
-> command:
+> Note: Instead of using `localhost`, you can also use your machine's LAN IP address to access
+> the Ollama API and Web UI from other devices on the same network. For example,
+> `http://192.168.X.Y`. To find your machine's IP address, you can use the following command:
 
 ```bash
 ip addr show
@@ -41,8 +40,8 @@ ip addr show
 
 ### Create Account
 
-Navigate to the Ollama Web UI at `http://localhost:3020` and follow the instructions to
-create an account.
+Navigate to the Ollama Web UI at `http://localhost:3020` and follow the instructions to create
+an account.
 
 ### Add AI Models
 
@@ -96,13 +95,13 @@ Then select the model you want to delete and click the `Delete Model` button.
 
 ### Mobile App
 
-Install the `Conduit: OpenWebUI Client` app on your mobile device and connect it to your
-Ollama server using the API URL (Using the LAN IP).
+Install the `Conduit: OpenWebUI Client` app on your mobile device and connect it to your Ollama
+server using the API URL (Using the LAN IP).
 
 **Play Store:**
 [Conduit: OpenWebUI Client](https://play.google.com/store/apps/details?id=app.cogwheel.conduit)
 
 ### IDE Extension
 
-Use `Continue.dev` as AI Assistant extension in `PyCharm` and `VSCode`. Copy the content
-of `continue.dev.config.yml` into `config.yml` of the extension to define your models.
+Use `Continue.dev` as AI Assistant extension in `PyCharm` and `VSCode`. Copy the content of
+`continue.dev.config.yml` into `config.yml` of the extension to define your models.

@@ -17,9 +17,8 @@ mkdir -p ~/.expressvpn/keys
 
 Go to the [ExpressVPN Manual Setup](https://portal.expressvpn.com/setup#manual):
 
-- Copy the `Username` and `Password` that are shown there and put them in a safe place,
-  such as a secure password manager, as you will need them later to set up the VPN
-  connection.
+- Copy the `Username` and `Password` that are shown there and put them in a safe place, such as
+  a secure password manager, as you will need them later to set up the VPN connection.
 - Download profiles (**.ovpn**) for the servers that you want to be able to connect to.
 
 ### Step 3: Download The VPN Keys and Certificates
@@ -30,8 +29,8 @@ section and download the
 [Zip File](https://s23429.pcdn.co/wp-content/uploads/2015/11/my_expressvpn_keys-1.zip)
 containing the VPN keys and certificates.
 
-> Note: The link to the **Zip File** might change in the future, you can find the current
-> link on the above **Account** section.
+> Note: The link to the **Zip File** might change in the future, you can find the current link
+> on the above **Account** section.
 
 ### Step 4: Extract The Downloaded OpenVPN Profiles and The Keys File
 
@@ -90,8 +89,8 @@ Click on the **Advanced** button on the same tab:
 
 #### TLS Authentication Tab:
 
-- **Key File:** Locate the folder where the Zip file from the **Step 2** was saved
-  earlier, then select the `ta.key` file and click **Open**.
+- **Key File:** Locate the folder where the Zip file from the **Step 2** was saved earlier,
+  then select the `ta.key` file and click **Open**.
 - **Key Direction:** `1`
 
 > Click on the **Apply** button on the **Advanced Properties** form.
@@ -100,18 +99,18 @@ Click on the **Advanced** button on the same tab:
 
 > Now you can connect to the added VPN server through the Ubuntu VPN toggle.
 
-> Important: On the official ExpressVPN guide it is mentioned to use **Custom cipher key
-> size** and also to enable **Data compression**. But enabling any of these settings will
-> cause the VPN connection to fail. Other than that, enabling data compression is
-> considered a security risk and should be avoided.
+> Important: On the official ExpressVPN guide it is mentioned to use **Custom cipher key size**
+> and also to enable **Data compression**. But enabling any of these settings will cause the
+> VPN connection to fail. Other than that, enabling data compression is considered a security
+> risk and should be avoided.
 
 ### Adding Profiles Using Command Line
 
 Instead of manually adding every profile using the Ubuntu VPN settings, you can run the
 `openvpn-add` and `openvpn-bulk-add` scripts to add profiles automatically.
 
-> Note: Modify the **TA_KEY_PATH** in the `openvpn-add` script to point to the location
-> where you have saved the `ta.key` file if needed.
+> Note: Modify the **TA_KEY_PATH** in the `openvpn-add` script to point to the location where
+> you have saved the `ta.key` file if needed.
 
 Make the scripts executable:
 

@@ -73,8 +73,8 @@ free -h
 
 ## Kernel Swappiness Optimization
 
-Swappiness controls how aggressively the Linux kernel moves memory pages to swap (range
-`0` to `100`, default `60`). A lower value keeps processes in physical RAM longer.
+Swappiness controls how aggressively the Linux kernel moves memory pages to swap (range `0` to
+`100`, default `60`). A lower value keeps processes in physical RAM longer.
 
 ### Check Current Value
 

@@ -30,9 +30,8 @@ Install fonts globally so they are available to all users and system services:
    fc-cache -f -v
    ```
 
-4. **Apply Fonts**: Open the **GNOME Tweaks** application (`gnome-tweaks`) and navigate to
-   the **Fonts** section to select your preferred interface, document, and monospace
-   fonts.
+4. **Apply Fonts**: Open the **GNOME Tweaks** application (`gnome-tweaks`) and navigate to the
+   **Fonts** section to select your preferred interface, document, and monospace fonts.
 
 5. **Restart System**: Restart your system (or log out and back in) to ensure all running
    applications recognize the new fonts.
@@ -58,8 +57,8 @@ Install fonts locally without requiring root or administrative privileges:
    cp -r /path/to/my-fonts ~/.fonts/
    ```
 
-2. **Font Cache**: Per-user fonts are typically detected automatically without needing a
-   manual cache reload.
+2. **Font Cache**: Per-user fonts are typically detected automatically without needing a manual
+   cache reload.
 
 3. **Apply Fonts**: Open **GNOME Tweaks** and set the fonts in the **Fonts** section.
 

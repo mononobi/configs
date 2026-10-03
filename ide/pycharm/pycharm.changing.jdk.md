@@ -1,7 +1,7 @@
 # Switching PyCharm Boot JDK Runtime
 
-How to change PyCharm's bundled Java runtime to an alternate JDK (e.g., Oracle JDK or
-custom OpenJDK build).
+How to change PyCharm's bundled Java runtime to an alternate JDK (e.g., Oracle JDK or custom
+OpenJDK build).
 
 ---
 

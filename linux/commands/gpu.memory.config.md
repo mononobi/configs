@@ -1,7 +1,7 @@
 # Dedicated GPU Memory (VRAM) Configuration for Integrated GPUs
 
-Guidelines for configuring dedicated video RAM (VRAM) for processors with integrated
-graphics (iGPUs) such as AMD APUs or Intel HD/UHD/Iris GPUs.
+Guidelines for configuring dedicated video RAM (VRAM) for processors with integrated graphics
+(iGPUs) such as AMD APUs or Intel HD/UHD/Iris GPUs.
 
 ---
 
@@ -38,7 +38,7 @@ Recommended static allocation is between **10% and 20%** of total installed phys
 > [!TIP]
 >
 > On modern Linux kernels, it is recommended to set this configuration to **`Auto`** or a
-> minimal static base (e.g., **512 MB**). The Linux kernel graphics drivers (e.g.,
-> `amdgpu`, `i915`) dynamically allocate and release system memory to the GPU on demand.
-> Dedicating an excessively large static chunk of RAM permanently deprives the OS of
-> memory needed for CPU tasks, which can degrade overall system performance.
+> minimal static base (e.g., **512 MB**). The Linux kernel graphics drivers (e.g., `amdgpu`,
+> `i915`) dynamically allocate and release system memory to the GPU on demand. Dedicating an
+> excessively large static chunk of RAM permanently deprives the OS of memory needed for CPU
+> tasks, which can degrade overall system performance.

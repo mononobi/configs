@@ -58,8 +58,8 @@ uid                   [ultimate] KEY_USER_NAME <KEY_EMAIL>
 ssb   rsa4096/B7ABC0813E4028C0 2017-08-18 [E]
 ```
 
-The **Key ID** is the 16-character string immediately following `rsa4096/` on the `sec`
-line (e.g., `30F2B65B9246B6CA`).
+The **Key ID** is the 16-character string immediately following `rsa4096/` on the `sec` line
+(e.g., `30F2B65B9246B6CA`).
 
 ---
 
@@ -104,8 +104,8 @@ gpg --delete-key "KEY_USER_NAME"
 
 ## 6. Using a Single Key with Multiple Email Addresses
 
-To sign commits across personal and work repositories with a single GPG key and have both
-show as **Verified** on GitHub/GitLab, attach additional email identities to the key:
+To sign commits across personal and work repositories with a single GPG key and have both show
+as **Verified** on GitHub/GitLab, attach additional email identities to the key:
 
 1. Edit the key:
 

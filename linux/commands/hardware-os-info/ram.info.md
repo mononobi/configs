@@ -1,12 +1,10 @@
 # RAM Information Commands
 
-CLI commands to inspect physical RAM hardware specifications and real-time memory
-utilization.
+CLI commands to inspect physical RAM hardware specifications and real-time memory utilization.
 
 ## Physical Memory Hardware
 
-Inspect installed physical memory modules, speeds, capacities, types, and slot form
-factors:
+Inspect installed physical memory modules, speeds, capacities, types, and slot form factors:
 
 ```bash
 sudo dmidecode --type 17

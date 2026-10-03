@@ -7,8 +7,8 @@ database systems and is considered a close second to DBeaver regarding features.
 
 1. Go to the [DbGate Download Page](https://dbgate.org/download) and download the `.deb`
    version.
-2. Execute the following command to install the downloaded package (replace
-   `FILE_NAME.deb` with the actual file name):
+2. Execute the following command to install the downloaded package (replace `FILE_NAME.deb`
+   with the actual file name):
 
 ```bash
 sudo apt install ./FILE_NAME.deb

@@ -1,7 +1,7 @@
 # Install Spotify
 
-To install the Spotify client, run the following commands to add the official repository
-and install the application:
+To install the Spotify client, run the following commands to add the official repository and
+install the application:
 
 ```bash
 curl -sS https://download.spotify.com/debian/pubkey_5384CE82BA52C83A.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg

@@ -1,7 +1,7 @@
 # Docker & Docker Compose Cheat Sheet
 
-Quick reference for Docker containers, images, volumes, Compose services, and private
-registry management.
+Quick reference for Docker containers, images, volumes, Compose services, and private registry
+management.
 
 ---
 

@@ -36,8 +36,7 @@ integrations.
    ```
 2. **Authenticate**: On first launch, follow the on-screen browser/device authentication
    prompt.
-3. **Slash Commands**: Inside the interactive TUI, type `/help` to view available
-   commands.
+3. **Slash Commands**: Inside the interactive TUI, type `/help` to view available commands.
 4. **Exit**: Press `Ctrl+D` twice or type `/exit`.
 
 ## Configuration

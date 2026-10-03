@@ -4,8 +4,8 @@
 
 ### Option 1: Support for Both Browser and App
 
-Install the following packages if you want support in both the web browser and the
-Extension Manager application:
+Install the following packages if you want support in both the web browser and the Extension
+Manager application:
 
 ```bash
 sudo apt install gnome-shell-extension-manager
@@ -22,8 +22,8 @@ Follow all steps below if you only require support in the web browser:
 sudo apt install gnome-shell-extensions
 ```
 
-2. Go to [https://extensions.gnome.org](https://extensions.gnome.org) and install the
-   browser extension if it is not already installed.
+2. Go to [https://extensions.gnome.org](https://extensions.gnome.org) and install the browser
+   extension if it is not already installed.
 
 3. Open a terminal and install the browser connector:
 
@@ -43,8 +43,8 @@ To modify the settings of each installed extension:
 
 ### Disable Version Validation Globally
 
-To disable the extension version compatibility check for all extensions, execute the
-following command:
+To disable the extension version compatibility check for all extensions, execute the following
+command:
 
 ```bash
 dconf write /org/gnome/shell/disable-extension-version-validation
@@ -61,5 +61,5 @@ To manually make older extensions compatible with a new GNOME version:
 ```
 
 2. Go into the folder of the specific extension you want to update.
-3. Open the `metadata.json` file and add the current GNOME version into the
-   `shell-version` list.
+3. Open the `metadata.json` file and add the current GNOME version into the `shell-version`
+   list.

@@ -1,7 +1,7 @@
 # Restoring Classic Full Context Menu in Windows 11
 
-Restore the classic Windows 10 full right-click context menu by default (bypassing the
-trimmed "Show more options" menu).
+Restore the classic Windows 10 full right-click context menu by default (bypassing the trimmed
+"Show more options" menu).
 
 ---
 

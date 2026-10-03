@@ -1,7 +1,7 @@
 # UFW (Uncomplicated Firewall) Guide & Recommended Rules
 
-Essential management commands and recommended firewall rule templates for local
-workstations and production servers.
+Essential management commands and recommended firewall rule templates for local workstations
+and production servers.
 
 ---
 

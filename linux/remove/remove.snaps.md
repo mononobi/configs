@@ -4,14 +4,14 @@
 
 There are a few minor things to keep in mind for the future before disabling Snap:
 
-- **Ubuntu Release Upgrades:** When executing a full system upgrade to the next LTS
-  version, the do-release-upgrade process sometimes attempts to reinstall snapd. While
-  your APT pin usually blocks this, it is worth verifying that the pin is still active
-  after a major OS upgrade.
-- **Canonical-Specific GUI Tools:** Default utilities like the Ubuntu App Center and the
-  new Firmware Updater are exclusively Snap packages. You will need to use alternatives,
-  such as the standard GNOME Software center (which supports Flatpaks) and command-line
-  tools like fwupdmgr for firmware updates.
+- **Ubuntu Release Upgrades:** When executing a full system upgrade to the next LTS version,
+  the do-release-upgrade process sometimes attempts to reinstall snapd. While your APT pin
+  usually blocks this, it is worth verifying that the pin is still active after a major OS
+  upgrade.
+- **Canonical-Specific GUI Tools:** Default utilities like the Ubuntu App Center and the new
+  Firmware Updater are exclusively Snap packages. You will need to use alternatives, such as
+  the standard GNOME Software center (which supports Flatpaks) and command-line tools like
+  fwupdmgr for firmware updates.
 - **App Availability:** A small number of developers only package their software as Snaps.
 
 ## 1. Remove all active Snaps
@@ -22,10 +22,10 @@ First, check what snaps are currently installed:
 snap list
 ```
 
-> Important: Snap packages have strict dependencies. Applications (like firefox or
-> snap-store) rely on frameworks (like gnome-42-2204) and base layers (like core22). You
-> must always remove standard applications first, then frameworks and themes, then base
-> layers, and finally the snapd daemon.
+> Important: Snap packages have strict dependencies. Applications (like firefox or snap-store)
+> rely on frameworks (like gnome-42-2204) and base layers (like core22). You must always remove
+> standard applications first, then frameworks and themes, then base layers, and finally the
+> snapd daemon.
 
 Remove them one by one. You must remove standard applications (like Firefox, bare) before
 removing the core, base, and then snapd packages:

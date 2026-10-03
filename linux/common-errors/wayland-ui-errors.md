@@ -7,8 +7,7 @@ methods to recover.
 >
 > **Never execute `Alt + F2` then `r` on Wayland.** In Wayland, the display server and the
 > compositor/UI (GNOME Shell) run inside the same process. Restarting or terminating that
-> process immediately terminates your entire user session and closes all running
-> applications.
+> process immediately terminates your entire user session and closes all running applications.
 
 ---
 

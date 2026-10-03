@@ -23,8 +23,8 @@ environment:
 
 > [!IMPORTANT]
 >
-> If the frontend and backend are hosted on separate domains or ports, ensure CORS headers
-> are properly handled on the backend or via your reverse proxy.
+> If the frontend and backend are hosted on separate domains or ports, ensure CORS headers are
+> properly handled on the backend or via your reverse proxy.
 
 ---
 

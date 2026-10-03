@@ -1,7 +1,7 @@
 # Python 3.11 Installation (APT)
 
-Follow these steps to install Python 3.11, pip, and additional development packages using
-the `deadsnakes` PPA.
+Follow these steps to install Python 3.11, pip, and additional development packages using the
+`deadsnakes` PPA.
 
 ## 1. Add Repository and Install Python 3.11
 

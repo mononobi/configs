@@ -1,16 +1,16 @@
 # Install Ventoy (Local)
 
-> **Note:** This will install Ventoy in the user's local path, so each user will need to
-> have their own installation. However, if you reinstall the OS, the installation will be
-> preserved as long as you have `/home` mounted on a separate partition.
+> **Note:** This will install Ventoy in the user's local path, so each user will need to have
+> their own installation. However, if you reinstall the OS, the installation will be preserved
+> as long as you have `/home` mounted on a separate partition.
 
-Ventoy is a cross-platform USB multiboot creator. It works on Windows and Linux and can
-create bootables for both operating systems.
+Ventoy is a cross-platform USB multiboot creator. It works on Windows and Linux and can create
+bootables for both operating systems.
 
 ## Download and Extract
 
-First, head over to [Ventoy Releases on GitHub](https://github.com/ventoy/Ventoy/releases)
-and download the latest version.
+First, head over to [Ventoy Releases on GitHub](https://github.com/ventoy/Ventoy/releases) and
+download the latest version.
 
 Execute this command to extract the downloaded file (replace `X.Y.Z` with the downloaded
 version):
@@ -69,11 +69,11 @@ sudo chmod 755 ~/.local/share/ventoy/ventoy-current/VentoyGUI.x86_64
 
 ## Final Steps
 
-Press `Alt + F2`, input `r`, and hit `Enter` to reload the shell. Now the app should be
-visible in your application menu.
+Press `Alt + F2`, input `r`, and hit `Enter` to reload the shell. Now the app should be visible
+in your application menu.
 
 ## Updating
 
-If you want to update the Ventoy app, you only need to download the newer version, extract
-it into `~/.local/share/ventoy/ventoy-current`, and make the
+If you want to update the Ventoy app, you only need to download the newer version, extract it
+into `~/.local/share/ventoy/ventoy-current`, and make the
 `~/.local/share/ventoy/ventoy-current/VentoyGUI.x86_64` file executable.

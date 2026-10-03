@@ -39,8 +39,8 @@ sudo apt-get install bash curl file git unzip xz-utils zip libglu1-mesa
    vi ~/.bashrc
    ```
 
-   Add the following line into the file. Replace `[PATH_OF_FLUTTER_GIT_DIRECTORY]` with
-   the directory path of your SDK.
+   Add the following line into the file. Replace `[PATH_OF_FLUTTER_GIT_DIRECTORY]` with the
+   directory path of your SDK.
 
    ```bash
    export PATH="$PATH:[PATH_OF_FLUTTER_GIT_DIRECTORY]/bin"
@@ -124,8 +124,8 @@ flutter config
   flutter upgrade
   ```
 
-- To only update the dependency packages that your app is using and not Flutter itself,
-  run the following command from the root directory of your project:
+- To only update the dependency packages that your app is using and not Flutter itself, run the
+  following command from the root directory of your project:
 
   ```bash
   flutter pub upgrade

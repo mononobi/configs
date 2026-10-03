@@ -23,15 +23,14 @@ wrk -t 2 -c 2 -d 10 -s data.lua https://example.com/api/users/1/
 - `-t 2`: Number of worker threads.
 - `-c 2`: Total number of open HTTP connections kept active.
 - `-d 10`: Duration of the benchmark test in seconds.
-- `-s data.lua`: Custom Lua script defining request payloads, headers, or methods
-  (mandatory for non-GET requests).
+- `-s data.lua`: Custom Lua script defining request payloads, headers, or methods (mandatory
+  for non-GET requests).
 
 ---
 
 ## Structure of `data.lua`
 
-Create `data.lua` in the working directory to customize the HTTP method, payload, and
-headers:
+Create `data.lua` in the working directory to customize the HTTP method, payload, and headers:
 
 ```lua
 wrk.method = "PUT"

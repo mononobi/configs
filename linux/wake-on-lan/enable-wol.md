@@ -1,7 +1,7 @@
 # Wake-on-LAN (WoL) Complete Configuration
 
-Step-by-step setup to enable Wake-on-LAN across BIOS/UEFI firmware, network routers, and
-the Linux operating system.
+Step-by-step setup to enable Wake-on-LAN across BIOS/UEFI firmware, network routers, and the
+Linux operating system.
 
 ---
 
@@ -69,8 +69,8 @@ sudo ethtool -s eno1 wol g
    cp linux/install/commands/sbin/wol-status ~/.local/sbin/
    chmod +x ~/.local/sbin/wol-enable ~/.local/sbin/wol-status
    ```
-2. Open `Startup Applications` (`gnome-session-properties`) and create an entry pointing
-   to `~/.local/sbin/wol-enable`.
+2. Open `Startup Applications` (`gnome-session-properties`) and create an entry pointing to
+   `~/.local/sbin/wol-enable`.
 
 ---
 

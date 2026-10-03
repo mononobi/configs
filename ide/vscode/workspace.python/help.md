@@ -11,10 +11,9 @@ Template setup for Python project workspaces in VS Code.
    - Rename `_env` to `.env`.
 
 2. **Placement**:
-   - Place the `.vscode` folder into your project's root directory (alongside
-     `.gitignore`).
+   - Place the `.vscode` folder into your project's root directory (alongside `.gitignore`).
    - Place the `.env` file into your project's root directory.
 
 3. **Environment Adaptation**:
-   - Update Python interpreter paths, virtual environment locations, and linter/formatter
-     paths within `.vscode/settings.json` to match your local setup.
+   - Update Python interpreter paths, virtual environment locations, and linter/formatter paths
+     within `.vscode/settings.json` to match your local setup.

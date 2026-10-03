@@ -1,14 +1,14 @@
 # Disabling Start Menu Web Search & Bing in Windows 11
 
-Prevent the Windows 11 Start Menu and search bar from querying Bing or opening web results
-via Group Policy.
+Prevent the Windows 11 Start Menu and search bar from querying Bing or opening web results via
+Group Policy.
 
 ---
 
 ## Step 1: Open Group Policy Editor
 
-1. Press `Win + R`, type `gpedit.msc`, and press `Enter` to launch the **Local Group
-   Policy Editor**.
+1. Press `Win + R`, type `gpedit.msc`, and press `Enter` to launch the **Local Group Policy
+   Editor**.
 
 ---
 
@@ -37,10 +37,10 @@ Computer Configuration > Administrative Templates > Windows Components > Microso
 
 Double-click the following policies, set their status to **Disabled**, and click **OK**:
 
-- **Allow Microsoft Edge to pre-launch at Windows startup, when the system is idle, and
+- **Allow Microsoft Edge to pre-launch at Windows startup, when the system is idle, and each
+  time Microsoft Edge is closed**
+- **Allow Microsoft Edge to start and load the Start and New Tab page at Windows startup and
   each time Microsoft Edge is closed**
-- **Allow Microsoft Edge to start and load the Start and New Tab page at Windows startup
-  and each time Microsoft Edge is closed**
 
 ---
 

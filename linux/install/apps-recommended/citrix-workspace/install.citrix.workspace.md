@@ -3,8 +3,7 @@
 Download the `.deb` package from here:
 [Citrix Workspace for Linux](https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html)
 
-> You only need the `Full Package (Self-Service Support)` and NOT the
-> `USB Support Package`.
+> You only need the `Full Package (Self-Service Support)` and NOT the `USB Support Package`.
 
 Always read the system requirements to make sure your current Ubuntu version is supported:
 [System Requirements and Compatibility](https://docs.citrix.com/en-us/citrix-workspace-app-for-linux/system-requirements.html)
@@ -39,8 +38,8 @@ rm libicu74_74.2-1ubuntu3.1_amd64.deb libxml2_2.9.14+dfsg-1.3ubuntu3.9_amd64.deb
 ```
 
 > **Important:** Newer versions of Ubuntu (e.g. 26.04) ship with `libwebkit2gtk-4.1`, but
-> Citrix Workspace specifically looks for the `4.0` library. You must create symbolic
-> links to the `4.1` library so Citrix can find it. After installing the Citrix App, run:
+> Citrix Workspace specifically looks for the `4.0` library. You must create symbolic links to
+> the `4.1` library so Citrix can find it. After installing the Citrix App, run:
 
 ```bash
 sudo mkdir -p /opt/Citrix/ICAClient/gtk2/lib
@@ -48,8 +47,8 @@ sudo ln -s /usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.1.so.0 /opt/Citrix/ICAClien
 sudo ln -s /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /opt/Citrix/ICAClient/gtk2/lib/libjavascriptcoregtk-4.0.so.18
 ```
 
-> If the app still does not launch, run one of these commands from the terminal to see
-> what other dependencies might be missing.
+> If the app still does not launch, run one of these commands from the terminal to see what
+> other dependencies might be missing.
 
 ```bash
 # This will launch the Citrix Workspace app and will show the exact error that is
@@ -62,8 +61,8 @@ sudo ln -s /usr/lib/x86_64-linux-gnu/libjavascriptcoregtk-4.1.so.0 /opt/Citrix/I
 
 ### Citrix App Installation
 
-To ensure your system stays stable, run these commands in sequence to install the
-bare-minimum core package:
+To ensure your system stays stable, run these commands in sequence to install the bare-minimum
+core package:
 
 1. Pre-create the core user account to prevent the logging service error:
 
@@ -85,8 +84,8 @@ sudo dpkg -i FILE_NAME.deb
 
 ### Citrix App Removal
 
-If you want to remove the installed Citrix app or perform a new installation or fix a
-broken installation, follow these steps to remove the current installation:
+If you want to remove the installed Citrix app or perform a new installation or fix a broken
+installation, follow these steps to remove the current installation:
 
 - Step 1: Force-Clear the Broken Package Status
 
@@ -118,5 +117,5 @@ sudo rm -rf /opt/Citrix/
 rm -rf ~/.ICAClient/
 ```
 
-> NOTE: Always run the Citrix app before trying to connect to the remote workspace through
-> the web browser.
+> NOTE: Always run the Citrix app before trying to connect to the remote workspace through the
+> web browser.

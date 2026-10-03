@@ -15,8 +15,8 @@ Configure mobile VMess / Shadowsocks clients to connect to your intermediate pro
 
 ## Importing Profiles
 
-1. In your desktop client (e.g., NekoRay), right-click the target profile and select
-   **Share** -> **QR Code and Link**.
+1. In your desktop client (e.g., NekoRay), right-click the target profile and select **Share**
+   -> **QR Code and Link**.
 2. In the mobile app, tap **Add / Import** and scan the QR code.
 
 ---

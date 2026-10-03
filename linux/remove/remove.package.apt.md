@@ -1,7 +1,7 @@
 # Removing APT Packages
 
-Commands for completely removing or purging APT packages and their associated
-configuration files.
+Commands for completely removing or purging APT packages and their associated configuration
+files.
 
 ```bash
 # Standard package removal (preserves configuration files):

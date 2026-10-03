@@ -1,7 +1,7 @@
 # Fix Read-Only Mounts on NTFS Drives
 
-If an NTFS partition mounts in read-only mode without write access, try the following
-solutions in order (restarting or remounting after each):
+If an NTFS partition mounts in read-only mode without write access, try the following solutions
+in order (restarting or remounting after each):
 
 ---
 
@@ -17,8 +17,8 @@ sudo apt-get remove ntfsprogs && sudo apt-get install -y ntfs-3g
 
 ## Solution 2: Repair NTFS Filesystem Inconsistencies
 
-Use `ntfsfix` to clear dirty flags and fix NTFS metadata errors (common after unclean
-Windows shutdowns or Fast Startup hibernations):
+Use `ntfsfix` to clear dirty flags and fix NTFS metadata errors (common after unclean Windows
+shutdowns or Fast Startup hibernations):
 
 ```bash
 sudo ntfsfix /dev/sdXN

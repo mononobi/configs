@@ -5,8 +5,8 @@ Debian-based and Arch-based Linux distributions.
 
 ## Debian-Based Distributions
 
-Run the following commands to install the dependencies on Debian, Ubuntu, Linux Mint, or
-other Debian-based systems:
+Run the following commands to install the dependencies on Debian, Ubuntu, Linux Mint, or other
+Debian-based systems:
 
 ```bash
 sudo apt-get install libgtk-3.0
@@ -17,8 +17,8 @@ sudo apt-get install sassc
 
 ## Arch-Based Distributions
 
-Run the following commands to install the dependencies on Arch Linux, Manjaro,
-EndeavourOS, or other Arch-based systems:
+Run the following commands to install the dependencies on Arch Linux, Manjaro, EndeavourOS, or
+other Arch-based systems:
 
 ```bash
 sudo pacman -S gtk3

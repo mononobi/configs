@@ -1,9 +1,8 @@
 # Fixing "Oh no! Something has gone wrong" Error Screen
 
-If Ubuntu boots into a white error screen stating **"Oh no! Something has gone wrong. A
-problem has occurred and the system can't recover. Please contact a system
-administrator"**, this is commonly caused by interrupted, deferred, or partially applied
-package updates.
+If Ubuntu boots into a white error screen stating **"Oh no! Something has gone wrong. A problem
+has occurred and the system can't recover. Please contact a system administrator"**, this is
+commonly caused by interrupted, deferred, or partially applied package updates.
 
 Follow these steps to recover via virtual terminal.
 
@@ -13,8 +12,7 @@ Follow these steps to recover via virtual terminal.
 
 ### 1. Open a Virtual Console (TTY)
 
-On the error screen, switch to a text terminal using one of the following key
-combinations:
+On the error screen, switch to a text terminal using one of the following key combinations:
 
 - `Ctrl + Alt + F6` (Default)
 - `Ctrl + Alt + F3`

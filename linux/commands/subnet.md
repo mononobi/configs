@@ -1,14 +1,14 @@
 # IPv4 & IPv6 Subnetting Reference Guide
 
-A comprehensive quick-reference for network subnet masks, CIDR prefix notation, and
-private IP addressing ranges.
+A comprehensive quick-reference for network subnet masks, CIDR prefix notation, and private IP
+addressing ranges.
 
 ---
 
 ## IPv4 Subnetting (CIDR)
 
-An IPv4 address consists of 32 bits divided into four 8-bit octets. The prefix `/N`
-indicates the number of static (network) bits counted from left to right.
+An IPv4 address consists of 32 bits divided into four 8-bit octets. The prefix `/N` indicates
+the number of static (network) bits counted from left to right.
 
 ### Example: `192.168.1.0/24`
 
@@ -28,14 +28,13 @@ indicates the number of static (network) bits counted from left to right.
 
 ## IPv6 Subnetting (CIDR)
 
-An IPv6 address consists of 128 bits divided into eight 16-bit hexadecimal blocks. The
-prefix `/N` specifies how many bits are constant from left to right.
+An IPv6 address consists of 128 bits divided into eight 16-bit hexadecimal blocks. The prefix
+`/N` specifies how many bits are constant from left to right.
 
 _(The following addresses are illustrative examples)_
 
-- `AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64` Spans
-  `AAAA:BBBB:CCCC:0126:0000:0000:0000:0000` through
-  `AAAA:BBBB:CCCC:0126:FFFF:FFFF:FFFF:FFFF`
+- `AAAA:BBBB:CCCC:0126:0000:0000:0000:0000/64` Spans `AAAA:BBBB:CCCC:0126:0000:0000:0000:0000`
+  through `AAAA:BBBB:CCCC:0126:FFFF:FFFF:FFFF:FFFF`
 
 ### Common IPv6 CIDR Blocks
 
@@ -54,27 +53,25 @@ _(The following addresses are illustrative examples)_
 
 ## Private IPv4 Ranges (RFC 1918) & Localhost
 
-These addresses are reserved for private internal networks and are non-routable on the
-public internet:
+These addresses are reserved for private internal networks and are non-routable on the public
+internet:
 
-- **`192.168.0.0/16`** (LAN / Home Networks) Spans `192.168.0.0` through
-  `192.168.255.255`.
+- **`192.168.0.0/16`** (LAN / Home Networks) Spans `192.168.0.0` through `192.168.255.255`.
 - **`172.16.0.0/12`** (Private Networks, Docker bridges, VPN tunnels) Spans `172.16.0.0`
   through `172.31.255.255`.
-- **`10.0.0.0/8`** (Enterprise Private Networks, WireGuard/OpenVPN tunnels) Spans
-  `10.0.0.0` through `10.255.255.255`.
-- **`127.0.0.0/8`** (Loopback / Localhost) Spans `127.0.0.0` through `127.255.255.255`.
-  Each system or container maintains its own isolated loopback interface; localhost in a
-  host system is not automatically reachable from inside a container unless sharing
-  network namespaces.
+- **`10.0.0.0/8`** (Enterprise Private Networks, WireGuard/OpenVPN tunnels) Spans `10.0.0.0`
+  through `10.255.255.255`.
+- **`127.0.0.0/8`** (Loopback / Localhost) Spans `127.0.0.0` through `127.255.255.255`. Each
+  system or container maintains its own isolated loopback interface; localhost in a host system
+  is not automatically reachable from inside a container unless sharing network namespaces.
 
 ---
 
 ## System Proxy Bypass Configuration
 
-When configuring a system-wide HTTP/SOCKS proxy, include the following list in the
-**Ignore Hosts** (No Proxy) setting to ensure local, container, and private resources
-remain accessible directly without routing through the proxy:
+When configuring a system-wide HTTP/SOCKS proxy, include the following list in the **Ignore
+Hosts** (No Proxy) setting to ensure local, container, and private resources remain accessible
+directly without routing through the proxy:
 
 ```text
 localhost, 127.0.0.0/8, ::1, 192.168.0.0/16, 172.16.0.0/12, 10.0.0.0/8

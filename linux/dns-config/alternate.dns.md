@@ -9,8 +9,7 @@ To apply these DNS servers:
 - In web browsers: Configure secure DNS directly in browser privacy settings.
 - In VPN clients: Add them as custom DNS or DoH endpoints.
 
-After updating system DNS settings, disconnect and reconnect your network to apply the
-changes.
+After updating system DNS settings, disconnect and reconnect your network to apply the changes.
 
 ---
 

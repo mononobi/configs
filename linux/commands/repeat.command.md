@@ -1,7 +1,7 @@
 # Recurring Command Execution with `watch`
 
-Execute a command or script repeatedly at a fixed interval to monitor output changes in
-real time.
+Execute a command or script repeatedly at a fixed interval to monitor output changes in real
+time.
 
 ## Syntax
 

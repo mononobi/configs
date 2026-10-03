@@ -12,8 +12,8 @@ After installation, execute this command to see if your CPU supports KVM:
 kvm-ok
 ```
 
-Alternatively, you can execute this command. If it returns a value greater than 0, your
-CPU supports KVM:
+Alternatively, you can execute this command. If it returns a value greater than 0, your CPU
+supports KVM:
 
 ```bash
 egrep -c '(vmx|svm)' /proc/cpuinfo
@@ -113,8 +113,8 @@ Add a new hardware device for a second CD-ROM:
 - **Readonly:** True
 - **Select or create custom storage:** Select the virtio libs `.iso` file.
 
-> **Note:** It is required to install dependencies during the setup and also after booting
-> into Windows. You can download the ISO here:
+> **Note:** It is required to install dependencies during the setup and also after booting into
+> Windows. You can download the ISO here:
 > [virtio-win.iso](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso)
 
 #### Recommended Resources for the Win 11 VM
@@ -124,9 +124,9 @@ Add a new hardware device for a second CD-ROM:
 
 ### Installation
 
-When you reach the "Where do you want to install Windows?" screen, you will likely see a
-blank list with the message "We couldn't find any drives." This is normal because Windows
-doesn't have built-in VirtIO storage drivers.
+When you reach the "Where do you want to install Windows?" screen, you will likely see a blank
+list with the message "We couldn't find any drives." This is normal because Windows doesn't
+have built-in VirtIO storage drivers.
 
 1. Click **"Load driver"** at the bottom left.
 2. In the "Load Driver" dialog, click **"Browse"**.
@@ -134,24 +134,23 @@ doesn't have built-in VirtIO storage drivers.
 4. Select the following folder for the storage driver: `viostor -> w11 -> amd64`.
 5. Click **"OK"**. The setup will find the "Red Hat VirtIO SCSI pass-through controller"
    driver.
-6. Click **"Next"** to install the driver. After a moment, your virtual disk will appear
-   in the list (DISK 1).
-7. Select the unallocated space on the disk and click **"Next"** to begin the
-   installation.
+6. Click **"Next"** to install the driver. After a moment, your virtual disk will appear in the
+   list (DISK 1).
+7. Select the unallocated space on the disk and click **"Next"** to begin the installation.
 
 ### Post Installation
 
 Once Windows 11 is installed and you've booted to the desktop:
 
-**Install Guest Tools:** Open File Explorer, navigate to the `virtio-win` CD-ROM, and run
-these 3 installers:
+**Install Guest Tools:** Open File Explorer, navigate to the `virtio-win` CD-ROM, and run these
+3 installers:
 
 - `CD-ROM:/virtio-win-guest-tools.exe`
 - `CD-ROM:/guest-agent/qemu-ga-x86_64.msi`
 - `CD-ROM:/virtio-win-gt-x64.msi`
 
-**Change Configs:** After the guest tools are installed, you can shut down the VM. Go into
-its hardware settings in virt-manager and change the following settings:
+**Change Configs:** After the guest tools are installed, you can shut down the VM. Go into its
+hardware settings in virt-manager and change the following settings:
 
 #### Post Installation Configs
 
@@ -175,8 +174,8 @@ Display"** and check these two options:
 - "Auto resize VM with window"
 
 > **Note:** Even after applying these, you'll still need to manually select the correct
-> resolution every time you boot into Windows, but without this, you won't even see the
-> correct resolution to select.
+> resolution every time you boot into Windows, but without this, you won't even see the correct
+> resolution to select.
 
 #### Remove These Hardware When Done
 

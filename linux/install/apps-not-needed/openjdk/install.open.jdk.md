@@ -12,8 +12,8 @@ sudo apt-get install openjdk-14-jdk
 
 ## Switching Java Versions
 
-If you have more than one Java version installed on your system, use the following command
-to switch versions:
+If you have more than one Java version installed on your system, use the following command to
+switch versions:
 
 ```bash
 sudo update-alternatives --config java

@@ -1,8 +1,8 @@
 # Install pgAdmin 4 (Local Version via APT)
 
-> **Note:** You can install the normal version using the Ubuntu package manager. However,
-> it is recommended to use the `pgadmin4-local` script to run it and prevent further
-> problems. Make sure you have installed PostgreSQL before proceeding.
+> **Note:** You can install the normal version using the Ubuntu package manager. However, it is
+> recommended to use the `pgadmin4-local` script to run it and prevent further problems. Make
+> sure you have installed PostgreSQL before proceeding.
 
 ## Installation Steps
 

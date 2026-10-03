@@ -16,10 +16,9 @@ For Python 3:
 pip3 install pipenv
 ```
 
-> **Note:** Pipenv supports the automatic loading of environmental variables when a `.env`
-> file exists in the top-level directory. That way, when you run `pipenv shell` to open
-> the virtual environment, it automatically loads your environmental variables from the
-> file.
+> **Note:** Pipenv supports the automatic loading of environmental variables when a `.env` file
+> exists in the top-level directory. That way, when you run `pipenv shell` to open the virtual
+> environment, it automatically loads your environmental variables from the file.
 >
 > The `.env` file should contain key-value pairs like this:
 >

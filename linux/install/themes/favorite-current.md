@@ -1,8 +1,8 @@
 # Important: Reinstalling The Themes & Icons
 
-If you have already installed the themes or icon packs mentioned in this guide and would
-like to reinstall them with different flags, first remove the installed icons or themes
-and then continue.
+If you have already installed the themes or icon packs mentioned in this guide and would like
+to reinstall them with different flags, first remove the installed icons or themes and then
+continue.
 
 > Remove Themes:
 
@@ -27,8 +27,7 @@ https://github.com/vinceliuice
 ## Step 1
 
 Go to the Ubuntu settings and select your base style. This is the most important part as
-failing to do so can cause conflicts between the base style and the applied theme
-(Dark/Light).
+failing to do so can cause conflicts between the base style and the applied theme (Dark/Light).
 
 > Settings → Appearance → Dark or Light (Based on the theme you want to select)
 
@@ -36,8 +35,8 @@ failing to do so can cause conflicts between the base style and the applied them
 
 ## Step 2
 
-Create the required folders. These commands will skip creation if any of the folders
-already exist.
+Create the required folders. These commands will skip creation if any of the folders already
+exist.
 
 ```bash
 mkdir -p ~/.icons
@@ -81,8 +80,8 @@ cd ~/Workspace/linux-styling/icons/Tela-icon-theme
 
 ## Step 5
 
-Copy the installed themes and icons to the shared folder to be able to also use them on
-the login screen.
+Copy the installed themes and icons to the shared folder to be able to also use them on the
+login screen.
 
 ```bash
 sudo cp -r ~/.themes/* /usr/share/themes
@@ -110,9 +109,9 @@ Open the **GDM Settings** app and configure the theme and icons for login page:
 - **Icons:** Tela-dark
 - **Cursor:** DMZ-White
 
-> IMPORTANT: After configuring the themes, never open the **Appearance** menu on the
-> **Ubuntu Settings** window, otherwise all styling settings will be reset to their
-> default values and you have to reconfigure.
+> IMPORTANT: After configuring the themes, never open the **Appearance** menu on the **Ubuntu
+> Settings** window, otherwise all styling settings will be reset to their default values and
+> you have to reconfigure.
 
 ## Suggestions
 
@@ -232,8 +231,7 @@ Mouse Wheel**.
 > GDM Settings → Fonts:
 
 - **Scaling Factor:** 1.0
-- **Login Background**
-  [Tony Webster Blur](./login-background/images/tony-webster-blur.jpg)
+- **Login Background** [Tony Webster Blur](./login-background/images/tony-webster-blur.jpg)
 
 > **Laptop (2880x1800):**
 
@@ -273,6 +271,6 @@ Mouse Wheel**.
 - **Scaling Factor:** 1.0
 - **Login Background** [Abstract Blur](./login-background/images/abstract-blur.jpg)
 
-> NOTE: On `Ubuntu 26.04` and later, the cursor change through the `Tweaks` and
-> `GDM-Settings` apps will not work, to change the cursor, follow the guides in
+> NOTE: On `Ubuntu 26.04` and later, the cursor change through the `Tweaks` and `GDM-Settings`
+> apps will not work, to change the cursor, follow the guides in
 > [Change Cursor](cursor/change-cursor.md) file.

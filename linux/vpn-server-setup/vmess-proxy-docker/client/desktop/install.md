@@ -1,7 +1,7 @@
 # NekoRay Desktop VMess Client Setup (Linux & Windows)
 
-Step-by-step setup guide for configuring NekoRay (V2Ray / Xray GUI) for anti-censorship
-VMess proxy connections.
+Step-by-step setup guide for configuring NekoRay (V2Ray / Xray GUI) for anti-censorship VMess
+proxy connections.
 
 ---
 
@@ -29,8 +29,7 @@ Open **Preferences** in NekoRay and configure the following panels:
 
 #### Custom Global Routing JSON
 
-Click **Custom (global)**, paste the following routing rules, click **Format JSON**, and
-save:
+Click **Custom (global)**, paste the following routing rules, click **Format JSON**, and save:
 
 ```json
 {
@@ -61,8 +60,8 @@ save:
 - **Concurrent**: `1`
 - **Loglevel**: `none`
 
-_(Alternatively, copy pre-configured group settings from
-`desktop/files/configs/nekoray.json` into `<APP_DIR>/config/groups`)._
+_(Alternatively, copy pre-configured group settings from `desktop/files/configs/nekoray.json`
+into `<APP_DIR>/config/groups`)._
 
 ---
 
@@ -117,8 +116,8 @@ cp nekoray.desktop ~/.local/share/applications/
 
 > [!CAUTION]
 >
-> On Linux, `systemd-resolved` often bypasses routing tables, sending DNS queries directly
-> to the physical gateway instead of the `nekoray-tun` interface.
+> On Linux, `systemd-resolved` often bypasses routing tables, sending DNS queries directly to
+> the physical gateway instead of the `nekoray-tun` interface.
 
 ### Recommended Remedy
 

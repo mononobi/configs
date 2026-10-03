@@ -1,7 +1,7 @@
 # GPG Commit Signing Configuration
 
-Configure Git to cryptographically sign commits using GPG keys for verified badges on
-GitHub or GitLab.
+Configure Git to cryptographically sign commits using GPG keys for verified badges on GitHub or
+GitLab.
 
 ---
 

@@ -1,7 +1,7 @@
 # Linux System Upgrade
 
-Use the following commands to update your package lists and perform a distribution upgrade
-on your Linux system.
+Use the following commands to update your package lists and perform a distribution upgrade on
+your Linux system.
 
 ## Upgrade Commands
 

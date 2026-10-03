@@ -4,8 +4,7 @@ CLI commands to inspect CPU architecture, core counts, and real-time clock frequ
 
 ## System-Wide CPU Architecture
 
-Display full processor specifications, flags, virtualization capabilities, and cache
-sizes:
+Display full processor specifications, flags, virtualization capabilities, and cache sizes:
 
 ```bash
 lscpu

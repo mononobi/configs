@@ -1,7 +1,7 @@
 # Resolving Divergent Branches During Git Rebase
 
-If your IDE reports a divergent branches error when attempting to rebase onto another
-branch, temporarily configure pull behavior to rebase.
+If your IDE reports a divergent branches error when attempting to rebase onto another branch,
+temporarily configure pull behavior to rebase.
 
 ---
 

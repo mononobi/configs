@@ -62,8 +62,8 @@ Find the line starting with `DEVICESCAN` and comment it out by adding a `#` at t
 #DEVICESCAN -d removable -n standby ...
 ```
 
-Paste the content of the corresponding `smartd.*.conf` file into that file. Replace drive
-IDs with your actual drive IDs.
+Paste the content of the corresponding `smartd.*.conf` file into that file. Replace drive IDs
+with your actual drive IDs.
 
 ### Update Interval
 
@@ -100,8 +100,7 @@ sudo systemctl status smartmontools
 
 ## Part 4: Configure Schedule (Cron)
 
-We use the system scheduler to run tests. It runs as root, bypassing complex permission
-issues.
+We use the system scheduler to run tests. It runs as root, bypassing complex permission issues.
 
 Open the root `crontab`:
 
@@ -179,14 +178,13 @@ terminal and run the "Show All" command for the specific drive:
 sudo smartctl -a /dev/disk/by-id/[DRIVE_ID]
 ```
 
-- **HDDs:** Look for "Reallocated_Sector_Ct" or "Current_Pending_Sector". Non-zero values
-  are bad.
+- **HDDs:** Look for "Reallocated_Sector_Ct" or "Current_Pending_Sector". Non-zero values are
+  bad.
 - **SSDs:** Look for "Media_Wearout_Indicator" or "Percentage Used".
 
 ### 3. How to Run a Manual Test
 
-If you suspect a drive is failing and want to force a test immediately (ignoring the
-schedule):
+If you suspect a drive is failing and want to force a test immediately (ignoring the schedule):
 
 **Short Test (2 mins):**
 
@@ -228,8 +226,8 @@ sudo smartctl -a /dev/disk/by-id/[DRIVE_ID] | grep "Power On Hours"
 
 ### Note On NVMe Drive ID
 
-This tool has an issue using device ID of the NVMe drives, so the controller name should
-be used instead.
+This tool has an issue using device ID of the NVMe drives, so the controller name should be
+used instead.
 
 - Instead Of: `/dev/disk/by-id/nvme-Samsung_SSD_990`
 - Use: `/dev/nvme0` or `/dev/nvme1`

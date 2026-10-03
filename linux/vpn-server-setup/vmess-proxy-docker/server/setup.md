@@ -1,7 +1,7 @@
 # Anti-Censorship VMess + SSH Relay Server Setup (Dual-Server Architecture)
 
-A resilient, two-tier proxy architecture designed to circumvent national firewalls and
-deep packet inspection (DPI) in heavily censored regions.
+A resilient, two-tier proxy architecture designed to circumvent national firewalls and deep
+packet inspection (DPI) in heavily censored regions.
 
 ---
 
@@ -10,8 +10,8 @@ deep packet inspection (DPI) in heavily censored regions.
 1. **INTERNAL Server**: Located inside the restricted national boundary. It possesses
    unrestricted outbound connectivity to the international internet, acting as an domestic
    gateway relay.
-2. **EXTERNAL Server**: Located in the free internet outside the restricted country,
-   running the V2Ray / VMess Docker service.
+2. **EXTERNAL Server**: Located in the free internet outside the restricted country, running
+   the V2Ray / VMess Docker service.
 
 ```mermaid
 flowchart LR
@@ -111,8 +111,7 @@ docker ps
 
 ## Step 3: Secure SSH Key Relay from INTERNAL to EXTERNAL
 
-Generate an SSH key pair **on the INTERNAL server** dedicated solely to the tunnel
-connection:
+Generate an SSH key pair **on the INTERNAL server** dedicated solely to the tunnel connection:
 
 ```bash
 # On INTERNAL server:
@@ -140,8 +139,8 @@ authbind --deep ssh -f -N -i ~/.ssh/relay_key -o GatewayPorts=true -L <INTERNAL_
 
 ### Tunnel Maintenance
 
-To prevent TCP exhaustion and maintain peak throughput, schedule a daily restart of the
-tunnel or reboot the INTERNAL server nightly:
+To prevent TCP exhaustion and maintain peak throughput, schedule a daily restart of the tunnel
+or reboot the INTERNAL server nightly:
 
 ```bash
 # Reconnect tunnel on boot:

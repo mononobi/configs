@@ -1,8 +1,7 @@
 # Install Antigravity IDE
 
-This will install the Antigravity IDE with the AI agent mode. It is recommended to install
-the Antigravity Agent Manager instead to be able to use it with your favorite IDE or
-without IDE.
+This will install the Antigravity IDE with the AI agent mode. It is recommended to install the
+Antigravity Agent Manager instead to be able to use it with your favorite IDE or without IDE.
 
 Open your terminal and run the following commands:
 

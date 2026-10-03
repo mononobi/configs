@@ -1,9 +1,8 @@
 # Production OpenVPN Server Setup Guide (Ubuntu/Debian)
 
-A comprehensive guide for building a hardened, enterprise-grade OpenVPN server using
-Easy-RSA v3, PKI certificate authorities, elliptic-curve or RSA cryptography, TLS-Crypt
-authentication, UFW NAT forwarding, multi-protocol serving (UDP & TCP), and multi-IP
-policy routing.
+A comprehensive guide for building a hardened, enterprise-grade OpenVPN server using Easy-RSA
+v3, PKI certificate authorities, elliptic-curve or RSA cryptography, TLS-Crypt authentication,
+UFW NAT forwarding, multi-protocol serving (UDP & TCP), and multi-IP policy routing.
 
 ---
 
@@ -85,8 +84,8 @@ cd ~/easy-rsa
 ./easyrsa init-pki
 ```
 
-Build the root CA certificate. Choose a strong passphrase and set an identifiable Common
-Name (referenced as `vpn-server-ca` in this guide):
+Build the root CA certificate. Choose a strong passphrase and set an identifiable Common Name
+(referenced as `vpn-server-ca` in this guide):
 
 ```bash
 ./easyrsa build-ca
@@ -251,8 +250,8 @@ _(Note the interface name, e.g., `eth0`, `ens3`, or `enp3s0`)._
 sudo nano /etc/ufw/before.rules
 ```
 
-Add the following NAT block at the very top of the file, before the `*filter` line
-(replace `eth0` with your actual network interface):
+Add the following NAT block at the very top of the file, before the `*filter` line (replace
+`eth0` with your actual network interface):
 
 ```text
 # START OPENVPN RULES
@@ -434,8 +433,8 @@ down /etc/openvpn/update-resolv-conf
 
 ## 10. Multi-Protocol: Serving OpenVPN on Both UDP and TCP
 
-Running OpenVPN on TCP port 443 allows clients to bypass strict firewalls that block
-standard UDP ports.
+Running OpenVPN on TCP port 443 allows clients to bypass strict firewalls that block standard
+UDP ports.
 
 ### Configure TCP Instance (`server.tcp.conf`)
 
@@ -534,8 +533,8 @@ Generate both UDP and TCP profiles with one command:
 
 ## 11. Offline CA Hardening (Recommended)
 
-Once all initial client profiles are generated, back up `ca.key` to an encrypted, offline
-local storage drive and remove it from the server:
+Once all initial client profiles are generated, back up `ca.key` to an encrypted, offline local
+storage drive and remove it from the server:
 
 ```bash
 # Run on local machine:
@@ -552,8 +551,8 @@ Whenever you need to sign a new client certificate in the future, copy `ca.key` 
 
 ## 12. Advanced: Multi-IP Server Policy Routing & SNAT
 
-If your server has multiple public IPv4 addresses (`IP1` and `IP2`) and you want different
-VPN subnets to exit through specific external IPs:
+If your server has multiple public IPv4 addresses (`IP1` and `IP2`) and you want different VPN
+subnets to exit through specific external IPs:
 
 ### Define Separate Subnets per Server Instance
 
@@ -564,8 +563,7 @@ VPN subnets to exit through specific external IPs:
 
 ### Configure SNAT in `/etc/ufw/before.rules`
 
-Replace generic `MASQUERADE` with explicit `SNAT` rules pointing to target outbound public
-IPs:
+Replace generic `MASQUERADE` with explicit `SNAT` rules pointing to target outbound public IPs:
 
 ```text
 # NAT table rules

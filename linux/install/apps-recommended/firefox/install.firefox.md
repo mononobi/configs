@@ -48,8 +48,8 @@ Add the Mozilla APT repository:
 echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
 ```
 
-Configure APT to prioritize packages from the Mozilla repository. Execute these lines all
-at once:
+Configure APT to prioritize packages from the Mozilla repository. Execute these lines all at
+once:
 
 ```bash
 echo '
@@ -91,10 +91,10 @@ layers.acceleration.force-enabled
 gfx.webrender.all
 ```
 
-> **Note:** If these changes cause any issues with your browsing experience, revert them
-> to `false`.
+> **Note:** If these changes cause any issues with your browsing experience, revert them to
+> `false`.
 
 ## Note on Wayland
 
-> **Note:** If you use Wayland, refer to the `wayland/firefox.wayland.issues.md` file for
-> more details.
+> **Note:** If you use Wayland, refer to the `wayland/firefox.wayland.issues.md` file for more
+> details.

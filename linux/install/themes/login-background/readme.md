@@ -33,10 +33,10 @@ RESCUE_MODE, Example Commands:
 3. `sudo ./ubuntu-gdm-set-background --gradient horizontal \#aAbBcC \#dDeEfF rescue`
 4. `sudo ./ubuntu-gdm-set-background --gradient vertical \#aAbBcC \#dDeEfF rescue`
 
-Why RESCUE_MODE? It is when you try to change the background with some other scripts and
-then interacted with this script, there will be some conflicts. In case you ran other
-scripts to change the background and then tried this script, found conflicts? then add
-'rescue' to the end of the command as mentioned above.
+Why RESCUE_MODE? It is when you try to change the background with some other scripts and then
+interacted with this script, there will be some conflicts. In case you ran other scripts to
+change the background and then tried this script, found conflicts? then add 'rescue' to the end
+of the command as mentioned above.
 
 Please note that for 'RESCUE_MODE' active internet connection is necessary
 

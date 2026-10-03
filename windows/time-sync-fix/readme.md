@@ -1,7 +1,7 @@
 # Windows Dual-Boot Time Synchronization Fix
 
-Ensure clock synchronization across dual-boot environments (e.g., Linux and Windows
-hardware clock desynchronization).
+Ensure clock synchronization across dual-boot environments (e.g., Linux and Windows hardware
+clock desynchronization).
 
 ---
 
@@ -13,8 +13,7 @@ hardware clock desynchronization).
    C:\Users\<username>\AppData\Local\
    ```
 
-2. Create a shortcut to `TimeSyncInvoke.exe` and place it in the Windows Startup
-   directory:
+2. Create a shortcut to `TimeSyncInvoke.exe` and place it in the Windows Startup directory:
 
    ```text
    C:\Users\<username>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\

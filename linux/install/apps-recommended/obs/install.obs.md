@@ -1,7 +1,7 @@
 # OBS Studio
 
-OBS (Open Broadcaster Software) is a powerful, open-source tool for screen recording and
-live streaming.
+OBS (Open Broadcaster Software) is a powerful, open-source tool for screen recording and live
+streaming.
 
 ## Installation
 
@@ -39,8 +39,8 @@ sudo apt install ffmpeg
 **Virtual Camera Support**  
 Install this package if you specifically need the "Start Virtual Camera" feature.
 
-> **WARNING**: `v4l2loopback-dkms` is known to occasionally cause kernel panics! Only
-> install this if you specifically need the "Start Virtual Camera" feature.
+> **WARNING**: `v4l2loopback-dkms` is known to occasionally cause kernel panics! Only install
+> this if you specifically need the "Start Virtual Camera" feature.
 
 ```bash
 sudo apt install v4l2loopback-dkms

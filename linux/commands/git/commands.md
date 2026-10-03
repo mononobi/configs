@@ -1,7 +1,7 @@
 # Common Git Commands Cheat Sheet
 
-A quick reference guide for everyday Git operations, branch management, history
-inspection, and configuration.
+A quick reference guide for everyday Git operations, branch management, history inspection, and
+configuration.
 
 ---
 
@@ -55,8 +55,7 @@ git config --global user.email "you@example.com"
 
 ### Via `.git/config`
 
-You can also set repository-specific identity directly inside the project's `.git/config`
-file:
+You can also set repository-specific identity directly inside the project's `.git/config` file:
 
 ```ini
 [user]

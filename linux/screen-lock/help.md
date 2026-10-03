@@ -1,15 +1,15 @@
 # Resolving Display Backlight Sleep Issues on Screen Lock
 
 On Ubuntu with GNOME (and certain display hardware), locking the screen turns the display
-output black, but the monitor backlight remains powered on instead of entering low-power
-DPMS sleep mode.
+output black, but the monitor backlight remains powered on instead of entering low-power DPMS
+sleep mode.
 
 ---
 
 ## Option 1: Automated Daemon Script (Recommended)
 
-This solution reliably turns off the backlight across all scenarios: locking via menu,
-pressing `Super + L`, and automatic system idle timeout.
+This solution reliably turns off the backlight across all scenarios: locking via menu, pressing
+`Super + L`, and automatic system idle timeout.
 
 1. Make the bundled script executable:
 
@@ -30,8 +30,8 @@ backlight will immediately power off into DPMS standby.
 
 > [!NOTE]
 >
-> This workaround only triggers when locking the screen manually using the custom
-> shortcut. It does not apply to idle timeouts or menu locks.
+> This workaround only triggers when locking the screen manually using the custom shortcut. It
+> does not apply to idle timeouts or menu locks.
 
 1. Ensure `gnome-screensaver` and X11 utilities are installed:
 

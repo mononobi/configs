@@ -33,14 +33,14 @@ sudo apt-get install -f
 
 ### White Banner on Video Players (Wayland)
 
-> **Note:** If you are using Wayland and you see a white banner on video players on
-> different websites (YouTube, Netflix, ...) when playing a video, you need to follow the
-> fix provided in the `wayland/chrome.wayland.issues.md` file.
+> **Note:** If you are using Wayland and you see a white banner on video players on different
+> websites (YouTube, Netflix, ...) when playing a video, you need to follow the fix provided in
+> the `wayland/chrome.wayland.issues.md` file.
 
 ### Chrome Not Rendering UI or Webpages
 
-> **Warning:** If after some updates to the OS, Google Chrome failed to render its own UI
-> or websites, you should close the app and delete these two folders to fix the issue:
+> **Warning:** If after some updates to the OS, Google Chrome failed to render its own UI or
+> websites, you should close the app and delete these two folders to fix the issue:
 
 ```text
 ~/.config/google-chrome/Default/GPUCache

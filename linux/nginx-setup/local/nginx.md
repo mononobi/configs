@@ -19,8 +19,8 @@ Map your custom host name (e.g., `app`) to `127.0.0.1`:
 127.0.0.1	localhost app
 ```
 
-_(You can replace `app` with any preferred domain or subdomain name. Ensure the same name
-is used in your Nginx config)._
+_(You can replace `app` with any preferred domain or subdomain name. Ensure the same name is
+used in your Nginx config)._
 
 ---
 

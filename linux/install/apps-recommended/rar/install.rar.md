@@ -8,8 +8,8 @@ sudo apt-get install rar unrar
 
 ## Usage
 
-To create a password-protected RAR archive (including header encryption), use the
-following syntax:
+To create a password-protected RAR archive (including header encryption), use the following
+syntax:
 
 ```bash
 rar a -p -hp NEW_ARCHIVE_NAME.RAR FILE_NAME

@@ -20,7 +20,7 @@ Configure the Farsi keyboard layout utility to run automatically at Windows star
 
 3. **Compatibility Settings**:
    - Right-click `KeyChanger.exe` -> **Properties** -> **Compatibility**.
-   - Check **Run this program in compatibility mode for:** and select **Windows XP
-     (Service Pack 3)**.
-   - Click **Change settings for all users** and save. _(This compatibility mode is
-     required for the hook process to start)._
+   - Check **Run this program in compatibility mode for:** and select **Windows XP (Service
+     Pack 3)**.
+   - Click **Change settings for all users** and save. _(This compatibility mode is required
+     for the hook process to start)._

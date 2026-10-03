@@ -1,7 +1,6 @@
 # Snap Package Management Commands
 
-Commands for inspecting, aborting, and troubleshooting Ubuntu Snap applications and
-services.
+Commands for inspecting, aborting, and troubleshooting Ubuntu Snap applications and services.
 
 ---
 
@@ -18,8 +17,8 @@ services.
 
 ## Troubleshooting "Update pending 'APP_NAME' snap"
 
-If a snap fails to update with the error **"Update pending 'APP_NAME' snap"**, close
-lingering processes and trigger a manual refresh:
+If a snap fails to update with the error **"Update pending 'APP_NAME' snap"**, close lingering
+processes and trigger a manual refresh:
 
 ```bash
 # Terminate snapd and snap-store background processes

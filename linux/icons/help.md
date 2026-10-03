@@ -12,14 +12,13 @@ sudo cp ICON_FILE /usr/share/pixmaps
 
 ## 2. Locate the Application's Desktop Entry
 
-Find the `.desktop` shortcut file for the target application. It is typically located in
-one of the following directories:
+Find the `.desktop` shortcut file for the target application. It is typically located in one of
+the following directories:
 
 - `/usr/share/applications` (System-wide APT packages)
 - `~/.local/share/applications` (User-specific custom shortcuts)
 - `/var/lib/flatpak/exports/share/applications` (System-wide Flatpak applications)
-- `~/.local/share/flatpak/exports/share/applications` (User-installed Flatpak
-  applications)
+- `~/.local/share/flatpak/exports/share/applications` (User-installed Flatpak applications)
 - `~/.gnome/apps` (Legacy GNOME applications)
 
 ## 3. Edit the Desktop Shortcut
@@ -48,5 +47,5 @@ Reload GNOME Shell to immediately apply the updated icon:
 - Type `r` into the command prompt.
 - Press `Enter`.
 
-_(Note: On Wayland sessions where `Alt + F2` + `r` is not supported, log out and log back
-in to reload icons)._
+_(Note: On Wayland sessions where `Alt + F2` + `r` is not supported, log out and log back in to
+reload icons)._

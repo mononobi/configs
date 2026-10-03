@@ -1,7 +1,6 @@
 # Varnish Cache Real-Time Logging (`varnishlog`)
 
-CLI commands for monitoring and filtering real-time HTTP transaction logs in Varnish
-Cache.
+CLI commands for monitoring and filtering real-time HTTP transaction logs in Varnish Cache.
 
 ---
 

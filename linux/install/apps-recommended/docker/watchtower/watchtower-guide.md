@@ -1,7 +1,7 @@
 ## Watchtower
 
-Watchtower is a tool that automatically updates running Docker containers whenever their
-base image is updated.
+Watchtower is a tool that automatically updates running Docker containers whenever their base
+image is updated.
 
 ### Installation
 
@@ -31,18 +31,18 @@ docker compose up -d
 
 ### Configuration
 
-The `docker-compose.yml` file is configured to check for updates every 3 hours. You can
-adjust the `WATCHTOWER_POLL_INTERVAL` environment variable to change the update frequency.
+The `docker-compose.yml` file is configured to check for updates every 3 hours. You can adjust
+the `WATCHTOWER_POLL_INTERVAL` environment variable to change the update frequency.
 
-> Note: The docker compose files that have defined volumes, will maintain their state and
-> data even after the container is updated. Watchtower will only update the container
-> image, not the volumes.
+> Note: The docker compose files that have defined volumes, will maintain their state and data
+> even after the container is updated. Watchtower will only update the container image, not the
+> volumes.
 
 #### Opt-In to Watchtower for specific containers:
 
-To make Watchtower update the containers you want, you need to add the following label to
-the `docker-compose.yml` file of each container. Otherwise, Watchtower will ignore those
-containers and not update them.
+To make Watchtower update the containers you want, you need to add the following label to the
+`docker-compose.yml` file of each container. Otherwise, Watchtower will ignore those containers
+and not update them.
 
 ```yml
 # This is the magic label that invites Watchtower in to update this container

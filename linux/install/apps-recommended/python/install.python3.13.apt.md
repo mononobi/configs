@@ -1,7 +1,7 @@
 # Install Python 3.13
 
-Run the following commands to add the appropriate PPA and install Python 3.13 along with
-`pip` and its development headers:
+Run the following commands to add the appropriate PPA and install Python 3.13 along with `pip`
+and its development headers:
 
 ```bash
 sudo apt update

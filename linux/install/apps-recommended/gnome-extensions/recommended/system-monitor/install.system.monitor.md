@@ -5,8 +5,8 @@
 
 ## Prerequisite Application
 
-Before installing the extension, you must install the GNOME System Monitor. Run the
-following command:
+Before installing the extension, you must install the GNOME System Monitor. Run the following
+command:
 
 ```bash
 sudo apt install gnome-system-monitor

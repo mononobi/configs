@@ -1,7 +1,7 @@
 ## Continues Successful Update Notification On Start Up From Ubuntu Software App
 
-If you receive a successful update notification on start up (usually for the **UEFI
-dbx**), follow this guide to fix it.
+If you receive a successful update notification on start up (usually for the **UEFI dbx**),
+follow this guide to fix it.
 
 ```bash
 sudo fwupdmgr refresh --force

@@ -46,13 +46,13 @@ gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0
 
 ## Commands for non-root users only
 
-Set a custom value for screen blank timeout (3600 is the value in seconds), set a custom
-value for screen to lock after going blank (5 is the value in seconds), and enable the
-lock after the screen goes blank.
+Set a custom value for screen blank timeout (3600 is the value in seconds), set a custom value
+for screen to lock after going blank (5 is the value in seconds), and enable the lock after the
+screen goes blank.
 
 > **Note:** If these commands issue any errors or warnings, try to install
-> [`install.dbus.x11.md`](/linux/install/apps-not-needed/dbus-x11/install.dbus.x11.md)
-> first and then execute these commands.
+> [`install.dbus.x11.md`](/linux/install/apps-not-needed/dbus-x11/install.dbus.x11.md) first
+> and then execute these commands.
 
 ```bash
 gsettings set org.gnome.desktop.session idle-delay 3600

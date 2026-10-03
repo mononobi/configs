@@ -11,8 +11,8 @@ sudo apt install build-essential checkinstall zlib1g-dev libncursesw5-dev libncu
 
 ## 2. Configure the Build
 
-Configure the Python build with optimizations, loadable SQLite extensions, shared
-libraries, and framework enabled:
+Configure the Python build with optimizations, loadable SQLite extensions, shared libraries,
+and framework enabled:
 
 ```bash
 ./configure --enable-optimizations --enable-loadable-sqlite-extensions --enable-shared --enable-framework
@@ -30,8 +30,8 @@ make -j 4
 
 Choose one of the following installation methods:
 
-- **Alternative Install (Recommended):** Generates a `python3.7` executable without
-  replacing the default `python3` system binary.
+- **Alternative Install (Recommended):** Generates a `python3.7` executable without replacing
+  the default `python3` system binary.
   ```bash
   sudo make altinstall
   ```

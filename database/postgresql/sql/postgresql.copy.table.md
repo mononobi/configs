@@ -1,7 +1,7 @@
 # PostgreSQL Table Duplication & Data Transfer
 
-SQL patterns for copying table schemas, cloning rows, inserting between tables, and
-joining updates.
+SQL patterns for copying table schemas, cloning rows, inserting between tables, and joining
+updates.
 
 ---
 

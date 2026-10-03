@@ -3,8 +3,8 @@
 ## Extension Installation
 
 1. Navigate to the
-   [User Themes extension page](https://extensions.gnome.org/extension/19/user-themes/)
-   and toggle the install icon.
+   [User Themes extension page](https://extensions.gnome.org/extension/19/user-themes/) and
+   toggle the install icon.
 2. Once installed, you can download new shell themes and icon themes from
    [GNOME Look](https://www.gnome-look.org/).
 
@@ -22,5 +22,5 @@
 
 ## Applying Themes
 
-After installing the themes in their respective folders, open the **Tweaks** application
-and navigate to the **Appearance** tab to change both your icons and shell theme.
+After installing the themes in their respective folders, open the **Tweaks** application and
+navigate to the **Appearance** tab to change both your icons and shell theme.

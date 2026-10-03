@@ -14,9 +14,9 @@ Automated issuance and renewal of trusted SSL/TLS certificates using Certbot and
 
 > [!IMPORTANT]
 >
-> The target domain (and subdomains) must have public DNS `A` records resolving directly
-> to your server's public IP address before issuing certificates, or domain validation
-> challenges will fail.
+> The target domain (and subdomains) must have public DNS `A` records resolving directly to
+> your server's public IP address before issuing certificates, or domain validation challenges
+> will fail.
 
 ---
 
@@ -100,5 +100,4 @@ expiring certificates daily:
    0 12 * * * /usr/bin/certbot renew --quiet
    ```
 
-Certbot will automatically renew certificates when fewer than 30 days remain before
-expiration.
+Certbot will automatically renew certificates when fewer than 30 days remain before expiration.

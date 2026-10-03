@@ -1,7 +1,6 @@
 # Restoring a Completely Deleted Git Branch
 
-Step-by-step guide to recover a Git branch that has been deleted both locally and
-remotely.
+Step-by-step guide to recover a Git branch that has been deleted both locally and remotely.
 
 ---
 

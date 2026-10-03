@@ -15,8 +15,7 @@ This guide provides common commands for using `virtualenv` to manage Python envi
 
 ## Setting up a New Project
 
-When setting up a new project with a single application, you might use the following
-commands:
+When setting up a new project with a single application, you might use the following commands:
 
 - **Allow server port through firewall (e.g., port 8000):**
   ```bash

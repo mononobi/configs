@@ -1,7 +1,7 @@
 # cURL Response Time Formatting Template
 
-A timing format string for `curl` to profile latency breakdown across connection phases
-(DNS lookup, TCP connect, TLS handshake, transfer start, and total elapsed duration).
+A timing format string for `curl` to profile latency breakdown across connection phases (DNS
+lookup, TCP connect, TLS handshake, transfer start, and total elapsed duration).
 
 ## Timing Format Template
 
@@ -24,10 +24,9 @@ Save this format string in a file named `curl-time.txt`:
 - `time_connect`: Elapsed time until remote TCP connection established.
 - `time_appconnect`: Elapsed time until SSL/TLS handshake completed.
 - `time_pretransfer`: Elapsed time until file transfer was about to begin.
-- `time_redirect`: Total elapsed time across all redirection steps before final
-  transaction.
-- `time_starttransfer`: Time until the first byte was about to be transferred (Time To
-  First Byte - TTFB).
+- `time_redirect`: Total elapsed time across all redirection steps before final transaction.
+- `time_starttransfer`: Time until the first byte was about to be transferred (Time To First
+  Byte - TTFB).
 - `time_total`: Total duration of the complete operation.
 
 ## Usage Example

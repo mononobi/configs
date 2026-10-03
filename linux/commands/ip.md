@@ -1,7 +1,7 @@
 # IP Address & Network Diagnostics Cheat Sheet
 
-Commands for inspecting local network interfaces, public IP addresses, routing gateways,
-and DNS resolvers.
+Commands for inspecting local network interfaces, public IP addresses, routing gateways, and
+DNS resolvers.
 
 ---
 

@@ -4,8 +4,8 @@ This document provides the commands to install Python 3.7 and its development pa
 
 ## Installation Commands
 
-Run the following commands to add the repository and install Python 3.7 along with `pip`
-and development headers:
+Run the following commands to add the repository and install Python 3.7 along with `pip` and
+development headers:
 
 ```bash
 sudo apt update

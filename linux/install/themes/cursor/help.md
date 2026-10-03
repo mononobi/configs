@@ -1,8 +1,8 @@
 # Cursor Theme Installation Help
 
-> **Warning**: On Ubuntu 26.04 and later, this guide will not work and the cursor icon
-> will not change. To fix the issue on Ubuntu 26.04 and later, follow the
-> `change-cursor.md` guide instead.
+> **Warning**: On Ubuntu 26.04 and later, this guide will not work and the cursor icon will not
+> change. To fix the issue on Ubuntu 26.04 and later, follow the `change-cursor.md` guide
+> instead.
 
 ## For Ubuntu 24.04 and Earlier
 

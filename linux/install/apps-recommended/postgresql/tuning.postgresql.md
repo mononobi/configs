@@ -1,7 +1,7 @@
 # PostgreSQL Tuning
 
-To optimize your PostgreSQL installation, you can get configuration suggestions based on
-your specific hardware and application type.
+To optimize your PostgreSQL installation, you can get configuration suggestions based on your
+specific hardware and application type.
 
 ## Configuration Tool
 

@@ -1,17 +1,16 @@
 # SSH Key Management Guide (ed25519)
 
-This guide provides a definitive, step-by-step process for creating and managing SSH keys
-using the secure ed25519 format.
+This guide provides a definitive, step-by-step process for creating and managing SSH keys using
+the secure ed25519 format.
 
 ## Glossary of Terms
 
 In this guide, we will use the following terms:
 
-- **SOURCE_DEVICE_NAME**: The local machine name (e.g., your PC or laptop) where you
-  generate and store your SSH keys.
+- **SOURCE_DEVICE_NAME**: The local machine name (e.g., your PC or laptop) where you generate
+  and store your SSH keys.
 - **SOURCE_USER**: The user account on your local device that owns the SSH keys.
-- **REMOTE_USER**: The user account on the remote server that you want to access using
-  SSH.
+- **REMOTE_USER**: The user account on the remote server that you want to access using SSH.
 - **REMOTE_IP**: The IP address or hostname of the remote server you want to connect to.
 
 ## 1. Generate SSH Key on Your Local Device
@@ -22,19 +21,19 @@ Create `.ssh` directory:
 mkdir -p ~/.ssh
 ```
 
-Generate a new SSH key pair on your local machine. The ed25519 algorithm is recommended
-for its strong security properties.
+Generate a new SSH key pair on your local machine. The ed25519 algorithm is recommended for its
+strong security properties.
 
 ```bash
 ssh-keygen -t ed25519 -C "SOURCE_USER@SOURCE_DEVICE_NAME"
 ```
 
-- Replace `SOURCE_USER` with your local username and `SOURCE_DEVICE_NAME` with a
-  descriptive name for the device (e.g., `laptop`).
+- Replace `SOURCE_USER` with your local username and `SOURCE_DEVICE_NAME` with a descriptive
+  name for the device (e.g., `laptop`).
 - When prompted, press Enter to accept the default file location
   (`~/.ssh/id_SOURCE_DEVICE_NAME`).
-- Enter a strong passphrase when prompted. This encrypts your private key and adds an
-  extra layer of security. Use a strong passphrase for the key.
+- Enter a strong passphrase when prompted. This encrypts your private key and adds an extra
+  layer of security. Use a strong passphrase for the key.
 
 This command creates two files in your `~/.ssh` directory:
 
@@ -43,8 +42,8 @@ This command creates two files in your `~/.ssh` directory:
 
 ## 2. Copy Public Key to the Server
 
-Transfer your public key to the remote server. This allows your local device to
-authenticate with the server using the key pair.
+Transfer your public key to the remote server. This allows your local device to authenticate
+with the server using the key pair.
 
 ```bash
 ssh-copy-id -i ~/.ssh/id_SOURCE_DEVICE_NAME.pub REMOTE_USER@REMOTE_IP
@@ -53,8 +52,8 @@ ssh-copy-id -i ~/.ssh/id_SOURCE_DEVICE_NAME.pub REMOTE_USER@REMOTE_IP
 - Replace `REMOTE_USER` with your username on the remote server and `REMOTE_IP` with the
   server's IP address or hostname and `SOURCE_DEVICE_NAME` with the name you used when
   generating the key.
-- You will be prompted for the server's password (if not already authenticated) to
-  complete the transfer.
+- You will be prompted for the server's password (if not already authenticated) to complete the
+  transfer.
 
 This command appends your public key to the `~/.ssh/authorized_keys` file on the server.
 
@@ -123,8 +122,8 @@ To avoid entering your passphrase every time you connect, add your private key t
 
 ## 4. Secure SSH Key Files and Directory
 
-Proper file permissions are crucial for SSH key security. Apply the following permissions
-on your local device:
+Proper file permissions are crucial for SSH key security. Apply the following permissions on
+your local device:
 
 - **All key files (public and private) in `~/.ssh` directory:**
   - Set to `600` access level (read/write for owner only).
@@ -149,8 +148,8 @@ on your local device:
 
 To further secure your server, it is highly recommended to disable password-based
 authentication and other less secure methods. The file
-[999_sshd_config_secure.conf](./999_sshd_config_secure.conf) provides a secure
-configuration for your SSH daemon.
+[999_sshd_config_secure.conf](./999_sshd_config_secure.conf) provides a secure configuration
+for your SSH daemon.
 
 This configuration file sets the following directives:
 
@@ -162,13 +161,13 @@ This configuration file sets the following directives:
 
 **To use this configuration:**
 
-_Always ensure you have key-based access working before disabling password authentication
-to avoid locking yourself out of the server._
+_Always ensure you have key-based access working before disabling password authentication to
+avoid locking yourself out of the server._
 
 1.  Remove any existing configuration files.
 2.  Create a configuration file for `sshd` on the server.
-3.  Copy the content of [999_sshd_config_secure.conf](./999_sshd_config_secure.conf) to
-    the created `/etc/ssh/sshd_config.d/999_sshd_config_secure.conf` file on your server.
+3.  Copy the content of [999_sshd_config_secure.conf](./999_sshd_config_secure.conf) to the
+    created `/etc/ssh/sshd_config.d/999_sshd_config_secure.conf` file on your server.
 4.  Restart the SSH service to apply the changes.
 
     ```bash
@@ -178,13 +177,11 @@ to avoid locking yourself out of the server._
     ```
 
     **Important:**
-    - Keep the file name starting with `999_` to ensure it is loaded after any other
-      possibly present SSH configuration files, allowing it to override less secure
-      settings.
-    - Remove any existing `*.conf` files under `/etc/ssh/sshd_config.d/`. Some cloud
-      providers (e.g., AWS) may have default SSH configurations that could override your
-      settings. Ensure that only your secure configuration file is present in the
-      directory.
+    - Keep the file name starting with `999_` to ensure it is loaded after any other possibly
+      present SSH configuration files, allowing it to override less secure settings.
+    - Remove any existing `*.conf` files under `/etc/ssh/sshd_config.d/`. Some cloud providers
+      (e.g., AWS) may have default SSH configurations that could override your settings. Ensure
+      that only your secure configuration file is present in the directory.
 
     After editing and saving the file, run this:
 
@@ -195,31 +192,30 @@ to avoid locking yourself out of the server._
     sudo systemctl restart ssh.socket
     ```
 
-    _Now you should not be able to make an SSH connection to the server using the username
-    and password or the root user._
+    _Now you should not be able to make an SSH connection to the server using the username and
+    password or the root user._
 
 ## 6. SSH Key Best Practices
 
-Understanding how to manage SSH keys effectively is crucial for maintaining security
-across your devices and servers.
+Understanding how to manage SSH keys effectively is crucial for maintaining security across
+your devices and servers.
 
-- **Key Per Source Device (**Recommended**):** Each local device (e.g., your PC, your
-  laptop) should have its own unique SSH key pair. This establishes a distinct identity
-  for each device. If one device is compromised, only its specific key is affected,
-  limiting the blast radius.
+- **Key Per Source Device (**Recommended**):** Each local device (e.g., your PC, your laptop)
+  should have its own unique SSH key pair. This establishes a distinct identity for each
+  device. If one device is compromised, only its specific key is affected, limiting the blast
+  radius.
 
 - **Key Per Destination (**Misunderstanding**):** It is a common misunderstanding that you
-  should create a new SSH key for each server you connect to. This is not recommended.
-  Instead, a single SSH key from a source device can, and should, be used to connect to
-  multiple destination servers. The public key of your source device's SSH key is simply
-  added to the `authorized_keys` file on each server you wish to access. This simplifies
-  management and maintains the "identity" of your source device across all your
-  connections.
+  should create a new SSH key for each server you connect to. This is not recommended. Instead,
+  a single SSH key from a source device can, and should, be used to connect to multiple
+  destination servers. The public key of your source device's SSH key is simply added to the
+  `authorized_keys` file on each server you wish to access. This simplifies management and
+  maintains the "identity" of your source device across all your connections.
 
 ## 7. Adding SSH Key to Git Repositories (GitHub/GitLab)
 
-To use your SSH key for authenticating with Git hosting services like GitHub or GitLab,
-you need to add your public key to your account settings on these platforms.
+To use your SSH key for authenticating with Git hosting services like GitHub or GitLab, you
+need to add your public key to your account settings on these platforms.
 
 ### 7.1. Copy Your Public SSH Key
 
@@ -229,8 +225,7 @@ First, retrieve the content of your public key.
 cat ~/.ssh/id_SOURCE_DEVICE_NAME.pub
 ```
 
-Copy the entire output, which starts with `ssh-ed25519` and ends with your source device
-name.
+Copy the entire output, which starts with `ssh-ed25519` and ends with your source device name.
 
 ### 7.2. Add Public Key to GitHub/GitLab
 
@@ -250,18 +245,18 @@ name.
 
 ### 7.3. Configure Local Git Repository to Use SSH
 
-If your local Git repository is currently configured to use HTTPS for remote operations,
-you should change it to SSH to leverage your newly added SSH key.
+If your local Git repository is currently configured to use HTTPS for remote operations, you
+should change it to SSH to leverage your newly added SSH key.
 
-1.  **Check current remote URL:** Navigate to the root directory of your local Git
-    repository and run:
+1.  **Check current remote URL:** Navigate to the root directory of your local Git repository
+    and run:
 
     ```bash
     git remote -v
     ```
 
-    If the output shows URLs starting with `https://github.com/` or `https://gitlab.com/`,
-    your repository is using HTTPS.
+    If the output shows URLs starting with `https://github.com/` or `https://gitlab.com/`, your
+    repository is using HTTPS.
 
 2.  **Change remote URL to SSH:** To switch to SSH, use the following command, replacing
     `USERNAME` and `REPOSITORY` with your actual Git username and repository name:
@@ -272,12 +267,12 @@ you should change it to SSH to leverage your newly added SSH key.
     # git remote set-url origin git@gitlab.com:USERNAME/REPOSITORY.git
     ```
 
-3.  **Verify the change:** Run `git remote -v` again to confirm that the remote URL now
-    starts with `git@github.com:` or `git@gitlab.com:`.
+3.  **Verify the change:** Run `git remote -v` again to confirm that the remote URL now starts
+    with `git@github.com:` or `git@gitlab.com:`.
 
     ```bash
     git remote -v
     ```
 
-    The output should now look like `origin  git@github.com:USERNAME/REPOSITORY.git`
-    (fetch) and `origin  git@github.com:USERNAME/REPOSITORY.git` (push).
+    The output should now look like `origin  git@github.com:USERNAME/REPOSITORY.git` (fetch)
+    and `origin  git@github.com:USERNAME/REPOSITORY.git` (push).

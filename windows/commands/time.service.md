@@ -1,7 +1,7 @@
 # Windows Time Service (`w32time`) Synchronization & Triggers
 
-Commands for repairing, re-registering, and forcing synchronization of the Windows Time
-service (`w32time`) via elevated Command Prompt (`cmd.exe`).
+Commands for repairing, re-registering, and forcing synchronization of the Windows Time service
+(`w32time`) via elevated Command Prompt (`cmd.exe`).
 
 ---
 

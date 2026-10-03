@@ -1,7 +1,7 @@
 # SSH Connections & Port Forwarding Cheat Sheet
 
-Complete reference for standard SSH connections, key authentication, local port
-forwarding, and remote reverse tunneling.
+Complete reference for standard SSH connections, key authentication, local port forwarding, and
+remote reverse tunneling.
 
 ---
 
@@ -76,13 +76,13 @@ ssh -f -N -i <PRIVATE_KEY_PATH> -o GatewayPorts=true -R <REMOTE_PORT>:<LOCAL_ADD
 
 ### Local Port Forwarding is useful when:
 
-1. **Bypassing Censorship / Internet Access**: You want to route internet traffic from
-   your local machine through an unblocked remote server.
-2. **Accessing Internal Services**: You want to access internal database or admin ports on
-   a remote server without exposing those ports to the public internet.
+1. **Bypassing Censorship / Internet Access**: You want to route internet traffic from your
+   local machine through an unblocked remote server.
+2. **Accessing Internal Services**: You want to access internal database or admin ports on a
+   remote server without exposing those ports to the public internet.
 
 ### Remote Port Forwarding is useful when:
 
 1. **Public Webhooks & Demonstrations**: You want to expose a local web service (e.g.,
-   `localhost:3000`) on a public remote server without requiring a static public IP or
-   port forwarding rules on your local router.
+   `localhost:3000`) on a public remote server without requiring a static public IP or port
+   forwarding rules on your local router.
