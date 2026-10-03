@@ -225,13 +225,6 @@ HIGHEST_INSTALLED_MINOR=$(
 
 if [[ -n "$HIGHEST_INSTALLED_MINOR" && -x "/usr/bin/python3.${HIGHEST_INSTALLED_MINOR}" ]]; then
     LATEST_SYSTEM_VER="3.${HIGHEST_INSTALLED_MINOR}"
-elif command -v python3 >/dev/null 2>&1; then
-    LATEST_SYSTEM_VER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "3")
-else
-    LATEST_SYSTEM_VER=""
-fi
-
-if [[ -n "$LATEST_SYSTEM_VER" ]]; then
     echo "[+] Configuring default /usr/bin/python -> /usr/bin/python${LATEST_SYSTEM_VER}..."
     sudo ln -sf "/usr/bin/python${LATEST_SYSTEM_VER}" /usr/bin/python
 
