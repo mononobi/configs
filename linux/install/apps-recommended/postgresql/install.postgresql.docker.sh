@@ -354,11 +354,11 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     mkdir -p "${TARGET_DIR}/logs"
 
     # Copy template configuration files idempotently
-    if [[ ! -f "${TARGET_DIR}/config/conf.d/db.conf" ]]; then
-        echo "[+] Installing default db.conf to ${TARGET_DIR}/config/conf.d/db.conf..."
+    if [[ ! -f "${TARGET_DIR}/config/conf.d/db.conf" ]] || [[ "$FORCE" == "true" ]]; then
+        echo "[+] Installing db.conf to ${TARGET_DIR}/config/conf.d/db.conf..."
         cp "${SCRIPT_DIR}/files/db.conf" "${TARGET_DIR}/config/conf.d/db.conf"
-    elif [[ "$FORCE" == "true" ]]; then
-        echo "[+] Force-updating ${TARGET_DIR}/config/conf.d/db.conf..."
+    elif ! cmp -s "${SCRIPT_DIR}/files/db.conf" "${TARGET_DIR}/config/conf.d/db.conf"; then
+        echo "[+] Updating ${TARGET_DIR}/config/conf.d/db.conf with updated settings..."
         cp "${SCRIPT_DIR}/files/db.conf" "${TARGET_DIR}/config/conf.d/db.conf"
     fi
 
