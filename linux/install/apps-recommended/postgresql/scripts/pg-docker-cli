@@ -82,7 +82,7 @@ execute_in_container() {
         docker_flags="-it"
     fi
 
-    # Print connection notice to stderr so it does not corrupt stdout dumps (e.g. pg-dump-d > backup.sql)
+    # Print connection notice to stderr so it does not corrupt stdout dumps (e.g. pg_dump > backup.sql)
     echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (PG ${ver}, port ${port})...${C_RESET}" >&2
 
     exec docker exec $docker_flags "$name" "$COMMAND_NAME" "$@"

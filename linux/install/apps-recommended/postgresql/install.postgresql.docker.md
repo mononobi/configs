@@ -150,10 +150,10 @@ Unless customized with flags, all instances default to standard local developmen
 - **Username**: `postgres`
 - **Password**: `123`
 
-### 2. Container-Native CLI Tools (`psql-d`, `pg-dump-d`, `pg-restore-d`)
+### 2. Container-Native CLI Tools (`psql`, `pg_dump`, `pg_restore`)
 
-The installer provides and symlinks matching `-d` CLI tools into `~/.local/bin/`. They execute
-directly inside the target container via `docker exec`, guaranteeing **exact 1:1
+The installer provides and symlinks wrapper CLI tools directly into `~/.local/bin/`. They
+execute transparently inside the target container via `docker exec`, guaranteeing **exact 1:1
 client-to-server version matches**, zero catalog/version mismatch warnings, and full support
 for all flags and piped input/output:
 
@@ -162,65 +162,68 @@ for all flags and piped input/output:
 - **Multiple Versions Installed**: Displays an interactive numbered menu on stderr (preserving
   clean stdout redirections for backups) and runs against your selected container.
 
-#### `psql-d` (Interactive & Query Execution)
+#### `psql` (Interactive & Query Execution)
 
 ```bash
 # Connect interactively to default database:
-psql-d
+psql
 
 # Connect to a specific custom database:
-psql-d -d my_database
+psql -d my_database
 # or:
-psql-d --database my_database
+psql --dbname my_database
 
 # Execute one-liner queries or backslash commands:
-psql-d -c "\l"
-psql-d -d my_database -c "SELECT count(*) FROM users;"
+psql -c "\l"
+psql -d my_database -c "SELECT count(*) FROM users;"
 
 # Pipe SQL scripts or run migrations into a specific database:
-psql-d -d my_database < migration.sql
+psql -d my_database < migration.sql
 ```
 
-#### `pg-dump-d` (1:1 Schema & Data Backup)
+#### `pg_dump` (1:1 Schema & Data Backup)
 
 ```bash
 # Full database plain text backup:
-pg-dump-d > backup.sql
+pg_dump > backup.sql
 
 # Backup a specific database:
-pg-dump-d -d my_database > my_db_backup.sql
+pg_dump -d my_database > my_db_backup.sql
 
 # Compressed custom archive format:
-pg-dump-d -d my_database -Fc -f backup.dump
+pg_dump -d my_database -Fc -f /shared/backup.dump
 
 # Dump specific table from a database:
-pg-dump-d -d my_database -t my_table > table_backup.sql
+pg_dump -d my_database -t my_table > table_backup.sql
 ```
 
-#### `pg-restore-d` (1:1 Archive Restore)
+#### `pg_restore` (1:1 Archive Restore)
 
 ```bash
 # Restore custom archive into a specific database:
-pg-restore-d -d my_database backup.dump
+pg_restore -d my_database /shared/backup.dump
 
 # Clean and recreate tables before restoring:
-pg-restore-d --clean --if-exists -d my_database backup.dump
+pg_restore --clean --if-exists -d my_database /shared/backup.dump
 
 # List contents of an archive without connecting to a database:
-pg-restore-d -l backup.dump
+pg_restore -l /shared/backup.dump
 ```
 
-### 3. Direct Terminal CLI (`psql`)
+### 3. Instance Shared Directory (`~/.postgres/<version>/shared/`)
 
-Because `postgresql-client` is installed on your host system:
+Each instance includes a dedicated `shared/` directory on the host mounted to `/shared` inside
+the container (`./shared:/shared`):
 
-```bash
-# Connect to primary instance (port 5432)
-psql -h localhost -p 5432 -U postgres -d postgres
+- **Host Path**: `~/.postgres/<version>/shared/`
+- **Container Path**: `/shared/`
 
-# Connect to secondary instance (e.g. port 5433)
-psql -h localhost -p 5433 -U postgres -d postgres
-```
+Use this directory to exchange files between host and container:
+
+- Place large backup archives or CSV datasets into `~/.postgres/<version>/shared/` to restore
+  or import them directly via `pg_restore -d mydb /shared/archive.dump` or
+  `COPY ... FROM '/shared/data.csv'`.
+- Save dumps directly to the shared folder via `pg_dump -Fc -f /shared/dump.sql`.
 
 ### 4. Connection URIs for Programming Languages
 

@@ -26,5 +26,6 @@ services:
       - ./config/pg_hba.conf:/etc/postgresql/pg_hba.conf
       - ./initdb.d:/docker-entrypoint-initdb.d
       - ./logs:/var/log/postgresql
+      - ./shared:/shared
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
