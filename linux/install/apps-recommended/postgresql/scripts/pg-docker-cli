@@ -69,6 +69,43 @@ for inst_dir in "${instances[@]}"; do
     c_versions+=("$ver")
 done
 
+TARGETED_PORT=""
+TARGETED_INSTANCE=""
+FORWARD_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -p|--port)
+            if [[ $# -gt 1 ]]; then
+                TARGETED_PORT="$2"
+                shift 2
+            else
+                shift
+            fi
+            ;;
+        -p=*|--port=*)
+            TARGETED_PORT="${1#*=}"
+            shift
+            ;;
+        --instance)
+            if [[ $# -gt 1 ]]; then
+                TARGETED_INSTANCE="$2"
+                shift 2
+            else
+                shift
+            fi
+            ;;
+        --instance=*)
+            TARGETED_INSTANCE="${1#*=}"
+            shift
+            ;;
+        *)
+            FORWARD_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
 execute_in_container() {
     local idx="$1"
     shift
@@ -88,12 +125,46 @@ execute_in_container() {
     exec docker exec $docker_flags "$name" "$COMMAND_NAME" "$@"
 }
 
-# Single instance: execute automatically
-if [[ ${#instances[@]} -eq 1 ]]; then
-    execute_in_container 0 "$@"
+# Resolve targeted container if specified via port or instance name
+MATCHED_IDX=""
+
+if [[ -n "$TARGETED_PORT" ]]; then
+    for i in "${!instances[@]}"; do
+        if [[ "${c_ports[$i]}" == "$TARGETED_PORT" ]]; then
+            MATCHED_IDX="$i"
+            break
+        fi
+    done
+    if [[ -z "$MATCHED_IDX" ]]; then
+        echo -e "${C_RED}[!] Error: No PostgreSQL instance found listening on port ${TARGETED_PORT}.${C_RESET}" >&2
+        exit 1
+    fi
 fi
 
-# Multiple instances: present interactive menu on stderr so stdout redirection stays clean
+if [[ -n "$TARGETED_INSTANCE" ]]; then
+    for i in "${!instances[@]}"; do
+        if [[ "${c_names[$i]}" == "$TARGETED_INSTANCE" || "${c_versions[$i]}" == "$TARGETED_INSTANCE" ]]; then
+            MATCHED_IDX="$i"
+            break
+        fi
+    done
+    if [[ -z "$MATCHED_IDX" ]]; then
+        echo -e "${C_RED}[!] Error: No PostgreSQL instance found matching '${TARGETED_INSTANCE}'.${C_RESET}" >&2
+        exit 1
+    fi
+fi
+
+# If target resolved directly via flag, execute without prompt
+if [[ -n "$MATCHED_IDX" ]]; then
+    execute_in_container "$MATCHED_IDX" "${FORWARD_ARGS[@]}"
+fi
+
+# Single instance: execute automatically
+if [[ ${#instances[@]} -eq 1 ]]; then
+    execute_in_container 0 "${FORWARD_ARGS[@]}"
+fi
+
+# Multiple instances and no targeted flag provided: present interactive menu on stderr
 echo "" >&2
 echo -e "${C_BOLD}${C_CYAN}Available PostgreSQL Instances for ${COMMAND_NAME}:${C_RESET}" >&2
 echo "$DIV_SUB" >&2
@@ -118,7 +189,7 @@ while true; do
 
     if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= ${#instances[@]} )); then
         selected_idx=$((choice - 1))
-        execute_in_container "$selected_idx" "$@"
+        execute_in_container "$selected_idx" "${FORWARD_ARGS[@]}"
     else
         echo -e "${C_RED}[!] Invalid selection. Please enter a number between 1 and ${#instances[@]}.${C_RESET}" >&2
     fi

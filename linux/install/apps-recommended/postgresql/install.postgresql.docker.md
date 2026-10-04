@@ -164,14 +164,23 @@ for all flags and piped input/output:
 
 - **Single Version Installed**: Detects the only version in `~/.postgres/` and executes
   immediately.
-- **Multiple Versions Installed**: Displays an interactive numbered menu on stderr (preserving
-  clean stdout redirections for backups) and runs against your selected container.
+- **Multiple Versions Installed**:
+  - **Non-Interactive Bypass**: Pass `-p <port>` (e.g. `-p 5433`) or
+    `--instance <name|version>` (e.g. `--instance 18` or `--instance postgres-18-postgis`) to
+    immediately target that instance without triggering any prompt.
+  - **Interactive Mode**: If neither `-p` nor `--instance` is specified, displays an
+    interactive numbered menu on stderr and runs against your selected container.
 
 #### `psql` (Interactive & Query Execution)
 
 ```bash
-# Connect interactively to default database:
+# Connect interactively to default database (or shows menu if multiple versions exist):
 psql
+
+# Target a specific instance non-interactively via port or instance name:
+psql -p 5433
+psql --instance 18
+psql --instance postgres-18-postgis
 
 # Connect to a specific custom database:
 psql -d my_database
