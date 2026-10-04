@@ -300,61 +300,41 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     fi
 
     if [[ -z "$PORT" ]]; then
-        # If --port was specified by user, use it as the base port
+        # Determine starting candidate port:
         if [[ -n "$CUSTOM_PORT" ]]; then
             if [[ "$is_first_instance" == "true" ]]; then
-                # First instance must strictly use the specified --port, fail if busy
-                PORT="$CUSTOM_PORT"
-                if is_port_in_use "$PORT"; then
-                    if ! container_owns_port "$CONTAINER_BASE" "$PORT"; then
-                        echo "[!] Error: Specified port ${PORT} is already in use by another process." >&2
-                        echo "[!] Cannot install PostgreSQL instance on ${PORT}. Halting." >&2
-                        exit 1
-                    fi
-                fi
-                next_available_port=$((CUSTOM_PORT + 1))
+                candidate_port="$CUSTOM_PORT"
             else
-                # Subsequent instances increment starting from the custom port and find the next free port without failure
                 candidate_port="$next_available_port"
-                while is_port_in_use "$candidate_port"; do
-                    if container_owns_port "$CONTAINER_BASE" "$candidate_port"; then
-                        break
-                    fi
-                    candidate_port=$((candidate_port + 1))
-                done
-                PORT="$candidate_port"
-                next_available_port=$((candidate_port + 1))
             fi
         else
-            # Default behavior when --port is not provided:
-            # Check how many existing instances already exist on the system (excluding current version)
             existing_subfolder_count=0
             if [[ -d "$HOME/.postgres" ]]; then
                 existing_subfolder_count=$(find "$HOME/.postgres" -mindepth 1 -maxdepth 1 -type d ! -name "$TAG" | wc -l)
             fi
 
-            # Truly the first instance on the system only if no other instance subfolders exist AND it is first in this run
             if [[ "$is_first_instance" == "true" && "$existing_subfolder_count" -eq 0 ]]; then
-                PORT="$DEFAULT_PORT"
-                if is_port_in_use "$PORT"; then
-                    if ! container_owns_port "$CONTAINER_BASE" "$PORT"; then
-                        echo "[!] Error: Default port ${PORT} is already in use by another process." >&2
-                        echo "[!] Cannot install primary PostgreSQL instance on ${PORT}. Halting." >&2
-                        exit 1
-                    fi
-                fi
+                candidate_port="$DEFAULT_PORT"
             else
-                # Other instances already exist: find first free port starting from DEFAULT_PORT + existing_subfolder_count
                 candidate_port=$((DEFAULT_PORT + existing_subfolder_count))
-                while is_port_in_use "$candidate_port"; do
-                    if container_owns_port "$CONTAINER_BASE" "$candidate_port"; then
-                        break
-                    fi
-                    candidate_port=$((candidate_port + 1))
-                done
-                PORT="$candidate_port"
             fi
         fi
+
+        # Find the next free port without failing
+        original_port="$candidate_port"
+        while is_port_in_use "$candidate_port"; do
+            if container_owns_port "$CONTAINER_BASE" "$candidate_port"; then
+                break
+            fi
+            candidate_port=$((candidate_port + 1))
+        done
+
+        if [[ "$candidate_port" -ne "$original_port" ]]; then
+            echo "[i] Port ${original_port} is busy; automatically using next available port: ${candidate_port}"
+        fi
+
+        PORT="$candidate_port"
+        next_available_port=$((candidate_port + 1))
     fi
 
     is_first_instance=false
