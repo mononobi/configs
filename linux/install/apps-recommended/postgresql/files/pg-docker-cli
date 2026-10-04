@@ -88,6 +88,13 @@ execute_in_container() {
     # Print connection notice to stderr so it does not corrupt stdout dumps (e.g. pg_dump-d > backup.sql)
     echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (PG ${ver}, port ${port})...${C_RESET}" >&2
 
+    # If user requests help or version information, pass arguments directly without injecting connection defaults
+    for arg in "$@"; do
+        if [[ "$arg" == "--help" || "$arg" == "-?" || "$arg" == "--version" || "$arg" == "-V" ]]; then
+            exec docker exec $docker_flags "$name" "$COMMAND_NAME" "$@"
+        fi
+    done
+
     case "$COMMAND_NAME" in
         psql)
             exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" psql -U "$user" -d "$db" "$@"
