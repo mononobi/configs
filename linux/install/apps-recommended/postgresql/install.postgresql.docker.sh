@@ -278,9 +278,13 @@ is_first_instance=true
 
 # Process each target version
 for VER in "${TARGET_VERSIONS[@]}"; do
-    TAG="$VER"
-    CONTAINER_BASE="postgres-${TAG}"
-    [[ "$USE_POSTGIS" == "true" ]] && CONTAINER_BASE="postgis-${TAG}"
+    if [[ "$USE_POSTGIS" == "true" ]]; then
+        TAG="${VER}-postgis"
+        CONTAINER_BASE="postgres-${VER}-postgis"
+    else
+        TAG="${VER}"
+        CONTAINER_BASE="postgres-${VER}"
+    fi
 
     TARGET_DIR="$HOME/.postgres/${TAG}"
 
@@ -394,10 +398,10 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     HOST_GID="$(id -g)"
 
     if [[ "$USE_POSTGIS" == "true" ]]; then
-        POSTGIS_TAG=$(resolve_postgis_tag "$TAG")
+        POSTGIS_TAG=$(resolve_postgis_tag "$VER")
         PG_IMAGE="postgis/postgis:${POSTGIS_TAG}"
     else
-        PG_IMAGE="postgres:${TAG}"
+        PG_IMAGE="postgres:${VER}"
     fi
 
     # Generate docker-compose.yml from template

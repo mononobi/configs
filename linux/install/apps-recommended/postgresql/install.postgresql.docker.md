@@ -104,6 +104,11 @@ To deploy instances with PostGIS pre-installed and ready:
 ./install.postgresql.docker.sh 18 --postgis
 ```
 
+PostGIS instances are stored in dedicated directories (`~/.postgres/<version>-postgis/`, e.g.
+`~/.postgres/18-postgis/`) with container name `postgres-<version>-postgis`. They can run
+side-by-side with vanilla PostgreSQL instances on separate ports without replacing or
+overwriting each other's data.
+
 ### 4. Custom Host Port (`--port`)
 
 Specify a custom base port for the primary instance. If the port (or default 5432) is busy, the

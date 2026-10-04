@@ -97,12 +97,12 @@ fi
 echo "" >&2
 echo -e "${C_BOLD}${C_CYAN}Available PostgreSQL Instances for ${COMMAND_NAME}:${C_RESET}" >&2
 echo "$DIV_SUB" >&2
-printf "  ${C_BOLD}%-4s %-22s %-10s %-8s %-12s${C_RESET}\n" "#" "Container" "Version" "Port" "Database" >&2
+printf "  ${C_BOLD}%-4s %-26s %-14s %-8s %-12s${C_RESET}\n" "#" "Container" "Version" "Port" "Database" >&2
 echo "$DIV_SUB" >&2
 
 for i in "${!instances[@]}"; do
     num=$((i + 1))
-    printf "  [%s]  %-22s %-10s %-8s %-12s\n" \
+    printf "  [%s]  %-26s %-14s %-8s %-12s\n" \
         "$num" "${c_names[$i]}" "${c_versions[$i]}" "${c_ports[$i]}" "${c_dbs[$i]}" >&2
 done
 echo "$DIV_SUB" >&2
