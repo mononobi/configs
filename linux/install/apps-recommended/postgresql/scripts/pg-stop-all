@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# Description: Stops or downs all PostgreSQL Docker Compose instances across ~/.postgres/
+# Usage: pg-stop-all [-d|--down]
+
+set -euo pipefail
+
+ACTION="stop"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -d|--down)
+            ACTION="down"
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: $(basename "$0") [-d|--down]"
+            echo ""
+            echo "Stops all active PostgreSQL Docker Compose instances."
+            echo ""
+            echo "Options:"
+            echo "  -d, --down    Run 'docker compose down' instead of 'stop' (removes containers, keeps data volumes)"
+            echo "  -h, --help    Show this help message"
+            exit 0
+            ;;
+        *)
+            echo "[!] Error: Unknown option: $1" >&2
+            echo "Use -h or --help for usage information." >&2
+            exit 1
+            ;;
+    esac
+done
+
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+# Source centralized framework colors
+source "${SCRIPT_DIR}/../../../colors.sh"
+
+POSTGRES_DIR="${HOME}/.postgres"
+
+if [[ ! -d "$POSTGRES_DIR" ]]; then
+    echo -e "${C_YELLOW}[i] No PostgreSQL instances directory found at ${POSTGRES_DIR}.${C_RESET}"
+    exit 0
+fi
+
+# Find all version directories containing a docker-compose.yml
+instances=()
+while IFS= read -r dir; do
+    if [[ -f "${dir}/docker-compose.yml" ]]; then
+        instances+=("$dir")
+    fi
+done < <(find "$POSTGRES_DIR" -mindepth 1 -maxdepth 1 -type d | sort -V)
+
+if [[ ${#instances[@]} -eq 0 ]]; then
+    echo -e "${C_YELLOW}[i] No configured PostgreSQL instances found in ${POSTGRES_DIR}.${C_RESET}"
+    exit 0
+fi
+
+echo -e "${C_BOLD}${C_CYAN}[+] Performing 'docker compose ${ACTION}' across ${#instances[@]} PostgreSQL instance(s)...${C_RESET}"
+
+for inst_dir in "${instances[@]}"; do
+    ver="$(basename "$inst_dir")"
+    echo -e "${C_BLUE}--> [${ver}] Running 'docker compose ${ACTION}' in ${inst_dir}...${C_RESET}"
+    (cd "$inst_dir" && docker compose "$ACTION")
+done
+
+echo ""
+echo -e "${C_BOLD}${C_GREEN}[✓] Successfully executed '${ACTION}' on all PostgreSQL instances.${C_RESET}"

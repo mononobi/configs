@@ -280,4 +280,15 @@ docker compose -f ~/.postgres/18/docker-compose.yml start
 
 # Remove container (data in ~/.postgres/18/data remains completely safe)
 docker compose -f ~/.postgres/18/docker-compose.yml down
+
+# Stop all PostgreSQL instances across ~/.postgres/ at once:
+pg-stop-all
+
+# Start all PostgreSQL instances across ~/.postgres/ at once:
+pg-start-all
+
+# Down (remove) all PostgreSQL instances at once (volumes preserved):
+pg-stop-all -d
+# or:
+pg-stop-all --down
 ```

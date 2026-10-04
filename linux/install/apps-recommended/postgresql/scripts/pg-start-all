@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Description: Starts all PostgreSQL Docker Compose instances across ~/.postgres/
+# Usage: pg-start-all
+
+set -euo pipefail
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            echo "Usage: $(basename "$0")"
+            echo ""
+            echo "Starts all configured PostgreSQL Docker Compose instances across ~/.postgres/."
+            echo ""
+            echo "Options:"
+            echo "  -h, --help    Show this help message"
+            exit 0
+            ;;
+        *)
+            echo "[!] Error: Unknown option: $1" >&2
+            echo "Use -h or --help for usage information." >&2
+            exit 1
+            ;;
+    esac
+done
+
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+# Source centralized framework colors
+source "${SCRIPT_DIR}/../../../colors.sh"
+
+POSTGRES_DIR="${HOME}/.postgres"
+
+if [[ ! -d "$POSTGRES_DIR" ]]; then
+    echo -e "${C_YELLOW}[i] No PostgreSQL instances directory found at ${POSTGRES_DIR}.${C_RESET}"
+    exit 0
+fi
+
+# Find all version directories containing a docker-compose.yml
+instances=()
+while IFS= read -r dir; do
+    if [[ -f "${dir}/docker-compose.yml" ]]; then
+        instances+=("$dir")
+    fi
+done < <(find "$POSTGRES_DIR" -mindepth 1 -maxdepth 1 -type d | sort -V)
+
+if [[ ${#instances[@]} -eq 0 ]]; then
+    echo -e "${C_YELLOW}[i] No configured PostgreSQL instances found in ${POSTGRES_DIR}.${C_RESET}"
+    exit 0
+fi
+
+echo -e "${C_BOLD}${C_CYAN}[+] Performing 'docker compose up -d' across ${#instances[@]} PostgreSQL instance(s)...${C_RESET}"
+
+for inst_dir in "${instances[@]}"; do
+    ver="$(basename "$inst_dir")"
+    echo -e "${C_BLUE}--> [${ver}] Running 'docker compose up -d' in ${inst_dir}...${C_RESET}"
+    (cd "$inst_dir" && docker compose up -d)
+done
+
+echo ""
+echo -e "${C_BOLD}${C_GREEN}[✓] Successfully started all PostgreSQL instances.${C_RESET}"
