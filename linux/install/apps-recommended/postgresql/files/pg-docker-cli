@@ -7,14 +7,8 @@ set -euo pipefail
 COMMAND_NAME="${1:-psql}"
 shift || true
 
-# Resolve true directory of this script (supporting symlinks in ~/.local/bin)
-TARGET_FILE="${BASH_SOURCE[0]}"
-while [[ -L "$TARGET_FILE" ]]; do
-    TARGET_DIR="$(cd -P "$(dirname "$TARGET_FILE")" && pwd)"
-    TARGET_FILE="$(readlink "$TARGET_FILE")"
-    [[ "$TARGET_FILE" != /* ]] && TARGET_FILE="${TARGET_DIR}/${TARGET_FILE}"
-done
-SCRIPT_DIR="$(cd -P "$(dirname "$TARGET_FILE")" && pwd)"
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 
 # Source centralized framework colors
 source "${SCRIPT_DIR}/../../../colors.sh"

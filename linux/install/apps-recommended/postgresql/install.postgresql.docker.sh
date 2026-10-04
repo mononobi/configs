@@ -511,7 +511,8 @@ done
 # Ensure container CLI helper tools are executable and linked into ~/.local/bin
 ensure_local_bin_in_path
 
-for tool in "pg-docker-cli" "psql-d" "pg_dump-d" "pg_restore-d"; do
+chmod +x "${SCRIPT_DIR}/files/pg-docker-cli"
+for tool in "psql-d" "pg_dump-d" "pg_restore-d"; do
     chmod +x "${SCRIPT_DIR}/files/${tool}"
     ln -sf "${SCRIPT_DIR}/files/${tool}" "${HOME}/.local/bin/${tool}"
 done

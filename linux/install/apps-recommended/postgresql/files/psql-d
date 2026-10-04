@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # Description: Wrapper for psql executing inside PostgreSQL Docker container
-set -euo pipefail
-SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 exec "${SCRIPT_DIR}/pg-docker-cli" "psql" "$@"
