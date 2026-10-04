@@ -224,6 +224,32 @@ pg_restore --clean --if-exists -d my_database /shared/backup.dump
 pg_restore -l /shared/backup.dump
 ```
 
+#### `pg_dumpall` (Complete Cluster & Globals Backup)
+
+```bash
+# Full cluster backup (all databases, roles, globals, tablespaces):
+pg_dumpall > cluster_backup.sql
+
+# Backup roles and global settings only:
+pg_dumpall --globals-only > globals.sql
+
+# Target a specific cluster via port without prompt:
+pg_dumpall -p 5433 > cluster_18.sql
+```
+
+#### `pgbench` (Performance Benchmarking)
+
+```bash
+# Initialize benchmark schema on default database:
+pgbench -i
+
+# Run benchmark test with 10 clients and 2 threads:
+pgbench -c 10 -j 2 -t 1000
+
+# Target a specific instance via port:
+pgbench -p 5433 -c 10 -t 500
+```
+
 ### 3. Instance Shared Directory (`~/.postgres/<version>/shared/`)
 
 Each instance includes a dedicated `shared/` directory on the host mounted to `/shared` inside

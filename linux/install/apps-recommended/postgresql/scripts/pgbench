@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Description: Wrapper for pgbench executing inside PostgreSQL Docker container
+
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+exec "${SCRIPT_DIR}/pg-docker-cli" "pgbench" "$@"
