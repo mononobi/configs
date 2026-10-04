@@ -150,7 +150,7 @@ Unless customized with flags, all instances default to standard local developmen
 - **Username**: `postgres`
 - **Password**: `123`
 
-### 2. Container-Native CLI Tools (`psql-d`, `pg_dump-d`, `pg_restore-d`)
+### 2. Container-Native CLI Tools (`psql-d`, `pg-dump-d`, `pg-restore-d`)
 
 The installer provides and symlinks matching `-d` CLI tools into `~/.local/bin/`. They execute
 directly inside the target container via `docker exec`, guaranteeing **exact 1:1
@@ -165,38 +165,49 @@ for all flags and piped input/output:
 #### `psql-d` (Interactive & Query Execution)
 
 ```bash
-# Connect interactively to PostgreSQL:
+# Connect interactively to default database:
 psql-d
+
+# Connect to a specific custom database:
+psql-d -d my_database
+# or:
+psql-d --database my_database
 
 # Execute one-liner queries or backslash commands:
 psql-d -c "\l"
-psql-d -c "SELECT version();"
+psql-d -d my_database -c "SELECT count(*) FROM users;"
 
-# Pipe SQL scripts or run migrations:
-psql-d < migration.sql
+# Pipe SQL scripts or run migrations into a specific database:
+psql-d -d my_database < migration.sql
 ```
 
-#### `pg_dump-d` (1:1 Schema & Data Backup)
+#### `pg-dump-d` (1:1 Schema & Data Backup)
 
 ```bash
 # Full database plain text backup:
-pg_dump-d > backup.sql
+pg-dump-d > backup.sql
+
+# Backup a specific database:
+pg-dump-d -d my_database > my_db_backup.sql
 
 # Compressed custom archive format:
-pg_dump-d -Fc -f backup.dump
+pg-dump-d -d my_database -Fc -f backup.dump
 
-# Dump specific database or table:
-pg_dump-d -d my_db -t my_table > table_backup.sql
+# Dump specific table from a database:
+pg-dump-d -d my_database -t my_table > table_backup.sql
 ```
 
-#### `pg_restore-d` (1:1 Archive Restore)
+#### `pg-restore-d` (1:1 Archive Restore)
 
 ```bash
-# Restore custom archive into database:
-pg_restore-d -d my_db backup.dump
+# Restore custom archive into a specific database:
+pg-restore-d -d my_database backup.dump
 
 # Clean and recreate tables before restoring:
-pg_restore-d --clean --if-exists -d my_db backup.dump
+pg-restore-d --clean --if-exists -d my_database backup.dump
+
+# List contents of an archive without connecting to a database:
+pg-restore-d -l backup.dump
 ```
 
 ### 3. Direct Terminal CLI (`psql`)

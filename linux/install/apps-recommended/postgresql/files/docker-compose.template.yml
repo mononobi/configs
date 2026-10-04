@@ -9,6 +9,9 @@ services:
       - POSTGRES_USER=${PG_USER}
       - POSTGRES_PASSWORD=${PG_PASSWORD}
       - POSTGRES_DB=${PG_DB}
+      - PGUSER=${PG_USER}
+      - PGDATABASE=${PG_DB}
+      - PGPASSWORD=${PG_PASSWORD}
       - PGDATA=/var/lib/postgresql/data/pgdata
     command:
       - "postgres"

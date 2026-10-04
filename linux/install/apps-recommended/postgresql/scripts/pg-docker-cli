@@ -74,9 +74,6 @@ execute_in_container() {
     shift
     local name="${c_names[$idx]}"
     local port="${c_ports[$idx]}"
-    local user="${c_users[$idx]}"
-    local pass="${c_passwords[$idx]}"
-    local db="${c_dbs[$idx]}"
     local ver="${c_versions[$idx]}"
 
     local docker_flags="-i"
@@ -85,30 +82,10 @@ execute_in_container() {
         docker_flags="-it"
     fi
 
-    # Print connection notice to stderr so it does not corrupt stdout dumps (e.g. pg_dump-d > backup.sql)
+    # Print connection notice to stderr so it does not corrupt stdout dumps (e.g. pg-dump-d > backup.sql)
     echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (PG ${ver}, port ${port})...${C_RESET}" >&2
 
-    # If user requests help or version information, pass arguments directly without injecting connection defaults
-    for arg in "$@"; do
-        if [[ "$arg" == "--help" || "$arg" == "-?" || "$arg" == "--version" || "$arg" == "-V" ]]; then
-            exec docker exec $docker_flags "$name" "$COMMAND_NAME" "$@"
-        fi
-    done
-
-    case "$COMMAND_NAME" in
-        psql)
-            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" psql -U "$user" -d "$db" "$@"
-            ;;
-        pg_dump)
-            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" pg_dump -U "$user" -d "$db" "$@"
-            ;;
-        pg_restore)
-            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" pg_restore -U "$user" -d "$db" "$@"
-            ;;
-        *)
-            exec docker exec $docker_flags -e PGPASSWORD="$pass" "$name" "$COMMAND_NAME" -U "$user" -d "$db" "$@"
-            ;;
-    esac
+    exec docker exec $docker_flags "$name" "$COMMAND_NAME" "$@"
 }
 
 # Single instance: execute automatically

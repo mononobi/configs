@@ -401,10 +401,10 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     # Copy initdb script to inject include_dir into postgresql.conf during initialization
     if [[ ! -f "${TARGET_DIR}/initdb.d/00-init-conf.sh" ]]; then
         echo "[+] Installing 00-init-conf.sh to ${TARGET_DIR}/initdb.d/..."
-        cp "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
+        cp "${SCRIPT_DIR}/scripts/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
         chmod +x "${TARGET_DIR}/initdb.d/00-init-conf.sh"
-    elif [[ "$FORCE" == "true" ]] || ! cmp -s "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"; then
-        cp "${SCRIPT_DIR}/files/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
+    elif [[ "$FORCE" == "true" ]] || ! cmp -s "${SCRIPT_DIR}/scripts/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"; then
+        cp "${SCRIPT_DIR}/scripts/00-init-conf.sh" "${TARGET_DIR}/initdb.d/00-init-conf.sh"
         chmod +x "${TARGET_DIR}/initdb.d/00-init-conf.sh"
     fi
 
@@ -510,13 +510,12 @@ done
 
 # Ensure container CLI helper tools are executable and linked into ~/.local/bin
 ensure_local_bin_in_path
-
-chmod +x "${SCRIPT_DIR}/files/pg-docker-cli"
-for tool in "psql-d" "pg_dump-d" "pg_restore-d"; do
-    chmod +x "${SCRIPT_DIR}/files/${tool}"
-    ln -sf "${SCRIPT_DIR}/files/${tool}" "${HOME}/.local/bin/${tool}"
+chmod +x "${SCRIPT_DIR}/scripts/pg-docker-cli"
+for tool in "psql-d" "pg-dump-d" "pg-restore-d"; do
+    chmod +x "${SCRIPT_DIR}/scripts/${tool}"
+    ln -sf "${SCRIPT_DIR}/scripts/${tool}" "${HOME}/.local/bin/${tool}"
 done
-echo "[+] Linked CLI utilities (psql-d, pg_dump-d, pg_restore-d) to ${HOME}/.local/bin/"
+echo "[+] Linked CLI utilities (psql-d, pg-dump-d, pg-restore-d) to ${HOME}/.local/bin/"
 
 echo ""
 echo "[✓] All PostgreSQL Docker instances processed successfully!"
