@@ -689,6 +689,30 @@ check_os_compatibility() {
     fi
 }
 
+# is_port_in_use <port>
+# Checks whether a TCP port is currently bound or listening
+is_port_in_use() {
+    local port="$1"
+    if ss -tuln "sport = :${port}" 2>/dev/null | grep -q ":${port} "; then
+        return 0
+    fi
+    if lsof -iTCP:"$port" -sTCP:LISTEN -n -P >/dev/null 2>&1; then
+        return 0
+    fi
+    return 1
+}
+
+# container_owns_port <container_name> <port>
+# Checks whether a specific Docker container currently owns the host port mapping
+container_owns_port() {
+    local cname="$1"
+    local port="$2"
+    if docker ps --filter "name=^/${cname}$" --format '{{.Ports}}' 2>/dev/null | grep -q "${port}->"; then
+        return 0
+    fi
+    return 1
+}
+
 export INSTALL_ROOT
 export -f require_app
 export -f conditional_apt_update
@@ -699,3 +723,5 @@ export -f compare_extension_version
 export -f install_gnome_extension
 export -f resolve_ubuntu_pool_deb
 export -f check_os_compatibility
+export -f is_port_in_use
+export -f container_owns_port

@@ -233,28 +233,6 @@ else
     done
 fi
 
-# Helper: Check if a TCP port is currently listening
-is_port_in_use() {
-    local port="$1"
-    if ss -tuln "sport = :${port}" 2>/dev/null | grep -q ":${port} "; then
-        return 0
-    fi
-    if lsof -iTCP:"$port" -sTCP:LISTEN -n -P >/dev/null 2>&1; then
-        return 0
-    fi
-    return 1
-}
-
-# Helper: Check if a specific container owns the listening port
-container_owns_port() {
-    local cname="$1"
-    local port="$2"
-    if docker ps --filter "name=^/${cname}$" --format '{{.Ports}}' 2>/dev/null | grep -q "${port}->"; then
-        return 0
-    fi
-    return 1
-}
-
 # Ensure the container database group (postgres: 999) exists on the host
 PG_CONTAINER_GID=999
 if ! getent group "$PG_CONTAINER_GID" >/dev/null 2>&1; then

@@ -1,0 +1,19 @@
+services:
+  sqlserver:
+    image: ${SQL_IMAGE}
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - "${SQL_PORT}:1433"
+    environment:
+      # Accept Microsoft End-User Licensing Agreement
+      - ACCEPT_EULA=Y
+      # System Administrator (SA) password
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD}
+      # Server-level default collation (Case-Sensitive, Accent-Sensitive)
+      - MSSQL_COLLATION=${SQL_COLLATION}
+    volumes:
+      - ./data:/var/opt/mssql
+      - ./shared:/shared
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
