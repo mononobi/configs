@@ -153,14 +153,7 @@ else
 fi
 # Helper: Generate a compliant UUID v4 password for SQL Server
 generate_sa_password() {
-    local uuid
-    if command -v uuidgen >/dev/null 2>&1; then
-        uuid=$(uuidgen)
-    else
-        uuid=$(cat /proc/sys/kernel/random/uuid 2>/dev/null || python3 -c "import uuid; print(uuid.uuid4())")
-    fi
-    # SQL Server password complexity requires uppercase, lowercase, numbers/symbols
-    echo "SqlPass-${uuid}!"
+    echo "SqlPass-$(python3 -c 'import uuid; print(uuid.uuid4())')!"
 }
 
 # Ensure SQL Server non-root container user UID 10001 has shared group access with host user
