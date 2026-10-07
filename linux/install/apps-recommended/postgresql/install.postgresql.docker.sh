@@ -233,23 +233,10 @@ else
     done
 fi
 
-# Ensure the container database group (postgres: 999) exists on the host
-PG_CONTAINER_GID=999
-if ! getent group "$PG_CONTAINER_GID" >/dev/null 2>&1; then
-    sudo groupadd -g "$PG_CONTAINER_GID" postgres 2>/dev/null || sudo groupadd postgres 2>/dev/null || true
-fi
-PG_GROUP_NAME=$(getent group "$PG_CONTAINER_GID" | cut -d: -f1 || echo "postgres")
-
-# Add current host user to the database group so both share access
-if ! id -nG "$USER" | grep -qw "$PG_GROUP_NAME"; then
-    echo "[+] Adding ${USER} to database group (${PG_GROUP_NAME})..."
-    sudo usermod -aG "$PG_GROUP_NAME" "$USER"
-fi
-
-# Ensure base directory ~/.postgres exists and is accessible to both user and database group
+# Ensure base directory ~/.postgres exists and is owned by host user
 mkdir -p "$HOME/.postgres"
-sudo chown -R "${USER}:${PG_GROUP_NAME}" "$HOME/.postgres"
-sudo chmod -R 775 "$HOME/.postgres"
+chown "${USER}:${USER}" "$HOME/.postgres" 2>/dev/null || true
+chmod 755 "$HOME/.postgres"
 
 # Track if this is the first instance being processed in this run
 is_first_instance=true
@@ -331,9 +318,12 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     mkdir -p "${TARGET_DIR}/logs"
     mkdir -p "${TARGET_DIR}/shared"
 
-    # Ensure target directory structure is owned by user and postgres group with group write permissions
-    sudo chown -R "${USER}:${PG_GROUP_NAME}" "${TARGET_DIR}"
-    sudo chmod -R 775 "${TARGET_DIR}"
+    # Set appropriate ownership and permissions:
+    # User-space configuration and scripts owned by host user
+    chown -R "${USER}:${USER}" "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d" 2>/dev/null || true
+    chmod -R 755 "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d"
+    # Exchange directories (logs & shared) require write access for both host user and container engine
+    chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared"
 
     CONFIG_UPDATED=false
 
@@ -444,10 +434,12 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         sleep 1
     done
 
-    # Ensure host user and database group retain read/write access to ~/.postgres/<version>/
-    echo "[+] Ensuring user and group access permissions on ${TARGET_DIR}..."
-    sudo chown -R "${USER}:${PG_GROUP_NAME}" "$TARGET_DIR"
-    sudo chmod -R 775 "$TARGET_DIR"
+    # Ensure user-space configs, compose file, logs, and shared directories remain accessible to host user
+    echo "[+] Ensuring user access permissions on configuration and exchange directories..."
+    chown -R "${USER}:${USER}" "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d" "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
+    chmod -R 755 "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d"
+    chmod 644 "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
+    chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared"
 
     # Mandatory UFW firewall rule for the instance port
     echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."

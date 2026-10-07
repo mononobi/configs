@@ -31,12 +31,17 @@ Compose.
 - **Zero-Friction Host CLI**: Automatically equips the host system with `postgresql-client` so
   `psql`, `pg_dump`, and `pg_restore` work directly in your terminal without requiring
   `docker exec`.
-- **Easy Config & User-Space Access**: Custom server configurations (`db.conf`, `pg_hba.conf`,
-  and `.conf` drops) are mounted in user space and editable without `sudo`. The host user is
-  automatically added to the database system group (`postgres:999`) and all directories in
-  `~/.postgres/<version>/` are maintained with standard group permissions (`775`), allowing
-  your user to inspect logs, manage configs, and backup data directories directly without
-  `sudo`.
+- **Clean User-Space Access & File Sharing**:
+  - Custom server configurations (`db.conf`, `pg_hba.conf`, and `.conf` drops), `initdb.d/`,
+    and `docker-compose.yml` reside in user space and are editable without `sudo`.
+  - Server query logs in `logs/` are generated with readable mode (`0644`), allowing direct
+    inspection in your editor or terminal without root privileges.
+  - A dedicated `shared/` directory (mounted to `/shared` in the container) provides seamless,
+    permission-frictionless two-way file exchange (e.g. for CSV imports, SQL dumps, or scripts)
+    between the host user and the container.
+  - The raw database directory (`data/pgdata`) remains standard and private to the PostgreSQL
+    engine (`0700`), ensuring full ACID safety and data integrity without fragile host group
+    hacks.
 - **PostGIS Support**: One-flag deployment of spatial databases via official `postgis/postgis`
   images.
 - **Automated UFW Firewall**: Opens instance listening ports in UFW automatically.
@@ -55,16 +60,18 @@ major version:
 │   │   ├── conf.d/
 │   │   │   └── db.conf           # Custom server tuning & query logging
 │   │   └── pg_hba.conf           # Client authentication rules
-│   ├── data/                     # Database cluster files (persists across OS reinstalls)
+│   ├── data/                     # Database cluster files (engine-private, 0700)
 │   ├── initdb.d/                 # First-boot SQL & shell initialization scripts
-│   ├── logs/                     # Query and statement rotation logs
+│   ├── logs/                     # Query and statement rotation logs (mode 0644)
+│   ├── shared/                   # Two-way exchange directory for dumps, CSVs, imports
 │   └── docker-compose.yml        # Docker Compose service definition (image: postgres:18)
 └── 17/
     ├── config/
     ├── data/
     ├── initdb.d/
     ├── logs/
-    └── docker-compose.yml        # Docker Compose service definition (image: postgres:17)
+    ├── shared/
+    └── docker-compose.yml
 ```
 
 ---
