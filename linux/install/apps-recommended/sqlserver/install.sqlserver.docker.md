@@ -13,6 +13,7 @@ All runtime files and volumes are persisted on the host in `~/.sqlserver/<versio
 ```text
 ~/.sqlserver/2022/
 ├── data/                  # Host bind mount for SQL Server data (/var/opt/mssql, engine-private 0700)
+├── logs/                  # Dedicated host mount for server diagnostic logs (/var/opt/mssql/log, mode 777)
 ├── shared/                # Two-way exchange directory for backups & SQL scripts (mode 777)
 └── docker-compose.yml     # Generated Compose configuration (user-owned)
 ```
@@ -75,6 +76,9 @@ cd linux/install/apps-recommended/sqlserver
   The `data/` directory (`/var/opt/mssql`) holds raw `.mdf` and `.ldf` database cluster files
   and remains engine-private (`0700` owned by `10001`). This standard Linux isolation prevents
   accidental deletion or file corruption from host user commands.
+- **Log Files (`logs/`)**: Dedicated host directory mounted to `/var/opt/mssql/log` with mode `777`.
+  SQL Server writes `errorlog` and diagnostic trace files here, allowing host users to inspect,
+  tail, and open logs in editors directly without root privileges.
 - **Shared Directory (`shared/`)**: Mounted to `/shared` in the container with open read/write
   permissions (`777`), enabling seamless, friction-free file exchange between the host user and
   SQL Server for database backups (`.bak` files), CSV exports, and initialization scripts

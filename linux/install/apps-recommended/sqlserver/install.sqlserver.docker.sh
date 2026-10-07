@@ -156,8 +156,21 @@ generate_sa_password() {
     echo "SqlPass-$(python3 -c 'import uuid; print(uuid.uuid4())')!"
 }
 
-# Ensure base directory ~/.sqlserver exists and is owned by host user
+# Ensure SQL Server non-root container group (mssql: 10001) exists on host
+# so the host user can read diagnostic logs (created with mode 0660) without sudo
 MSSQL_UID=10001
+MSSQL_GID=10001
+if ! getent group "$MSSQL_GID" >/dev/null 2>&1; then
+    sudo groupadd -g "$MSSQL_GID" mssql 2>/dev/null || true
+fi
+MSSQL_GROUP_NAME=$(getent group "$MSSQL_GID" | cut -d: -f1 || echo "mssql")
+
+if ! id -nG "$USER" | grep -qw "$MSSQL_GROUP_NAME"; then
+    echo "[+] Adding ${USER} to mssql group (${MSSQL_GROUP_NAME}) for log reading..."
+    sudo usermod -aG "$MSSQL_GROUP_NAME" "$USER" 2>/dev/null || true
+fi
+
+# Ensure base directory ~/.sqlserver exists and is owned by host user
 mkdir -p "$HOME/.sqlserver"
 chown "${USER}:${USER}" "$HOME/.sqlserver" 2>/dev/null || true
 chmod 755 "$HOME/.sqlserver"
@@ -230,14 +243,15 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 
     # Verify and create target directories
     mkdir -p "${TARGET_DIR}/data"
+    mkdir -p "${TARGET_DIR}/logs"
     mkdir -p "${TARGET_DIR}/shared"
 
     # Set ownership and permissions:
     # SQL Server container engine (UID 10001) requires ownership of its data directory (/var/opt/mssql)
     sudo chown -R "${MSSQL_UID}:${MSSQL_UID}" "${TARGET_DIR}/data"
     sudo chmod -R 700 "${TARGET_DIR}/data"
-    # Exchange directory (/shared) requires write access for both host user and container engine
-    chmod 777 "${TARGET_DIR}/shared"
+    # Exchange and log directories require write access for both host user and container engine
+    chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared"
 
     # Password management: preserve existing password from docker-compose.yml or generate new UUID v4
     CURRENT_PASS=""
@@ -306,10 +320,10 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         sleep 1
     done
 
-    # Ensure user-space compose file and exchange directory remain properly accessible
+    # Ensure user-space compose file and exchange directories remain properly accessible
     chown "${USER}:${USER}" "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
     chmod 644 "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
-    chmod 777 "${TARGET_DIR}/shared" 2>/dev/null || true
+    chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared" 2>/dev/null || true
 
     # Configure UFW firewall
     echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
@@ -327,6 +341,7 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     printf "%-18s: %s\n" "Collation" "$SQL_COLLATION"
     printf "%-18s: %s\n" "JDBC / URL" "jdbc:sqlserver://localhost:${PORT};encrypt=false;trustServerCertificate=true"
     printf "%-18s: %s\n" "Data Directory" "${TARGET_DIR}/data"
+    printf "%-18s: %s\n" "Log Directory" "${TARGET_DIR}/logs"
     printf "%-18s: %s\n" "Shared Directory" "${TARGET_DIR}/shared"
     printf "%-18s: %s\n" "Compose File" "${TARGET_DIR}/docker-compose.yml"
     echo "${DIV_MAIN}"
