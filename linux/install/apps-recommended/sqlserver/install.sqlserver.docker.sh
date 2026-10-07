@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Description: Install and configure Microsoft SQL Server instances via Docker Compose
-# Note: Persists data and shared folders under ~/.sqlserver/<version>/ and sets 775 user/mssql access.
+# Note: Persists data and shared folders under ~/.sqlserver/<version>/ with standard
+# container isolation.
 
 set -euo pipefail
 
@@ -24,8 +25,7 @@ Usage: $(basename "$0") [OPTIONS] [VERSION...]
 Description:
   Installs and configures Microsoft SQL Server instances using Docker Compose.
   Persists database data and shared backups in ~/.sqlserver/<version>/, runs with
-  restart: unless-stopped, configures permissions for host user and mssql UID 10001,
-  and secures ports with UFW.
+  restart: unless-stopped, keeps data engine-private, and secures ports with UFW.
 
 Arguments:
   VERSION               SQL Server release year(s) to install (e.g. 2022, 2019, latest).
@@ -156,23 +156,11 @@ generate_sa_password() {
     echo "SqlPass-$(python3 -c 'import uuid; print(uuid.uuid4())')!"
 }
 
-# Ensure SQL Server non-root container user UID 10001 has shared group access with host user
+# Ensure base directory ~/.sqlserver exists and is owned by host user
 MSSQL_UID=10001
-MSSQL_GID=10001
-if ! getent group "$MSSQL_GID" >/dev/null 2>&1; then
-    sudo groupadd -g "$MSSQL_GID" mssql 2>/dev/null || true
-fi
-MSSQL_GROUP_NAME=$(getent group "$MSSQL_GID" | cut -d: -f1 || echo "mssql")
-
-if ! id -nG "$USER" | grep -qw "$MSSQL_GROUP_NAME"; then
-    echo "[+] Adding ${USER} to mssql group (${MSSQL_GROUP_NAME})..."
-    sudo usermod -aG "$MSSQL_GROUP_NAME" "$USER" 2>/dev/null || true
-fi
-
-# Ensure base directory ~/.sqlserver exists
 mkdir -p "$HOME/.sqlserver"
-sudo chown -R "${USER}:${MSSQL_GROUP_NAME}" "$HOME/.sqlserver"
-sudo chmod -R 775 "$HOME/.sqlserver"
+chown "${USER}:${USER}" "$HOME/.sqlserver" 2>/dev/null || true
+chmod 755 "$HOME/.sqlserver"
 
 is_first_instance=true
 
@@ -244,9 +232,12 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     mkdir -p "${TARGET_DIR}/data"
     mkdir -p "${TARGET_DIR}/shared"
 
-    # Set ownership so both host user and SQL Server UID 10001 have full read/write access
-    sudo chown -R "${MSSQL_UID}:${MSSQL_GROUP_NAME}" "${TARGET_DIR}/data" "${TARGET_DIR}/shared"
-    sudo chmod -R 775 "${TARGET_DIR}/data" "${TARGET_DIR}/shared"
+    # Set ownership and permissions:
+    # SQL Server container engine (UID 10001) requires ownership of its data directory (/var/opt/mssql)
+    sudo chown -R "${MSSQL_UID}:${MSSQL_UID}" "${TARGET_DIR}/data"
+    sudo chmod -R 700 "${TARGET_DIR}/data"
+    # Exchange directory (/shared) requires write access for both host user and container engine
+    chmod 777 "${TARGET_DIR}/shared"
 
     # Password management: preserve existing password from docker-compose.yml or generate new UUID v4
     CURRENT_PASS=""
@@ -315,9 +306,10 @@ for VER in "${TARGET_VERSIONS[@]}"; do
         sleep 1
     done
 
-    # Ensure permissions remain cleanly open after first initialization
-    sudo chown -R "${MSSQL_UID}:${MSSQL_GROUP_NAME}" "${TARGET_DIR}/data" "${TARGET_DIR}/shared" 2>/dev/null || true
-    sudo chmod -R 775 "${TARGET_DIR}/data" "${TARGET_DIR}/shared" 2>/dev/null || true
+    # Ensure user-space compose file and exchange directory remain properly accessible
+    chown "${USER}:${USER}" "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
+    chmod 644 "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
+    chmod 777 "${TARGET_DIR}/shared" 2>/dev/null || true
 
     # Configure UFW firewall
     echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."

@@ -12,9 +12,9 @@ All runtime files and volumes are persisted on the host in `~/.sqlserver/<versio
 
 ```text
 ~/.sqlserver/2022/
-├── data/                  # Host bind mount for SQL Server data (/var/opt/mssql)
-├── shared/                # Host bind mount for backups & SQL scripts (/shared)
-└── docker-compose.yml     # Generated Compose configuration
+├── data/                  # Host bind mount for SQL Server data (/var/opt/mssql, engine-private 0700)
+├── shared/                # Two-way exchange directory for backups & SQL scripts (mode 777)
+└── docker-compose.yml     # Generated Compose configuration (user-owned)
 ```
 
 ---
@@ -71,7 +71,13 @@ cd linux/install/apps-recommended/sqlserver
 
 ## Permissions & Host Access
 
-SQL Server in Docker runs under non-root UID `10001` (`mssql`). The installer automatically
-adds the host user to the `mssql` group and sets `775` permissions on
-`~/.sqlserver/<version>/data` and `~/.sqlserver/<version>/shared`, ensuring both the container
-and host user can read, write, and manage backup files without permission conflicts.
+- **Database Files (`data/`)**: SQL Server in Docker runs under non-root UID `10001` (`mssql`).
+  The `data/` directory (`/var/opt/mssql`) holds raw `.mdf` and `.ldf` database cluster files
+  and remains engine-private (`0700` owned by `10001`). This standard Linux isolation prevents
+  accidental deletion or file corruption from host user commands.
+- **Shared Directory (`shared/`)**: Mounted to `/shared` in the container with open read/write
+  permissions (`777`), enabling seamless, friction-free file exchange between the host user and
+  SQL Server for database backups (`.bak` files), CSV exports, and initialization scripts
+  without requiring `sudo` or host group modifications.
+- **Compose & Configurations**: `docker-compose.yml` is owned by the host user and editable
+  without administrative privileges.
