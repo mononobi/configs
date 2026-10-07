@@ -128,12 +128,47 @@ execute_in_container() {
         bin_path="${COMMAND_NAME}"
     fi
 
+    local is_help=false
+    local is_version=false
+
+    for arg in "$@"; do
+        if [[ "$arg" == "--help" || "$arg" == "-?" ]]; then
+            is_help=true
+            break
+        elif [[ "$arg" == "--version" ]]; then
+            is_version=true
+            break
+        fi
+    done
+
+    local docker_flags="-i"
+    # Use interactive TTY only when both stdin/stdout are terminals and running interactive query
+    if [[ -t 0 && -t 1 && "$COMMAND_NAME" == "sqlcmd" ]]; then
+        docker_flags="-it"
+    fi
+
+    # Handle --version: print only the version header without help
+    if [[ "$is_version" == "true" ]]; then
+        echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
+        if [[ "$COMMAND_NAME" == "sqlcmd" ]]; then
+            docker exec $docker_flags "$name" "$bin_path" "-?" 2>&1 | head -n 3
+            exit 0
+        else
+            exec docker exec $docker_flags "$name" "$bin_path" "-v"
+        fi
+    fi
+
+    # Handle --help: print full usage help
+    if [[ "$is_help" == "true" ]]; then
+        echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
+        exec docker exec $docker_flags "$name" "$bin_path" "-?"
+    fi
+
     # Inspect user arguments to supply sensible defaults if omitted
     local has_server=false
     local has_user=false
     local has_pass=false
     local has_trust=false
-    local is_help_or_version=false
 
     for arg in "$@"; do
         case "$arg" in
@@ -141,35 +176,25 @@ execute_in_container() {
             -U|-U*) has_user=true ;;
             -P|-P*) has_pass=true ;;
             -C|-N|-N*) has_trust=true ;;
-            -\?|--help|-V|--version) is_help_or_version=true ;;
         esac
     done
 
     local final_args=()
 
-    # Only inject defaults if not asking for help or version
-    if [[ "$is_help_or_version" == "false" ]]; then
-        if [[ "$has_server" == "false" ]]; then
-            final_args+=("-S" "localhost")
-        fi
-        if [[ "$has_user" == "false" ]]; then
-            final_args+=("-U" "sa")
-        fi
-        if [[ "$has_pass" == "false" && -n "$pass" ]]; then
-            final_args+=("-P" "$pass")
-        fi
-        if [[ "$has_trust" == "false" && "$COMMAND_NAME" == "sqlcmd" ]]; then
-            final_args+=("-C")
-        fi
+    if [[ "$has_server" == "false" ]]; then
+        final_args+=("-S" "localhost")
+    fi
+    if [[ "$has_user" == "false" ]]; then
+        final_args+=("-U" "sa")
+    fi
+    if [[ "$has_pass" == "false" && -n "$pass" ]]; then
+        final_args+=("-P" "$pass")
+    fi
+    if [[ "$has_trust" == "false" && "$COMMAND_NAME" == "sqlcmd" ]]; then
+        final_args+=("-C")
     fi
 
     final_args+=("$@")
-
-    local docker_flags="-i"
-    # Use interactive TTY only when both stdin/stdout are terminals and running interactive query
-    if [[ -t 0 && -t 1 && "$COMMAND_NAME" == "sqlcmd" ]]; then
-        docker_flags="-it"
-    fi
 
     # Print connection notice to stderr so it does not corrupt stdout redirects
     echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
@@ -213,7 +238,7 @@ fi
 
 # If user requests global client help or version information, execute directly on the latest instance without prompt
 for arg in "${FORWARD_ARGS[@]}"; do
-    if [[ "$arg" == "--help" || "$arg" == "-?" || "$arg" == "--version" || "$arg" == "-V" ]]; then
+    if [[ "$arg" == "--help" || "$arg" == "--version" || "$arg" == "-?" ]]; then
         latest_idx=$(( ${#instances[@]} - 1 ))
         if [[ ${#instances[@]} -gt 1 ]]; then
             other_instances=()
