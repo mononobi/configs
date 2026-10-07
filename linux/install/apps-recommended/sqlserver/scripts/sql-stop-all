@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Description: Stops or downs all Microsoft SQL Server Docker Compose instances across ~/.sqlserver/
+# Usage: sql-stop-all [-d|--down]
+
+set -euo pipefail
+
+ACTION="stop"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -d|--down)
+            ACTION="down"
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: $(basename "$0") [-d|--down]"
+            echo ""
+            echo "Stops all active Microsoft SQL Server Docker Compose instances."
+            echo ""
+            echo "Options:"
+            echo "  -d, --down    Run 'docker compose down' instead of 'stop' (removes containers, keeps data volumes)"
+            echo "  -h, --help    Show thishelp message"
+            exit 0
+            ;;
+        *)
+            echo "[!] Error: Unknown option: $1" >&2
+            echo "Use -h or --help for usage information." >&2
+            exit 1
+            ;;
+    esac
+done
+
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+# Source centralized framework colors
+source "${SCRIPT_DIR}/../../../colors.sh"
+
+SQLSERVER_DIR="${HOME}/.sqlserver"
+
+if [[ ! -d "$SQLSERVER_DIR" ]]; then
+    echo -e "${C_YELLOW}[i] No SQL Server instances directory found at ${SQLSERVER_DIR}.${C_RESET}"
+    exit 0
+fi
+
+instances=()
+while IFS= read -r dir; do
+    if [[ -f "${dir}/docker-compose.yml" ]]; then
+        instances+=("$dir")
+    fi
+done < <(find "$SQLSERVER_DIR" -mindepth 1 -maxdepth 1 -type d | sort -V)
+
+if [[ ${#instances[@]} -eq 0 ]]; then
+    echo -e "${C_YELLOW}[i] No SQL Server instances configured in ${SQLSERVER_DIR}.${C_RESET}"
+    exit 0
+fi
+
+stopped_count=0
+for inst_dir in "${instances[@]}"; do
+    ver="$(basename "$inst_dir")"
+    if (cd "$inst_dir" && docker compose ps -q 2>/dev/null | grep -q .); then
+        echo -e "${C_CYAN}[+] Running 'docker compose ${ACTION}' for SQL Server ${ver}...${C_RESET}"
+        (cd "$inst_dir" && docker compose "$ACTION")
+        stopped_count=$((stopped_count + 1))
+    fi
+done
+
+if [[ $stopped_count -eq 0 ]]; then
+    echo -e "${C_YELLOW}[i] No active SQL Server instances were running.${C_RESET}"
+else
+    echo -e "${C_GREEN}[✓] Successfully processed ${stopped_count} SQL Server instance(s).${C_RESET}"
+fi

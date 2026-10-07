@@ -59,6 +59,49 @@ cd linux/install/apps-recommended/sqlserver
 
 ---
 
+## Host CLI Utilities (`sqlcmd`, `bcp`)
+
+The installer automatically exposes wrapper utilities in `~/.local/bin/` so you can interact
+with your SQL Server instances directly from your host shell without running `docker exec` or
+looking up generated credentials:
+
+- **`sqlcmd`**: Full-featured interactive and batch SQL client.
+  - Automatically detects the container's generated `sa` password and connects to `localhost`.
+  - Automatically trusts local development certificates (`-C`).
+  - Automatically selects the running instance if only one is configured, or displays an
+    interactive menu if multiple versions exist.
+  - Can directly target specific instances via `--instance <name|year>` or `--port <port>`.
+- **`bcp`**: High-speed bulk copy utility for importing and exporting tables to/from text or
+  CSV files.
+- **`sql-stop-all`**: Convenience command to stop all running SQL Server instances (`-d` to
+  down).
+- **`sql-start-all`**: Convenience command to launch all configured SQL Server instances.
+
+### CLI Examples
+
+```bash
+# Interactive terminal session (auto-authenticates to running instance)
+sqlcmd
+
+# Run single query and exit
+sqlcmd -Q "SELECT @@VERSION;"
+
+# Query databases list
+sqlcmd -Q "SELECT name FROM sys.databases;"
+
+# Execute a SQL script file
+sqlcmd -i /path/to/script.sql
+
+# Target specific instance when multiple versions are running
+sqlcmd --instance 2025 -Q "SELECT 1;"
+sqlcmd --port 1433 -Q "SELECT 1;"
+
+# Pipe query into sqlcmd
+echo "SELECT 12345 AS val;" | sqlcmd
+```
+
+---
+
 ## Connection Information
 
 - **Host**: `localhost` (or `127.0.0.1`)
@@ -76,9 +119,9 @@ cd linux/install/apps-recommended/sqlserver
   The `data/` directory (`/var/opt/mssql`) holds raw `.mdf` and `.ldf` database cluster files
   and remains engine-private (`0700` owned by `10001`). This standard Linux isolation prevents
   accidental deletion or file corruption from host user commands.
-- **Log Files (`logs/`)**: Dedicated host directory mounted to `/var/opt/mssql/log` with mode `777`.
-  SQL Server writes `errorlog` and diagnostic trace files here, allowing host users to inspect,
-  tail, and open logs in editors directly without root privileges.
+- **Log Files (`logs/`)**: Dedicated host directory mounted to `/var/opt/mssql/log` with mode
+  `777`. SQL Server writes `errorlog` and diagnostic trace files here, allowing host users to
+  inspect, tail, and open logs in editors directly without root privileges.
 - **Shared Directory (`shared/`)**: Mounted to `/shared` in the container with open read/write
   permissions (`777`), enabling seamless, friction-free file exchange between the host user and
   SQL Server for database backups (`.bak` files), CSV exports, and initialization scripts

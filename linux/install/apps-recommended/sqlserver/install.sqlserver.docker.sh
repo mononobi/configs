@@ -339,13 +339,22 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     printf "%-18s: %s\n" "Superuser" "$SQL_USER"
     printf "%-18s: %s\n" "Password" "$ACTIVE_PASS"
     printf "%-18s: %s\n" "Collation" "$SQL_COLLATION"
-    printf "%-18s: %s\n" "JDBC / URL" "jdbc:sqlserver://localhost:${PORT};encrypt=false;trustServerCertificate=true"
+    printf "%-18s: %s\n" "Host CLI Command" "sqlcmd"
     printf "%-18s: %s\n" "Data Directory" "${TARGET_DIR}/data"
     printf "%-18s: %s\n" "Log Directory" "${TARGET_DIR}/logs"
     printf "%-18s: %s\n" "Shared Directory" "${TARGET_DIR}/shared"
     printf "%-18s: %s\n" "Compose File" "${TARGET_DIR}/docker-compose.yml"
     echo "${DIV_MAIN}"
 done
+
+# Ensure container CLI helper tools are executable and linked into ~/.local/bin
+ensure_local_bin_in_path
+chmod +x "${SCRIPT_DIR}/scripts/sql-docker-cli"
+for tool in "sqlcmd" "bcp" "sql-stop-all" "sql-start-all"; do
+    chmod +x "${SCRIPT_DIR}/scripts/${tool}"
+    ln -sf "${SCRIPT_DIR}/scripts/${tool}" "${HOME}/.local/bin/${tool}"
+done
+echo "[+] Linked CLI utilities (sqlcmd, bcp, sql-stop-all, sql-start-all) to ${HOME}/.local/bin/"
 
 echo ""
 echo "[✓] Microsoft SQL Server Docker setup completed successfully!"

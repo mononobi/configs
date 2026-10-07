@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Description: Starts all Microsoft SQL Server Docker Compose instances configured across ~/.sqlserver/
+# Usage: sql-start-all
+
+set -euo pipefail
+
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+# Source centralized framework colors
+source "${SCRIPT_DIR}/../../../colors.sh"
+
+SQLSERVER_DIR="${HOME}/.sqlserver"
+
+if [[ ! -d "$SQLSERVER_DIR" ]]; then
+    echo -e "${C_YELLOW}[i] No SQL Server instances directory found at ${SQLSERVER_DIR}.${C_RESET}"
+    exit 0
+fi
+
+instances=()
+while IFS= read -r dir; do
+    if [[ -f "${dir}/docker-compose.yml" ]]; then
+        instances+=("$dir")
+    fi
+done < <(find "$SQLSERVER_DIR" -mindepth 1 -maxdepth 1 -type d | sort -V)
+
+if [[ ${#instances[@]} -eq 0 ]]; then
+    echo -e "${C_YELLOW}[i] No SQL Server instances configured in ${SQLSERVER_DIR}.${C_RESET}"
+    exit 0
+fi
+
+started_count=0
+for inst_dir in "${instances[@]}"; do
+    ver="$(basename "$inst_dir")"
+    echo -e "${C_CYAN}[+] Starting SQL Server ${ver} via Docker Compose...${C_RESET}"
+    (cd "$inst_dir" && docker compose up -d)
+    started_count=$((started_count + 1))
+done
+
+echo -e "${C_GREEN}[✓] Successfully launched ${started_count} SQL Server instance(s).${C_RESET}"
