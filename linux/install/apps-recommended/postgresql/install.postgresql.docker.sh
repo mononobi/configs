@@ -147,91 +147,184 @@ if ! is_installed --check "psql"; then
 fi
 
 # Helper: Detect latest stable major version via Docker metadata with clean fallback
-detect_latest_major_version() {
-    local detected=""
+# Helper: Fetch tags once from Docker Hub Registry v2 API with retry and in-memory caching
+CACHED_PG_TAGS=""
+CACHED_POSTGIS_TAGS=""
 
-    # Tier 1: Query Docker Registry v2 API directly for OCI annotations (no layer downloads)
-    local repo="library/postgres"
-    local token
-    token=$(curl -fsSL "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull" 2>/dev/null | jq -r .token || true)
-    if [[ -n "$token" && "$token" != "null" ]]; then
-        detected=$(curl -fsSL -H "Authorization: Bearer ${token}" \
-            -H "Accept: application/vnd.docker.distribution.manifest.v2+json,application/vnd.oci.image.index.v1+json" \
-            "https://registry-1.docker.io/v2/${repo}/manifests/latest" 2>/dev/null \
-            | jq -r '.. | .["org.opencontainers.image.version"]? // empty' 2>/dev/null | head -n 1 | cut -d. -f1 || true)
-    fi
-
-    if [[ -n "$detected" && "$detected" =~ ^[0-9]+$ ]]; then
-        echo "$detected"
+fetch_docker_registry_tags() {
+    local repo="$1"
+    if [[ "$repo" == "library/postgres" && -n "$CACHED_PG_TAGS" ]]; then
+        echo "$CACHED_PG_TAGS"
+        return 0
+    elif [[ "$repo" == "postgis/postgis" && -n "$CACHED_POSTGIS_TAGS" ]]; then
+        echo "$CACHED_POSTGIS_TAGS"
         return 0
     fi
 
-    # Tier 2: Fallback to pulling temporary :latest image, inspecting PG_MAJOR, and removing it
-    local temp_image="postgres:latest"
-    if docker pull -q "$temp_image" >/dev/null 2>&1; then
-        detected=$(docker inspect "$temp_image" --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null \
-            | grep '^PG_MAJOR=' | cut -d= -f2 | head -n 1 || true)
-        # Clean up temporary :latest image immediately
-        docker rmi "$temp_image" >/dev/null 2>&1 || true
-        if [[ -n "$detected" && "$detected" =~ ^[0-9]+$ ]]; then
-            echo "$detected"
+    local token
+    token=$(curl -fsSL --retry 3 --retry-connrefused --retry-delay 1 "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull" 2>/dev/null | jq -r .token || true)
+    if [[ -z "$token" || "$token" == "null" ]]; then
+        return 1
+    fi
+
+    local raw
+    raw=$(curl -fsSL --retry 3 --retry-connrefused --retry-delay 1 \
+        -H "Authorization: Bearer ${token}" \
+        "https://registry-1.docker.io/v2/${repo}/tags/list" 2>/dev/null || true)
+
+    if [[ -z "$raw" ]]; then
+        return 1
+    fi
+
+    if [[ "$repo" == "library/postgres" ]]; then
+        CACHED_PG_TAGS="$raw"
+    elif [[ "$repo" == "postgis/postgis" ]]; then
+        CACHED_POSTGIS_TAGS="$raw"
+    fi
+
+    echo "$raw"
+}
+
+# Helper: Retrieve available major versions from Docker Hub tags (strictly major numbers: e.g. 18 17 16...)
+get_available_postgres_versions() {
+    local repo="library/postgres"
+    if [[ "$USE_POSTGIS" == "true" ]]; then
+        repo="postgis/postgis"
+    fi
+
+    local raw
+    raw=$(fetch_docker_registry_tags "$repo") || return 1
+
+    if [[ "$USE_POSTGIS" == "true" ]]; then
+        # PostGIS tags format: e.g. "18-3.6", "17-3.5". Extract distinct major versions.
+        echo "$raw" | jq -r '.tags[]' 2>/dev/null \
+            | grep -E '^[0-9]+-[0-9.]+$' \
+            | cut -d'-' -f1 \
+            | sort -u -rV \
+            | tr '\n' ' ' \
+            | sed 's/ $//' || true
+    else
+        # Vanilla PostgreSQL tags format: pure major numbers e.g. "18", "17", "16", "15"...
+        echo "$raw" | jq -r '.tags[]' 2>/dev/null \
+            | grep -E '^[0-9]+$' \
+            | sort -rV \
+            | tr '\n' ' ' \
+            | sed 's/ $//' || true
+    fi
+}
+
+# Helper: Detect latest stable major version via Docker Hub tags
+detect_latest_major_version() {
+    local versions
+    versions=$(get_available_postgres_versions) || return 1
+    local latest
+    latest=$(echo "$versions" | awk '{print $1}')
+    if [[ -n "$latest" && "$latest" =~ ^[0-9]+$ ]]; then
+        echo "$latest"
+        return 0
+    fi
+    return 1
+}
+
+# Helper: Resolve appropriate PostGIS tag for a major version from cached registry tags
+resolve_postgis_tag() {
+    local major="$1"
+    local raw
+    raw=$(fetch_docker_registry_tags "postgis/postgis") || true
+
+    if [[ -n "$raw" ]]; then
+        # Check exact tag match first (if user passed full tag e.g. 18-3.6)
+        if echo "$raw" | jq -e --arg t "$major" '.tags[] | select(. == $t)' >/dev/null 2>&1; then
+            echo "$major"
+            return 0
+        fi
+        # Match standard stable Debian release tag: <major>-<postgis_version>
+        local matched
+        matched=$(echo "$raw" | jq -r '.tags[]' 2>/dev/null | grep -E "^${major}-[0-9.]+$" | head -n 1 || true)
+        if [[ -n "$matched" ]]; then
+            echo "$matched"
             return 0
         fi
     fi
 
-    # Tier 3: Query postgresql.org API or default fallback
-    local api_ver
-    api_ver=$(python3 -c '
-import urllib.request, json
-try:
-    with urllib.request.urlopen("https://www.postgresql.org/versions.json", timeout=3) as r:
-        for v in json.loads(r.read().decode()):
-            if v.get("current"):
-                print(v["major"])
-                break
-except Exception:
-    pass
-' 2>/dev/null || true)
-
-    if [[ -n "$api_ver" && "$api_ver" =~ ^[0-9]+$ ]]; then
-        echo "$api_ver"
-        return 0
-    fi
-
-    echo "18"
+    echo "${major}"
 }
 
-# Helper: Resolve appropriate PostGIS tag for a major version
-resolve_postgis_tag() {
-    local major="$1"
-    if curl -fsSL "https://hub.docker.com/v2/repositories/postgis/postgis/tags/${major}" >/dev/null 2>&1; then
-        echo "${major}"
-        return 0
+# Helper: Verify whether a Docker image exists on Docker Hub
+check_docker_image_exists() {
+    local repo="$1"
+    local tag="$2"
+
+    local raw
+    raw=$(fetch_docker_registry_tags "$repo") || true
+    if [[ -n "$raw" ]]; then
+        if echo "$raw" | jq -e --arg t "$tag" '.tags[] | select(. == $t)' >/dev/null 2>&1; then
+            return 0
+        fi
+        return 1
     fi
-    local matched
-    matched=$(curl -fsSL "https://hub.docker.com/v2/repositories/postgis/postgis/tags?page_size=20" 2>/dev/null \
-        | jq -r '.results[].name' 2>/dev/null | grep -E "^${major}-[0-9.]+$" | head -n 1 || true)
-    if [[ -n "$matched" ]]; then
-        echo "$matched"
-        return 0
-    fi
-    echo "${major}"
+
+    local token
+    token=$(curl -fsSL --retry 3 --retry-connrefused --retry-delay 1 "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${repo}:pull" 2>/dev/null | jq -r .token || true)
+    [[ -z "$token" || "$token" == "null" ]] && return 1
+
+    local status
+    status=$(curl -s -o /dev/null -w "%{http_code}" --retry 3 --retry-connrefused --retry-delay 1 -I \
+        -H "Authorization: Bearer ${token}" \
+        -H "Accept: application/vnd.docker.distribution.manifest.v2+json,application/vnd.oci.image.index.v1+json" \
+        "https://registry-1.docker.io/v2/${repo}/manifests/${tag}" 2>/dev/null || true)
+
+    [[ "$status" == "200" ]]
 }
 
 # Resolve target versions: replace missing or 'latest' with detected major version
 if [[ ${#TARGET_VERSIONS[@]} -eq 0 ]]; then
     echo "[+] Auto-detecting latest stable PostgreSQL major version..."
-    LATEST_MAJOR=$(detect_latest_major_version)
+    if ! LATEST_MAJOR=$(detect_latest_major_version); then
+        echo -e "${C_RED}[!] Error: Failed to detect latest PostgreSQL version from Docker Hub (network unreachable).${C_RESET}" >&2
+        exit 1
+    fi
     echo "[+] Detected latest stable PostgreSQL major version: ${LATEST_MAJOR}"
     TARGET_VERSIONS=("${LATEST_MAJOR}")
 else
     for i in "${!TARGET_VERSIONS[@]}"; do
         if [[ "${TARGET_VERSIONS[$i]}" == "latest" ]]; then
-            LATEST_MAJOR=$(detect_latest_major_version)
+            if ! LATEST_MAJOR=$(detect_latest_major_version); then
+                echo -e "${C_RED}[!] Error: Failed to detect latest PostgreSQL version from Docker Hub (network unreachable).${C_RESET}" >&2
+                exit 1
+            fi
             TARGET_VERSIONS[$i]="$LATEST_MAJOR"
         fi
     done
 fi
+
+# Pre-flight check: Verify all requested versions exist BEFORE creating any directories
+echo "[+] Validating requested PostgreSQL version(s) against Docker Hub..."
+for VER in "${TARGET_VERSIONS[@]}"; do
+    if [[ "$USE_POSTGIS" == "true" ]]; then
+        probe_tag=$(resolve_postgis_tag "$VER")
+        if ! check_docker_image_exists "postgis/postgis" "$probe_tag"; then
+            echo -e "${C_RED}[!] Error: PostgreSQL PostGIS release '${VER}' (image: postgis/postgis:${probe_tag}) does not exist on Docker Hub.${C_RESET}" >&2
+            available_versions=$(get_available_postgres_versions || true)
+            if [[ -n "$available_versions" ]]; then
+                echo -e "${C_YELLOW}[i] Available release versions: ${available_versions// /, }${C_RESET}" >&2
+            fi
+            echo -e "${C_YELLOW}[i] No directories or configurations were created.${C_RESET}" >&2
+            exit 1
+        fi
+    else
+        if ! check_docker_image_exists "library/postgres" "$VER"; then
+            echo -e "${C_RED}[!] Error: PostgreSQL release '${VER}' (image: postgres:${VER}) does not exist on Docker Hub.${C_RESET}" >&2
+            available_versions=$(get_available_postgres_versions || true)
+            if [[ -n "$available_versions" ]]; then
+                echo -e "${C_YELLOW}[i] Available release versions: ${available_versions// /, }${C_RESET}" >&2
+            fi
+            echo -e "${C_YELLOW}[i] No directories or configurations were created.${C_RESET}" >&2
+            exit 1
+        fi
+    fi
+done
+echo "[✓] Requested PostgreSQL version(s) verified."
 
 # Ensure base directory ~/.postgres exists and is owned by host user
 mkdir -p "$HOME/.postgres"

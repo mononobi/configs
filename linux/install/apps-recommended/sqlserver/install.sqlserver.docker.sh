@@ -119,83 +119,81 @@ echo "[+] Starting Microsoft SQL Server Docker setup..."
 require_app docker ufw lsof curl
 require_app python --fast
 
-# Helper: Detect latest stable SQL Server release year from MCR
-detect_latest_release_year() {
-    local detected
-    detected=$(curl -fsSL "https://mcr.microsoft.com/v2/mssql/server/tags/list" 2>/dev/null \
-        | jq -r '.tags[]' 2>/dev/null \
+# Helper: Fetch tags once from MCR with retry and in-memory caching
+CACHED_MCR_TAGS=""
+fetch_mcr_tags() {
+    if [[ -z "$CACHED_MCR_TAGS" ]]; then
+        CACHED_MCR_TAGS=$(curl -fsSL --retry 3 --retry-connrefused --retry-delay 1 "https://mcr.microsoft.com/v2/mssql/server/tags/list" 2>/dev/null || true)
+    fi
+    echo "$CACHED_MCR_TAGS"
+}
+
+# Helper: Retrieve available release years from MCR tags (strictly major years: e.g. 2025 2022 2019 2017)
+get_available_release_years() {
+    local raw
+    raw=$(fetch_mcr_tags)
+    [[ -z "$raw" ]] && return 1
+
+    echo "$raw" | jq -r '.tags[]' 2>/dev/null \
         | grep -E '^[0-9]{4}-latest$' \
         | sed 's/-latest//' \
-        | sort -V \
-        | tail -n 1 || true)
+        | sort -rV \
+        | tr '\n' ' ' \
+        | sed 's/ $//' || true
+}
 
-    if [[ -n "$detected" && "$detected" =~ ^[0-9]{4}$ ]]; then
-        echo "$detected"
+# Helper: Detect latest stable SQL Server release year from MCR tags
+detect_latest_release_year() {
+    local years
+    years=$(get_available_release_years) || return 1
+    local latest
+    latest=$(echo "$years" | awk '{print $1}')
+    if [[ -n "$latest" && "$latest" =~ ^[0-9]{4}$ ]]; then
+        echo "$latest"
         return 0
     fi
-
-    echo "2025"
+    return 1
 }
 
 # Resolve target versions: replace missing or 'latest' with detected release year
 if [[ ${#TARGET_VERSIONS[@]} -eq 0 ]]; then
     echo "[+] Auto-detecting latest stable SQL Server release year from MCR..."
-    LATEST_YEAR=$(detect_latest_release_year)
+    if ! LATEST_YEAR=$(detect_latest_release_year); then
+        echo -e "${C_RED}[!] Error: Failed to detect latest SQL Server release from MCR (network unreachable).${C_RESET}" >&2
+        exit 1
+    fi
     echo "[+] Detected latest stable SQL Server release: ${LATEST_YEAR}"
     TARGET_VERSIONS=("${LATEST_YEAR}")
 else
     for i in "${!TARGET_VERSIONS[@]}"; do
         if [[ "${TARGET_VERSIONS[$i]}" == "latest" ]]; then
-            LATEST_YEAR=$(detect_latest_release_year)
+            if ! LATEST_YEAR=$(detect_latest_release_year); then
+                echo -e "${C_RED}[!] Error: Failed to detect latest SQL Server release from MCR (network unreachable).${C_RESET}" >&2
+                exit 1
+            fi
             TARGET_VERSIONS[$i]="$LATEST_YEAR"
         fi
     done
 fi
 
-# Helper: Retrieve available release years from MCR tags
-get_available_release_years() {
-    local years
-    years=$(curl -fsSL "https://mcr.microsoft.com/v2/mssql/server/tags/list" 2>/dev/null \
-        | jq -r '.tags[]' 2>/dev/null \
-        | grep -E '^[0-9]{4}-latest$' \
-        | sed 's/-latest//' \
-        | sort -rV \
-        | tr '\n' ' ' \
-        | sed 's/ $//' || true)
-
-    if [[ -n "$years" ]]; then
-        echo "$years"
-        return 0
-    fi
-
-    echo "2025 2022 2019 2017"
-}
-
-# Helper: Verify whether an image tag exists on MCR via OCI manifest probe
+# Helper: Verify whether an image tag exists on MCR via cached tags or manifest probe fallback
 check_sqlserver_image_exists() {
     local tag="$1"
-    local status
-    status=$(curl -s -o /dev/null -w "%{http_code}" -I \
-        -H "Accept: application/vnd.docker.distribution.manifest.v2+json,application/vnd.oci.image.index.v1+json" \
-        "https://mcr.microsoft.com/v2/mssql/server/manifests/${tag}" 2>/dev/null || true)
-
-    if [[ "$status" == "200" ]]; then
-        return 0
-    elif [[ "$status" == "404" ]]; then
+    local raw
+    raw=$(fetch_mcr_tags)
+    if [[ -n "$raw" ]]; then
+        if echo "$raw" | jq -e --arg t "$tag" '.tags[] | select(. == $t)' >/dev/null 2>&1; then
+            return 0
+        fi
         return 1
     fi
 
-    # Fallback 1: Local Docker cache inspection
-    if docker image inspect "mcr.microsoft.com/mssql/server:${tag}" >/dev/null 2>&1; then
-        return 0
-    fi
+    local status
+    status=$(curl -s -o /dev/null -w "%{http_code}" --retry 3 --retry-connrefused --retry-delay 1 -I \
+        -H "Accept: application/vnd.docker.distribution.manifest.v2+json,application/vnd.oci.image.index.v1+json" \
+        "https://mcr.microsoft.com/v2/mssql/server/manifests/${tag}" 2>/dev/null || true)
 
-    # Fallback 2: Known official release years
-    if [[ "$tag" =~ ^(2025|2022|2019|2017)-latest$ ]]; then
-        return 0
-    fi
-
-    return 1
+    [[ "$status" == "200" ]]
 }
 
 # Pre-flight check: Verify all requested versions exist BEFORE creating any directories
@@ -210,8 +208,10 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 
     if ! check_sqlserver_image_exists "$probe_tag"; then
         echo -e "${C_RED}[!] Error: Microsoft SQL Server release '${VER}' (tag: ${probe_tag}) does not exist on Microsoft Container Registry (MCR).${C_RESET}" >&2
-        available_years=$(get_available_release_years)
-        echo -e "${C_YELLOW}[i] Available release years: ${available_years// /, }${C_RESET}" >&2
+        available_years=$(get_available_release_years || true)
+        if [[ -n "$available_years" ]]; then
+            echo -e "${C_YELLOW}[i] Available release years: ${available_years// /, }${C_RESET}" >&2
+        fi
         echo -e "${C_YELLOW}[i] No directories or configurations were created.${C_RESET}" >&2
         exit 1
     fi

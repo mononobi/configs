@@ -136,6 +136,19 @@ informational message:
 ./install.postgresql.docker.sh -p "mysecurepass" -u "developer" -d "production_dev"
 ```
 
+### Pre-flight Version Validation
+
+Before creating any local directories (`data/`, `config/`, `initdb.d/`, `logs/`, `shared/`),
+modifying permissions, or generating Compose files, the installer queries Docker Hub to verify
+that all requested versions/tags exist (for both standard PostgreSQL and PostGIS).
+
+If an invalid or unsupported version is specified (e.g. `99`):
+
+- The installer fails immediately with a clear error message.
+- It displays the list of major versions available on Docker Hub (e.g.
+  `18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8`).
+- Zero directories, configurations, or partial artifacts are created on disk.
+
 ---
 
 ## Connection Credentials & Defaults
