@@ -57,6 +57,18 @@ cd linux/install/apps-recommended/sqlserver
 ./install.sqlserver.docker.sh -p "MyStrongPass123!"
 ```
 
+### Pre-flight Version Validation
+
+Before creating any local directories (`data/`, `logs/`, `shared/`), modifying permissions, or
+generating Compose files, the installer queries the Microsoft Container Registry (MCR) to
+verify that all requested versions/tags exist.
+
+If an invalid or unsupported version is specified (e.g. `2014` or `2099`):
+
+- The installer fails immediately with a clear error message.
+- It displays the list of officially available releases (`2025`, `2022`, `2019`, `2017`).
+- Zero directories, configurations, or partial artifacts are created on disk.
+
 ---
 
 ## Host CLI Utilities (`sqlcmd`, `bcp`)

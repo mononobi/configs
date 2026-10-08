@@ -151,6 +151,72 @@ else
         fi
     done
 fi
+
+# Helper: Retrieve available release years from MCR tags
+get_available_release_years() {
+    local years
+    years=$(curl -fsSL "https://mcr.microsoft.com/v2/mssql/server/tags/list" 2>/dev/null \
+        | jq -r '.tags[]' 2>/dev/null \
+        | grep -E '^[0-9]{4}-latest$' \
+        | sed 's/-latest//' \
+        | sort -rV \
+        | tr '\n' ' ' \
+        | sed 's/ $//' || true)
+
+    if [[ -n "$years" ]]; then
+        echo "$years"
+        return 0
+    fi
+
+    echo "2025 2022 2019 2017"
+}
+
+# Helper: Verify whether an image tag exists on MCR via OCI manifest probe
+check_sqlserver_image_exists() {
+    local tag="$1"
+    local status
+    status=$(curl -s -o /dev/null -w "%{http_code}" -I \
+        -H "Accept: application/vnd.docker.distribution.manifest.v2+json,application/vnd.oci.image.index.v1+json" \
+        "https://mcr.microsoft.com/v2/mssql/server/manifests/${tag}" 2>/dev/null || true)
+
+    if [[ "$status" == "200" ]]; then
+        return 0
+    elif [[ "$status" == "404" ]]; then
+        return 1
+    fi
+
+    # Fallback 1: Local Docker cache inspection
+    if docker image inspect "mcr.microsoft.com/mssql/server:${tag}" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    # Fallback 2: Known official release years
+    if [[ "$tag" =~ ^(2025|2022|2019|2017)-latest$ ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+# Pre-flight check: Verify all requested versions exist BEFORE creating any directories
+echo "[+] Validating requested SQL Server version(s) against MCR..."
+for VER in "${TARGET_VERSIONS[@]}"; do
+    year="${VER%-latest}"
+    if [[ "$VER" == *"-latest" || "$VER" == *"-"* ]]; then
+        probe_tag="$VER"
+    else
+        probe_tag="${year}-latest"
+    fi
+
+    if ! check_sqlserver_image_exists "$probe_tag"; then
+        echo -e "${C_RED}[!] Error: Microsoft SQL Server release '${VER}' (tag: ${probe_tag}) does not exist on Microsoft Container Registry (MCR).${C_RESET}" >&2
+        available_years=$(get_available_release_years)
+        echo -e "${C_YELLOW}[i] Available release years: ${available_years// /, }${C_RESET}" >&2
+        echo -e "${C_YELLOW}[i] No directories or configurations were created.${C_RESET}" >&2
+        exit 1
+    fi
+done
+echo "[✓] Requested SQL Server version(s) verified."
 # Helper: Generate a compliant UUID v4 password for SQL Server
 generate_sa_password() {
     echo "SqlPass-$(python3 -c 'import uuid; print(uuid.uuid4())')!"
