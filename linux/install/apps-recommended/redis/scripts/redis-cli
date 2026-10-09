@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Description: Wrapper for redis-cli executing inside Redis Docker container
+# Exposes container redis-cli with full interactive TTY and pipe/redirection support.
+
+set -euo pipefail
+
+CONTAINER_NAME="redis"
+REDIS_DIR="${HOME}/.redis"
+
+# If docker-compose.yml exists, inspect container_name if customized
+if [[ -f "${REDIS_DIR}/docker-compose.yml" ]]; then
+    c_name=$(grep -E '^\s*container_name:' "${REDIS_DIR}/docker-compose.yml" | head -n 1 | awk '{print $2}' || true)
+    [[ -n "$c_name" ]] && CONTAINER_NAME="$c_name"
+fi
+
+# Check if container exists or is running
+if ! docker ps --filter "name=^/${CONTAINER_NAME}$" --format '{{.Names}}' 2>/dev/null | grep -qx "${CONTAINER_NAME}"; then
+    if docker ps -a --filter "name=^/${CONTAINER_NAME}$" --format '{{.Names}}' 2>/dev/null | grep -qx "${CONTAINER_NAME}"; then
+        echo "[+] Redis container '${CONTAINER_NAME}' is stopped. Starting container..." >&2
+        docker start "${CONTAINER_NAME}" >/dev/null
+    else
+        echo "[!] Error: Redis container '${CONTAINER_NAME}' not found." >&2
+        echo "Please run install.redis.docker.sh to set up Redis." >&2
+        exit 1
+    fi
+fi
+
+# Determine TTY flags: use -it only when both STDIN and STDOUT are attached to a terminal
+docker_flags="-i"
+if [[ -t 0 && -t 1 ]]; then
+    docker_flags="-it"
+fi
+
+exec docker exec $docker_flags "$CONTAINER_NAME" redis-cli "$@"

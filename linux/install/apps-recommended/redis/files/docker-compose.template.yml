@@ -1,0 +1,14 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT}:6379"
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./data:/data
+      - ./config:/usr/local/etc/redis
+      - ./logs:/var/log/redis
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
