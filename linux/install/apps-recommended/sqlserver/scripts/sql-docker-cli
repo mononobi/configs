@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# Description: Shared execution dispatcher for Microsoft SQL Server container CLI tools (sqlcmd, bcp)
+# Description: Shared execution dispatcher for Microsoft SQL Server container CLI tools (sqlcmd, sql-bcp)
 # Note: Connects directly if only 1 version exists; presents a numbered selection menu if multiple.
 
 set -euo pipefail
 
 COMMAND_NAME="${1:-sqlcmd}"
 shift || true
+
+DISPLAY_TOOL="$COMMAND_NAME"
+[[ "$COMMAND_NAME" == "bcp" ]] && DISPLAY_TOOL="sql-bcp"
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"
@@ -149,7 +152,7 @@ execute_in_container() {
 
     # Handle --version: print only the version header without help
     if [[ "$is_version" == "true" ]]; then
-        echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
+        echo -e "${C_GREEN}[+] Executing ${DISPLAY_TOOL} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
         if [[ "$COMMAND_NAME" == "sqlcmd" ]]; then
             docker exec $docker_flags "$name" "$bin_path" "-?" 2>&1 | head -n 3
             exit 0
@@ -160,7 +163,7 @@ execute_in_container() {
 
     # Handle --help: print full usage help
     if [[ "$is_help" == "true" ]]; then
-        echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
+        echo -e "${C_GREEN}[+] Executing ${DISPLAY_TOOL} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
         exec docker exec $docker_flags "$name" "$bin_path" "-?"
     fi
 
@@ -197,7 +200,7 @@ execute_in_container() {
     final_args+=("$@")
 
     # Print connection notice to stderr so it does not corrupt stdout redirects
-    echo -e "${C_GREEN}[+] Executing ${COMMAND_NAME} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
+    echo -e "${C_GREEN}[+] Executing ${DISPLAY_TOOL} on container ${C_BOLD}${name}${C_RESET}${C_GREEN} (SQL Server ${ver}, port ${port})...${C_RESET}" >&2
 
     exec docker exec $docker_flags "$name" "$bin_path" "${final_args[@]}"
 }
@@ -247,7 +250,7 @@ for arg in "${FORWARD_ARGS[@]}"; do
             done
             other_list="$(printf ", %s" "${other_instances[@]}")"
             other_list="${other_list:2}"
-            echo -e "${C_YELLOW}[i] Note: Showing ${COMMAND_NAME} from latest instance (${c_versions[$latest_idx]}). Other available instances: ${other_list} (use --port <port> or --instance <name> to query specific instance).${C_RESET}" >&2
+            echo -e "${C_YELLOW}[i] Note: Showing ${DISPLAY_TOOL} from latest instance (${c_versions[$latest_idx]}). Other available instances: ${other_list} (use --port <port> or --instance <name> to query specific instance).${C_RESET}" >&2
         fi
         execute_in_container "$latest_idx" "${FORWARD_ARGS[@]}"
     fi
@@ -260,7 +263,7 @@ fi
 
 # Multiple instances and no targeted flag provided: present interactive menu on stderr
 echo "" >&2
-echo -e "${C_BOLD}${C_CYAN}Available Microsoft SQL Server Instances for ${COMMAND_NAME}:${C_RESET}" >&2
+echo -e "${C_BOLD}${C_CYAN}Available Microsoft SQL Server Instances for ${DISPLAY_TOOL}:${C_RESET}" >&2
 echo "$DIV_SUB" >&2
 printf "  ${C_BOLD}%-4s %-26s %-14s %-8s${C_RESET}\n" "#" "Container" "Version" "Port" >&2
 echo "$DIV_SUB" >&2

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Description: Wrapper for bcp executing inside Microsoft SQL Server Docker container
+# Description: Wrapper for sql-bcp (Bulk Copy Program) executing inside Microsoft SQL Server Docker container
 
 SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
 SCRIPT_DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" && pwd)"

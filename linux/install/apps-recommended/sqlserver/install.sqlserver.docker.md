@@ -71,7 +71,7 @@ If an invalid or unsupported version is specified (e.g. `2014` or `2099`):
 
 ---
 
-## Host CLI Utilities (`sqlcmd`, `bcp`)
+## Host CLI Utilities (`sqlcmd`, `sql-bcp`)
 
 The installer automatically exposes wrapper utilities in `~/.local/bin/` so you can interact
 with your SQL Server instances directly from your host shell without running `docker exec` or
@@ -83,8 +83,8 @@ looking up generated credentials:
   - Automatically selects the running instance if only one is configured, or displays an
     interactive menu if multiple versions exist.
   - Can directly target specific instances via `--instance <name|year>` or `--port <port>`.
-- **`bcp`**: High-speed bulk copy utility for importing and exporting tables to/from text or
-  CSV files.
+- **`sql-bcp`**: High-speed bulk copy utility for importing and exporting tables to/from text
+  or CSV files.
 - **`sql-stop-all`**: Convenience command to stop all running SQL Server instances (`-d` to
   down).
 - **`sql-start-all`**: Convenience command to launch all configured SQL Server instances.
