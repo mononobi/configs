@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 
 NODE_MAJOR=""
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
-FORCE=false
+FORCE="${FORCE:-false}"
 
 show_help() {
     cat <<EOF
@@ -24,7 +24,7 @@ Arguments:
 
 Options:
   -v, --version VER     Specify a custom Node.js major version (e.g. 24, 22, 20)
-  -F, --force           Force reinstallation even if already installed
+  -f, -F, --force       Force reinstallation even if already installed
   --no-update           Skip apt update before installation
   -h, --help            Show this help message and exit
 
@@ -45,7 +45,7 @@ while [[ $# -gt 0 ]]; do
             SKIP_UPDATE=true
             shift
             ;;
-        -F|--force)
+        -f|-F|--force)
             FORCE=true
             shift
             ;;
@@ -65,6 +65,15 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+setup_symlinks() {
+    if [[ -f "${SCRIPT_DIR}/yarn-refresh-key" ]]; then
+        ensure_local_bin_in_path
+        chmod +x "${SCRIPT_DIR}/yarn-refresh-key"
+        ln -sf "${SCRIPT_DIR}/yarn-refresh-key" "${HOME}/.local/bin/yarn-refresh-key"
+        echo "[+] Linked yarn-refresh-key helper into ${HOME}/.local/bin/yarn-refresh-key"
+    fi
+}
+
 NODE_INSTALLED=false
 YARN_INSTALLED=false
 
@@ -78,6 +87,7 @@ fi
 
 # Skip early if both Node.js and Yarn are already installed
 if [[ "$NODE_INSTALLED" == true && "$YARN_INSTALLED" == true ]]; then
+    setup_symlinks
     exit 0
 fi
 
@@ -140,5 +150,7 @@ fi
 node -v
 npm -v
 yarn -v
+
+setup_symlinks
 
 echo "[✓] Node.js, NPM & Yarn setup completed successfully!"
