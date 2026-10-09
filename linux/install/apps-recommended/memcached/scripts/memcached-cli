@@ -1,0 +1,624 @@
+#!/usr/bin/env python3
+"""
+memcached-cli: Production-grade interactive and scripted CLI client for Memcached.
+Provides Redis-like ergonomics, multi-key operations (del, mget, mset, keys, dump),
+and memcached-tool diagnostic inspections (slabs/display, items, stats).
+"""
+
+import sys
+import os
+import socket
+import re
+import shlex
+import fnmatch
+import subprocess
+
+try:
+    import readline
+except ImportError:
+    readline = None
+
+HISTORY_FILE = os.path.expanduser("~/.memcached_history")
+DEFAULT_HOST = "127.0.0.1"
+DEFAULT_PORT = 11211
+
+ANSI_RESET = "\033[0m"
+ANSI_BOLD = "\033[1m"
+ANSI_CYAN = "\033[36m"
+ANSI_GREEN = "\033[32m"
+ANSI_YELLOW = "\033[33m"
+ANSI_RED = "\033[31m"
+
+def colorize(text, color):
+    if sys.stdout.isatty():
+        return f"{color}{text}{ANSI_RESET}"
+    return text
+
+def resolve_target():
+    """Detects port and container name from ~/.memcached/docker-compose.yml if available."""
+    host = DEFAULT_HOST
+    port = DEFAULT_PORT
+    c_name = "memcached"
+
+    compose_path = os.path.expanduser("~/.memcached/docker-compose.yml")
+    if os.path.isfile(compose_path):
+        try:
+            with open(compose_path, "r", encoding="utf-8") as f:
+                content = f.read()
+                m_port = re.search(r'["\']?([0-9]+):11211["\']?', content)
+                if m_port:
+                    port = int(m_port.group(1))
+                m_name = re.search(r'container_name:\s*([^\s]+)', content)
+                if m_name:
+                    c_name = m_name.group(1)
+        except Exception:
+            pass
+    return host, port, c_name
+
+def ensure_container_running(container_name):
+    """Checks if the Docker container is running; auto-starts if stopped."""
+    try:
+        check = subprocess.run(
+            ["docker", "ps", "--filter", f"name=^/{container_name}$", "--format", "{{.Names}}"],
+            capture_output=True, text=True, check=False
+        )
+        if container_name in check.stdout.strip().splitlines():
+            return True
+        # Check if container exists in stopped state
+        check_all = subprocess.run(
+            ["docker", "ps", "-a", "--filter", f"name=^/{container_name}$", "--format", "{{.Names}}"],
+            capture_output=True, text=True, check=False
+        )
+        if container_name in check_all.stdout.strip().splitlines():
+            sys.stderr.write(f"[+] Starting stopped Memcached container '{container_name}'...\n")
+            subprocess.run(["docker", "start", container_name], capture_output=True, check=False)
+            return True
+    except FileNotFoundError:
+        pass
+    return True
+
+class MemcachedClient:
+    def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT, timeout=5.0):
+        self.host = host
+        self.port = port
+        self.timeout = timeout
+        self.sock = None
+        self.reader = None
+
+    def connect(self):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.settimeout(self.timeout)
+        self.sock.connect((self.host, self.port))
+        self.reader = self.sock.makefile("rb")
+
+    def close(self):
+        if self.sock:
+            try:
+                self.sock.close()
+            except Exception:
+                pass
+            self.sock = None
+            self.reader = None
+
+    def send_raw(self, data: bytes):
+        if not self.sock:
+            self.connect()
+        self.sock.sendall(data)
+
+    def read_line(self) -> str:
+        line = self.reader.readline()
+        if not line:
+            raise ConnectionResetError("Connection closed by server")
+        return line.decode("utf-8", errors="replace").rstrip("\r\n")
+
+    def execute_raw(self, cmd_line: str) -> list:
+        """Sends raw command string and returns response lines until terminator."""
+        self.send_raw(cmd_line.strip().encode("utf-8") + b"\r\n")
+        lines = []
+        first = self.read_line()
+        lines.append(first)
+
+        # Single-line responses
+        if first in ("STORED", "NOT_STORED", "EXISTS", "NOT_FOUND", "DELETED", "OK", "ERROR") or \
+           first.startswith("CLIENT_ERROR") or first.startswith("SERVER_ERROR") or \
+           first.startswith("VERSION") or first.isdigit():
+            return lines
+
+        # Multi-line responses (stats, get, cachedump)
+        if first.startswith("VALUE") or first.startswith("STAT") or first.startswith("ITEM"):
+            current = first
+            while True:
+                if current.startswith("VALUE"):
+                    # VALUE <key> <flags> <bytes> [cas]
+                    parts = current.split()
+                    if len(parts) >= 4 and parts[3].isdigit():
+                        byte_count = int(parts[3])
+                        val_data = self.reader.read(byte_count)
+                        self.reader.read(2)  # consume \r\n
+                        lines.append(val_data.decode("utf-8", errors="replace"))
+                if current == "END":
+                    break
+                current = self.read_line()
+                lines.append(current)
+        return lines
+
+    def ping(self) -> str:
+        res = self.execute_raw("version")
+        if res and res[0].startswith("VERSION"):
+            return "PONG"
+        return "ERROR"
+
+    def get(self, key: str):
+        res = self.execute_raw(f"get {key}")
+        for i, line in enumerate(res):
+            if line.startswith(f"VALUE {key}") and i + 1 < len(res):
+                return res[i + 1]
+        return None
+
+    def mget(self, keys: list) -> dict:
+        if not keys:
+            return {}
+        cmd = "get " + " ".join(keys)
+        res = self.execute_raw(cmd)
+        results = {k: None for k in keys}
+        i = 0
+        while i < len(res):
+            line = res[i]
+            if line.startswith("VALUE "):
+                parts = line.split()
+                if len(parts) >= 2:
+                    k = parts[1]
+                    if i + 1 < len(res) and res[i + 1] != "END":
+                        results[k] = res[i + 1]
+                        i += 1
+            i += 1
+        return results
+
+    def set(self, key: str, value: str, exptime: int = 0, flags: int = 0) -> str:
+        val_bytes = value.encode("utf-8")
+        cmd = f"set {key} {flags} {exptime} {len(val_bytes)}\r\n".encode("utf-8") + val_bytes + b"\r\n"
+        self.send_raw(cmd)
+        return self.read_line()
+
+    def add(self, key: str, value: str, exptime: int = 0) -> str:
+        val_bytes = value.encode("utf-8")
+        cmd = f"add {key} 0 {exptime} {len(val_bytes)}\r\n".encode("utf-8") + val_bytes + b"\r\n"
+        self.send_raw(cmd)
+        return self.read_line()
+
+    def replace(self, key: str, value: str, exptime: int = 0) -> str:
+        val_bytes = value.encode("utf-8")
+        cmd = f"replace {key} 0 {exptime} {len(val_bytes)}\r\n".encode("utf-8") + val_bytes + b"\r\n"
+        self.send_raw(cmd)
+        return self.read_line()
+
+    def append(self, key: str, value: str) -> str:
+        val_bytes = value.encode("utf-8")
+        cmd = f"append {key} 0 0 {len(val_bytes)}\r\n".encode("utf-8") + val_bytes + b"\r\n"
+        self.send_raw(cmd)
+        return self.read_line()
+
+    def prepend(self, key: str, value: str) -> str:
+        val_bytes = value.encode("utf-8")
+        cmd = f"prepend {key} 0 0 {len(val_bytes)}\r\n".encode("utf-8") + val_bytes + b"\r\n"
+        self.send_raw(cmd)
+        return self.read_line()
+
+    def delete(self, key: str) -> str:
+        self.send_raw(f"delete {key}\r\n".encode("utf-8"))
+        return self.read_line()
+
+    def del_multiple(self, keys: list) -> int:
+        deleted_count = 0
+        for k in keys:
+            resp = self.delete(k)
+            if resp == "DELETED":
+                deleted_count += 1
+        return deleted_count
+
+    def exists(self, key: str) -> int:
+        val = self.get(key)
+        return 1 if val is not None else 0
+
+    def incr(self, key: str, val: int = 1) -> str:
+        self.send_raw(f"incr {key} {val}\r\n".encode("utf-8"))
+        return self.read_line()
+
+    def decr(self, key: str, val: int = 1) -> str:
+        self.send_raw(f"decr {key} {val}\r\n".encode("utf-8"))
+        return self.read_line()
+
+    def touch(self, key: str, exptime: int) -> str:
+        self.send_raw(f"touch {key} {exptime}\r\n".encode("utf-8"))
+        return self.read_line()
+
+    def flush_all(self) -> str:
+        self.send_raw(b"flush_all\r\n")
+        return self.read_line()
+
+    def version(self) -> str:
+        res = self.execute_raw("version")
+        return res[0] if res else ""
+
+    def get_all_keys(self) -> list:
+        """Retrieves all stored keys by querying slab item cachedumps."""
+        items_stats = self.execute_raw("stats items")
+        slab_ids = set()
+        for line in items_stats:
+            m = re.match(r"STAT items:(\d+):number\s+(\d+)", line)
+            if m and int(m.group(2)) > 0:
+                slab_ids.add(m.group(1))
+
+        keys = []
+        for slab in sorted(slab_ids, key=int):
+            dump_lines = self.execute_raw(f"stats cachedump {slab} 0")
+            for line in dump_lines:
+                m = re.match(r"ITEM\s+([^\s]+)", line)
+                if m:
+                    keys.append(m.group(1))
+        return sorted(list(set(keys)))
+
+    def slabs_table(self) -> str:
+        """Formats slab statistics matching memcached-tool display."""
+        slabs_stats = self.execute_raw("stats slabs")
+        items_stats = self.execute_raw("stats items")
+
+        slabs_data = {}
+        for line in slabs_stats:
+            m = re.match(r"STAT (\d+):([^\s]+)\s+(.+)", line)
+            if m:
+                s_id = int(m.group(1))
+                key = m.group(2)
+                val = m.group(3)
+                if s_id not in slabs_data:
+                    slabs_data[s_id] = {}
+                slabs_data[s_id][key] = val
+
+        for line in items_stats:
+            m = re.match(r"STAT items:(\d+):([^\s]+)\s+(.+)", line)
+            if m:
+                s_id = int(m.group(1))
+                key = m.group(2)
+                val = m.group(3)
+                if s_id not in slabs_data:
+                    slabs_data[s_id] = {}
+                slabs_data[s_id][f"item_{key}"] = val
+
+        if not slabs_data:
+            return "No active slabs allocated."
+
+        output = []
+        header = f"{'#':<4} {'Chunk Size':<12} {'Pages':<8} {'Total Chunks':<14} {'Used Items':<12} {'Evicted':<10}"
+        output.append(colorize(header, ANSI_BOLD))
+        output.append("-" * len(header))
+
+        for s_id in sorted(slabs_data.keys()):
+            data = slabs_data[s_id]
+            chunk_size = f"{data.get('chunk_size', '0')} B"
+            pages = data.get('total_pages', '0')
+            chunks = data.get('chunks_per_page', '0')
+            used = data.get('used_chunks', data.get('item_number', '0'))
+            evicted = data.get('item_evicted', '0')
+            output.append(f"{s_id:<4} {chunk_size:<12} {pages:<8} {chunks:<14} {used:<12} {evicted:<10}")
+        return "\n".join(output)
+
+COMMAND_LIST = [
+    "get", "set", "mget", "mset", "del", "delete", "exists", "keys", "dump",
+    "add", "replace", "append", "prepend", "incr", "decr", "touch",
+    "flush", "flush_all", "stats", "slabs", "display", "items", "version", "ping",
+    "help", "quit", "exit"
+]
+
+def print_help():
+    help_text = f"""
+{colorize("Memcached CLI - Available Commands", ANSI_BOLD)}
+{colorize("Standard Key/Value Operations:", ANSI_CYAN)}
+  set <key> <val> [ttl]        Set a key with optional TTL in seconds
+  get <key>                    Retrieve the value of a key
+  add <key> <val> [ttl]        Set value only if key does not exist
+  replace <key> <val> [ttl]    Set value only if key already exists
+  append <key> <val>           Append data to an existing key
+  prepend <key> <val>          Prepend data to an existing key
+  touch <key> <ttl>            Update the expiration time of a key
+  incr <key> [val]             Increment integer key value (default: 1)
+  decr <key> [val]             Decrement integer key value (default: 1)
+
+{colorize("Redis-Style Multi-Key Commands:", ANSI_CYAN)}
+  del <k1> [k2 ...]            Delete one or multiple keys (returns count deleted)
+  mget <k1> [k2 ...]           Retrieve multiple keys at once
+  mset <k1> <v1> [k2 <v2> ...] Batch set multiple key-value pairs
+  exists <key>                 Check if key exists (returns 1 or 0)
+  keys [pattern]               List cached keys matching optional glob pattern (e.g. user:*)
+  dump                         Dump all active keys and their values
+  ping                         Check server connectivity (returns PONG)
+
+{colorize("Server & Diagnostic Commands (memcached-tool):", ANSI_CYAN)}
+  stats [type]                 Server statistics (general, items, slabs, sizes, settings)
+  slabs / display              Display formatted memory slab allocation table
+  items                        Inspect item counts and age per slab
+  flush / flush_all            Invalidate all cached items
+  version                      Display Memcached server version
+  quit / exit                  Exit the client
+"""
+    print(help_text.strip())
+
+def run_command(client: MemcachedClient, cmd_args: list) -> bool:
+    """Executes a parsed command. Returns False on quit/exit, True otherwise."""
+    if not cmd_args:
+        return True
+
+    cmd = cmd_args[0].lower()
+    args = cmd_args[1:]
+
+    try:
+        if cmd in ("quit", "exit"):
+            return False
+
+        elif cmd == "help":
+            print_help()
+
+        elif cmd == "ping":
+            print(client.ping())
+
+        elif cmd == "version":
+            print(client.version())
+
+        elif cmd == "get":
+            if not args:
+                print("(error) ERR wrong number of arguments for 'get' command")
+            elif len(args) == 1:
+                val = client.get(args[0])
+                if val is None:
+                    print("(nil)")
+                else:
+                    print(val)
+            else:
+                # If multiple keys passed to get, treat as mget
+                res = client.mget(args)
+                for i, k in enumerate(args, 1):
+                    v = res.get(k)
+                    v_str = f'"{v}"' if v is not None else "(nil)"
+                    print(f'{i}) "{k}": {v_str}')
+
+        elif cmd == "mget":
+            if not args:
+                print("(error) ERR wrong number of arguments for 'mget' command")
+            else:
+                res = client.mget(args)
+                for i, k in enumerate(args, 1):
+                    v = res.get(k)
+                    v_str = f'"{v}"' if v is not None else "(nil)"
+                    print(f'{i}) "{k}": {v_str}')
+
+        elif cmd == "set":
+            if len(args) < 2:
+                print("(error) ERR wrong number of arguments for 'set' command")
+            else:
+                key = args[0]
+                val = args[1]
+                ttl = int(args[2]) if len(args) > 2 and args[2].isdigit() else 0
+                print(client.set(key, val, ttl))
+
+        elif cmd == "mset":
+            if len(args) < 2 or len(args) % 2 != 0:
+                print("(error) ERR wrong number of arguments for 'mset' command (requires key value pairs)")
+            else:
+                all_ok = True
+                for i in range(0, len(args), 2):
+                    res = client.set(args[i], args[i+1])
+                    if res != "STORED":
+                        all_ok = False
+                print("OK" if all_ok else "ERROR")
+
+        elif cmd in ("del", "delete"):
+            if not args:
+                print("(error) ERR wrong number of arguments for 'del' command")
+            elif len(args) == 1:
+                res = client.delete(args[0])
+                print("(integer) 1" if res == "DELETED" else "(integer) 0")
+            else:
+                count = client.del_multiple(args)
+                print(f"(integer) {count}")
+
+        elif cmd == "exists":
+            if not args:
+                print("(error) ERR wrong number of arguments for 'exists' command")
+            else:
+                print(f"(integer) {client.exists(args[0])}")
+
+        elif cmd in ("keys", "dump"):
+            all_keys = client.get_all_keys()
+            pattern = args[0] if args else "*"
+            matched = [k for k in all_keys if fnmatch.fnmatch(k, pattern)]
+
+            if cmd == "keys":
+                if not matched:
+                    print("(empty list or set)")
+                else:
+                    for i, k in enumerate(matched, 1):
+                        print(f'{i}) "{k}"')
+            else:
+                # dump mode
+                if not matched:
+                    print("(empty cache)")
+                else:
+                    vals = client.mget(matched)
+                    for k in matched:
+                        v = vals.get(k, "")
+                        print(f"{k} => {v}")
+
+        elif cmd == "add":
+            if len(args) < 2:
+                print("(error) ERR wrong number of arguments for 'add' command")
+            else:
+                ttl = int(args[2]) if len(args) > 2 and args[2].isdigit() else 0
+                print(client.add(args[0], args[1], ttl))
+
+        elif cmd == "replace":
+            if len(args) < 2:
+                print("(error) ERR wrong number of arguments for 'replace' command")
+            else:
+                ttl = int(args[2]) if len(args) > 2 and args[2].isdigit() else 0
+                print(client.replace(args[0], args[1], ttl))
+
+        elif cmd == "append":
+            if len(args) < 2:
+                print("(error) ERR wrong number of arguments for 'append' command")
+            else:
+                print(client.append(args[0], args[1]))
+
+        elif cmd == "prepend":
+            if len(args) < 2:
+                print("(error) ERR wrong number of arguments for 'prepend' command")
+            else:
+                print(client.prepend(args[0], args[1]))
+
+        elif cmd == "incr":
+            if not args:
+                print("(error) ERR wrong number of arguments for 'incr' command")
+            else:
+                val = int(args[1]) if len(args) > 1 and args[1].isdigit() else 1
+                print(client.incr(args[0], val))
+
+        elif cmd == "decr":
+            if not args:
+                print("(error) ERR wrong number of arguments for 'decr' command")
+            else:
+                val = int(args[1]) if len(args) > 1 and args[1].isdigit() else 1
+                print(client.decr(args[0], val))
+
+        elif cmd == "touch":
+            if len(args) < 2:
+                print("(error) ERR wrong number of arguments for 'touch' command")
+            else:
+                ttl = int(args[1]) if args[1].isdigit() else 0
+                print(client.touch(args[0], ttl))
+
+        elif cmd in ("flush", "flush_all"):
+            print(client.flush_all())
+
+        elif cmd in ("slabs", "display"):
+            print(client.slabs_table())
+
+        elif cmd == "items":
+            res = client.execute_raw("stats items")
+            for line in res:
+                print(line)
+
+        elif cmd == "stats":
+            subcmd = args[0] if args else ""
+            res = client.execute_raw(f"stats {subcmd}".strip())
+            for line in res:
+                print(line)
+
+        else:
+            # Fallback: pass raw command to Memcached
+            raw_line = " ".join([cmd_args[0]] + args)
+            res = client.execute_raw(raw_line)
+            for line in res:
+                print(line)
+
+    except (ConnectionResetError, socket.error) as e:
+        sys.stderr.write(colorize(f"[!] Connection error: {e}\n", ANSI_RED))
+        client.close()
+    return True
+
+def setup_autocomplete():
+    if not readline:
+        return
+    def completer(text, state):
+        options = [c for c in COMMAND_LIST if c.startswith(text.lower())]
+        if state < len(options):
+            return options[state]
+        return None
+    readline.set_completer(completer)
+    readline.parse_and_bind("tab: complete")
+    if os.path.exists(HISTORY_FILE):
+        try:
+            readline.read_history_file(HISTORY_FILE)
+        except Exception:
+            pass
+
+def save_history():
+    if readline:
+        try:
+            readline.write_history_file(HISTORY_FILE)
+        except Exception:
+            pass
+
+def main():
+    target_host, target_port, container_name = resolve_target()
+
+    # Manual CLI option overrides (-h host, -p port)
+    args = sys.argv[1:]
+    clean_args = []
+    i = 0
+    while i < len(args):
+        if args[i] in ("-h", "--host") and i + 1 < len(args):
+            target_host = args[i+1]
+            i += 2
+        elif args[i] in ("-p", "--port") and i + 1 < len(args):
+            target_port = int(args[i+1])
+            i += 2
+        elif args[i] in ("-v", "--version") and len(args) == 1:
+            clean_args = ["version"]
+            break
+        else:
+            clean_args.append(args[i])
+            i += 1
+
+    ensure_container_running(container_name)
+
+    client = MemcachedClient(host=target_host, port=target_port)
+    try:
+        client.connect()
+    except Exception as e:
+        sys.stderr.write(colorize(f"[!] Error: Could not connect to Memcached at {target_host}:{target_port} ({e})\n", ANSI_RED))
+        sys.exit(1)
+
+    # 1. Direct Command-Line Argument Mode (e.g. memcached-cli get key)
+    if clean_args:
+        run_command(client, clean_args)
+        client.close()
+        sys.exit(0)
+
+    # 2. Pipeline / Stdin Mode (e.g. echo "get key" | memcached-cli)
+    if not sys.stdin.isatty():
+        for line in sys.stdin:
+            line = line.strip()
+            if not line:
+                continue
+            parts = shlex.split(line)
+            run_command(client, parts)
+        client.close()
+        sys.exit(0)
+
+    # 3. Interactive REPL Mode
+    setup_autocomplete()
+    prompt_str = f"{target_host}:{target_port}> "
+    sys.stdout.write(f"Connected to Memcached at {colorize(f'{target_host}:{target_port}', ANSI_BOLD)}.\n")
+    sys.stdout.write("Type 'help' for commands, 'exit' or 'quit' to quit.\n\n")
+
+    try:
+        while True:
+            try:
+                line = input(prompt_str).strip()
+            except EOFError:
+                print()
+                break
+            except KeyboardInterrupt:
+                print()
+                continue
+
+            if not line:
+                continue
+
+            parts = shlex.split(line)
+            if not run_command(client, parts):
+                break
+    finally:
+        save_history()
+        client.close()
+
+if __name__ == "__main__":
+    main()

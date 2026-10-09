@@ -1,0 +1,19 @@
+services:
+  memcached:
+    image: memcached:latest
+    container_name: ${CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - "${MEMCACHED_PORT}:11211"
+    command:
+      - "memcached"
+      - "-m"
+      - "${MEMCACHED_MEMORY}"
+      - "-c"
+      - "${MEMCACHED_MAX_CONNECTIONS}"
+      - "-v"
+    volumes:
+      - ./config:/etc/memcached:ro
+      - ./logs:/var/log/memcached
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
