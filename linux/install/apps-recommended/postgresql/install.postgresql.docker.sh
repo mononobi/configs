@@ -549,7 +549,7 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     printf "%-18s: %s\n" "Password" "$PG_PASSWORD"
     printf "%-18s: %s\n" "Default Database" "$PG_DB"
     printf "%-18s: %s\n" "Connection URI" "postgresql://${PG_USER}:${PG_PASSWORD}@localhost:${PORT}/${PG_DB}"
-    printf "%-18s: %s\n" "Host CLI Command" "psql -h localhost -p ${PORT} -U ${PG_USER} -d ${PG_DB}"
+    printf "%-18s: %s\n" "Host CLI Command" "psql --port ${PORT}"
     printf "%-18s: %s\n" "Data Directory" "${TARGET_DIR}/data"
     printf "%-18s: %s\n" "Config Directory" "${TARGET_DIR}/config/conf.d"
     printf "%-18s: %s\n" "Compose File" "${TARGET_DIR}/docker-compose.yml"

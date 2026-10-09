@@ -405,7 +405,7 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     printf "%-18s: %s\n" "Superuser" "$SQL_USER"
     printf "%-18s: %s\n" "Password" "$ACTIVE_PASS"
     printf "%-18s: %s\n" "Collation" "$SQL_COLLATION"
-    printf "%-18s: %s\n" "Host CLI Command" "sqlcmd"
+    printf "%-18s: %s\n" "Host CLI Command" "sqlcmd --port ${PORT}"
     printf "%-18s: %s\n" "Data Directory" "${TARGET_DIR}/data"
     printf "%-18s: %s\n" "Log Directory" "${TARGET_DIR}/logs"
     printf "%-18s: %s\n" "Shared Directory" "${TARGET_DIR}/shared"
