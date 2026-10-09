@@ -335,38 +335,56 @@ def print_help():
     help_text = f"""
 {colorize("Usage:", ANSI_BOLD)} memcached-cli [OPTIONS] [COMMAND [ARGS...]]
 
-{colorize("Options:", ANSI_CYAN)}
+{colorize("Description:", ANSI_BOLD)}
+  Interactive and scripted CLI client for Memcached with Redis-like ergonomics,
+  multi-key operations, and memcached-tool diagnostic utilities.
+
+{colorize("Connection & CLI Options:", ANSI_CYAN)}
   -h, --host <host>            Server hostname (default: 127.0.0.1)
-  -p, --port <port>            Server port (default: 11211 or detected from compose)
-  --help                       Show this help message and exit
+  -p, --port <port>            Server port (default: 11211, auto-detected from compose)
+  -v, --version                Display server version and exit
+  --help, -?                   Show this help message and exit
 
 {colorize("Standard Key/Value Operations:", ANSI_CYAN)}
-  set <key> <val> [ttl]        Set a key with optional TTL in seconds
-  get <key>                    Retrieve the value of a key
-  add <key> <val> [ttl]        Set value only if key does not exist
-  replace <key> <val> [ttl]    Set value only if key already exists
-  append <key> <val>           Append data to an existing key
-  prepend <key> <val>          Prepend data to an existing key
-  touch <key> <ttl>            Update the expiration time of a key
-  incr <key> [val]             Increment integer key value (default: 1)
-  decr <key> [val]             Decrement integer key value (default: 1)
+  set <key> <val> [ttl]        Store a key-value pair (optional TTL in seconds, 0 = indefinite)
+  get <key> [k2 ...]           Retrieve value of a single key, or multiple keys if specified
+  add <key> <val> [ttl]        Store value only if key does NOT already exist
+  replace <key> <val> [ttl]    Store value only if key ALREADY exists
+  append <key> <val>           Append string data to an existing key's value
+  prepend <key> <val>          Prepend string data to an existing key's value
+  touch <key> <ttl>            Update the expiration time (TTL in seconds) of an existing key
+  incr <key> [delta]           Increment an integer key value by delta (default: 1)
+  decr <key> [delta]           Decrement an integer key value by delta (default: 1)
+  del / delete <k1> [k2 ...]   Delete one or multiple keys (returns deleted count: (integer) N)
+  exists <key>                 Check if a key exists in cache (returns (integer) 1 or 0)
 
-{colorize("Redis-Style Multi-Key Commands:", ANSI_CYAN)}
-  del <k1> [k2 ...]            Delete one or multiple keys (returns count deleted)
-  mget <k1> [k2 ...]           Retrieve multiple keys at once
-  mset <k1> <v1> [k2 <v2> ...] Batch set multiple key-value pairs
-  exists <key>                 Check if key exists (returns 1 or 0)
-  keys [pattern]               List cached keys matching optional glob pattern (e.g. user:*)
-  dump                         Dump all active keys and their values
+{colorize("Redis-Style Multi-Key & Discovery Commands:", ANSI_CYAN)}
+  mget <k1> [k2 ...]           Retrieve multiple keys in a single batch request
+  mset <k1> <v1> [k2 <v2> ...] Batch set multiple key-value pairs (returns OK)
+  keys [pattern]               List cached key NAMES matching optional glob pattern (e.g. *, user:*)
+  dump [pattern]               Dump key names AND their values (key => value); optional glob or key filter
   ping                         Check server connectivity (returns PONG)
 
-{colorize("Server & Diagnostic Commands (memcached-tool):", ANSI_CYAN)}
-  stats [type]                 Server statistics (general, items, slabs, sizes, settings)
-  slabs / display              Display formatted memory slab allocation table
-  items                        Inspect item counts and age per slab
-  flush / flush_all            Invalidate all cached items
-  version                      Display Memcached server version
-  quit / exit                  Exit the client
+{colorize("Server Diagnostics & Inspection (memcached-tool):", ANSI_CYAN)}
+  stats [type]                 Display server metrics (general, items, slabs, sizes, settings)
+  slabs / display              Display memory slab allocation table (chunk size, pages, items, evictions)
+  items                        Display item distribution, counts, and age per slab class
+  flush / flush_all            Invalidate / clear all cached items from memory
+  version                      Display Memcached server version string
+  help / --help                Show this command reference
+  quit / exit                  Exit the interactive REPL
+
+{colorize("Examples:", ANSI_CYAN)}
+  memcached-cli set user:1 "Alice" 3600
+  memcached-cli get user:1
+  memcached-cli mset k1 v1 k2 v2 k3 v3
+  memcached-cli mget k1 k2 k3
+  memcached-cli del k1 k2
+  memcached-cli keys "user:*"          # Returns only key names
+  memcached-cli dump "user:*"          # Returns key names and their values (key => value)
+  memcached-cli dump                   # Dumps entire cache contents
+  memcached-cli slabs                  # Displays slab memory allocation table
+  echo "get user:1" | memcached-cli    # Piped / non-interactive execution
 """
     print(help_text.strip())
 

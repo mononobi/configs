@@ -122,6 +122,12 @@ memcached-cli slabs
 # Dump all stored keys and values
 memcached-cli dump
 
+# Dump keys matching a pattern or prefix
+memcached-cli dump "user:*"
+
+# Dump a single specific key
+memcached-cli dump user:1
+
 # View server performance metrics
 memcached-cli stats
 ```
