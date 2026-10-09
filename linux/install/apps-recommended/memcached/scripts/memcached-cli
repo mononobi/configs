@@ -12,6 +12,7 @@ import re
 import shlex
 import fnmatch
 import subprocess
+import urllib.parse
 
 try:
     import readline
@@ -241,22 +242,43 @@ class MemcachedClient:
         return res[0] if res else ""
 
     def get_all_keys(self) -> list:
-        """Retrieves all stored keys by querying slab item cachedumps."""
-        items_stats = self.execute_raw("stats items")
-        slab_ids = set()
-        for line in items_stats:
-            m = re.match(r"STAT items:(\d+):number\s+(\d+)", line)
-            if m and int(m.group(2)) > 0:
-                slab_ids.add(m.group(1))
+        """Retrieves all stored keys using modern lru_crawler metadump merged with stats cachedump."""
+        keys = set()
+        # 1. Modern LRU crawler metadump (crawls all HOT, WARM, COLD queues)
+        try:
+            self.send_raw(b"lru_crawler metadump all\r\n")
+            first = self.read_line()
+            if first in ("OK", "BUSY") or first.startswith("key="):
+                current = first
+                while True:
+                    if current == "END":
+                        break
+                    m = re.search(r"key=([^\s]+)", current)
+                    if m:
+                        keys.add(urllib.parse.unquote(m.group(1)))
+                    current = self.read_line()
+        except Exception:
+            pass
 
-        keys = []
-        for slab in sorted(slab_ids, key=int):
-            dump_lines = self.execute_raw(f"stats cachedump {slab} 0")
-            for line in dump_lines:
-                m = re.match(r"ITEM\s+([^\s]+)", line)
-                if m:
-                    keys.append(m.group(1))
-        return sorted(list(set(keys)))
+        # 2. Slab cachedump (catches legacy slabs / queues if crawler missed anything)
+        try:
+            items_stats = self.execute_raw("stats items")
+            slab_ids = set()
+            for line in items_stats:
+                m = re.match(r"STAT items:(\d+):number\s+(\d+)", line)
+                if m and int(m.group(2)) > 0:
+                    slab_ids.add(m.group(1))
+
+            for slab in sorted(slab_ids, key=int):
+                dump_lines = self.execute_raw(f"stats cachedump {slab} 0")
+                for line in dump_lines:
+                    m = re.match(r"ITEM\s+([^\s]+)", line)
+                    if m:
+                        keys.add(m.group(1))
+        except Exception:
+            pass
+
+        return sorted(list(keys))
 
     def slabs_table(self) -> str:
         """Formats slab statistics matching memcached-tool display."""
