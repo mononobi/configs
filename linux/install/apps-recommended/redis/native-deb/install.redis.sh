@@ -6,7 +6,7 @@ set -euo pipefail
 
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/../../utils.sh"
+source "${SCRIPT_DIR}/../../../utils.sh"
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
 
 show_help() {
@@ -18,6 +18,7 @@ Description:
 
 Options:
   --no-update   Skip apt update before installation
+  -f, --force   Force reinstallation even if already installed
   -h, --help    Show this help message and exit
 EOF
 }
@@ -33,6 +34,10 @@ while [[ $# -gt 0 ]]; do
             SKIP_UPDATE=true
             shift
             ;;
+        -f|--force)
+            FORCE=true
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
             echo "Use -h or --help for usage information."
@@ -41,12 +46,26 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "redis-server" --name "Redis" && exit 0
+setup_symlinks() {
+    if [[ -f "${SCRIPT_DIR}/redis-reload" ]]; then
+        ensure_local_bin_in_path
+        chmod +x "${SCRIPT_DIR}/redis-reload"
+        ln -sf "${SCRIPT_DIR}/redis-reload" "${HOME}/.local/bin/redis-reload"
+        echo "[+] Linked redis-reload helper into ${HOME}/.local/bin/redis-reload"
+    fi
+}
+
+if is_installed "redis-server" --name "Redis"; then
+    setup_symlinks
+    exit 0
+fi
 
 echo "[+] Starting installation/setup for redis..."
 
 conditional_apt_update
 sudo apt-get install -y redis-server
 sudo systemctl enable --now redis-server
+
+setup_symlinks
 
 echo "[✓] redis setup completed successfully!"
