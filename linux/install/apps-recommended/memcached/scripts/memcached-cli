@@ -311,7 +311,13 @@ COMMAND_LIST = [
 
 def print_help():
     help_text = f"""
-{colorize("Memcached CLI - Available Commands", ANSI_BOLD)}
+{colorize("Usage:", ANSI_BOLD)} memcached-cli [OPTIONS] [COMMAND [ARGS...]]
+
+{colorize("Options:", ANSI_CYAN)}
+  -h, --host <host>            Server hostname (default: 127.0.0.1)
+  -p, --port <port>            Server port (default: 11211 or detected from compose)
+  --help                       Show this help message and exit
+
 {colorize("Standard Key/Value Operations:", ANSI_CYAN)}
   set <key> <val> [ttl]        Set a key with optional TTL in seconds
   get <key>                    Retrieve the value of a key
@@ -354,7 +360,7 @@ def run_command(client: MemcachedClient, cmd_args: list) -> bool:
         if cmd in ("quit", "exit"):
             return False
 
-        elif cmd == "help":
+        elif cmd in ("help", "--help", "-h", "-?"):
             print_help()
 
         elif cmd == "ping":
@@ -547,6 +553,12 @@ def save_history():
             pass
 
 def main():
+    # Check for help requests upfront
+    for a in sys.argv[1:]:
+        if a in ("--help", "-?", "help"):
+            print_help()
+            sys.exit(0)
+
     target_host, target_port, container_name = resolve_target()
 
     # Manual CLI option overrides (-h host, -p port)
