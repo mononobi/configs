@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# if you have already installed yarn and the yarn key has been expired
-# and you faced errors during apt update, execute this to get the new key.
-
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/yarn-archive-keyring.gpg
-
-echo "deb [signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
