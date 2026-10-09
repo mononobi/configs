@@ -18,6 +18,7 @@ Description:
 
 Options:
   --no-update   Skip apt update before installation
+  -f, --force   Force reinstallation even if already installed
   -h, --help    Show this help message and exit
 EOF
 }
@@ -33,6 +34,10 @@ while [[ $# -gt 0 ]]; do
             SKIP_UPDATE=true
             shift
             ;;
+        -f|--force)
+            FORCE=true
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
             echo "Use -h or --help for usage information."
@@ -41,12 +46,26 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "nginx" --name "Nginx" && exit 0
+setup_symlinks() {
+    if [[ -f "${SCRIPT_DIR}/nginx-reset" ]]; then
+        ensure_local_bin_in_path
+        chmod +x "${SCRIPT_DIR}/nginx-reset"
+        ln -sf "${SCRIPT_DIR}/nginx-reset" "${HOME}/.local/bin/nginx-reset"
+        echo "[+] Linked nginx-reset helper into ${HOME}/.local/bin/nginx-reset"
+    fi
+}
+
+if is_installed "nginx" --name "Nginx"; then
+    setup_symlinks
+    exit 0
+fi
 
 echo "[+] Starting installation/setup for nginx..."
 
 conditional_apt_update
 sudo apt-get install -y nginx
 sudo systemctl enable --now nginx
+
+setup_symlinks
 
 echo "[✓] nginx setup completed successfully!"
