@@ -104,7 +104,8 @@ done
 echo "[+] Starting Memcached Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker ufw lsof python
+require_app docker ufw lsof
+require_app python --fast
 
 # 2. Determine assigned port
 PORT=""
