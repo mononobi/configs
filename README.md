@@ -277,15 +277,18 @@ symlink_to_local_bin "${SCRIPT_DIR}/memcached-reload"
   symlink_to_local_bin "${SCRIPT_DIR}/scripts/tool-v2" "tool"
   ```
 
-### 6. `configure_ufw_lan_private_port <port> [service_name]`
+### 6. `configure_ufw_lan_private_port <port> [service_name] [proto]`
 
 Restricts incoming traffic for a given service port to private and local networks only:
 
 ```bash
 configure_ufw_lan_private_port "5432" "PostgreSQL"
-configure_ufw_lan_private_port "$PORT" "Redis"
+configure_ufw_lan_private_port "53" "DNS" "udp"
+configure_ufw_lan_private_port "1194" "OpenVPN" "both"
 ```
 
+- **Protocol Selection (`[proto]`)**: Supports `'tcp'`, `'udp'`, or `'both'` / `'any'`.
+  Defaults to `'tcp'` if omitted to ensure seamless usage with standard TCP services.
 - **Private & LAN Only Access**: Opens the port strictly to:
   - **Local Area Network (LAN)**: `192.168.0.0/16`
   - **Docker & Container Networks**: `172.16.0.0/12` (covers all default and custom bridge
@@ -293,8 +296,9 @@ configure_ufw_lan_private_port "$PORT" "Redis"
   - **Private VPNs / Corporate Subnets**: `10.0.0.0/8`
   - **Localhost**: `127.0.0.1`, `::1`
 - **Revocation of Public Exposure**: Automatically revokes and deletes any existing wide-open
-  `0.0.0.0/0` public allow rules for that port (`ufw delete allow <port>/tcp`), preventing
-  accidental internet-wide exposure on servers with public static IPs.
+  `0.0.0.0/0` public allow rules for that port (`ufw delete allow <port>` and
+  `ufw delete allow <port>/<proto>`), preventing accidental internet-wide exposure on servers
+  with public static IPs.
 - **Descriptive Audit Comments**: Attaches standard comments (`<service> (LAN/Private)`) to all
   rules for clean visibility in `sudo ufw status verbose`.
 
