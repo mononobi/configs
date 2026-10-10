@@ -104,7 +104,7 @@ done
 echo "[+] Starting Memcached Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker ufw lsof
+require_app docker lsof
 require_app python --fast
 
 # 2. Determine assigned port
@@ -209,9 +209,8 @@ if [[ "$ready" != "true" ]]; then
     echo -e "${C_YELLOW}[!] Warning: Memcached ping check did not respond within 15 seconds. Please inspect logs: docker logs ${CONTAINER_NAME}${C_RESET}" >&2
 fi
 
-# 9. Configure UFW firewall
-echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
-sudo ufw allow "${PORT}/tcp" >/dev/null 2>&1 || sudo ufw allow "${PORT}/tcp"
+# 9. Configure UFW firewall (restricted to LAN and container networks)
+configure_ufw_lan_private_port "${PORT}" "Memcached"
 
 # 10. Ensure memcached-cli is executable and linked into ~/.local/bin
 symlink_to_local_bin "${SCRIPT_DIR}/scripts/memcached-cli"

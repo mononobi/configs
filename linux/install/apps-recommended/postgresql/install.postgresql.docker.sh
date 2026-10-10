@@ -136,7 +136,7 @@ done
 echo "[+] Starting PostgreSQL Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker ufw lsof curl
+require_app docker lsof curl
 require_app python --fast
 
 # 2. Ensure lightweight host client tools (psql, pg_dump) are available
@@ -534,9 +534,8 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     chmod 644 "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
     chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared"
 
-    # Mandatory UFW firewall rule for the instance port
-    echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
-    sudo ufw allow "${PORT}/tcp" >/dev/null 2>&1 || sudo ufw allow "${PORT}/tcp"
+    # Mandatory UFW firewall rule for the instance port (restricted to LAN and container networks)
+    configure_ufw_lan_private_port "${PORT}" "PostgreSQL"
 
     # Display clean connection summary block
     echo ""

@@ -116,7 +116,7 @@ done
 echo "[+] Starting Microsoft SQL Server Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker ufw lsof curl
+require_app docker lsof curl
 require_app python --fast
 
 # Helper: Fetch tags once from MCR with retry and in-memory caching
@@ -391,9 +391,8 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     chmod 644 "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
     chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared" 2>/dev/null || true
 
-    # Configure UFW firewall
-    echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
-    sudo ufw allow "${PORT}/tcp" >/dev/null 2>&1 || sudo ufw allow "${PORT}/tcp"
+    # Configure UFW firewall (restricted to LAN and container networks)
+    configure_ufw_lan_private_port "${PORT}" "SQL Server"
 
     # Display clean connection summary block
     echo ""

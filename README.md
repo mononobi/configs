@@ -277,7 +277,28 @@ symlink_to_local_bin "${SCRIPT_DIR}/memcached-reload"
   symlink_to_local_bin "${SCRIPT_DIR}/scripts/tool-v2" "tool"
   ```
 
-### 6. GNOME Extension Helpers
+### 6. `configure_ufw_lan_private_port <port> [service_name]`
+
+Restricts incoming traffic for a given service port to private and local networks only:
+
+```bash
+configure_ufw_lan_private_port "5432" "PostgreSQL"
+configure_ufw_lan_private_port "$PORT" "Redis"
+```
+
+- **Private & LAN Only Access**: Opens the port strictly to:
+  - **Local Area Network (LAN)**: `192.168.0.0/16`
+  - **Docker & Container Networks**: `172.16.0.0/12` (covers all default and custom bridge
+    subnets)
+  - **Private VPNs / Corporate Subnets**: `10.0.0.0/8`
+  - **Localhost**: `127.0.0.1`, `::1`
+- **Revocation of Public Exposure**: Automatically revokes and deletes any existing wide-open
+  `0.0.0.0/0` public allow rules for that port (`ufw delete allow <port>/tcp`), preventing
+  accidental internet-wide exposure on servers with public static IPs.
+- **Descriptive Audit Comments**: Attaches standard comments (`<service> (LAN/Private)`) to all
+  rules for clean visibility in `sudo ufw status verbose`.
+
+### 7. GNOME Extension Helpers
 
 - **`install_gnome_extension <uuid> [display_name]`**: Queries extensions.gnome.org API for the
   host GNOME Shell version, downloads candidate archive, inspects `metadata.json` to verify
@@ -307,7 +328,7 @@ symlink_to_local_bin "${SCRIPT_DIR}/memcached-reload"
   Any newly added extension subfolder in `recommended/` is automatically discovered and
   installed without modifying orchestrator manifests.
 
-### 7. `resolve_ubuntu_pool_deb <pool_url> <pattern>`
+### 8. `resolve_ubuntu_pool_deb <pool_url> <pattern>`
 
 Dynamically scrapes an Ubuntu archive or repository pool directory and resolves the filename of
 the highest/latest available `.deb` package matching the given regex pattern using
@@ -320,7 +341,7 @@ deb="$(resolve_ubuntu_pool_deb "$pool_url" "$pattern")"
 - Avoids fragile hardcoded micro-revisions on Ubuntu archive pools where older superseded
   `.deb` packages are regularly pruned when security updates land.
 
-### 8. `has_apt_candidate <package_name>`
+### 9. `has_apt_candidate <package_name>`
 
 Inspects the APT policy cache to verify whether a package actually has an installable candidate
 in the repository indexes:
@@ -338,7 +359,7 @@ fi
 - **Safe Pre-Flight Checks**: Guarantees that dynamically assembled package lists only include
   packages that APT can actually download and install.
 
-### 9. Centralized Color Palette & UI Styling (`colors.sh`)
+### 10. Centralized Color Palette & UI Styling (`colors.sh`)
 
 The framework provides a centralized color and divider library in `linux/install/colors.sh`,
 which is automatically sourced by `utils.sh`:

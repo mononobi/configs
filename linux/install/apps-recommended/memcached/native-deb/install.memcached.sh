@@ -59,8 +59,17 @@ echo "[+] Starting installation/setup for memcached..."
 
 conditional_apt_update
 sudo apt-get install -y memcached libmemcached-tools
-sudo systemctl enable --now memcached
 
+# Ensure memcached listens on all interfaces (access restricted to LAN & containers by UFW)
+if [[ -f /etc/memcached.conf ]]; then
+    sudo sed -i 's/^\s*-l\s\+127\.0\.0\.1/# -l 127.0.0.1/' /etc/memcached.conf
+    sudo sed -i 's/^\s*-l\s\+::1/# -l ::1/' /etc/memcached.conf
+fi
+
+sudo systemctl enable --now memcached
+sudo systemctl restart memcached
+
+configure_ufw_lan_private_port 11211 "Memcached"
 setup_symlinks
 
 echo "[✓] memcached setup completed successfully!"

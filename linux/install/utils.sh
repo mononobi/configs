@@ -370,6 +370,31 @@ symlink_to_local_bin() {
     echo "[+] Linked ${dest_filename} into ${dest_path}"
 }
 
+# configure_ufw_lan_private_port <port> [service_name]
+#
+# Configures UFW firewall rules for a given TCP port to restrict incoming connections
+# strictly to localhost, LAN (192.168.0.0/16), Docker container networks (172.16.0.0/12),
+# and private subnets (10.0.0.0/8). Automatically revokes any wide-open public allow rules.
+configure_ufw_lan_private_port() {
+    local port="$1"
+    local service_name="${2:-Service}"
+
+    require_app ufw
+
+    # 1. Revoke any existing global/public allow rule
+    sudo ufw delete allow "${port}/tcp" >/dev/null 2>&1 || true
+    sudo ufw delete allow "${port}" >/dev/null 2>&1 || true
+
+    # 2. Add restricted allow rules for LAN, Docker containers, and private networks
+    local subnets=("127.0.0.1" "::1" "192.168.0.0/16" "172.16.0.0/12" "10.0.0.0/8")
+    for subnet in "${subnets[@]}"; do
+        sudo ufw allow from "$subnet" to any port "$port" proto tcp comment "${service_name} (LAN/Private)" >/dev/null 2>&1 || \
+            sudo ufw allow from "$subnet" to any port "$port" proto tcp comment "${service_name} (LAN/Private)"
+    done
+
+    echo "[+] Configured UFW rules for ${service_name} on port ${port}/tcp (restricted to LAN & containers)"
+}
+
 # check_extension_archive_compatibility <zip_path> [display_name] [uuid]
 #
 # Inspects metadata.json inside a downloaded extension .zip archive and checks whether
@@ -741,6 +766,7 @@ export -f conditional_apt_update
 export -f is_installed
 export -f ensure_local_bin_in_path
 export -f symlink_to_local_bin
+export -f configure_ufw_lan_private_port
 export -f check_extension_archive_compatibility
 export -f compare_extension_version
 export -f install_gnome_extension

@@ -129,18 +129,31 @@ if [[ -f "$SCRIPT_DIR/../files/db.conf" ]]; then
     sudo chmod 644 "$CONF_D/db.conf"
 fi
 
-# 6. Ensure PostgreSQL service is started
+# 6. Configure pg_hba.conf for LAN and container access
+PG_HBA="/etc/postgresql/${PG_VERSION}/main/pg_hba.conf"
+if [[ -f "$PG_HBA" ]]; then
+    for subnet in "192.168.0.0/16" "172.16.0.0/12" "10.0.0.0/8"; do
+        if ! grep -qs "$subnet" "$PG_HBA"; then
+            echo "host    all             all             ${subnet}            scram-sha-256" | sudo tee -a "$PG_HBA" > /dev/null
+        fi
+    done
+fi
+
+# 7. Ensure PostgreSQL service is started
 sudo systemctl enable --now postgresql
 
-# 7. Set default password for postgres database superuser
+# 8. Set default password for postgres database superuser
 echo "[+] Setting password for 'postgres' database user to '$PG_PASSWORD'..."
 sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '$PG_PASSWORD';"
 
-# 8. Restart service to apply configuration
+# 9. Restart service to apply configuration
 echo "[+] Restarting PostgreSQL service..."
 sudo systemctl restart postgresql
 
-# 9. Verify service and listening port
+# 10. Configure UFW firewall (restricted to LAN and container networks)
+configure_ufw_lan_private_port 5432 "PostgreSQL"
+
+# 11. Verify service and listening port
 echo "[+] Checking PostgreSQL service status..."
 sudo systemctl is-active --quiet postgresql && echo "[✓] PostgreSQL service is active and running." || sudo systemctl status postgresql --no-pager
 sudo ss -tunelp | grep 5432 || true

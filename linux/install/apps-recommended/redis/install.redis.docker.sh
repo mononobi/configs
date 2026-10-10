@@ -94,7 +94,7 @@ done
 echo "[+] Starting Redis Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker ufw lsof
+require_app docker lsof
 
 # 2. Determine assigned port
 PORT=""
@@ -213,9 +213,8 @@ if [[ "$ready" != "true" ]]; then
     echo -e "${C_YELLOW}[!] Warning: Redis readiness check did not respond within 15 seconds. Please check logs: docker logs ${CONTAINER_NAME}${C_RESET}" >&2
 fi
 
-# 9. Configure UFW firewall
-echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
-sudo ufw allow "${PORT}/tcp" >/dev/null 2>&1 || sudo ufw allow "${PORT}/tcp"
+# 9. Configure UFW firewall (restricted to LAN and container networks)
+configure_ufw_lan_private_port "${PORT}" "Redis"
 
 # 10. Ensure redis-cli wrapper is linked to ~/.local/bin
 symlink_to_local_bin "${SCRIPT_DIR}/scripts/redis-cli"

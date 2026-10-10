@@ -59,8 +59,17 @@ echo "[+] Starting installation/setup for redis..."
 
 conditional_apt_update
 sudo apt-get install -y redis-server
-sudo systemctl enable --now redis-server
 
+# Ensure Redis listens on all interfaces (access restricted to LAN & containers by UFW)
+if [[ -f /etc/redis/redis.conf ]]; then
+    sudo sed -i 's/^\s*bind\s\+127\.0\.0\.1.*/bind 0.0.0.0/' /etc/redis/redis.conf
+    sudo sed -i 's/^\s*protected-mode\s\+yes/protected-mode no/' /etc/redis/redis.conf
+fi
+
+sudo systemctl enable --now redis-server
+sudo systemctl restart redis-server
+
+configure_ufw_lan_private_port 6379 "Redis"
 setup_symlinks
 
 echo "[✓] redis setup completed successfully!"
