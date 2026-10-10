@@ -131,12 +131,8 @@ mkdir -p "$INSTALL_DIR"
 cp -a --remove-destination "$TOOLBOX_DIR/." "$INSTALL_DIR/"
 chmod +x "$INSTALL_DIR/jetbrains-toolbox"
 
-# Ensure ~/.local/bin exists and is permanently added to PATH
-ensure_local_bin_in_path
-
-# Create CLI symlink in ~/.local/bin
-ln -sf "$INSTALL_DIR/jetbrains-toolbox" "${HOME}/.local/bin/jetbrains-toolbox"
-echo "[+] Created CLI symlink at ${HOME}/.local/bin/jetbrains-toolbox"
+# Ensure ~/.local/bin exists and create CLI symlink
+symlink_to_local_bin "$INSTALL_DIR/jetbrains-toolbox"
 
 # Desktop integration
 if [[ -f "$INSTALL_DIR/jetbrains-toolbox.desktop" ]]; then

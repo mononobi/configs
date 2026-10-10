@@ -47,12 +47,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 setup_symlinks() {
-    if [[ -f "${SCRIPT_DIR}/plex-reset" ]]; then
-        ensure_local_bin_in_path
-        chmod +x "${SCRIPT_DIR}/plex-reset"
-        ln -sf "${SCRIPT_DIR}/plex-reset" "${HOME}/.local/bin/plex-reset"
-        echo "[+] Linked plex-reset helper into ${HOME}/.local/bin/plex-reset"
-    fi
+    symlink_to_local_bin "${SCRIPT_DIR}/plex-reset"
 }
 
 if is_installed "plexmediaserver" --name "Plex Media Server"; then

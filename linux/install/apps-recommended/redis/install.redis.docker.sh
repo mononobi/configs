@@ -218,10 +218,7 @@ echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
 sudo ufw allow "${PORT}/tcp" >/dev/null 2>&1 || sudo ufw allow "${PORT}/tcp"
 
 # 10. Ensure redis-cli wrapper is linked to ~/.local/bin
-ensure_local_bin_in_path
-chmod +x "${SCRIPT_DIR}/scripts/redis-cli"
-ln -sf "${SCRIPT_DIR}/scripts/redis-cli" "${HOME}/.local/bin/redis-cli"
-echo "[+] Linked CLI utility (redis-cli) to ${HOME}/.local/bin/redis-cli"
+symlink_to_local_bin "${SCRIPT_DIR}/scripts/redis-cli"
 
 # 11. Display connection summary
 echo ""

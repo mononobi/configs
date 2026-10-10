@@ -47,12 +47,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 setup_symlinks() {
-    if [[ -f "${SCRIPT_DIR}/memcached-reload" ]]; then
-        ensure_local_bin_in_path
-        chmod +x "${SCRIPT_DIR}/memcached-reload"
-        ln -sf "${SCRIPT_DIR}/memcached-reload" "${HOME}/.local/bin/memcached-reload"
-        echo "[+] Linked memcached-reload helper into ${HOME}/.local/bin/memcached-reload"
-    fi
+    symlink_to_local_bin "${SCRIPT_DIR}/memcached-reload"
 }
 
 if is_installed "memcached" --name "Memcached"; then

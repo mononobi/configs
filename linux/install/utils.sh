@@ -348,6 +348,28 @@ EOF
     done
 }
 
+# symlink_to_local_bin <source_path> <dest_filename>
+#
+# Ensures ~/.local/bin is present and in PATH, marks source_path executable (+x),
+# and creates a symbolic link at ~/.local/bin/<dest_filename> pointing to source_path.
+symlink_to_local_bin() {
+    local source_path="$1"
+    local dest_filename="${2:-$(basename "$source_path")}"
+
+    if [[ ! -e "$source_path" && ! -L "$source_path" ]]; then
+        echo "[!] Warning: Source file not found: ${source_path}, skipping symlink." >&2
+        return 1
+    fi
+
+    ensure_local_bin_in_path
+
+    chmod +x "$source_path"
+
+    local dest_path="${HOME}/.local/bin/${dest_filename}"
+    ln -sf "$source_path" "$dest_path"
+    echo "[+] Linked ${dest_filename} into ${dest_path}"
+}
+
 # check_extension_archive_compatibility <zip_path> [display_name] [uuid]
 #
 # Inspects metadata.json inside a downloaded extension .zip archive and checks whether
@@ -718,6 +740,7 @@ export -f require_app
 export -f conditional_apt_update
 export -f is_installed
 export -f ensure_local_bin_in_path
+export -f symlink_to_local_bin
 export -f check_extension_archive_compatibility
 export -f compare_extension_version
 export -f install_gnome_extension

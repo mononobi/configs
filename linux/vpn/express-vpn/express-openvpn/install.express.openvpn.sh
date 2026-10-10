@@ -85,10 +85,8 @@ cp -f "${FILES_DIR}/keys/"* "$KEYS_DIR/"
 
 # 5. Link scripts into ~/.local/bin
 SCRIPTS_DIR="${SCRIPT_DIR}/scripts"
-echo "[+] Linking CLI helper scripts into ${BIN_DIR}..."
-chmod +x "${SCRIPTS_DIR}/openvpn-add" "${SCRIPTS_DIR}/openvpn-bulk-add"
-ln -sf "${SCRIPTS_DIR}/openvpn-add" "${BIN_DIR}/openvpn-add"
-ln -sf "${SCRIPTS_DIR}/openvpn-bulk-add" "${BIN_DIR}/openvpn-bulk-add"
+symlink_to_local_bin "${SCRIPTS_DIR}/openvpn-add"
+symlink_to_local_bin "${SCRIPTS_DIR}/openvpn-bulk-add"
 
 # 6. Prompt for VPN Credentials (only interactive input)
 echo ""

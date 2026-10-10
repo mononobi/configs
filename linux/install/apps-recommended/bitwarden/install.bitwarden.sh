@@ -42,12 +42,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+setup_symlinks() {
+    symlink_to_local_bin "$SCRIPT_DIR/bitwarden-unlock"
+}
+
 if is_installed "com.bitwarden.desktop" --type flatpak --name "Bitwarden"; then
-    if [[ -f "$SCRIPT_DIR/bitwarden-unlock" && ! -L "$HOME/.local/bin/bitwarden-unlock" ]]; then
-        ensure_local_bin_in_path
-        chmod +x "$SCRIPT_DIR/bitwarden-unlock"
-        ln -sf "$SCRIPT_DIR/bitwarden-unlock" "$HOME/.local/bin/bitwarden-unlock"
-    fi
+    setup_symlinks
     exit 0
 fi
 
@@ -60,11 +60,6 @@ echo "[+] Installing Bitwarden Desktop from Flathub..."
 flatpak install -y flathub com.bitwarden.desktop
 
 # 2. Setup bitwarden-unlock helper script if present
-if [[ -f "$SCRIPT_DIR/bitwarden-unlock" ]]; then
-    ensure_local_bin_in_path
-    chmod +x "$SCRIPT_DIR/bitwarden-unlock"
-    ln -sf "$SCRIPT_DIR/bitwarden-unlock" "$HOME/.local/bin/bitwarden-unlock"
-    echo "[+] Linked bitwarden-unlock helper into $HOME/.local/bin/bitwarden-unlock"
-fi
+setup_symlinks
 
 echo "[✓] Bitwarden setup completed successfully!"

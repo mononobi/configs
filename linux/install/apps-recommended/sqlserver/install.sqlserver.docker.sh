@@ -414,13 +414,10 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 done
 
 # Ensure container CLI helper tools are executable and linked into ~/.local/bin
-ensure_local_bin_in_path
 chmod +x "${SCRIPT_DIR}/scripts/sql-docker-cli"
 for tool in "sqlcmd" "sql-bcp" "sql-stop-all" "sql-start-all"; do
-    chmod +x "${SCRIPT_DIR}/scripts/${tool}"
-    ln -sf "${SCRIPT_DIR}/scripts/${tool}" "${HOME}/.local/bin/${tool}"
+    symlink_to_local_bin "${SCRIPT_DIR}/scripts/${tool}"
 done
-echo "[+] Linked CLI utilities (sqlcmd, sql-bcp, sql-stop-all, sql-start-all) to ${HOME}/.local/bin/"
 
 echo ""
 echo "[✓] Microsoft SQL Server Docker setup completed successfully!"

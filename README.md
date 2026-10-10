@@ -247,7 +247,37 @@ is passed or during batch runs).
 Ensures `~/.local/bin` exists, exports it to current process `$PATH`, and permanently persists
 it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
 
-### 5. GNOME Extension Helpers
+### 5. `symlink_to_local_bin <source_path> [dest_filename]`
+
+Creates a symbolic link for an application binary or helper script inside `~/.local/bin`:
+
+```bash
+symlink_to_local_bin "${SCRIPT_DIR}/memcached-reload"
+```
+
+- **All-in-One Setup**: Automatically calls `ensure_local_bin_in_path`, marks the source file
+  as executable (`chmod +x`), creates or updates the symbolic link (`ln -sf`), and prints a
+  standard status log.
+- **Fail-Safe Pre-Check**: Validates that the source target exists before attempting to link,
+  printing a warning if missing.
+- **Omit Destination Name When Identical**: If the destination file name is identical to the
+  source file's basename, `dest_filename` **must be omitted**. It automatically defaults to
+  `$(basename "$source_path")`:
+  ```bash
+  # Correct (dest matches source basename)
+  symlink_to_local_bin "${SCRIPT_DIR}/memcached-reload"
+  symlink_to_local_bin "${SCRIPT_DIR}/scripts/redis-cli"
+
+  # Incorrect (redundant destination parameter)
+  symlink_to_local_bin "${SCRIPT_DIR}/memcached-reload" "memcached-reload"
+  ```
+- **Custom Destination Name**: Only specify `dest_filename` when deliberately renaming the
+  binary or helper in `~/.local/bin`:
+  ```bash
+  symlink_to_local_bin "${SCRIPT_DIR}/scripts/tool-v2" "tool"
+  ```
+
+### 6. GNOME Extension Helpers
 
 - **`install_gnome_extension <uuid> [display_name]`**: Queries extensions.gnome.org API for the
   host GNOME Shell version, downloads candidate archive, inspects `metadata.json` to verify
@@ -277,7 +307,7 @@ it to `~/.bashrc`, `~/.zshrc`, and `~/.profile` if not already present.
   Any newly added extension subfolder in `recommended/` is automatically discovered and
   installed without modifying orchestrator manifests.
 
-### 6. `resolve_ubuntu_pool_deb <pool_url> <pattern>`
+### 7. `resolve_ubuntu_pool_deb <pool_url> <pattern>`
 
 Dynamically scrapes an Ubuntu archive or repository pool directory and resolves the filename of
 the highest/latest available `.deb` package matching the given regex pattern using
@@ -290,7 +320,7 @@ deb="$(resolve_ubuntu_pool_deb "$pool_url" "$pattern")"
 - Avoids fragile hardcoded micro-revisions on Ubuntu archive pools where older superseded
   `.deb` packages are regularly pruned when security updates land.
 
-### 7. `has_apt_candidate <package_name>`
+### 8. `has_apt_candidate <package_name>`
 
 Inspects the APT policy cache to verify whether a package actually has an installable candidate
 in the repository indexes:
@@ -308,7 +338,7 @@ fi
 - **Safe Pre-Flight Checks**: Guarantees that dynamically assembled package lists only include
   packages that APT can actually download and install.
 
-### 8. Centralized Color Palette & UI Styling (`colors.sh`)
+### 9. Centralized Color Palette & UI Styling (`colors.sh`)
 
 The framework provides a centralized color and divider library in `linux/install/colors.sh`,
 which is automatically sourced by `utils.sh`:

@@ -214,10 +214,7 @@ echo "[+] Configuring UFW firewall for port ${PORT}/tcp..."
 sudo ufw allow "${PORT}/tcp" >/dev/null 2>&1 || sudo ufw allow "${PORT}/tcp"
 
 # 10. Ensure memcached-cli is executable and linked into ~/.local/bin
-ensure_local_bin_in_path
-chmod +x "${SCRIPT_DIR}/scripts/memcached-cli"
-ln -sf "${SCRIPT_DIR}/scripts/memcached-cli" "${HOME}/.local/bin/memcached-cli"
-echo "[+] Linked CLI utility (memcached-cli) to ${HOME}/.local/bin/memcached-cli"
+symlink_to_local_bin "${SCRIPT_DIR}/scripts/memcached-cli"
 
 # 11. Display connection summary
 echo ""

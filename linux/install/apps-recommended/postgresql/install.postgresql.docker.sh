@@ -557,13 +557,10 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 done
 
 # Ensure container CLI helper tools are executable and linked into ~/.local/bin
-ensure_local_bin_in_path
 chmod +x "${SCRIPT_DIR}/scripts/pg-docker-cli"
 for tool in "psql" "pg_dump" "pg_restore" "pg_dumpall" "pgbench" "pg-stop-all" "pg-start-all"; do
-    chmod +x "${SCRIPT_DIR}/scripts/${tool}"
-    ln -sf "${SCRIPT_DIR}/scripts/${tool}" "${HOME}/.local/bin/${tool}"
+    symlink_to_local_bin "${SCRIPT_DIR}/scripts/${tool}"
 done
-echo "[+] Linked CLI utilities (psql, pg_dump, pg_restore, pg_dumpall, pgbench, pg-stop-all, pg-start-all) to ${HOME}/.local/bin/"
 
 echo ""
 echo "[✓] All PostgreSQL Docker instances processed successfully!"

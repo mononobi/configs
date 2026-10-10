@@ -47,12 +47,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 setup_symlinks() {
-    if [[ -f "${SCRIPT_DIR}/nginx-reset" ]]; then
-        ensure_local_bin_in_path
-        chmod +x "${SCRIPT_DIR}/nginx-reset"
-        ln -sf "${SCRIPT_DIR}/nginx-reset" "${HOME}/.local/bin/nginx-reset"
-        echo "[+] Linked nginx-reset helper into ${HOME}/.local/bin/nginx-reset"
-    fi
+    symlink_to_local_bin "${SCRIPT_DIR}/nginx-reset"
 }
 
 if is_installed "nginx" --name "Nginx"; then

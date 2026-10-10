@@ -66,12 +66,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 setup_symlinks() {
-    if [[ -f "${SCRIPT_DIR}/yarn-refresh-key" ]]; then
-        ensure_local_bin_in_path
-        chmod +x "${SCRIPT_DIR}/yarn-refresh-key"
-        ln -sf "${SCRIPT_DIR}/yarn-refresh-key" "${HOME}/.local/bin/yarn-refresh-key"
-        echo "[+] Linked yarn-refresh-key helper into ${HOME}/.local/bin/yarn-refresh-key"
-    fi
+    symlink_to_local_bin "${SCRIPT_DIR}/yarn-refresh-key"
 }
 
 NODE_INSTALLED=false

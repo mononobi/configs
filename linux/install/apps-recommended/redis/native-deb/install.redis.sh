@@ -47,12 +47,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 setup_symlinks() {
-    if [[ -f "${SCRIPT_DIR}/redis-reload" ]]; then
-        ensure_local_bin_in_path
-        chmod +x "${SCRIPT_DIR}/redis-reload"
-        ln -sf "${SCRIPT_DIR}/redis-reload" "${HOME}/.local/bin/redis-reload"
-        echo "[+] Linked redis-reload helper into ${HOME}/.local/bin/redis-reload"
-    fi
+    symlink_to_local_bin "${SCRIPT_DIR}/redis-reload"
 }
 
 if is_installed "redis-server" --name "Redis"; then
