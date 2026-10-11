@@ -10,7 +10,7 @@ ExecStart=/usr/bin/rclone mount fritzbox: %h/Fritzbox-Storage \
   --vfs-cache-mode full \
   --vfs-cache-max-age 24h \
   --vfs-read-ahead 128M \
-  --dir-cache-time 1h \
+  --dir-cache-time 10s \
   --log-level INFO
 ExecStop=/bin/fusermount -u %h/Fritzbox-Storage
 Restart=on-failure
