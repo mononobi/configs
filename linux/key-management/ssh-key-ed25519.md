@@ -144,19 +144,19 @@ your local device:
   chown -R $(whoami):$(whoami) ~/.ssh
   ```
 
-## 5. Enhance Server Security with `999_sshd_config_secure.conf`
+## 5. Enhance Server Security with `0_sshd_config_secure.conf`
 
 To further secure your server, it is highly recommended to disable password-based
 authentication and other less secure methods. The file
-[999_sshd_config_secure.conf](./999_sshd_config_secure.conf) provides a secure configuration
-for your SSH daemon.
+[0_sshd_config_secure.conf](./0_sshd_config_secure.conf) provides a secure configuration for
+your SSH daemon.
 
 This configuration file sets the following directives:
 
 - `PermitRootLogin no`: Prevents direct root login via SSH.
 - `PasswordAuthentication no`: Disables password-based authentication, forcing key-based
   authentication.
-- `ChallengeResponseAuthentication no`: Disables challenge-response authentication.
+- `KbdInteractiveAuthentication no`: Disables challenge-response authentication.
 - `UsePAM no`: Disables Pluggable Authentication Modules (PAM) for SSH.
 
 **To use this configuration:**
@@ -166,19 +166,20 @@ avoid locking yourself out of the server._
 
 1.  Remove any existing configuration files.
 2.  Create a configuration file for `sshd` on the server.
-3.  Copy the content of [999_sshd_config_secure.conf](./999_sshd_config_secure.conf) to the
-    created `/etc/ssh/sshd_config.d/999_sshd_config_secure.conf` file on your server.
+3.  Copy the content of [0_sshd_config_secure.conf](./0_sshd_config_secure.conf) to the created
+    `/etc/ssh/sshd_config.d/0_sshd_config_secure.conf` file on your server.
 4.  Restart the SSH service to apply the changes.
 
     ```bash
     sudo rm -f /etc/ssh/sshd_config.d/*.conf
-    sudo touch /etc/ssh/sshd_config.d/999_sshd_config_secure.conf
-    sudo nano /etc/ssh/sshd_config.d/999_sshd_config_secure.conf
+    sudo touch /etc/ssh/sshd_config.d/0_sshd_config_secure.conf
+    sudo nano /etc/ssh/sshd_config.d/0_sshd_config_secure.conf
     ```
 
     **Important:**
-    - Keep the file name starting with `999_` to ensure it is loaded after any other possibly
-      present SSH configuration files, allowing it to override less secure settings.
+    - Keep the file name starting with `0_` to ensure it is loaded before any other possibly
+      present SSH configuration files, allowing it to lock specified settings from being
+      overridden by them.
     - Remove any existing `*.conf` files under `/etc/ssh/sshd_config.d/`. Some cloud providers
       (e.g., AWS) may have default SSH configurations that could override your settings. Ensure
       that only your secure configuration file is present in the directory.
