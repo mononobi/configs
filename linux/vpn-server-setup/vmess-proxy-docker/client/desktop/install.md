@@ -122,7 +122,7 @@ cp nekoray.desktop ~/.local/share/applications/
 ### Recommended Remedy
 
 Configure static, leak-free DNS using `dnsmasq` as documented in
-[permanent.dns.secure.md](file:///home/mono/Workspace/configs/linux/dns-config/permanent.dns.secure.md):
+[permanent.dns.secure.md](/linux/dns-config/permanent.dns.secure.md):
 
 ```text
 nameserver 8.8.8.8

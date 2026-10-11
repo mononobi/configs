@@ -14,8 +14,7 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Rclone official binary, FUSE 3 mount utilities, configures Google Drive
-  remote and sets up systemd auto-mount service.
+  Installs official Rclone binary and FUSE 3 mount utilities.
 
 Options:
   --no-update   Skip apt update before installation
@@ -41,6 +40,8 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+is_installed "rclone" && exit 0
 
 echo "[+] Starting installation/setup for Rclone..."
 
@@ -75,57 +76,5 @@ if [[ $rclone_exit -eq 3 ]]; then
 fi
 
 rclone version
-
-# Configure Google Drive remote
-if rclone listremotes 2>/dev/null | grep -q '^gdrive:$'; then
-    echo "[i] Rclone remote 'gdrive:' is already configured."
-else
-    echo ""
-    echo "[+] Configuring 'gdrive' remote..."
-    echo "[i] Prerequisites (from install.rclone.md Step 1):"
-    echo "    1. Go to https://console.cloud.google.com"
-    echo "    2. Create OAuth 2.0 Desktop App credentials for Google Drive API"
-    echo ""
-
-    read -rp "Enter your Google Drive Client ID: " client_id
-    if [[ -z "$client_id" ]]; then
-        echo "[!] Error: Client ID cannot be empty." >&2
-        exit 1
-    fi
-
-    read -rp "Enter your Google Drive Client Secret: " client_secret
-    if [[ -z "$client_secret" ]]; then
-        echo "[!] Error: Client Secret cannot be empty." >&2
-        exit 1
-    fi
-
-    echo "[+] Creating remote 'gdrive' and opening browser for authorization..."
-    rclone config create gdrive drive \
-        client_id "$client_id" \
-        client_secret "$client_secret" \
-        scope "drive" \
-        team_drive ""
-
-    if ! rclone listremotes 2>/dev/null | grep -q '^gdrive:$'; then
-        echo "[!] Error: Failed to configure 'gdrive:' remote." >&2
-        exit 1
-    fi
-    echo "[✓] Google Drive remote 'gdrive:' configured successfully!"
-fi
-
-# Create mount directory
-echo "[+] Creating mount directory at $HOME/Google-Drive..."
-mkdir -p "$HOME/Google-Drive"
-
-# Copy systemd service file and enable/start it
-mkdir -p "$HOME/.config/systemd/user"
-
-if [[ -f "$SCRIPT_DIR/files/rclone-gdrive.service" ]]; then
-    echo "[+] Installing and starting rclone-gdrive.service..."
-    cp "$SCRIPT_DIR/files/rclone-gdrive.service" "$HOME/.config/systemd/user/rclone-gdrive.service"
-    systemctl --user daemon-reload
-    systemctl --user enable --now rclone-gdrive.service
-    echo "[✓] rclone-gdrive.service is enabled and started."
-fi
 
 echo "[✓] Rclone setup completed successfully!"

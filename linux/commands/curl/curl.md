@@ -25,10 +25,8 @@ curl -s https://example.com/api/info \
 
 ## 2. Measuring Request Execution Time
 
-Use the timing configuration from
-[curl-time.txt](file:///home/mono/Workspace/configs/linux/commands/curl/curl-time.txt) (or
-[curl-time.md](file:///home/mono/Workspace/configs/linux/commands/curl/curl-time.md)) to
-profile connection phases.
+Use the timing configuration from [curl-time.txt](/linux/commands/curl/curl-time.txt) (or
+[curl-time.md](/linux/commands/curl/curl-time.md)) to profile connection phases.
 
 ### Template
 

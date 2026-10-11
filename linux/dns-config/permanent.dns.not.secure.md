@@ -6,8 +6,7 @@ This guide explains how to set permanent DNS servers using `resolvconf`.
 >
 > This method **does not prevent DNS leaks when connected to a VPN**. If you require complete
 > protection against DNS leaks and query spoofing, refer to
-> [permanent.dns.secure.md](file:///home/mono/Workspace/configs/linux/dns-config/permanent.dns.secure.md)
-> instead.
+> [permanent.dns.secure.md](/linux/dns-config/permanent.dns.secure.md) instead.
 
 ---
 
