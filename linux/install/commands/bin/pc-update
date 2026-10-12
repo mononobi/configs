@@ -151,6 +151,8 @@ if (( DIFF_SECONDS >= INTERVAL_SECONDS )) || [[ "$FORCE_STANDALONE" == "true" ]]
         if ! agy update; then
             echo -e "${C_YELLOW}[!] Warning: Antigravity CLI update issue, skipping.${C_RESET}"
         fi
+        # Remove the backup created by agy before updating
+        rm -f "${HOME}/.local/bin"/agy*.old
     fi
 
     if is_installed --check "rclone"; then
