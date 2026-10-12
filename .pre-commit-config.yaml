@@ -1,0 +1,10 @@
+repos:
+  - repo: local
+    hooks:
+      - id: format-markdown
+        name: Format Markdown
+        entry: ./scripts/format-markdown.sh
+        language: script
+        types: [markdown]
+        pass_filenames: true
+        exclude: ^AGENTS\.md$
