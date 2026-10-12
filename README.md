@@ -670,6 +670,27 @@ using the `scripts/format-markdown.sh` script:
   ./scripts/format-markdown.sh
   ```
 
+### Rule 15: Always Provide a `sudo` Fallback for `docker compose`
+
+Any installer script that provisions or manages containers via `docker compose` must always
+provide an automated fallback to run `sudo docker compose` if standard `docker compose` fails:
+
+- **Rootless & Session Context**: When an installer script is executed right after installing
+  Docker itself (for example, in automated batch runs or immediate server provisioning) and
+  before the user logs out and back in or restarts their system, the current shell session
+  lacks active membership in the `docker` group. In this state, rootless `docker compose`
+  commands fail with socket permission errors.
+- **Automated Fallback Pattern**: Always attempt standard `docker compose` first. If it fails,
+  log an informational warning and fall back to `sudo docker compose`:
+  ```bash
+  if ! (cd "$TARGET_DIR" && docker compose up -d); then
+      echo "[!] Standard docker compose command failed, attempting with sudo..."
+      (cd "$TARGET_DIR" && sudo docker compose up -d)
+  fi
+  ```
+- **Consistent Application**: Apply this fallback logic consistently to all container launch,
+  recreation, or restart actions (`docker compose up -d`, `--force-recreate`, `restart`).
+
 ---
 
 ## Application Types & Extensibility

@@ -183,13 +183,19 @@ fi
 if [[ "$IS_RUNNING" == "true" ]]; then
     if [[ "$CONFIG_UPDATED" == "true" || "$FORCE" == "true" ]]; then
         echo "[+] Configurations updated; recreating container ${CONTAINER_NAME}..."
-        (cd "$TARGET_DIR" && docker compose up -d --force-recreate)
+        if ! (cd "$TARGET_DIR" && docker compose up -d --force-recreate); then
+            echo "[!] Standard docker compose command failed, attempting with sudo..."
+            (cd "$TARGET_DIR" && sudo docker compose up -d --force-recreate)
+        fi
     else
         echo -e "${C_GREEN}[i] Container ${CONTAINER_NAME} is already active with latest configuration, skipping...${C_RESET}"
     fi
 else
     echo "[+] Launching container ${CONTAINER_NAME} via Docker Compose..."
-    (cd "$TARGET_DIR" && docker compose up -d)
+    if ! (cd "$TARGET_DIR" && docker compose up -d); then
+        echo "[!] Standard docker compose command failed, attempting with sudo..."
+        (cd "$TARGET_DIR" && sudo docker compose up -d)
+    fi
 fi
 
 # 8. Verify Redis service readiness

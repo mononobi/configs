@@ -366,13 +366,19 @@ for VER in "${TARGET_VERSIONS[@]}"; do
     if [[ "$IS_RUNNING" == "true" ]]; then
         if [[ "$CONFIG_UPDATED" == "true" || "$FORCE" == "true" ]]; then
             echo "[+] Configurations updated; restarting container ${CONTAINER_NAME}..."
-            (cd "$TARGET_DIR" && docker compose restart)
+            if ! (cd "$TARGET_DIR" && docker compose restart); then
+                echo "[!] Standard docker compose command failed, attempting with sudo..."
+                (cd "$TARGET_DIR" && sudo docker compose restart)
+            fi
         else
             echo "[i] Container ${CONTAINER_NAME} is already active with latest configuration, skipping..."
         fi
     else
         echo "[+] Launching container ${CONTAINER_NAME} via Docker Compose..."
-        (cd "$TARGET_DIR" && docker compose up -d)
+        if ! (cd "$TARGET_DIR" && docker compose up -d); then
+            echo "[!] Standard docker compose command failed, attempting with sudo..."
+            (cd "$TARGET_DIR" && sudo docker compose up -d)
+        fi
     fi
 
     # Wait up to 20 seconds for SQL Server service readiness
