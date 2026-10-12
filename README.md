@@ -653,8 +653,20 @@ using the `scripts/format-markdown.sh` script:
 - **Line Length & Prettier Enforcement**: The script invokes Prettier across all Markdown
   documents in the project, automatically wrapping prose and formatting content to comply with
   the project's line length limit (Rule 11).
-- **Execution Command**: Run the script from the repository root:
+- **Automated Pre-Commit Hook**: The repository uses the `pre-commit` framework
+  (`.pre-commit-config.yaml`) to automatically format staged Markdown files upon commit.
+- **Activating Pre-Commit Hook on a New Clone**: Run `pre-commit install` once in the cloned
+  repository:
   ```bash
+  pre-commit install
+  ```
+- **Manual Execution Command**: Run the script manually on specific files or across the whole
+  repository:
+  ```bash
+  # Format specific Markdown file(s)
+  ./scripts/format-markdown.sh README.md linux/swap/disable-swap.md
+
+  # Format all Markdown files across the repository
   ./scripts/format-markdown.sh
   ```
 
