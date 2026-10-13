@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Description: Install and configure TUXEDO Control Center & Drivers
-# Note: Modernized for Ubuntu with best practices.
+# Note: Official repository setup and drivers for TUXEDO hardware.
 
 set -euo pipefail
 
@@ -48,12 +48,21 @@ echo "[+] Starting installation/setup for TUXEDO Control Center & Drivers..."
 conditional_apt_update
 require_app ca-certificates curl gnupg lsb-release
 
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://deb.tuxedocomputers.com/0x54840598.pub.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/tuxedocomputers.gpg > /dev/null
-sudo chmod 644 /etc/apt/keyrings/tuxedocomputers.gpg
+sudo install -m 0755 -d /usr/share/keyrings
+curl -fsSL https://deb.tuxedocomputers.com/0x54840598.pub.asc | gpg --dearmor | sudo tee /usr/share/keyrings/tuxedo-archive-keyring.gpg > /dev/null
+sudo chmod 644 /usr/share/keyrings/tuxedo-archive-keyring.gpg
 
+# Bootstrap official DEB822 repository configuration.
+# When tuxedo-tomte installs tuxedo-repository, it replaces this file with its official symlink.
 CODENAME=$(lsb_release -cs)
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/tuxedocomputers.gpg] https://deb.tuxedocomputers.com/ubuntu ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/tuxedo-computers.list
+cat <<EOF | sudo tee /etc/apt/sources.list.d/tuxedo-computers.sources > /dev/null
+Types: deb
+URIs: https://deb.tuxedocomputers.com/ubuntu
+Suites: ${CODENAME}
+Components: main
+Enabled: yes
+Signed-By: /usr/share/keyrings/tuxedo-archive-keyring.gpg
+EOF
 
 sudo apt-get update
 sudo apt-get install -y tuxedo-tomte tuxedo-control-center
