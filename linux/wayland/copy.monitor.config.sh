@@ -9,6 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 source "${SCRIPT_DIR}/../install/utils.sh"
 
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
+ASSUME_YES=false
 
 show_help() {
     cat <<EOF
@@ -24,6 +25,7 @@ Description:
   Completely idempotent and safe to run multiple times.
 
 Options:
+  -y, --yes     Non-interactive mode (skip prerequisite confirmation prompt)
   --no-update   Ignored (no APT dependencies required)
   -h, --help    Show this help message and exit
 EOF
@@ -35,6 +37,10 @@ while [[ $# -gt 0 ]]; do
         -h|--help)
             show_help
             exit 0
+            ;;
+        -y|--yes)
+            ASSUME_YES=true
+            shift
             ;;
         --no-update|--skip-update)
             SKIP_UPDATE=true
@@ -65,6 +71,52 @@ USER_MONITORS="${USER_HOME}/.config/monitors.xml"
 echo "[+] User: ${REAL_USER}"
 echo "[+] Source monitor configuration: ${USER_MONITORS}"
 
+# 2. Prerequisite check & confirmation prompt
+if [[ "$ASSUME_YES" != "true" ]]; then
+    echo ""
+    echo -e "${C_YELLOW}${DIV_SUB}${C_RESET}"
+    echo -e " ${C_BOLD}${C_YELLOW}[!] PREREQUISITE: Display Configuration Required${C_RESET}"
+    echo -e "${C_YELLOW}${DIV_SUB}${C_RESET}"
+    echo -e " Before proceeding, please configure your display settings:"
+    echo -e "   1. Open ${C_BOLD}Settings -> Displays${C_RESET}."
+    echo -e "   2. Configure your ${C_BOLD}resolutions${C_RESET}, ${C_BOLD}refresh rates${C_RESET}, and ${C_BOLD}scaling${C_RESET}."
+    echo -e "   3. Arrange your ${C_BOLD}multi-monitor layout${C_RESET} and set your ${C_BOLD}primary monitor${C_RESET}."
+    echo -e "   4. Click ${C_BOLD}Apply${C_RESET} to save your settings to: ${USER_MONITORS}"
+    echo -e ""
+    echo -e " Once configured, this script copies your setup to the GDM login screen"
+    echo -e " so your monitor layout persists before logging in."
+    echo -e "${C_YELLOW}${DIV_SUB}${C_RESET}"
+    echo ""
+
+    echo -ne "${C_CYAN}[?] Press [Enter] to perform the operation, or 'c' to cancel: ${C_RESET}"
+    user_choice=""
+    if ! read -r user_choice; then
+        if [[ -e /dev/tty && -r /dev/tty ]]; then
+            read -r user_choice </dev/tty || user_choice="c"
+        else
+            user_choice="c"
+        fi
+    fi
+
+    trimmed_choice="$(echo "${user_choice}" | tr -d '[:space:]')"
+    case "${trimmed_choice,,}" in
+        ""|y|yes)
+            echo ""
+            ;;
+        c|cancel|q|quit|n|no)
+            echo "" >&2
+            echo -e "${C_RED}[!] Operation cancelled by user.${C_RESET}" >&2
+            exit 1
+            ;;
+        *)
+            echo "" >&2
+            echo -e "${C_RED}[!] Unrecognized input '${user_choice}'. Operation cancelled.${C_RESET}" >&2
+            exit 1
+            ;;
+    esac
+fi
+
+# 3. Verify source monitor configuration file exists
 if [[ ! -f "$USER_MONITORS" ]]; then
     echo "[!] Error: Monitor configuration file not found at: ${USER_MONITORS}" >&2
     echo "    Please configure your displays in Settings -> Displays, click Apply," >&2
@@ -72,7 +124,7 @@ if [[ ! -f "$USER_MONITORS" ]]; then
     exit 1
 fi
 
-# 2. Locate GDM user and home directory
+# 4. Locate GDM user and home directory
 GDM_USER="gdm"
 if ! id "$GDM_USER" >/dev/null 2>&1; then
     if id "gdm3" >/dev/null 2>&1; then
@@ -94,14 +146,14 @@ GDM_MONITORS="${GDM_CONFIG_DIR}/monitors.xml"
 echo "[+] GDM user: ${GDM_USER} (${GDM_HOME})"
 echo "[+] Destination monitor configuration: ${GDM_MONITORS}"
 
-# 3. Use sudo if not already root
+# 5. Use sudo if not already root
 if [[ $EUID -ne 0 ]]; then
     SUDO="sudo"
 else
     SUDO=""
 fi
 
-# 4. Copy monitor configuration and set ownership
+# 6. Copy monitor configuration and set ownership
 echo "[+] Ensuring GDM config directory exists..."
 $SUDO mkdir -p "${GDM_CONFIG_DIR}"
 $SUDO chmod 755 "${GDM_CONFIG_DIR}"
