@@ -343,9 +343,10 @@ if gsettings list-schemas | grep -q "org.gnome.shell.extensions.dash-to-dock"; t
     gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false
 fi
 
-echo "[+] Configuring Window Behavior and Fonts..."
+echo "[+] Configuring Window Behavior, Mouse, and Fonts..."
 gsettings set org.gnome.mutter center-new-windows true
 gsettings set org.gnome.desktop.interface text-scaling-factor 1.0
+gsettings set org.gnome.desktop.interface gtk-enable-primary-paste true
 
 echo ""
 echo "================================================================================"
@@ -361,6 +362,7 @@ echo "  Login Wallpaper:   /usr/share/backgrounds/${LOGIN_BG_IMG}"
 echo "  Files Icon Size:   Medium (3 of 5)"
 echo "  Dock Position:     Bottom (Panel Mode, 40px)"
 echo "  Desktop Icons:     Small, Top-Left (Home/Trash/Volumes hidden)"
+echo "  Middle Click:      Paste Enabled (gtk-enable-primary-paste)"
 echo "================================================================================"
 echo ""
 echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"

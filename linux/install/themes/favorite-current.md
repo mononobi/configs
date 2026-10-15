@@ -198,6 +198,10 @@ Mouse Wheel**.
 - **Click Actions:**
   - **Center New Windows:** On
 
+> Tweaks → Mouse & Touchpad:
+
+- **Middle Click Paste:** On
+
 > GDM Settings → Fonts:
 
 - **Scaling Factor:** 1.0
@@ -234,6 +238,10 @@ Mouse Wheel**.
 
 - **Click Actions:**
   - **Center New Windows:** On
+
+> Tweaks → Mouse & Touchpad:
+
+- **Middle Click Paste:** On
 
 > GDM Settings → Fonts:
 
@@ -272,6 +280,10 @@ Mouse Wheel**.
 
 - **Click Actions:**
   - **Center New Windows:** On
+
+> Tweaks → Mouse & Touchpad:
+
+- **Middle Click Paste:** On
 
 > GDM Settings → Fonts:
 
