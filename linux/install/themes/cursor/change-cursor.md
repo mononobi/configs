@@ -62,6 +62,10 @@ system user and inject the setting into its isolated database:
 sudo -u gdm -s /bin/bash -c "dbus-run-session gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'"
 ```
 
+> **Important:** Neither this manual injection nor the **GDM Settings** app fixes the login
+> screen cursor alone. **Both must be applied (in no specific order)**—ensure you also select
+> `DMZ-White` under the Appearance tab in the GDM Settings app.
+
 ## 6. Restart the Display Manager
 
 To apply all these changes—especially for Wayland and GDM—you need to restart the display

@@ -109,9 +109,15 @@ Open the **GDM Settings** app and configure the theme and icons for login page:
 - **Icons:** Tela-dark
 - **Cursor:** DMZ-White
 
-> IMPORTANT: After configuring the themes, never open the **Appearance** menu on the **Ubuntu
-> Settings** window, otherwise all styling settings will be reset to their default values and
-> you have to reconfigure.
+> [!IMPORTANT]
+>
+> Neither the cursor installer (`change.cursor.sh`) nor the **GDM Settings** app can fix the
+> login screen cursor alone. **Both must be applied (in no specific order)** for the cursor to
+> properly take effect on the login page!
+>
+> After configuring the themes, never open the **Appearance** menu on the **Ubuntu Settings**
+> window, otherwise all styling settings will be reset to their default values, and you have to
+> reconfigure.
 
 ## Suggestions
 
@@ -123,6 +129,7 @@ Set it in the **GDM Settings** app:
 
 - **Type:** Image
 - **Image:** A high quality image of your choice
+- **Adjustment:** Fit To Screen
 
 > Suggested Images:
 
@@ -271,9 +278,10 @@ Mouse Wheel**.
 - **Scaling Factor:** 1.0
 - **Login Background** [Abstract Blur](./login-background/images/abstract-blur.jpg)
 
-> NOTE: On `Ubuntu 26.04` and later, the cursor change through the `Tweaks` and `GDM-Settings`
-> apps will not work, to change the cursor, follow the guides in
-> [Change Cursor](cursor/change-cursor.md) file.
+> NOTE: On `Ubuntu 26.04` and later, neither the cursor installer nor the `GDM-Settings` app
+> can fix the login screen cursor alone—both must be applied (in no specific order) for the
+> cursor to properly take effect on the login page. Follow the guides in
+> [Change Cursor](cursor/change-cursor.md).
 
 > [!NOTE]
 >

@@ -184,8 +184,8 @@ done < /dev/null > /dev/null 2>&1 &
 sudo_keepalive_pid=$!
 
 # Ensure required applications are installed via require_app
-echo "[+] Ensuring application dependencies (shell-theme-changer, git, sassc) are installed..."
-require_app gnome-extensions/recommended/shell-theme-changer git sassc
+echo "[+] Ensuring application dependencies (shell-theme-changer, git, sassc, gdm-settings) are installed..."
+require_app gnome-extensions/recommended/shell-theme-changer git sassc gdm-settings
 
 # -----------------------------------------------------------------------------
 # Clean previous installations
@@ -304,6 +304,7 @@ if [[ -f "$BG_SOURCE" ]]; then
     if gsettings list-schemas | grep -q "io.github.realmazharhussain.GdmSettings.appearance"; then
         gsettings set io.github.realmazharhussain.GdmSettings.appearance background-type 'image'
         gsettings set io.github.realmazharhussain.GdmSettings.appearance background-image "/usr/share/backgrounds/${LOGIN_BG_IMG}"
+        # Note: 'zoom' in gsettings corresponds to "Fit To Screen" in the GDM Settings GUI
         gsettings set io.github.realmazharhussain.GdmSettings.appearance bg-adjustment 'zoom'
         gsettings set io.github.realmazharhussain.GdmSettings.appearance shell-theme "${THEME_NAME}"
         gsettings set io.github.realmazharhussain.GdmSettings.appearance icon-theme "${ICON_NAME}"
@@ -362,6 +363,32 @@ echo "  Dock Position:     Bottom (Panel Mode, 40px)"
 echo "  Desktop Icons:     Small, Top-Left (Home/Trash/Volumes hidden)"
 echo "================================================================================"
 echo ""
+echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
+echo -e "${C_BOLD}${C_YELLOW}  ACTION REQUIRED: CONFIGURE GDM SETTINGS APP (LOGIN SCREEN)${C_RESET}"
+echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
+echo -e "To ensure themes, the background image, and the cursor properly take effect"
+echo -e "on the login screen, open the ${C_BOLD}GDM Settings${C_RESET} app and set the following:"
+echo ""
+echo -e "  ${C_BOLD}[ Appearance Tab ]${C_RESET}"
+echo -e "  • Shell:            ${C_CYAN}${THEME_NAME}${C_RESET}"
+echo -e "  • Icons:            ${C_CYAN}${ICON_NAME}${C_RESET}"
+echo -e "  • Cursor:           ${C_CYAN}DMZ-White${C_RESET}"
+echo ""
+echo -e "  ${C_BOLD}[ Appearance -> Background Section ]${C_RESET}"
+echo -e "  • Type:             ${C_CYAN}Image${C_RESET}"
+echo -e "  • Image:            ${C_CYAN}/usr/share/backgrounds/${LOGIN_BG_IMG}${C_RESET}"
+echo -e "  • Adjustment:       ${C_CYAN}Fit To Screen${C_RESET}"
+echo ""
+echo -e "  ${C_BOLD}${C_YELLOW}CRITICAL NOTE ON LOGIN SCREEN CURSOR:${C_RESET}"
+echo -e "  Neither the cursor installer nor the GDM Settings app fixes the login"
+echo -e "  screen cursor alone. ${C_BOLD}Both must be applied (in no specific order)${C_RESET} for the"
+echo -e "  cursor to properly take effect on the login page!"
+echo ""
+echo -e "  ${C_BOLD}How to launch GDM Settings:${C_RESET}"
+echo -e "  Search for ${C_CYAN}GDM Settings${C_RESET} in your Applications menu, or run:"
+echo -e "  ${C_CYAN}flatpak run io.github.realmazharhussain.GdmSettings${C_RESET}"
+echo -e "${C_YELLOW}${DIV_MAIN}${C_RESET}"
+echo ""
 echo "IMPORTANT: As noted in the guide, never open Settings -> Appearance in Ubuntu,"
 echo "           as it will reset custom shell and icon themes to defaults."
 echo ""
@@ -370,6 +397,6 @@ if [[ "$RESTART_GDM" == "true" ]]; then
     echo "[!] Restarting gdm3 service now..."
     sudo systemctl restart gdm3
 else
-    echo "To finalize login screen and session changes, log out and back in,"
-    echo "or restart the display manager: sudo systemctl restart gdm3"
+    echo "To finalize login screen and session changes, apply settings in GDM Settings,"
+    echo "then log out and back in, or restart the display manager: sudo systemctl restart gdm3"
 fi
