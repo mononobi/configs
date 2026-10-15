@@ -80,6 +80,7 @@ if gsettings list-schemas | grep -q "org.gnome.shell.extensions.dash-to-dock"; t
     gsettings set org.gnome.shell.extensions.dash-to-dock shift-middle-click-action 'minimize' 2>/dev/null || true
     gsettings set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true 2>/dev/null || true
     gsettings set org.gnome.shell.extensions.dash-to-dock disable-overview-on-startup true 2>/dev/null || true
+    gsettings set org.gnome.shell.extensions.dash-to-dock apply-custom-theme true 2>/dev/null || true
     gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode 'FIXED' 2>/dev/null || true
     gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.65 2>/dev/null || true
 fi

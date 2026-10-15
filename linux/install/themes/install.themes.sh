@@ -335,6 +335,7 @@ fi
 
 echo "[+] Configuring Ubuntu Dock (dash-to-dock extension)..."
 if gsettings list-schemas | grep -q "org.gnome.shell.extensions.dash-to-dock"; then
+    gsettings set org.gnome.shell.extensions.dash-to-dock apply-custom-theme true
     gsettings set org.gnome.shell.extensions.dash-to-dock extend-height true
     gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 40
     gsettings set org.gnome.shell.extensions.dash-to-dock multi-monitor true
