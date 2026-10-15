@@ -274,3 +274,12 @@ Mouse Wheel**.
 > NOTE: On `Ubuntu 26.04` and later, the cursor change through the `Tweaks` and `GDM-Settings`
 > apps will not work, to change the cursor, follow the guides in
 > [Change Cursor](cursor/change-cursor.md) file.
+
+> [!NOTE]
+>
+> In the Tweaks app, the full name of the icon packs may not be visible. To see the full name
+> of the currently selected pack, execute this command in a terminal:
+>
+> ```bash
+> gsettings get org.gnome.desktop.interface icon-theme
+> ```
