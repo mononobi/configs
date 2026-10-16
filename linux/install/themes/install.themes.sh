@@ -186,6 +186,7 @@ sudo_keepalive_pid=$!
 # Ensure required applications are installed via require_app
 echo "[+] Ensuring application dependencies (shell-theme-changer, git, sassc, gdm-settings) are installed..."
 require_app gnome-extensions/recommended/shell-theme-changer git sassc gdm-settings
+require_app python --fast
 
 # -----------------------------------------------------------------------------
 # Clean previous installations
@@ -245,6 +246,9 @@ else
     echo "    Cloning Tela-icon-theme repository..."
     git clone https://github.com/vinceliuice/Tela-icon-theme.git "$TELA_DIR"
 fi
+
+echo "    Patching Tela SVG canvas dimensions for GTK 4.22 / Nautilus zoom..."
+python3 "${SCRIPT_DIR}/patch_tela_svgs.py" "$TELA_DIR"
 
 cd "$TELA_DIR"
 ./install.sh -a -d "${HOME}/.icons"
