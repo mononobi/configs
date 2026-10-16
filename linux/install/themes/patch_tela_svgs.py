@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 """
 Patch Tela Icon Theme SVGs for GTK 4.22 / GNOME 50 High-DPI & Zoom Scaling.
-Replaces root SVG width/height with 512 to prevent GTK 4.22 fallback texture capping at 64px.
-Strictly preserves symlinks, viewBox, colors, and KDE dynamic color scheme styles.
+Replaces root SVG width/height with 512 on folder (places) icons to prevent GTK 4.22
+fallback texture capping at 64px.
+
+Safety Rules:
+1. Targets ONLY 'places' (folder icons with dynamic color-scheme <style> tags).
+2. Guarantees viewBox exists (injects viewBox="0 0 {orig_w} {orig_h}" if missing)
+   so icons never shrink into dots.
+3. Strictly skips all symlinks.
+4. Validates XML syntax before writing.
 """
 
 import os
@@ -10,6 +17,39 @@ import sys
 import glob
 import re
 import xml.etree.ElementTree as ET
+
+def patch_tag(tag: str, target_size: int = 512) -> str:
+    # Extract original width / height if available
+    w_match = re.search(r'\bwidth=[\"\']([^\"\']+)[\"\']', tag)
+    h_match = re.search(r'\bheight=[\"\']([^\"\']+)[\"\']', tag)
+    orig_w = w_match.group(1) if w_match else "64"
+    orig_h = h_match.group(1) if h_match else "64"
+
+    # Strip units if any (e.g. 64px -> 64)
+    orig_w_num = re.sub(r'[^\d.]', '', orig_w) or "64"
+    orig_h_num = re.sub(r'[^\d.]', '', orig_h) or "64"
+
+    # Check if viewBox exists
+    has_vb = bool(re.search(r'\bviewBox=[\"\'][^\"\']+[\"\']', tag, re.I))
+
+    new_tag = tag
+    # If missing, inject viewBox based on original dimensions so content scales to fill
+    if not has_vb:
+        new_tag = re.sub(r'<svg\b', f'<svg viewBox="0 0 {orig_w_num} {orig_h_num}"', new_tag, count=1)
+
+    # Set width to target_size
+    if w_match:
+        new_tag = re.sub(r'\bwidth=[\"\'][^\"\']+[\"\']', f'width="{target_size}"', new_tag)
+    else:
+        new_tag = re.sub(r'<svg\b', f'<svg width="{target_size}"', new_tag, count=1)
+
+    # Set height to target_size
+    if h_match:
+        new_tag = re.sub(r'\bheight=[\"\'][^\"\']+[\"\']', f'height="{target_size}"', new_tag)
+    else:
+        new_tag = re.sub(r'<svg\b', f'<svg height="{target_size}"', new_tag, count=1)
+
+    return new_tag
 
 def patch_tela_svgs(repo_dir: str, target_size: int = 512):
     repo_dir = os.path.abspath(os.path.expanduser(repo_dir))
@@ -20,9 +60,10 @@ def patch_tela_svgs(repo_dir: str, target_size: int = 512):
         sys.exit(1)
 
     print(f"[+] Targeting Tela repository at: {repo_dir}")
-    print(f"[+] Scanning scalable directories under: {scalable_dir}")
+    print(f"[+] Patching folder icons under: {scalable_dir}/places")
 
-    categories = ["places", "apps", "devices", "mimetypes"]
+    # Only patch 'places' where <style id="current-color-scheme"> causes GTK fallback
+    categories = ["places"]
     total_scanned = 0
     total_patched = 0
     skipped_symlinks = 0
@@ -39,7 +80,7 @@ def patch_tela_svgs(repo_dir: str, target_size: int = 512):
         for fpath in svg_files:
             total_scanned += 1
 
-            # Safety 1: Strictly skip any symlinks
+            # Safety: Strictly skip any symlinks
             if os.path.islink(fpath):
                 skipped_symlinks += 1
                 continue
@@ -53,24 +94,12 @@ def patch_tela_svgs(repo_dir: str, target_size: int = 512):
                 continue
 
             orig_tag = match.group(1)
-            new_tag = orig_tag
-
-            # Replace width="..." with width="512"
-            if re.search(r'\bwidth=[\"\'][^\"\']+[\"\']', new_tag):
-                new_tag = re.sub(r'\bwidth=[\"\'][^\"\']+[\"\']', f'width="{target_size}"', new_tag)
-            else:
-                new_tag = re.sub(r'<svg', f'<svg width="{target_size}"', new_tag, count=1)
-
-            # Replace height="..." with height="512"
-            if re.search(r'\bheight=[\"\'][^\"\']+[\"\']', new_tag):
-                new_tag = re.sub(r'\bheight=[\"\'][^\"\']+[\"\']', f'height="{target_size}"', new_tag)
-            else:
-                new_tag = re.sub(r'<svg', f'<svg height="{target_size}"', new_tag, count=1)
+            new_tag = patch_tag(orig_tag, target_size)
 
             if new_tag != orig_tag:
                 new_content = content[:match.start()] + new_tag + content[match.end():]
 
-                # Safety 2: Validate XML before writing
+                # Validate XML before saving
                 try:
                     ET.fromstring(new_content)
                 except Exception as e:

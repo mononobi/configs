@@ -241,6 +241,7 @@ echo "[+] Step 4: Installing Tela icon theme..."
 TELA_DIR="${HOME}/Workspace/linux-styling/icons/Tela-icon-theme"
 if [[ -d "${TELA_DIR}/.git" ]]; then
     echo "    Updating existing Tela-icon-theme git repository..."
+    git -C "$TELA_DIR" checkout -- .
     git -C "$TELA_DIR" pull --ff-only || true
 else
     echo "    Cloning Tela-icon-theme repository..."
