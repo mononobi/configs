@@ -70,6 +70,7 @@ require_app curl tar ca-certificates
 
 TARGET_DIR="${HOME}/.local/bin"
 TARGET_BIN="${TARGET_DIR}/speedtest"
+EXISTING_VER=""
 
 if [[ -f "$TARGET_BIN" ]]; then
     EXISTING_VER=$("$TARGET_BIN" --version 2>/dev/null | grep -Po 'Speedtest by Ookla \K[0-9.]+' || true)
@@ -159,6 +160,9 @@ install -m 0755 "$SPEEDTEST_BIN" "$TARGET_BIN"
 echo "[+] Installed speedtest binary to ${TARGET_BIN}"
 
 echo "[+] Verification:"
+if [[ -n "$EXISTING_VER" ]]; then
+    echo "[i] Previous version: v${EXISTING_VER}"
+fi
 "$TARGET_DIR/speedtest" --version || true
 
 echo "[✓] Ookla Speedtest CLI setup completed successfully!"
