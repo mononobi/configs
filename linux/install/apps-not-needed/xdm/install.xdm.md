@@ -51,7 +51,7 @@ To do this, follow these steps:
 
 1. Copy the `files/chrome-extension-random-id.zip` file into a permanent location and extract
    it (e.g., `~/.config/xdm-chrome-extension`).
-2. On Chrome, go to **Settings -> Extensions** and enable **Developer mode**.
+2. On Chrome, go to **Settings → Extensions** and enable **Developer mode**.
 3. Click on the **Load unpacked** button on the top menu bar and select the root folder of the
    extension that you just extracted.
    > **Note:** Make sure you select the folder in which the `manifest.json` file is located.
