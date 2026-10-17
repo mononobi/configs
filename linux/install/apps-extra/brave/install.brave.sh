@@ -48,7 +48,7 @@ echo "[+] Starting installation/setup for brave..."
 require_app ca-certificates curl gnupg apt-transport-https
 
 sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSLo /etc/apt/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+sudo curl -fsSL https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg -o /etc/apt/keyrings/brave-browser-archive-keyring.gpg
 sudo chmod 644 /etc/apt/keyrings/brave-browser-archive-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
 sudo apt-get update
