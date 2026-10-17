@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# 1. Terminate any running XDM process
+pkill -f xdman.jar || true
+
+# 2. Run the official uninstaller
+sudo /opt/xdman/uninstall.sh
+
+# 3. Remove leftover autostart, user config, and cache
+rm -f ~/.config/autostart/xdman.desktop
+rm -rf ~/.xdman ~/.cache/xdman
