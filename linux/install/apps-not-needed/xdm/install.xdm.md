@@ -1,5 +1,23 @@
 # Xtreme Download Manager (XDM) Installation
 
+> [!WARNING]
+>
+> **Deprecated / Incompatible with Ubuntu 26.04 and Later:**
+>
+> XDM 7.2.11 is obsolete (unmaintained since 2020) and relies on an embedded Java 11 (OpenJ9) /
+> Java Swing GUI with hardcoded 750×450 pixel canvas dimensions.
+>
+> On **Ubuntu 26.04 LTS and later**, GNOME Shell and Mutter enabled native XWayland scaling
+> (`xwayland-native-scaling`), which stops compositor-side window stretching for legacy X11
+> applications. As a result, XDM renders either as an unusable microscopic "tiny box" on HiDPI
+> displays or breaks into a black rectangle if Java UI scaling is forced.
+>
+> **Recommended Replacement:**
+>
+> Use **[FetchFlow](../../apps-recommended/fetchflow/install.fetchflow.md)** (located in
+> `apps-recommended/fetchflow`), which is a modernized .NET 8 + native GTK3 continuation of the
+> XDM codebase with full Wayland and HiDPI display scaling support.
+
 This guide walks you through downloading, installing, and integrating Xtreme Download Manager
 (XDM) into your web browsers.
 
