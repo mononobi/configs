@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+# Description: Distributes and synchronizes the encrypted Bitwarden vault to destination directories
+
+set -euo pipefail
+
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+source "${SCRIPT_DIR}/../../colors.sh"
+
+SOURCE_DIR="${HOME}/.bitwarden"
+SOURCE_GPG="${SOURCE_DIR}/bitwarden-info.gpg"
+
+show_help() {
+    cat <<EOF
+Usage: $(basename "$0") <destination_directory_1> [destination_directory_2 ...]
+
+Description:
+  Copies the encrypted Bitwarden vault (${SOURCE_GPG}) into one or more
+  destination directories. In each destination, it creates a .bitwarden
+  subfolder, copies the encrypted file, and sets secure permissions
+  (root:root, 600 for the file, 755 for the directory).
+
+Options:
+  -h, --help    Show this help message and exit
+EOF
+}
+
+# 1. Validate arguments
+if [[ $# -eq 0 ]]; then
+    show_help
+    exit 1
+fi
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help
+    exit 0
+fi
+
+# 2. Check if source vault exists
+if [[ ! -f "$SOURCE_GPG" ]]; then
+    echo -e "${C_RED}[!] Error: Main encrypted vault '${C_BOLD}${SOURCE_GPG}${C_RESET}${C_RED}' does not exist.${C_RESET}" >&2
+    echo -e "${C_YELLOW}[!] Please create your vault using '${C_BOLD}bitwarden-lock${C_RESET}${C_YELLOW}' first.${C_RESET}" >&2
+    exit 1
+fi
+
+real_source_dir="$(realpath "$SOURCE_DIR")"
+copied_count=0
+failed_count=0
+
+# 3. Iterate over destination arguments
+for dest in "$@"; do
+    echo -e "${C_BLUE}--- Processing: ${C_BOLD}${dest}${C_RESET}${C_BLUE} ---${C_RESET}"
+
+    # Verify destination exists
+    if [[ ! -e "$dest" ]]; then
+        echo -e "${C_RED}[!] Error: Path '${C_BOLD}${dest}${C_RESET}${C_RED}' does not exist, skipping.${C_RESET}" >&2
+        ((failed_count++)) || true
+        continue
+    fi
+
+    # Verify destination is a directory
+    if [[ ! -d "$dest" ]]; then
+        echo -e "${C_RED}[!] Error: Path '${C_BOLD}${dest}${C_RESET}${C_RED}' is a file, not a directory. Skipping.${C_RESET}" >&2
+        ((failed_count++)) || true
+        continue
+    fi
+
+    real_dest="$(realpath "$dest")"
+    target_dir="${real_dest}/.bitwarden"
+
+    # Avoid copying onto source directory itself
+    if [[ "$target_dir" == "$real_source_dir" ]]; then
+        echo -e "${C_YELLOW}[!] Warning: Destination '${C_BOLD}${target_dir}${C_RESET}${C_YELLOW}' is the source directory itself. Skipping.${C_RESET}"
+        continue
+    fi
+
+    target_file="${target_dir}/bitwarden-info.gpg"
+
+    # Overwrite confirmation if target .gpg exists (No default)
+    if [[ -f "$target_file" ]]; then
+        should_skip=false
+        while true; do
+            echo -en "${C_YELLOW}[?] Encrypted file '${C_BOLD}${target_file}${C_RESET}${C_YELLOW}' already exists. Overwrite? (${C_GREEN}yes/y${C_YELLOW} or ${C_RED}no/n${C_YELLOW}): ${C_RESET}"
+            read -r answer
+            case "${answer,,}" in
+                y|yes)
+                    break
+                    ;;
+                n|no)
+                    echo -e "${C_CYAN}[i] Skipped '${C_BOLD}${target_file}${C_RESET}${C_CYAN}'.${C_RESET}"
+                    should_skip=true
+                    break
+                    ;;
+                *)
+                    echo -e "${C_RED}[!] Please answer explicitly with 'yes'/'y' or 'no'/'n'.${C_RESET}"
+                    ;;
+            esac
+        done
+        if [[ "$should_skip" == true ]]; then
+            continue
+        fi
+    fi
+
+    # Create target .bitwarden folder (try user-space first, fallback to sudo if needed)
+    if [[ ! -d "$target_dir" ]]; then
+        if ! mkdir -p "$target_dir" 2>/dev/null; then
+            if ! sudo mkdir -p "$target_dir"; then
+                echo -e "${C_RED}[!] Error: Failed to create directory '${C_BOLD}${target_dir}${C_RESET}${C_RED}'. Skipping.${C_RESET}" >&2
+                ((failed_count++)) || true
+                continue
+            fi
+        fi
+    fi
+
+    # Copy the encrypted file (try user-space first, fallback to sudo if needed)
+    if ! cp "$SOURCE_GPG" "$target_file" 2>/dev/null; then
+        if ! sudo cp "$SOURCE_GPG" "$target_file"; then
+            echo -e "${C_RED}[!] Error: Failed to copy vault to '${C_BOLD}${target_file}${C_RESET}${C_RED}'. Skipping.${C_RESET}" >&2
+            ((failed_count++)) || true
+            continue
+        fi
+    fi
+
+    # Apply permissions and ownership
+    sudo chown root:root "$target_file" 2>/dev/null || true
+    sudo chmod 600 "$target_file" 2>/dev/null || true
+    sudo chown root:root "$target_dir" 2>/dev/null || true
+    sudo chmod 755 "$target_dir" 2>/dev/null || true
+
+    echo -e "${C_GREEN}[✓] Successfully copied vault to '${C_BOLD}${target_file}${C_RESET}${C_GREEN}'${C_RESET}"
+    ((copied_count++)) || true
+done
+
+echo ""
+echo -e "${C_BOLD}${C_GREEN}[✓] Finished: ${copied_count} location(s) updated successfully.${C_RESET}"
+if [[ $failed_count -gt 0 ]]; then
+    echo -e "${C_YELLOW}[!] Notice: ${failed_count} location(s) had errors or were skipped.${C_RESET}"
+fi

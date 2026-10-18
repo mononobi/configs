@@ -54,8 +54,8 @@ automatically:
 
 1. Copies the `bitwarden-info` template to `~/.bitwarden/bitwarden-info` with private user
    permissions (`600`).
-2. Creates symbolic links in `~/.local/bin/` for both `bitwarden-lock` and `bitwarden-unlock`,
-   making them executable from anywhere.
+2. Creates symbolic links in `~/.local/bin/` for `bitwarden-lock`, `bitwarden-unlock`, and
+   `bitwarden-copy`, making them executable from anywhere.
 
 #### 1. Fill in Your Credentials
 
@@ -159,6 +159,27 @@ Key fields explained:
   OpenPGP standards (encoded as byte `255`). This exponentially increases the computing time
   required for any offline GPU brute-force attempt, while running in a fraction of a second
   during normal decryption.
+
+#### 5. Distribute Encrypted Vault Copies (`bitwarden-copy`)
+
+To distribute or back up your encrypted vault to external drives, backup partitions, or USB
+flash drives:
+
+```bash
+bitwarden-copy /media/mono/USB_DRIVE /mnt/backup_drive
+```
+
+The script will automatically:
+
+- Verify that your source vault (`~/.bitwarden/bitwarden-info.gpg`) exists. If missing, it
+  instructs you to run `bitwarden-lock` first.
+- Create a `.bitwarden/` subfolder inside each specified destination path.
+- Prompt for overwrite confirmation (`yes/y or no/n` explicit, with no default) if
+  `bitwarden-info.gpg` already exists at any destination.
+- Copy `bitwarden-info.gpg` and apply the same strict ownership and permissions (`root:root`,
+  `chmod 600` for the file, and `chmod 755` for the directory).
+- Gracefully skip any invalid or non-existent destination paths and continue processing the
+  remaining paths.
 
 ### Configure The Desktop App:
 

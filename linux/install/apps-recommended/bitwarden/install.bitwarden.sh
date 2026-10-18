@@ -16,7 +16,7 @@ Usage: $(basename "$0") [OPTIONS]
 
 Description:
   Installs Bitwarden Desktop client via Flatpak, initializes ~/.bitwarden
-  configuration template, and links lock and unlock helpers into ~/.local/bin.
+  configuration template, and links lock, unlock, and copy helpers into ~/.local/bin.
 
 Options:
   --no-update   Skip apt update before installation
@@ -46,6 +46,7 @@ done
 setup_symlinks() {
     symlink_to_local_bin "$SCRIPT_DIR/bitwarden-unlock"
     symlink_to_local_bin "$SCRIPT_DIR/bitwarden-lock"
+    symlink_to_local_bin "$SCRIPT_DIR/bitwarden-copy"
 }
 
 setup_bitwarden_info() {
