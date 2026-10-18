@@ -1,22 +1,22 @@
 Bitwarden Account:
 
 Email:
-<your_email>
+<no_value:your_email>
 
 Master Password:
-<master_password>
+<no_value:master_password>
 
 GPG Encryption Key:
-<encryption_key_for_this_file>
+<no_value:encryption_key_for_this_file>
 
 PIN (Web - Desktop - Browser Extension):
-<pin_for_unlocking_the_vault>
+<no_value:pin_for_unlocking_the_vault>
 
 PIN (Mobile):
-<pin_for_unlocking_the_vault>
+<no_value:pin_for_unlocking_the_vault>
 
 Account fingerprint phrase:
-<account_finger_print_phrase>
+<no_value:account_finger_print_phrase>
 
 Disable two-step login recovery code:
-<disable_two_step_login_recovery_code>
+<no_value:disable_two_step_login_recovery_code>
