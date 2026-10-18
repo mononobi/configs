@@ -15,7 +15,8 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Description:
-  Installs Bitwarden Desktop client via Flatpak and links unlock helper into ~/.local/bin.
+  Installs Bitwarden Desktop client via Flatpak, initializes ~/.bitwarden
+  configuration template, and links lock and unlock helpers into ~/.local/bin.
 
 Options:
   --no-update   Skip apt update before installation
@@ -44,9 +45,36 @@ done
 
 setup_symlinks() {
     symlink_to_local_bin "$SCRIPT_DIR/bitwarden-unlock"
+    symlink_to_local_bin "$SCRIPT_DIR/bitwarden-lock"
+}
+
+setup_bitwarden_info() {
+    local target_dir="${HOME}/.bitwarden"
+    local target_file="${target_dir}/bitwarden-info"
+    local gpg_file="${target_dir}/bitwarden-info.gpg"
+
+    if [[ -f "$target_file" || -f "$gpg_file" ]]; then
+        echo "[i] Bitwarden info or encrypted vault already exists in ${target_dir}, skipping template copy."
+        return 0
+    fi
+
+    if [[ ! -d "$target_dir" ]]; then
+        mkdir -p "$target_dir"
+    fi
+
+    if [[ ! -w "$target_dir" ]]; then
+        sudo cp "${SCRIPT_DIR}/bitwarden-info" "$target_file"
+        sudo chown "$(id -u):$(id -g)" "$target_file"
+        sudo chmod 600 "$target_file"
+    else
+        cp "${SCRIPT_DIR}/bitwarden-info" "$target_file"
+        chmod 600 "$target_file"
+    fi
+    echo "[+] Copied bitwarden-info template to ${target_file}"
 }
 
 if is_installed "com.bitwarden.desktop" --type flatpak --name "Bitwarden"; then
+    setup_bitwarden_info
     setup_symlinks
     exit 0
 fi
@@ -59,7 +87,10 @@ require_app "flatpak"
 echo "[+] Installing Bitwarden Desktop from Flathub..."
 flatpak install -y flathub com.bitwarden.desktop
 
-# 2. Setup bitwarden-unlock helper script if present
+# 2. Setup bitwarden-info template if not present
+setup_bitwarden_info
+
+# 3. Setup bitwarden-lock and bitwarden-unlock helper scripts
 setup_symlinks
 
 echo "[✓] Bitwarden setup completed successfully!"

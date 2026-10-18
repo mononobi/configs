@@ -41,80 +41,78 @@ openssl rand -base64 50 | head -c 50; echo
 
 ### Secure The Master Password
 
-Run this commands to create a folder and a file to store the master password:
+When you run the Bitwarden installer (`install.bitwarden.sh` or through the main installer), it
+automatically:
+
+1. Copies the `bitwarden-info` template to `~/.bitwarden/bitwarden-info` with private user
+   permissions (`600`).
+2. Creates symbolic links in `~/.local/bin/` for both `bitwarden-lock` and `bitwarden-unlock`,
+   making them executable from anywhere.
+
+#### 1. Fill in Your Credentials
+
+Open the template in your preferred text editor:
 
 ```bash
-mkdir -p ~/.bitwarden/
-touch ~/.bitwarden/bitwarden-info
+nano ~/.bitwarden/bitwarden-info
 ```
 
-Copy the master password you generated into the `bitwarden-info` file. You can also add other
-information about your account in this file such as the email address you used to create the
-account, and any other relevant information.
+Replace all `<no_value:...>` placeholders with your real account credentials:
 
-Run this command to encrypt the `bitwarden-info` file with a memorable but still strong
-password.
+- Your generated 50-character Master Password
+- Your email address
+- GPG Encryption Key / Passphrase description
+- Web / Desktop / Extension and Mobile PINs
+- Account fingerprint phrase
+- Two-step recovery code
+
+> [!IMPORTANT] Do not leave any `<no_value:...>` fields in the file. The `bitwarden-lock`
+> script scans for these placeholders and will abort if any remain.
+
+#### 2. Encrypt The Info File (`bitwarden-lock`)
+
+Run the lock command from anywhere in your terminal:
 
 ```bash
-sudo gpg --symmetric --cipher-algo AES256 ~/.bitwarden/bitwarden-info
+bitwarden-lock
 ```
 
-A Gnome popup will ask you for a passphrase. This is the `secondary key` for this specific
-file. Make it something simple but still strong and unique that you can remember. To see your
-master password, you need to know this `secondary key`.
+The script will automatically perform several safety checks:
 
-> Note: On the Gnome popup, **DO NOT** select the `Save in the password manager` checkbox.
+- **Presence Check:** Ensures `~/.bitwarden/bitwarden-info` exists and is non-empty.
+- **Placeholder Check:** Verifies that no `<no_value:...>` placeholders remain.
+- **Overwrite Protection:** If `~/.bitwarden/bitwarden-info.gpg` already exists, it asks
+  whether to overwrite (`yes/y or no/n` explicit, with no default).
+- **AES-256 Encryption:** Prompts you for a passphrase using GPG symmetric encryption. On the
+  Gnome popup, enter your passphrase and **DO NOT** select the `Save in the password manager`
+  checkbox.
+- **Permission Hardening:** Automatically restricts ownership and permissions:
+  ```bash
+  sudo chown root:root ~/.bitwarden/bitwarden-info.gpg
+  sudo chmod 600 ~/.bitwarden/bitwarden-info.gpg
+  sudo chown root:root ~/.bitwarden
+  sudo chmod 755 ~/.bitwarden
+  ```
+- **Plaintext Deletion:** Prompts whether to securely delete the unencrypted `bitwarden-info`
+  file (`yes/y or no/n` explicit, with no default).
 
-A GPG encrypted file called `bitwarden-info.gpg` will be created.
+#### 3. View Your Credentials (`bitwarden-unlock`)
 
-Run these commands to limit the access to the GPG file to the root user (**sudo**):
-
-```bash
-sudo chown root:root ~/.bitwarden/bitwarden-info.gpg
-sudo chmod 600 ~/.bitwarden/bitwarden-info.gpg
-sudo chown root:root ~/.bitwarden
-sudo chmod 755 ~/.bitwarden
-```
-
-> Now the file is encrypted and only the root user can read it. A regular user cannot read,
-> write, delete, copy, or move the GPG file. This also applies to the `~/.bitwarden` directory.
-
-Run this command to see you master password by decrypting the GPG file:
-
-```bash
-sudo gpg --decrypt ~/.bitwarden/bitwarden-info.gpg
-```
-
-If you were successful to decrypt the GPG file, go ahead and delete the original
-`bitwarden-info` file (**not the GPG file**):
-
-```bash
-sudo rm ~/.bitwarden/bitwarden-info
-```
-
-> Important: The `bitwarden-info.gpg` file is your only gate to log in to your bitwarden
-> account. Keep multiple copies of it on different drives and mediums. Since it is both
-> encrypted and also limited to the root user, it is safe to have multiple copies of it in
-> different places. Make sure to apply the same set of permissions to all copies of the GPG
-> file as mentioned above.
-
-> Note: You can create a symbolic link for the `bitwarden-unlock` script in your local `bin`
-> folder to be able to unlock the GPG file by a single command from anywhere.
-
-> Note: When you decrypt the GPG file once, it will remain unlocked for the next 15 minutes. So
-> on consecutive usages of the decryption command within 15 minutes, you will only need to
-> enter your user's password for the `sudo` command.
-
-```bash
-chmod +x bitwarden-unlock
-ln -sf "$(pwd)/bitwarden-unlock" ~/.local/bin/
-```
-
-Run this command in the terminal from anywhere to unlock the master password GPG file:
+Whenever you need to view your master password and account details, run from anywhere:
 
 ```bash
 bitwarden-unlock
 ```
+
+Enter your `sudo` password and GPG passphrase when prompted to decrypt and display your
+credentials.
+
+> [!NOTE] When you decrypt the GPG file once, GPG caches the key for 15 minutes. On consecutive
+> usages within that window, you will only need to authenticate with `sudo`.
+
+> [!IMPORTANT] The `bitwarden-info.gpg` file is your master recovery vault. Keep multiple
+> backup copies on secure external drives. Make sure to apply the same `root:root` ownership
+> and `600` permissions to any backup copies.
 
 ### Configure The Desktop App:
 
