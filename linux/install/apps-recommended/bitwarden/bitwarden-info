@@ -15,8 +15,8 @@ PIN (Web - Desktop - Browser Extension):
 PIN (Mobile):
 <no_value:pin_for_unlocking_the_vault>
 
-Account fingerprint phrase:
+Account Fingerprint Phrase:
 <no_value:account_finger_print_phrase>
 
-Disable two-step login recovery code:
+Disable Two-Step Login Recovery Code (Single Use):
 <no_value:disable_two_step_login_recovery_code>
