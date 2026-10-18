@@ -35,9 +35,17 @@ openssl rand -base64 50 | head -c 50; echo
 > and the stored credentials were stolen, the attacker cannot easily find out the encryption
 > key (the master password) and decrypt the stored credentials.
 
-> Note: The master password is only used when you are logged out of your account. For every-day
-> use where you are already logged in to your account, you will use another password called
-> `PIN` to unlock the app and see your saved credentials.
+> [!NOTE] The master password is only used when you are logged out of your account. For
+> every-day use where you are already logged in to your account, you will use another password
+> called `PIN` to unlock the app and see your saved credentials.
+
+> [!TIP] **Use a 15 to 20-word passphrase instead of random gibberish characters:** Instead of
+> 50 random characters, it is recommended to use a passphrase composed of **15 to 20 random
+> words** (e.g. using Diceware / EFF wordlists, separated by hyphens). A 15 to 20-word
+> passphrase provides ~194 to 258 bits of entropy (matching Bitwarden's 256-bit Argon2id
+> ceiling and mathematically uncrackable by any computer). More importantly, real words
+> eliminate typo-prone and ambiguous characters (`0` vs `O`, `1` vs `l`, symbols), making it
+> vastly easier and safer to write down on paper and type when disaster recovery is needed.
 
 ### Secure The Master Password
 
@@ -86,6 +94,15 @@ The script will automatically perform several safety checks:
 - **AES-256 Encryption:** Prompts you for a passphrase using GPG symmetric encryption. On the
   Gnome popup, enter your passphrase and **DO NOT** select the `Save in the password manager`
   checkbox.
+
+  > [!TIP] **Use a 6 to 8-word passphrase for the GPG key:** For your GPG key, it is better to
+  > use a memorable passphrase composed of **6 to 8 random words** (e.g.
+  > `cactus-orbit-velvet-falcon-meadow-timber-lantern-echo`) rather than random gibberish
+  > characters. With GPG's enforced **65,011,712 S2K iterations**, an 8-word passphrase (~103
+  > bits of entropy) would require **41 quintillion years** to crack on dedicated GPU clusters,
+  > while remaining effortless for you to remember in your head and quick to type in the
+  > terminal when unlocking.
+
 - **Permission Hardening:** Automatically restricts ownership and permissions:
   ```bash
   sudo chown root:root ~/.bitwarden/bitwarden-info.gpg
