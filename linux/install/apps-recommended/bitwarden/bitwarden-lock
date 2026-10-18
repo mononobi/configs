@@ -3,86 +3,93 @@
 
 set -euo pipefail
 
+SCRIPT_SOURCE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+source "${SCRIPT_DIR}/../../colors.sh"
+
 BITWARDEN_DIR="${HOME}/.bitwarden"
 INFO_FILE="${BITWARDEN_DIR}/bitwarden-info"
 GPG_FILE="${BITWARDEN_DIR}/bitwarden-info.gpg"
 
 # 1. Verify TTY for interactive prompts
 if [[ ! -t 0 ]]; then
-    echo "[!] Error: bitwarden-lock must be run interactively in a terminal." >&2
+    echo -e "${C_RED}[!] Error: bitwarden-lock must be run interactively in a terminal.${C_RESET}" >&2
     exit 1
 fi
 
 # 2. Check if info file exists
 if [[ ! -f "$INFO_FILE" ]]; then
     if [[ -f "$GPG_FILE" ]]; then
-        echo "[i] The info file '${INFO_FILE}' does not exist, but '${GPG_FILE}' already exists." >&2
-        echo "[i] Use 'bitwarden-unlock' to decrypt and view your credentials." >&2
+        echo -e "${C_YELLOW}[!] The info file '${C_BOLD}${INFO_FILE}${C_RESET}${C_YELLOW}' does not exist.${C_RESET}" >&2
+        echo -e "${C_CYAN}[i] Encrypted vault '${C_BOLD}${GPG_FILE}${C_RESET}${C_CYAN}' already exists.${C_RESET}" >&2
+        echo -e "${C_GREEN}[+] Run '${C_BOLD}bitwarden-unlock${C_RESET}${C_GREEN}' to decrypt and view your credentials.${C_RESET}" >&2
     else
-        echo "[!] Error: The info file '${INFO_FILE}' does not exist." >&2
-        echo "[!] Please create and fill '${INFO_FILE}' before encrypting." >&2
+        echo -e "${C_RED}[!] Error: The info file '${C_BOLD}${INFO_FILE}${C_RESET}${C_RED}' does not exist.${C_RESET}" >&2
+        echo -e "${C_YELLOW}[!] Please create and fill '${C_BOLD}${INFO_FILE}${C_RESET}${C_YELLOW}' before encrypting.${C_RESET}" >&2
     fi
     exit 1
 fi
 
 # 3. Check if info file is empty
 if [[ ! -s "$INFO_FILE" ]]; then
-    echo "[!] Error: '${INFO_FILE}' is empty. Please fill it with your credentials before encrypting." >&2
+    echo -e "${C_RED}[!] Error: '${C_BOLD}${INFO_FILE}${C_RESET}${C_RED}' is empty. Please fill it with your credentials before encrypting.${C_RESET}" >&2
     exit 1
 fi
 
 # 4. Check for '<no_value:' placeholders
 if grep -q '<no_value:' "$INFO_FILE"; then
-    echo "[!] Error: '${INFO_FILE}' still contains placeholder '<no_value:...' fields." >&2
-    echo "[!] Please edit '${INFO_FILE}' and fill it with your real Bitwarden information." >&2
+    echo -e "${C_RED}[!] Error: '${C_BOLD}${INFO_FILE}${C_RESET}${C_RED}' still contains placeholder '<no_value:...' fields.${C_RESET}" >&2
+    echo -e "${C_YELLOW}[!] Please edit '${C_BOLD}${INFO_FILE}${C_RESET}${C_YELLOW}' and fill it with your real Bitwarden information.${C_RESET}" >&2
     exit 1
 fi
 
 # 5. Overwrite confirmation if encrypted file already exists (No default)
 if [[ -f "$GPG_FILE" ]]; then
     while true; do
-        read -rp "Encrypted file '${GPG_FILE}' already exists. Overwrite? (yes/y or no/n): " answer
+        echo -en "${C_YELLOW}[?] Encrypted file '${C_BOLD}${GPG_FILE}${C_RESET}${C_YELLOW}' already exists. Overwrite? (${C_GREEN}yes/y${C_YELLOW} or ${C_RED}no/n${C_YELLOW}): ${C_RESET}"
+        read -r answer
         case "${answer,,}" in
             y|yes)
                 break
                 ;;
             n|no)
-                echo "Aborted. '${GPG_FILE}' was not overwritten."
+                echo -e "${C_CYAN}[i] Aborted. '${C_BOLD}${GPG_FILE}${C_RESET}${C_CYAN}' was not overwritten.${C_RESET}"
                 exit 0
                 ;;
             *)
-                echo "Please answer explicitly with 'yes'/'y' or 'no'/'n'."
+                echo -e "${C_RED}[!] Please answer explicitly with 'yes'/'y' or 'no'/'n'.${C_RESET}"
                 ;;
         esac
     done
 fi
 
 # 6. Encrypt with GPG AES256
-echo "[+] Encrypting '${INFO_FILE}' with AES256..."
+echo -e "${C_BLUE}[+] Encrypting '${C_BOLD}${INFO_FILE}${C_RESET}${C_BLUE}' with AES256...${C_RESET}"
 if ! sudo gpg --yes --symmetric --cipher-algo AES256 \
     --s2k-cipher-algo AES256 --s2k-digest-algo SHA512 --s2k-count 65011712 \
     -o "$GPG_FILE" "$INFO_FILE"; then
-    echo "[!] Error: GPG encryption failed." >&2
+    echo -e "${C_RED}[!] Error: GPG encryption failed.${C_RESET}" >&2
     exit 1
 fi
 
 if [[ ! -f "$GPG_FILE" || ! -s "$GPG_FILE" ]]; then
-    echo "[!] Error: Encrypted file '${GPG_FILE}' was not created or is empty." >&2
+    echo -e "${C_RED}[!] Error: Encrypted file '${C_BOLD}${GPG_FILE}${C_RESET}${C_RED}' was not created or is empty.${C_RESET}" >&2
     exit 1
 fi
 
 # 7. Apply required security permissions
-echo "[+] Setting secure permissions on Bitwarden vault..."
+echo -e "${C_BLUE}[+] Setting secure permissions on Bitwarden vault...${C_RESET}"
 sudo chown root:root "$GPG_FILE"
 sudo chmod 600 "$GPG_FILE"
 sudo chown root:root "$BITWARDEN_DIR"
 sudo chmod 755 "$BITWARDEN_DIR"
 
-echo "[✓] Encryption completed and permissions secured!"
+echo -e "${C_BOLD}${C_GREEN}[✓] Encryption completed and permissions secured!${C_RESET}"
 
 # 8. Deletion confirmation for plaintext file (No default)
 while true; do
-    read -rp "Delete the unencrypted info file '${INFO_FILE}'? (yes/y or no/n): " del_ans
+    echo -en "${C_YELLOW}[?] Delete the unencrypted info file '${C_BOLD}${INFO_FILE}${C_RESET}${C_YELLOW}'? (${C_GREEN}yes/y${C_YELLOW} or ${C_RED}no/n${C_YELLOW}): ${C_RESET}"
+    read -r del_ans
     case "${del_ans,,}" in
         y|yes)
             if command -v shred >/dev/null 2>&1; then
@@ -90,16 +97,16 @@ while true; do
             else
                 sudo rm -f "$INFO_FILE"
             fi
-            echo "[✓] Unencrypted info file deleted successfully."
+            echo -e "${C_GREEN}[✓] Unencrypted info file deleted successfully.${C_RESET}"
             break
             ;;
         n|no)
-            echo "[i] Keeping unencrypted info file at '${INFO_FILE}'."
-            echo "[!] WARNING: Remember to delete it once you have confirmed your password!"
+            echo -e "${C_CYAN}[i] Keeping unencrypted info file at '${C_BOLD}${INFO_FILE}${C_RESET}${C_CYAN}'.${C_RESET}"
+            echo -e "${C_BOLD}${C_YELLOW}[!] WARNING: Remember to delete it once you have confirmed your password!${C_RESET}"
             break
             ;;
         *)
-            echo "Please answer explicitly with 'yes'/'y' or 'no'/'n'."
+            echo -e "${C_RED}[!] Please answer explicitly with 'yes'/'y' or 'no'/'n'.${C_RESET}"
             ;;
     esac
 done
