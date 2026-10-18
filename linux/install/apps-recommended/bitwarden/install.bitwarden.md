@@ -114,6 +114,35 @@ credentials.
 > backup copies on secure external drives. Make sure to apply the same `root:root` ownership
 > and `600` permissions to any backup copies.
 
+#### 4. Inspect Vault Encryption Metadata (Optional)
+
+You can inspect the OpenPGP packet headers and encryption parameters of your vault with this
+command:
+
+```bash
+sudo gpg -v --list-packets ~/.bitwarden/bitwarden-info.gpg
+```
+
+Look for the symmetric key packet header (`:symkey enc packet:`):
+
+```text
+:symkey enc packet: version 4, cipher 9, s2k 3, hash 10
+	salt a1b2c3d4e5f60718, count 65011712 (255)
+```
+
+Key fields explained:
+
+- **`cipher 9` (AES-256):** The symmetric cipher algorithm (`9 = AES-256`, `8 = AES-192`,
+  `7 = AES-128`).
+- **`s2k 3` (Salted & Iterated):** String-to-Key mode 3, which salts and heavily iterates the
+  passphrase hashing to prevent precomputed dictionary or rainbow table attacks.
+- **`hash 10` (SHA-512):** The cryptographic hash function used for the key derivation function
+  (`10 = SHA-512`, `8 = SHA-256`, `2 = SHA-1`).
+- **`count 65011712` (Maximum Iteration Count):** The maximum iteration count allowable under
+  OpenPGP standards (encoded as byte `255`). This exponentially increases the computing time
+  required for any offline GPU brute-force attempt, while running in a fraction of a second
+  during normal decryption.
+
 ### Configure The Desktop App:
 
 Login to the desktop app using the master password. Then go to the settings:
