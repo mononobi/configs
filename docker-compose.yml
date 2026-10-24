@@ -1,0 +1,12 @@
+services:
+  test-env:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    pull_policy: build
+    image: configs-ubuntu2604-test:latest
+    container_name: configs-test-container
+    privileged: true
+    stdin_open: true
+    tty: true
+    working_dir: /home/ubuntu/configs/linux/install

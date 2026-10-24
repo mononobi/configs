@@ -989,3 +989,36 @@ To see all folders marked with an `ignore` file across categories:
 # Output plain folder names only (for scripting and loops)
 ./linux/install/list-ignored.sh --names-only -c apps-recommended
 ```
+
+### 5. Testing in an Isolated Environment (`docker-test.sh`)
+
+To test application recipes or unattended batch runs in a clean, pristine Ubuntu 26.04
+environment without modifying your host system, use the provided Docker test runner:
+
+- **`Dockerfile`**: Builds a clean Ubuntu 26.04 image with only minimal container
+  infrastructure (`sudo`, `iptables`, `dbus`), pre-configures passwordless `sudo` for the
+  standard `ubuntu` user, and copies the entire `linux/` directory into
+  `/home/ubuntu/configs/linux`. All application dependencies (such as `curl`,
+  `ca-certificates`, `flatpak`, `python`, etc.) are intentionally omitted so the framework
+  resolves them on demand.
+- **`docker-compose.yml`**: Configures the test service (`test-env`) in privileged mode with an
+  interactive TTY and `pull_policy: build` so Compose always rebuilds the image before running.
+- **`docker-test.sh`**: Always rebuilds the test image with latest local repository changes and
+  launches the container.
+
+**Usage**:
+
+```bash
+# Start an interactive bash shell inside a fresh Ubuntu 26.04 container
+./docker-test.sh
+
+# Or directly execute a specific command or installer inside the fresh container
+./docker-test.sh ./install-recommended.sh
+./docker-test.sh ./apps-recommended/python/install.python.sh
+```
+
+Inside the container:
+
+- You are logged in as the standard `ubuntu` user (UID 1000) with passwordless `sudo`.
+- The working directory is pre-set to `/home/ubuntu/configs/linux/install`.
+- All recipes and runners are fully self-contained and run against a fresh system.
