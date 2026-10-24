@@ -60,7 +60,14 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-is_installed "fetchflow" --name "FetchFlow" && exit 0
+get_installed_version() {
+    dpkg-query -W -f='${Version}\n' fetchflow 2>/dev/null | tr -d '[:space:]' || true
+}
+
+CURRENT_VERSION=$(get_installed_version)
+if [[ -n "$CURRENT_VERSION" ]]; then
+    echo "[i] Currently installed version: v${CURRENT_VERSION}"
+fi
 
 echo "[+] Starting installation/setup for FetchFlow..."
 
@@ -96,7 +103,18 @@ if [[ -z "$TARGET_VERSION" ]]; then
     exit 1
 fi
 
-echo "[+] Target version to install: v${TARGET_VERSION}"
+if [[ "$FORCE" != "true" && -n "$CURRENT_VERSION" && -n "$TARGET_VERSION" && "$CURRENT_VERSION" == "$TARGET_VERSION" ]]; then
+    if [[ -x "/opt/fetchflow/fetchflow" || -x "/usr/bin/fetchflow" ]]; then
+        echo "[✓] FetchFlow is already at latest version (v${CURRENT_VERSION}), skipping."
+        exit 0
+    fi
+fi
+
+if [[ -n "$CURRENT_VERSION" && "$CURRENT_VERSION" != "$TARGET_VERSION" ]]; then
+    echo "[+] Upgrading FetchFlow: v${CURRENT_VERSION} -> v${TARGET_VERSION}..."
+else
+    echo "[+] Target version to install: v${TARGET_VERSION}"
+fi
 
 conditional_apt_update
 
