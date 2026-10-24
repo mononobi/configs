@@ -131,7 +131,23 @@ fi
 # Ensure read access so APT sandbox user '_apt' can access the package
 chmod 644 "$TEMP_DEB"
 
+WAS_RUNNING=false
+if pgrep -x fetchflow >/dev/null 2>&1; then
+    WAS_RUNNING=true
+    echo "[+] Closing active FetchFlow instance before updating..."
+    pkill -x fetchflow 2>/dev/null || true
+    sleep 1
+    if pgrep -x fetchflow >/dev/null 2>&1; then
+        pkill -9 -x fetchflow 2>/dev/null || true
+    fi
+fi
+
 echo "[+] Installing FetchFlow via apt..."
 sudo apt-get install -y "$TEMP_DEB"
+
+if [[ "$WAS_RUNNING" == "true" ]]; then
+    echo "[+] Restarting FetchFlow in the background..."
+    (setsid /usr/bin/fetchflow --background >/dev/null 2>&1 &)
+fi
 
 echo "[✓] FetchFlow setup completed successfully!"
