@@ -23,11 +23,13 @@ RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 
-# Add systemctl and apparmor_parser stubs to prevent service/profile failures in containers
+# Add container stubs and wrappers (systemctl, apparmor_parser, udevadm)
 RUN printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/systemctl && \
     chmod +x /usr/local/bin/systemctl && \
     printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/apparmor_parser && \
-    chmod +x /usr/local/bin/apparmor_parser
+    chmod +x /usr/local/bin/apparmor_parser && \
+    printf '#!/bin/sh\nif [ ! -S /run/udev/control ]; then\n    case "$1" in\n        control|trigger) exit 0 ;;\n    esac\nfi\nif [ -x /bin/udevadm ]; then\n    exec /bin/udevadm "$@"\nelif [ -x /usr/bin/udevadm ]; then\n    exec /usr/bin/udevadm "$@"\nfi\nexit 0\n' > /usr/local/bin/udevadm && \
+    chmod +x /usr/local/bin/udevadm
 
 # Add entrypoint script to initialize background daemons (e.g. dbus)
 RUN printf '#!/bin/sh\nif [ -x /etc/init.d/dbus ] && ! service dbus status >/dev/null 2>&1; then\n    sudo service dbus start >/dev/null 2>&1 || true\nfi\nexec "$@"\n' > /usr/local/bin/docker-entrypoint.sh && \
