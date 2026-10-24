@@ -10,6 +10,10 @@ RUN apt-get update -qq && \
         dbus && \
     rm -rf /var/lib/apt/lists/*
 
+# Set default passwords ('ubuntu' for ubuntu, 'root' for root)
+RUN echo "ubuntu:ubuntu" | chpasswd && \
+    echo "root:root" | chpasswd
+
 # Grant passwordless sudo to default 'ubuntu' user (UID 1000)
 RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
     chmod 0440 /etc/sudoers.d/ubuntu

@@ -1020,5 +1020,7 @@ environment without modifying your host system, use the provided Docker test run
 Inside the container:
 
 - You are logged in as the standard `ubuntu` user (UID 1000) with passwordless `sudo`.
+- Default credentials if prompted: user `ubuntu` password is `ubuntu` (root password is
+  `root`).
 - The working directory is pre-set to `/home/ubuntu/configs/linux/install`.
 - All recipes and runners are fully self-contained and run against a fresh system.
