@@ -71,7 +71,16 @@ fi
 
 echo "[+] Starting installation/setup for FetchFlow..."
 
-require_app curl ca-certificates
+require_app curl ca-certificates unzip
+
+EXTENSION_DIR="${HOME}/.config/fetchflow-chrome-extension"
+TEMP_DEB=""
+TEMP_ZIP=""
+
+cleanup() {
+    rm -f "${TEMP_DEB:-}" "${TEMP_ZIP:-}"
+}
+trap cleanup EXIT
 
 # Determine target version to install
 TARGET_VERSION="$CUSTOM_VERSION"
@@ -103,8 +112,32 @@ if [[ -z "$TARGET_VERSION" ]]; then
     exit 1
 fi
 
+setup_chrome_extension() {
+    local ver="$1"
+    local ext_url="https://github.com/Mayanktaker/fetchflow/releases/download/v${ver}/fetchflow-chrome-extension-${ver}.zip"
+    TEMP_ZIP=$(mktemp --suffix=.zip)
+
+    echo "[+] Downloading FetchFlow Chrome extension (v${ver})..."
+    if curl -fsSL "$ext_url" -o "$TEMP_ZIP" 2>/dev/null; then
+        mkdir -p "$EXTENSION_DIR"
+        unzip -q -o "$TEMP_ZIP" -d "$EXTENSION_DIR"
+        echo "[✓] Chrome extension unpacked to: ${EXTENSION_DIR}"
+        echo "    To load in Chrome / Chromium / Brave:"
+        echo "      1. Navigate to chrome://extensions"
+        echo "      2. Enable 'Developer mode' (top-right toggle)"
+        echo "      3. Click 'Load unpacked' and select: ${EXTENSION_DIR}"
+    else
+        echo "[i] Note: Chrome extension archive was not found for release v${ver}."
+    fi
+}
+
 if [[ "$FORCE" != "true" && -n "$CURRENT_VERSION" && -n "$TARGET_VERSION" && "$CURRENT_VERSION" == "$TARGET_VERSION" ]]; then
     if [[ -x "/opt/fetchflow/fetchflow" || -x "/usr/bin/fetchflow" ]]; then
+        if [[ ! -f "${EXTENSION_DIR}/manifest.json" ]]; then
+            echo "[✓] FetchFlow application is already at latest version (v${CURRENT_VERSION})."
+            setup_chrome_extension "$TARGET_VERSION"
+            exit 0
+        fi
         echo "[✓] FetchFlow is already at latest version (v${CURRENT_VERSION}), skipping."
         exit 0
     fi
@@ -120,7 +153,6 @@ conditional_apt_update
 
 DEB_URL="https://github.com/Mayanktaker/fetchflow/releases/download/v${TARGET_VERSION}/fetchflow_${TARGET_VERSION}_amd64.deb"
 TEMP_DEB=$(mktemp --suffix=.deb)
-trap 'rm -f "$TEMP_DEB"' EXIT
 
 echo "[+] Downloading FetchFlow v${TARGET_VERSION} (.deb package)..."
 if ! curl -fsSL "$DEB_URL" -o "$TEMP_DEB"; then
@@ -149,5 +181,7 @@ if [[ "$WAS_RUNNING" == "true" ]]; then
     echo "[+] Restarting FetchFlow in the background..."
     (setsid /usr/bin/fetchflow --background >/dev/null 2>&1 &)
 fi
+
+setup_chrome_extension "$TARGET_VERSION"
 
 echo "[✓] FetchFlow setup completed successfully!"
