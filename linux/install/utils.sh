@@ -720,7 +720,7 @@ resolve_ubuntu_pool_deb() {
 has_apt_candidate() {
     local pkg="${1:-}"
     [[ -z "$pkg" ]] && return 1
-    apt-cache policy "$pkg" 2>/dev/null | grep -q 'Candidate: [^(]'
+    apt-cache policy "$pkg" 2>/dev/null | grep 'Candidate: [^(]' >/dev/null
 }
 
 # check_os_compatibility

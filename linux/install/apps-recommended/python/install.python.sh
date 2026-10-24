@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Description: Install and configure Python versions (from 3.8 up to latest stable)
 # Note: Installs Python runtimes with -dev and -full packages; links default python
-# without python3-is-python. Checks each component (runtime, -dev, -full) independently.
+# to python3 if not already present. Checks each component (runtime, -dev, -full) independently.
 # Only installs stable Python versions (filters out pre-release alpha/beta/rc tags).
 
 set -euo pipefail
@@ -23,8 +23,8 @@ Description:
   version (e.g. 3.14). Excludes pre-release / development versions (e.g. alpha, beta, rc).
   For each version, the runtime, development package (-dev), and complete runtime
   (-full / -venv) are checked and installed independently. Configures default
-  /usr/bin/python and /usr/bin/python-config symlinks to point to the highest
-  installed Python version without requiring python3-is-python.
+  /usr/bin/python and /usr/bin/python-config symlinks to point to python3
+  if they do not already exist, without requiring python3-is-python.
 
 Arguments:
   VERSIONS              Optional specific Python version(s) to install (e.g. 3.12 3.14).
@@ -49,7 +49,7 @@ EOF
 is_stable_python_package() {
     local pkg="$1"
     local raw_ver
-    raw_ver=$(apt-cache madison "$pkg" 2>/dev/null | head -n 1 | awk -F'|' '{gsub(/ /, "", $2); print $2}')
+    raw_ver=$(apt-cache madison "$pkg" 2>/dev/null | awk -F'|' 'NR==1 {gsub(/ /, "", $2); ver=$2} END {print ver}')
     [[ -z "$raw_ver" ]] && return 1
 
     local upstream="${raw_ver%%-*}"
@@ -121,10 +121,19 @@ fi
 TARGET_VERSIONS=()
 if [[ ${#CUSTOM_VERSIONS[@]} -gt 0 ]]; then
     for ver in "${CUSTOM_VERSIONS[@]}"; do
-        if [[ "$ver" == "3" ]] || is_stable_python_package "python${ver}"; then
+        if [[ "$ver" == "3" ]]; then
+            TARGET_VERSIONS+=("$ver")
+        elif is_stable_python_package "python${ver}"; then
             TARGET_VERSIONS+=("$ver")
         else
-            echo "[!] Skipping pre-release/unstable Python version: ${ver}"
+            raw_ver=$(apt-cache madison "python${ver}" 2>/dev/null | awk -F'|' 'NR==1 {gsub(/ /, "", $2); ver=$2} END {print ver}')
+            if [[ -n "$raw_ver" ]]; then
+                echo "[!] Skipping pre-release/unstable Python version: ${ver}"
+            elif [[ "$ver" =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
+                TARGET_VERSIONS+=("$ver")
+            else
+                echo "[!] Skipping invalid/unstable Python version: ${ver}"
+            fi
         fi
     done
 else
@@ -183,6 +192,18 @@ require_app software-properties-common ca-certificates curl build-essential
 echo "[+] Adding deadsnakes PPA..."
 sudo add-apt-repository -y -n ppa:deadsnakes/ppa
 sudo apt-get update
+
+# Re-evaluate latest stable minor from deadsnakes PPA if using default versions
+if [[ ${#CUSTOM_VERSIONS[@]} -eq 0 ]]; then
+    for (( m=MAX_MINOR+1; m<=25; m++ )); do
+        if is_stable_python_package "python3.${m}"; then
+            MAX_MINOR="$m"
+            TARGET_VERSIONS+=("3.$m")
+        else
+            break
+        fi
+    done
+fi
 
 echo "[+] Target Python versions to process: ${TARGET_VERSIONS[*]}"
 
@@ -253,20 +274,18 @@ else
     echo "[+] All components for target Python versions and tools are already installed."
 fi
 
-# 4. Point /usr/bin/python and /usr/bin/python-config to the highest installed Python version on the system
-HIGHEST_INSTALLED_MINOR=$(
-    find /usr/bin -maxdepth 1 \( -name "python3.[0-9]*" ! -name "*config*" ! -name "*m" \) 2>/dev/null \
-        | grep -Po "python3\.\K[0-9]+$" | sort -n | tail -1 || true
-)
+# 4. Point /usr/bin/python and /usr/bin/python-config to python3 only if not already present
+if [[ ! -e "/usr/bin/python" && ! -L "/usr/bin/python" ]]; then
+    if [[ -x "/usr/bin/python3" ]]; then
+        echo "[+] Configuring default /usr/bin/python -> /usr/bin/python3..."
+        sudo ln -s "/usr/bin/python3" /usr/bin/python
+    fi
+fi
 
-if [[ -n "$HIGHEST_INSTALLED_MINOR" && -x "/usr/bin/python3.${HIGHEST_INSTALLED_MINOR}" ]]; then
-    LATEST_SYSTEM_VER="3.${HIGHEST_INSTALLED_MINOR}"
-    echo "[+] Configuring default /usr/bin/python -> /usr/bin/python${LATEST_SYSTEM_VER}..."
-    sudo ln -sf "/usr/bin/python${LATEST_SYSTEM_VER}" /usr/bin/python
-
-    if [[ -f "/usr/bin/python${LATEST_SYSTEM_VER}-config" ]]; then
-        echo "[+] Configuring /usr/bin/python-config -> /usr/bin/python${LATEST_SYSTEM_VER}-config..."
-        sudo ln -sf "/usr/bin/python${LATEST_SYSTEM_VER}-config" /usr/bin/python-config
+if [[ ! -e "/usr/bin/python-config" && ! -L "/usr/bin/python-config" ]]; then
+    if [[ -f "/usr/bin/python3-config" ]]; then
+        echo "[+] Configuring default /usr/bin/python-config -> /usr/bin/python3-config..."
+        sudo ln -s "/usr/bin/python3-config" /usr/bin/python-config
     fi
 fi
 
