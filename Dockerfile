@@ -20,6 +20,7 @@ RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
     echo 'Defaults env_keep += "DEBIAN_FRONTEND"' >> /etc/sudoers.d/ubuntu && \
     chmod 0440 /etc/sudoers.d/ubuntu && \
     echo "DEBIAN_FRONTEND=noninteractive" >> /etc/environment && \
+    echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 
 # Add systemctl stub to prevent service daemon failures in container environments
