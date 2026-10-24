@@ -8,22 +8,29 @@ to define and manage linters, formatters, and repository checks in a declarative
 
 ### Automated Framework Install
 
-Run the recipe directly:
+Run the recipe directly (defaults to Python 3.14):
 
 ```bash
 cd linux/install/apps-recommended/pre-commit && ./install.pre-commit.sh
+```
+
+Or specify a custom Python version:
+
+```bash
+./install.pre-commit.sh --python 3.12
 ```
 
 Or invoke via `require_app`:
 
 ```bash
 require_app "pre-commit"
+require_app "pre-commit" --args --python 3.12
 ```
 
 ### Manual Installation (via `uv`)
 
 ```bash
-uv tool install pre-commit
+uv tool install --python 3.14 pre-commit
 ```
 
 The tool installs `pre-commit` into an isolated user environment and places the executable in

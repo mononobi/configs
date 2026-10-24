@@ -24,9 +24,18 @@ source "${INSTALL_ROOT}/colors.sh"
 #
 # Options:
 #   --category <dir>   Custom category folder to search first
-#   --args <args...>   Pass trailing arguments and flags directly to the underlying installer
+#   --args <args...>   Pass all remaining trailing arguments and flags directly to the underlying installer
 #                      (only valid when requiring a single application)
 #   --no-update        Forwarded to candidate scripts
+#
+# Flag & Argument Forwarding Rules:
+#   - Single-token flags (starting with '-'):
+#     Any standalone boolean flag (e.g. --force, -F, --silent) or single-token flag with '='
+#     syntax (e.g. --python=3.12) is captured and forwarded directly to the candidate script.
+#   - Separated flag-value pairs & positional arguments:
+#     Tokens without a leading '-' (such as '3.12') are treated as application names by default.
+#     To pass separated flag-value pairs (--python 3.12) or positional arguments (3.14 3.11),
+#     they MUST be passed after '--args'. Everything following '--args' is forwarded verbatim.
 #
 # Examples:
 #   # 1. Single application:
@@ -38,18 +47,24 @@ source "${INSTALL_ROOT}/colors.sh"
 #   # 3. Custom category folder with priority search:
 #   require_app my-tool --category apps-custom
 #
-#   # 4. Standalone flag forwarded to a single application:
+#   # 4. Standalone boolean flag forwarded directly (without --args):
 #   require_app python --force
-#   require_app python --silent
+#   require_app python -F
 #
-#   # 5. Positional arguments & custom flags via --args (single app only):
+#   # 5. Single-token flag with '=' syntax forwarded directly (without --args):
+#   require_app pre-commit --python=3.12
+#
+#   # 6. Flag-value pairs separated by space (MUST use --args):
+#   require_app pre-commit --args --python 3.12
+#
+#   # 7. Positional arguments & custom flags via --args (single app only):
 #   require_app python --args 3.14 3.11
 #   require_app python --args 3.14 3.11 --force
 #
-#   # 6. Global framework update flag across multiple applications:
+#   # 8. Global framework update flag across multiple applications:
 #   require_app curl docker ufw --no-update
 #
-#   # 7. Nested subfolder under standard categories (resolved automatically):
+#   # 9. Nested subfolder under standard categories (resolved automatically):
 #   require_app "gnome-extensions/activator"
 #   require_app "gnome-extensions/recommended/color-picker"
 require_app() {

@@ -120,12 +120,22 @@ Resolves and executes application installers on demand:
   execution immediately and returns a non-zero exit code (`return 1`).
 - **Instant Fast-Skip**: Each required recipe inspects its own state via `is_installed`,
   skipping in `<1ms` if already present.
-- **Passing Arguments via `--args`**: Pass custom arguments or version numbers directly to the
-  underlying recipe script using `--args`. This is strictly allowed only when requiring a
-  single application:
+- **Passing Arguments via `--args`**: Pass custom arguments, version numbers, or separated
+  flag-value pairs directly to the underlying recipe script using `--args`. This is strictly
+  allowed only when requiring a single application:
   ```bash
   require_app python --args 3.14 3.11 --force
+  require_app pre-commit --args --python 3.12
   ```
+- **Single-Token Flags (With or Without `=`)**: Standalone boolean flags (e.g. `--force`, `-F`,
+  `--silent`) or single-token flags with `=` syntax (e.g. `--python=3.12`) start with `-` and
+  are forwarded directly without needing `--args`:
+  ```bash
+  require_app python --force
+  require_app pre-commit --python=3.12
+  ```
+  _Caveat:_ Separated flag-value pairs (e.g. `--python 3.12`) **must** use `--args` so that the
+  value (`3.12`) is not mistaken for another application recipe name to install.
 - **Flag Propagation**: Global flags such as `--no-update` are deduplicated and forwarded
   automatically to all required dependencies. Custom flags or `--args` cannot be passed when
   requiring multiple applications.
