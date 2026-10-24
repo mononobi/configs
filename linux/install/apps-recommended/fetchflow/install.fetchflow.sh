@@ -8,7 +8,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/../../utils.sh"
 
 RELEASES_URL="https://github.com/Mayanktaker/fetchflow/releases"
-SCRIPT_URL="https://github.com/Mayanktaker/fetchflow/releases/latest/download/install-fetchflow.sh"
 
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
 FORCE=false
@@ -91,25 +90,30 @@ if [[ -z "$TARGET_VERSION" ]]; then
     fi
 fi
 
-TEMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TEMP_DIR"' EXIT
-
-echo "[+] Downloading official FetchFlow installer script..."
-if ! curl -fsSL "$SCRIPT_URL" -o "$TEMP_DIR/install-fetchflow.sh"; then
-    echo "[!] Error: Failed to download FetchFlow installer script from $SCRIPT_URL" >&2
+if [[ -z "$TARGET_VERSION" ]]; then
+    echo "[-] Error: Failed to automatically resolve latest FetchFlow version from GitHub." >&2
+    echo "    Please specify an explicit version with: $(basename "$0") --version <version>" >&2
     exit 1
 fi
-chmod +x "$TEMP_DIR/install-fetchflow.sh"
 
-INSTALLER_ARGS=("-y")
-if [[ -n "$TARGET_VERSION" ]]; then
-    echo "[+] Target version resolved: v${TARGET_VERSION}"
-    INSTALLER_ARGS+=(--version "$TARGET_VERSION")
-else
-    echo "[i] Could not dynamically resolve latest version. Falling back to default version embedded in installer script."
+echo "[+] Target version to install: v${TARGET_VERSION}"
+
+conditional_apt_update
+
+DEB_URL="https://github.com/Mayanktaker/fetchflow/releases/download/v${TARGET_VERSION}/fetchflow_${TARGET_VERSION}_amd64.deb"
+TEMP_DEB=$(mktemp --suffix=.deb)
+trap 'rm -f "$TEMP_DEB"' EXIT
+
+echo "[+] Downloading FetchFlow v${TARGET_VERSION} (.deb package)..."
+if ! curl -fsSL "$DEB_URL" -o "$TEMP_DEB"; then
+    echo "[!] Error: Failed to download FetchFlow package from: $DEB_URL" >&2
+    exit 1
 fi
 
-echo "[+] Running FetchFlow installer..."
-sudo bash "$TEMP_DIR/install-fetchflow.sh" "${INSTALLER_ARGS[@]}"
+# Ensure read access so APT sandbox user '_apt' can access the package
+chmod 644 "$TEMP_DEB"
+
+echo "[+] Installing FetchFlow via apt..."
+sudo apt-get install -y "$TEMP_DEB"
 
 echo "[✓] FetchFlow setup completed successfully!"
