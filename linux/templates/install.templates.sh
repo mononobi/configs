@@ -66,9 +66,11 @@ if [[ ! -d "$FILES_DIR" ]]; then
     exit 1
 fi
 
-# Detect user's Templates folder via xdg-user-dir
-TEMPLATES_DIR="$(xdg-user-dir TEMPLATES)"
-TEMPLATES_DIR="${TEMPLATES_DIR:-${HOME}/Templates}"
+# Detect user's Templates folder via xdg-user-dir (falls back to ~/Templates if unconfigured or pointing to HOME)
+TEMPLATES_DIR="$(xdg-user-dir TEMPLATES 2>/dev/null || true)"
+if [[ -z "$TEMPLATES_DIR" || "$TEMPLATES_DIR" == "$HOME" ]]; then
+    TEMPLATES_DIR="${HOME}/Templates"
+fi
 
 echo "[+] Target Templates directory: ${TEMPLATES_DIR}"
 mkdir -p "$TEMPLATES_DIR"
