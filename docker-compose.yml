@@ -6,6 +6,7 @@ services:
     pull_policy: build
     image: configs-ubuntu2604-test:latest
     container_name: configs-test-container
+    network_mode: host
     privileged: true
     stdin_open: true
     tty: true

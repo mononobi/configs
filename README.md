@@ -1001,8 +1001,10 @@ environment without modifying your host system, use the provided Docker test run
   `/home/ubuntu/configs/linux`. All application dependencies (such as `curl`,
   `ca-certificates`, `flatpak`, `python`, etc.) are intentionally omitted so the framework
   resolves them on demand.
-- **`docker-compose.yml`**: Configures the test service (`test-env`) in privileged mode with an
-  interactive TTY and `pull_policy: build` so Compose always rebuilds the image before running.
+- **`docker-compose.yml`**: Configures the test service (`test-env`) in privileged mode with
+  `network_mode: host` (sharing the host network stack to avoid bridge firewall and DNS
+  issues), an interactive TTY, and `pull_policy: build` so Compose always rebuilds the image
+  before running.
 - **`docker-test.sh`**: Always rebuilds the test image with latest local repository changes and
   launches the container.
 
