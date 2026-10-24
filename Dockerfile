@@ -1,6 +1,7 @@
 FROM ubuntu:26.04
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV USER=ubuntu
 
 # Install only minimal container infrastructure packages
 RUN apt-get update -qq && \
