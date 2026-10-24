@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/../../utils.sh"
 
 SKIP_UPDATE="${SKIP_UPDATE:-false}"
 FORCE="${FORCE:-false}"
-PYTHON_VERSION="3.14"
+PYTHON_VERSION=""
 CUSTOM_PYTHON=false
 
 show_help() {
@@ -22,16 +22,16 @@ Description:
   The binary is placed in ~/.local/bin/pre-commit.
 
 Arguments:
-  PYTHON_VERSION              Optional Python version to pin pre-commit to (default: 3.14)
+  PYTHON_VERSION              Optional Python version to pin pre-commit to (default: system python3)
 
 Options:
-  -p, --python <ver>          Python version to use for pre-commit environment (default: 3.14)
+  -p, --python <ver>          Python version to use for pre-commit environment (default: system python3)
   -F, --force                 Force re-installation even if already installed
   --no-update, --skip-update  Skip apt update before installation
   -h, --help                  Show this help message and exit
 
 Examples:
-  $(basename "$0")                    # Installs using default Python 3.14
+  $(basename "$0")                    # Installs using system python3
   $(basename "$0") -p 3.12            # Pins pre-commit to Python 3.12
   $(basename "$0") 3.12               # Pins pre-commit to Python 3.12
   $(basename "$0") -F                 # Force re-installs pre-commit
@@ -90,11 +90,18 @@ fi
 # Fast-path self-check (bypassed if FORCE=true)
 is_installed "pre-commit" && exit 0
 
-echo "[+] Starting installation/setup for pre-commit (Python ${PYTHON_VERSION})..."
-
 # Require uv package installer and target Python runtime
 require_app uv
-require_app python --args "$PYTHON_VERSION"
+
+if [[ "$CUSTOM_PYTHON" == "true" ]]; then
+    require_app python --args "$PYTHON_VERSION" --fast
+else
+    # Guarantees system python3 runtime is installed before querying its version
+    require_app python --fast
+    PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "3")
+fi
+
+echo "[+] Starting installation/setup for pre-commit (Python ${PYTHON_VERSION})..."
 
 # Ensure ~/.local/bin is present in PATH and shell startup files
 ensure_local_bin_in_path
