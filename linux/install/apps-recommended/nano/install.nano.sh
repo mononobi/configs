@@ -43,10 +43,10 @@ done
 
 is_installed "nano" --name "Nano" && exit 0
 
-echo -e "${C_BLUE}[+] Starting installation of Nano...${C_RESET}"
+echo -e "[+] Starting installation of Nano..."
 
 conditional_apt_update
 
 sudo apt-get install -y nano
 
-echo -e "${C_GREEN}[✓] Nano setup completed successfully!${C_RESET}"
+echo -e "[✓] Nano setup completed successfully!"
