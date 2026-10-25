@@ -36,8 +36,10 @@ RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
 # Add container stubs and wrappers (systemctl, apparmor_parser, udevadm)
 RUN printf '#!/bin/sh\ncase "$*" in\n  *docker*)\n    if [ ! -S /var/run/docker.sock ]; then\n      if [ -x /usr/bin/dockerd ]; then\n        /usr/bin/dockerd >/var/log/dockerd.log 2>&1 &\n        for i in 1 2 3 4 5; do\n          [ -S /var/run/docker.sock ] && break\n          sleep 1\n        done\n        chmod 666 /var/run/docker.sock 2>/dev/null || true\n      elif [ -x /etc/init.d/docker ]; then\n        service docker start >/dev/null 2>&1 || true\n        chmod 666 /var/run/docker.sock 2>/dev/null || true\n      fi\n    fi\n    ;;\nesac\nexit 0\n' > /usr/local/bin/systemctl && \
     chmod +x /usr/local/bin/systemctl && \
-    printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/apparmor_parser && \
-    chmod +x /usr/local/bin/apparmor_parser && \
+    dpkg-divert --divert /usr/sbin/apparmor_parser.real --rename /usr/sbin/apparmor_parser && \
+    printf '#!/bin/sh\nif [ ! -d /sys/kernel/security/apparmor ]; then\n    exit 0\nfi\nif [ -x /usr/sbin/apparmor_parser.real ]; then\n    exec /usr/sbin/apparmor_parser.real "$@"\nfi\nexit 0\n' > /usr/sbin/apparmor_parser && \
+    chmod +x /usr/sbin/apparmor_parser && \
+    ln -sf /usr/sbin/apparmor_parser /usr/local/bin/apparmor_parser && \
     printf '#!/bin/sh\nif [ ! -S /run/udev/control ]; then\n    case "$1" in\n        control|trigger) exit 0 ;;\n    esac\nfi\nif [ -x /bin/udevadm ]; then\n    exec /bin/udevadm "$@"\nelif [ -x /usr/bin/udevadm ]; then\n    exec /usr/bin/udevadm "$@"\nfi\nexit 0\n' > /usr/local/bin/udevadm && \
     chmod +x /usr/local/bin/udevadm
 
