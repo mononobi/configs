@@ -21,18 +21,19 @@ RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
     chmod 0440 /etc/sudoers.d/ubuntu && \
     echo "DEBIAN_FRONTEND=noninteractive" >> /etc/environment && \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
-    ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
+    groupadd -f docker && usermod -aG docker ubuntu
 
 # Add container stubs and wrappers (systemctl, apparmor_parser, udevadm)
-RUN printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/systemctl && \
+RUN printf '#!/bin/sh\ncase "$*" in\n  *docker*)\n    if [ -x /etc/init.d/docker ]; then\n      service docker start >/dev/null 2>&1 || true\n      chmod 666 /var/run/docker.sock 2>/dev/null || true\n    fi\n    ;;\nesac\nexit 0\n' > /usr/local/bin/systemctl && \
     chmod +x /usr/local/bin/systemctl && \
     printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/apparmor_parser && \
     chmod +x /usr/local/bin/apparmor_parser && \
     printf '#!/bin/sh\nif [ ! -S /run/udev/control ]; then\n    case "$1" in\n        control|trigger) exit 0 ;;\n    esac\nfi\nif [ -x /bin/udevadm ]; then\n    exec /bin/udevadm "$@"\nelif [ -x /usr/bin/udevadm ]; then\n    exec /usr/bin/udevadm "$@"\nfi\nexit 0\n' > /usr/local/bin/udevadm && \
     chmod +x /usr/local/bin/udevadm
 
-# Add entrypoint script to initialize background daemons (e.g. dbus)
-RUN printf '#!/bin/sh\nif [ -x /etc/init.d/dbus ] && ! service dbus status >/dev/null 2>&1; then\n    sudo service dbus start >/dev/null 2>&1 || true\nfi\nexec "$@"\n' > /usr/local/bin/docker-entrypoint.sh && \
+# Add entrypoint script to initialize background daemons (e.g. dbus, docker)
+RUN printf '#!/bin/sh\nif [ -x /etc/init.d/dbus ] && ! service dbus status >/dev/null 2>&1; then\n    sudo service dbus start >/dev/null 2>&1 || true\nfi\nif [ -x /etc/init.d/docker ] && ! service docker status >/dev/null 2>&1; then\n    sudo service docker start >/dev/null 2>&1 || true\n    sudo chmod 666 /var/run/docker.sock >/dev/null 2>&1 || true\nfi\nexec "$@"\n' > /usr/local/bin/docker-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Copy entire linux directory into /home/ubuntu/configs/linux with proper ownership

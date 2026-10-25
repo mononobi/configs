@@ -11,3 +11,8 @@ services:
     stdin_open: true
     tty: true
     working_dir: /home/ubuntu/configs/linux/install
+    volumes:
+      - docker-data:/var/lib/docker
+
+volumes:
+  docker-data:

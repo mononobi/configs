@@ -1003,8 +1003,9 @@ environment without modifying your host system, use the provided Docker test run
   resolves them on demand.
 - **`docker-compose.yml`**: Configures the test service (`test-env`) in privileged mode with
   `network_mode: host` (sharing the host network stack to avoid bridge firewall and DNS
-  issues), an interactive TTY, and `pull_policy: build` so Compose always rebuilds the image
-  before running.
+  issues), an isolated `docker-data` volume for `/var/lib/docker` (enabling nested Docker/DinD
+  testing without touching the host), an interactive TTY, and `pull_policy: build` so Compose
+  always rebuilds the image before running.
 - **`docker-test.sh`**: Always rebuilds the test image with latest local repository changes and
   launches the container.
 
