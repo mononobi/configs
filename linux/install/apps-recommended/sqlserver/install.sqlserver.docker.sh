@@ -116,7 +116,7 @@ done
 echo "[+] Starting Microsoft SQL Server Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker lsof curl
+require_app docker lsof curl jq
 require_app python --fast
 
 # Helper: Fetch tags once from MCR with retry and in-memory caching
