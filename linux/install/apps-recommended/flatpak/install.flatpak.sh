@@ -48,5 +48,6 @@ echo "[+] Starting installation/setup for flatpak..."
 conditional_apt_update
 sudo apt-get install -y flatpak gnome-software-plugin-flatpak
 flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak repair --user
 
 echo "[✓] flatpak setup completed successfully!"

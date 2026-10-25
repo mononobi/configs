@@ -16,10 +16,12 @@ sudo apt install flatpak
 
 ## Post-Installation Steps (All Systems)
 
-Execute the following command to add the Flathub repository for the current user:
+Execute the following commands to add the Flathub repository and ensure user installation
+integrity and desktop launcher exports:
 
 ```bash
 flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak repair --user
 ```
 
 ---
