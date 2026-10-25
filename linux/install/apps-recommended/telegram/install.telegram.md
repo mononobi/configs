@@ -5,14 +5,14 @@
 Flatpak is the recommended way to install Telegram Desktop:
 
 ```bash
-flatpak install flathub org.telegram.desktop
+flatpak install --user flathub org.telegram.desktop
 ```
 
 Execute this command to let Telegram access your home directory (to be able to share or save
 files):
 
 ```bash
-sudo flatpak override --filesystem=home org.telegram.desktop
+flatpak override --user --filesystem=home org.telegram.desktop
 ```
 
 ## Snap Installation (Not Recommended)

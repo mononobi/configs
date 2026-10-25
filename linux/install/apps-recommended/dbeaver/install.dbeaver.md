@@ -15,7 +15,7 @@ sudo apt-get install dbeaver-ce
 ## Installation using Flatpak
 
 ```bash
-flatpak install flathub io.dbeaver.DBeaverCommunity
+flatpak install --user flathub io.dbeaver.DBeaverCommunity
 ```
 
 > **TIP:** You can import the `dbeaver.dark.epf` file into your installed app to set a dark

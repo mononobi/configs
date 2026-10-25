@@ -86,7 +86,7 @@ echo "[+] Starting installation/setup for Bitwarden..."
 require_app "flatpak"
 
 echo "[+] Installing Bitwarden Desktop from Flathub..."
-flatpak install -y flathub com.bitwarden.desktop
+flatpak install --user -y flathub com.bitwarden.desktop
 
 # 2. Setup bitwarden-info template if not present
 setup_bitwarden_info

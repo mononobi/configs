@@ -48,6 +48,6 @@ echo "[+] Starting installation for Microsoft Teams via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing com.github.IsmaelMartinez.teams_for_linux from Flathub..."
-flatpak install -y flathub com.github.IsmaelMartinez.teams_for_linux
+flatpak install --user -y flathub com.github.IsmaelMartinez.teams_for_linux
 
 echo "[✓] Microsoft Teams installation completed successfully!"

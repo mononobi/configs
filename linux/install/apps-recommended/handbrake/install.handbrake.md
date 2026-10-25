@@ -7,7 +7,7 @@
 Flatpak is the recommended way to install Handbrake:
 
 ```bash
-flatpak install flathub fr.handbrake.ghb
+flatpak install --user flathub fr.handbrake.ghb
 ```
 
 ### Snap (Not Recommended)

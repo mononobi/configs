@@ -5,7 +5,7 @@
 Flatpak is the recommended way to install Postman:
 
 ```bash
-flatpak install flathub com.getpostman.Postman
+flatpak install --user flathub com.getpostman.Postman
 ```
 
 ### Troubleshooting Certificate Errors

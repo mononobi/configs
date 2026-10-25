@@ -48,6 +48,6 @@ echo "[+] Starting installation for Sugar Labs Music Keyboard via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.sugarlabs.MusicKeyboard from Flathub..."
-flatpak install -y flathub org.sugarlabs.MusicKeyboard
+flatpak install --user -y flathub org.sugarlabs.MusicKeyboard
 
 echo "[✓] Sugar Labs Music Keyboard installation completed successfully!"

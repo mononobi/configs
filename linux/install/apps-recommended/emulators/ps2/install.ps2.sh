@@ -45,7 +45,7 @@ echo "[+] Starting installation for PS2 (PCSX2)..."
 
 require_app flatpak
 
-flatpak install -y flathub net.pcsx2.PCSX2
+flatpak install --user -y flathub net.pcsx2.PCSX2
 
 BIOS_ZIP="${SCRIPT_DIR}/../files/ps2.bios.zip"
 echo "------------------------------------------------------------"

@@ -22,5 +22,5 @@ sudo apt-get install jami
 Alternatively, you can install Jami using Flatpak:
 
 ```bash
-flatpak install flathub net.jami.Jami
+flatpak install --user flathub net.jami.Jami
 ```

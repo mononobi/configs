@@ -48,6 +48,6 @@ echo "[+] Starting installation for VLC via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.videolan.VLC from Flathub..."
-flatpak install -y flathub org.videolan.VLC
+flatpak install --user -y flathub org.videolan.VLC
 
 echo "[✓] VLC installation completed successfully!"

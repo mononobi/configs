@@ -48,6 +48,6 @@ echo "[+] Starting installation for Thonny via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.thonny.Thonny from Flathub..."
-flatpak install -y flathub org.thonny.Thonny
+flatpak install --user -y flathub org.thonny.Thonny
 
 echo "[✓] Thonny installation completed successfully!"

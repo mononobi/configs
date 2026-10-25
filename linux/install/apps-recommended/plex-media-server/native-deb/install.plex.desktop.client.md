@@ -8,5 +8,5 @@
 Use the following command to install the Plex desktop client via Flatpak:
 
 ```bash
-flatpak install flathub tv.plex.PlexDesktop
+flatpak install --user flathub tv.plex.PlexDesktop
 ```

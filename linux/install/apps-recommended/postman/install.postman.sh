@@ -48,6 +48,6 @@ echo "[+] Starting installation for Postman via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing com.getpostman.Postman from Flathub..."
-flatpak install -y flathub com.getpostman.Postman
+flatpak install --user -y flathub com.getpostman.Postman
 
 echo "[✓] Postman installation completed successfully!"

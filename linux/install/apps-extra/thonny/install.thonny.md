@@ -5,7 +5,7 @@
 ## Install using Flatpak (Recommended)
 
 ```bash
-flatpak install org.thonny.Thonny
+flatpak install --user flathub org.thonny.Thonny
 ```
 
 ## Install using APT (Not Recommended)

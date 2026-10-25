@@ -48,6 +48,6 @@ echo "[+] Starting installation for GIMP via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.gimp.GIMP from Flathub..."
-flatpak install -y flathub org.gimp.GIMP
+flatpak install --user -y flathub org.gimp.GIMP
 
 echo "[✓] GIMP installation completed successfully!"

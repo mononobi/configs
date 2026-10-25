@@ -48,6 +48,6 @@ echo "[+] Starting installation for Wonderwall via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing com.gitlab.wonderwall from Flathub..."
-flatpak install -y flathub com.gitlab.wonderwall
+flatpak install --user -y flathub com.gitlab.wonderwall
 
 echo "[✓] Wonderwall installation completed successfully!"

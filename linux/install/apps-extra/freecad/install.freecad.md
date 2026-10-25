@@ -6,7 +6,7 @@ FreeCAD is the open source alternative to AutoCAD.
 ## Install with Flatpak (Recommended)
 
 ```bash
-flatpak install flathub org.freecad.FreeCAD
+flatpak install --user flathub org.freecad.FreeCAD
 ```
 
 ## Install from APT Repository (Ubuntu <= 22.04)

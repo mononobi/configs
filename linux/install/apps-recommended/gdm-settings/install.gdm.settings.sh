@@ -48,6 +48,6 @@ echo "[+] Starting installation for GDM Settings via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing io.github.realmazharhussain.GdmSettings from Flathub..."
-flatpak install -y flathub io.github.realmazharhussain.GdmSettings
+flatpak install --user -y flathub io.github.realmazharhussain.GdmSettings
 
 echo "[✓] GDM Settings installation completed successfully!"

@@ -48,6 +48,6 @@ echo "[+] Starting installation for HandBrake via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing fr.handbrake.ghb from Flathub..."
-flatpak install -y flathub fr.handbrake.ghb
+flatpak install --user -y flathub fr.handbrake.ghb
 
 echo "[✓] HandBrake installation completed successfully!"

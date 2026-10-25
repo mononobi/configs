@@ -48,6 +48,6 @@ echo "[+] Starting installation for Blender via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.blender.Blender from Flathub..."
-flatpak install -y flathub org.blender.Blender
+flatpak install --user -y flathub org.blender.Blender
 
 echo "[✓] Blender installation completed successfully!"

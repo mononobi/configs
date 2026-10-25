@@ -73,7 +73,7 @@ sudo apt-get update && sudo apt-get install firefox
 > **Warning:** This installation method is known to have some issues.
 
 ```bash
-flatpak install flathub org.mozilla.firefox
+flatpak install --user flathub org.mozilla.firefox
 ```
 
 ## Post-Installation Settings

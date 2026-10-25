@@ -13,7 +13,7 @@ sudo apt-get install gnome-maps
 This method is not recommended:
 
 ```bash
-flatpak install flathub org.gnome.Maps
+flatpak install --user flathub org.gnome.Maps
 ```
 
 > **Note:** GNOME Maps may require a VPN connection in certain countries, such as Iran.

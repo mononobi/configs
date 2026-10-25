@@ -90,7 +90,7 @@ echo "[+] Ensuring Flatpak dependency is installed..."
 require_app flatpak
 
 echo "[+] Configuring Flatpak filesystem permissions for icons..."
-sudo flatpak override --filesystem=/usr/share/icons/:ro
+flatpak override --user --filesystem=/usr/share/icons/:ro
 echo "[✓] Flatpak icons override configured."
 
 # 5. Apply to Login Screen (GDM)

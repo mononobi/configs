@@ -14,7 +14,7 @@ sudo apt-get upgrade
 For applications installed via `flatpak`, run:
 
 ```bash
-sudo flatpak update
+flatpak update
 ```
 
 ## Snap Packages

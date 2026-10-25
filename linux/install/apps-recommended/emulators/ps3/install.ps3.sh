@@ -45,7 +45,7 @@ echo "[+] Starting installation for PS3 (RPCS3)..."
 
 require_app flatpak
 
-flatpak install -y flathub net.rpcs3.RPCS3
+flatpak install --user -y flathub net.rpcs3.RPCS3
 
 echo "------------------------------------------------------------"
 echo "NOTE: you should download PS3 firmware from Sony, and then install it inside the app."

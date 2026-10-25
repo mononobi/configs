@@ -7,7 +7,7 @@ You have two main options for installing Slack on Linux:
 You can easily install Slack using Flatpak by running:
 
 ```bash
-flatpak install flathub com.slack.Slack
+flatpak install --user flathub com.slack.Slack
 ```
 
 ## Option 2: Using the Official DEB Package

@@ -18,5 +18,5 @@ Alternatively, you can install it using Flatpak, although this is not recommende
 > **Note**: This method is generally not recommended compared to the standard APT installation.
 
 ```bash
-flatpak install flathub org.gnome.Weather
+flatpak install --user flathub org.gnome.Weather
 ```

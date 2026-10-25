@@ -7,7 +7,7 @@ PCSX2 is a PlayStation 2 emulator.
 Run the following command to install PCSX2 via Flatpak:
 
 ```bash
-flatpak install flathub net.pcsx2.PCSX2
+flatpak install --user flathub net.pcsx2.PCSX2
 ```
 
 ## Configuration
@@ -17,5 +17,5 @@ application's BIOS directory.
 
 > **Note:** The BIOS files are located at `files/ps2.bios.zip`.
 
-To locate the BIOS directory in the application, navigate to: **Settings -> BIOS -> BIOS
+To locate the BIOS directory in the application, navigate to: **Settings → BIOS → BIOS
 Directory**

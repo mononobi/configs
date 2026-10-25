@@ -45,6 +45,6 @@ echo "[+] Starting installation for PSP (PPSSPP)..."
 
 require_app flatpak
 
-flatpak install -y flathub org.ppsspp.PPSSPP
+flatpak install --user -y flathub org.ppsspp.PPSSPP
 
 echo "[✓] PSP setup completed successfully!"

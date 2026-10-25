@@ -6,5 +6,5 @@ reduction.
 Install it using Flatpak with the following command:
 
 ```bash
-flatpak install flathub org.shotcut.Shotcut
+flatpak install --user flathub org.shotcut.Shotcut
 ```

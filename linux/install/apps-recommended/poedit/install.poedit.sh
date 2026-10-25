@@ -48,6 +48,6 @@ echo "[+] Starting installation for Poedit via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing net.poedit.Poedit from Flathub..."
-flatpak install -y flathub net.poedit.Poedit
+flatpak install --user -y flathub net.poedit.Poedit
 
 echo "[✓] Poedit installation completed successfully!"

@@ -48,6 +48,6 @@ echo "[+] Starting installation for FreeCAD via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.freecad.FreeCAD from Flathub..."
-flatpak install -y flathub org.freecad.FreeCAD
+flatpak install --user -y flathub org.freecad.FreeCAD
 
 echo "[✓] FreeCAD installation completed successfully!"

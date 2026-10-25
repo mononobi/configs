@@ -48,6 +48,6 @@ echo "[+] Starting installation for Slack via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing com.slack.Slack from Flathub..."
-flatpak install -y flathub com.slack.Slack
+flatpak install --user -y flathub com.slack.Slack
 
 echo "[✓] Slack installation completed successfully!"

@@ -15,5 +15,5 @@ Alternatively, you can install the community-maintained `teams_for_linux` client
 using the following command:
 
 ```bash
-flatpak install -y flathub com.github.IsmaelMartinez.teams_for_linux
+flatpak install --user -y flathub com.github.IsmaelMartinez.teams_for_linux
 ```

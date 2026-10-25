@@ -48,6 +48,6 @@ echo "[+] Starting installation for Chromium via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.chromium.Chromium from Flathub..."
-flatpak install -y flathub org.chromium.Chromium
+flatpak install --user -y flathub org.chromium.Chromium
 
 echo "[✓] Chromium installation completed successfully!"

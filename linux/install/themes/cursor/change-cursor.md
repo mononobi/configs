@@ -43,7 +43,7 @@ cursor configuration. This causes the cursor to revert to black when hovering ov
 Grant Flatpak read-only access to the system icons directory:
 
 ```bash
-sudo flatpak override --filesystem=/usr/share/icons/:ro
+flatpak override --user --filesystem=/usr/share/icons/:ro
 ```
 
 ## 5. Apply the Theme to the Login Screen (GDM)

@@ -48,6 +48,6 @@ echo "[+] Starting installation for Discord via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing com.discordapp.Discord from Flathub..."
-flatpak install -y flathub com.discordapp.Discord
+flatpak install --user -y flathub com.discordapp.Discord
 
 echo "[✓] Discord installation completed successfully!"

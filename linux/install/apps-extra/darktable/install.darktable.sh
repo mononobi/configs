@@ -48,6 +48,6 @@ echo "[+] Starting installation for Darktable via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.darktable.Darktable from Flathub..."
-flatpak install -y flathub org.darktable.Darktable
+flatpak install --user -y flathub org.darktable.Darktable
 
 echo "[✓] Darktable installation completed successfully!"

@@ -48,6 +48,6 @@ echo "[+] Starting installation for Shotcut via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.shotcut.Shotcut from Flathub..."
-flatpak install -y flathub org.shotcut.Shotcut
+flatpak install --user -y flathub org.shotcut.Shotcut
 
 echo "[✓] Shotcut installation completed successfully!"

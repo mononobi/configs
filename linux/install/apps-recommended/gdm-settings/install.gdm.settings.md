@@ -12,7 +12,7 @@ The application is currently available as a Flatpak.
 To install using Flatpak, run the following command:
 
 ```bash
-flatpak install flathub io.github.realmazharhussain.GdmSettings
+flatpak install --user flathub io.github.realmazharhussain.GdmSettings
 ```
 
 ## Ubuntu 24.04

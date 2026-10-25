@@ -48,6 +48,6 @@ echo "[+] Starting installation for Audacity via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.audacityteam.Audacity from Flathub..."
-flatpak install -y flathub org.audacityteam.Audacity
+flatpak install --user -y flathub org.audacityteam.Audacity
 
 echo "[✓] Audacity installation completed successfully!"

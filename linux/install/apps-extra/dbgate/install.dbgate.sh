@@ -48,6 +48,6 @@ echo "[+] Starting installation for DbGate via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.dbgate.DbGate from Flathub..."
-flatpak install -y flathub org.dbgate.DbGate
+flatpak install --user -y flathub org.dbgate.DbGate
 
 echo "[✓] DbGate installation completed successfully!"

@@ -48,7 +48,7 @@ echo "[+] Starting installation for Telegram via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing org.telegram.desktop from Flathub..."
-flatpak install -y flathub org.telegram.desktop
+flatpak install --user -y flathub org.telegram.desktop
 
 echo "[+] Configuring filesystem permissions for Telegram Desktop..."
 flatpak override --user --filesystem=home org.telegram.desktop

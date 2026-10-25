@@ -45,7 +45,7 @@ echo "[+] Starting installation for PS1 (DuckStation)..."
 
 require_app flatpak
 
-flatpak install -y flathub org.duckstation.DuckStation
+flatpak install --user -y flathub org.duckstation.DuckStation
 
 BIOS_ZIP="${SCRIPT_DIR}/../files/ps1.bios.zip"
 echo "------------------------------------------------------------"

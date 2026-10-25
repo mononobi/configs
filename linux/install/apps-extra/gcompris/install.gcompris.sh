@@ -48,6 +48,6 @@ echo "[+] Starting installation for GCompris via Flatpak..."
 require_app "flatpak"
 
 echo "[+] Installing net.gcompris.GCompris from Flathub..."
-flatpak install -y flathub net.gcompris.GCompris
+flatpak install --user -y flathub net.gcompris.GCompris
 
 echo "[✓] GCompris installation completed successfully!"

@@ -84,8 +84,8 @@ if is_installed --check "flatpak"; then
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
     echo -e " ${C_BOLD}[2/4] Updating Flatpak Applications...${C_RESET}"
     echo -e "${C_CYAN}${DIV_SUB}${C_RESET}"
-    sudo flatpak update -y
-    sudo flatpak uninstall --unused -y
+    flatpak update -y
+    flatpak uninstall --unused -y
 fi
 
 # 3. Snap Refresh

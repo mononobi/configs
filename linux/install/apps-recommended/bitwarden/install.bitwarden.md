@@ -3,7 +3,7 @@
 ### Install The Desktop App
 
 ```bash
-flatpak install flathub com.bitwarden.desktop
+flatpak install --user flathub com.bitwarden.desktop
 ```
 
 ### Install The Browser Extension

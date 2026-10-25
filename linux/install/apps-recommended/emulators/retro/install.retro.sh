@@ -45,18 +45,18 @@ echo "[+] Starting installation for Retro emulator (Mednaffe)..."
 
 require_app flatpak
 
-flatpak install -y flathub com.github.AmatCoder.mednaffe
+flatpak install --user -y flathub com.github.AmatCoder.mednaffe
 
 GAMES_DIR="/mnt/archives-1/Applications/Emulators/Games/Retro"
 if [[ -d "$GAMES_DIR" ]]; then
     echo "[+] Found games directory at $GAMES_DIR, applying flatpak filesystem override..."
-    sudo flatpak override --filesystem="$GAMES_DIR" com.github.AmatCoder.mednaffe
+    flatpak override --user --filesystem="$GAMES_DIR" com.github.AmatCoder.mednaffe
 else
     echo "------------------------------------------------------------"
     echo "NOTE: Games directory $GAMES_DIR does not exist."
     echo "To be able to load your games into the app, you should give access to the games folders."
     echo "You can execute this command once for each folder you want to give access to:"
-    echo "sudo flatpak override --filesystem=PATH_TO_GAMES_FOLDER com.github.AmatCoder.mednaffe"
+    echo "flatpak override --user --filesystem=PATH_TO_GAMES_FOLDER com.github.AmatCoder.mednaffe"
     echo "------------------------------------------------------------"
 fi
 

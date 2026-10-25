@@ -5,7 +5,7 @@
 ## Flatpak Installation (Recommended)
 
 ```bash
-flatpak install flathub net.poedit.Poedit
+flatpak install --user flathub net.poedit.Poedit
 ```
 
 ## Snap Installation

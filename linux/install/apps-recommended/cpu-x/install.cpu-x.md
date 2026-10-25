@@ -15,5 +15,5 @@ sudo apt-get install cpu-x
 > **Warning** This method installs the latest version, but it does not support dark mode.
 
 ```bash
-flatpak install flathub io.github.thetumultuousunicornofdarkness.cpu-x
+flatpak install --user flathub io.github.thetumultuousunicornofdarkness.cpu-x
 ```

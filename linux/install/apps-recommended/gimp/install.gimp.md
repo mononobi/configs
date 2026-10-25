@@ -5,7 +5,7 @@
 To install the latest version of GIMP using Flatpak, run the following command:
 
 ```bash
-flatpak install flathub org.gimp.GIMP
+flatpak install --user flathub org.gimp.GIMP
 ```
 
 ## Alternative Method: APT (Not Recommended - Old Version)

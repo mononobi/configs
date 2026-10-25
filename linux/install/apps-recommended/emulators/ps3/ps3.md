@@ -7,7 +7,7 @@ This is a guide for installing and configuring a PlayStation 3 (PS3) emulator.
 To install the RPCS3 emulator via Flatpak, run the following command:
 
 ```bash
-flatpak install flathub net.rpcs3.RPCS3
+flatpak install --user flathub net.rpcs3.RPCS3
 ```
 
 ## Firmware Setup

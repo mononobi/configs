@@ -5,5 +5,5 @@
 Run the following command to install GCompris via flatpak:
 
 ```bash
-flatpak install flathub org.kde.gcompris
+flatpak install --user flathub org.kde.gcompris
 ```

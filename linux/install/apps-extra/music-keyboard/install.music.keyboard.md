@@ -5,5 +5,5 @@ This is a music keyboard simulator designed for kids.
 To install it via Flatpak, run the following command:
 
 ```bash
-flatpak install flathub org.sugarlabs.MusicKeyboard
+flatpak install --user flathub org.sugarlabs.MusicKeyboard
 ```
