@@ -69,8 +69,32 @@ flag. Understanding the differences between per-user and system-wide installatio
 
 ---
 
-Open the following file and add the specified line to it to allow installed Flatpak apps to
-show up immediately in the applications list after installation:
+## Desktop Menu Integration (`XDG_DATA_DIRS`)
+
+### Modern Ubuntu Systems (Ubuntu 20.04+)
+
+On modern Ubuntu releases, **no manual configuration is needed**. When Flatpak is installed, it
+automatically deploys:
+
+- `/etc/profile.d/flatpak.sh` (for interactive and login shells)
+- `/usr/lib/systemd/user-environment-generators/60-flatpak` (for systemd user sessions, GNOME
+  Shell, and Wayland/X11)
+
+These native generators dynamically include both `/var/lib/flatpak/exports/share` and
+`~/.local/share/flatpak/exports/share` into `XDG_DATA_DIRS`. A one-time session logout and
+login after installing Flatpak for the first time is all that is required for newly installed
+applications to populate the system application menu.
+
+### Legacy Systems Workaround (Ubuntu 18.04 and Older Only)
+
+> [!NOTE]
+>
+> This step is only relevant for legacy Ubuntu distributions (18.04 and older) or legacy
+> desktop managers that lack systemd user-environment-generators. Do not apply this on modern
+> Ubuntu installations, as hardcoding `XDG_DATA_DIRS` can override distribution-specific paths.
+
+If installed Flatpak apps do not show up in the applications list on legacy systems after
+relogging in:
 
 ```bash
 sudo nano /etc/security/pam_env.conf
