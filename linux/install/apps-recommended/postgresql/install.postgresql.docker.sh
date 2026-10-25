@@ -136,7 +136,7 @@ done
 echo "[+] Starting PostgreSQL Docker setup..."
 
 # 1. Require framework dependencies
-require_app docker lsof curl
+require_app docker lsof curl jq
 require_app python --fast
 
 # 2. Ensure lightweight host client tools (psql, pg_dump) are available
@@ -328,7 +328,9 @@ echo "[✓] Requested PostgreSQL version(s) verified."
 
 # Ensure base directory ~/.postgres exists and is owned by host user
 mkdir -p "$HOME/.postgres"
-chown "${USER}:${USER}" "$HOME/.postgres" 2>/dev/null || true
+if [[ -d "$HOME/.postgres" && ! -O "$HOME/.postgres" ]]; then
+    sudo chown -R "${USER}:${USER}" "$HOME/.postgres"
+fi
 chmod 755 "$HOME/.postgres"
 
 # Track if this is the first instance being processed in this run
@@ -413,7 +415,9 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 
     # Set appropriate ownership and permissions:
     # User-space configuration and scripts owned by host user
-    chown -R "${USER}:${USER}" "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d" 2>/dev/null || true
+    if [[ -e "${TARGET_DIR}/config" && ! -O "${TARGET_DIR}/config" ]]; then
+        sudo chown -R "${USER}:${USER}" "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d" 2>/dev/null || true
+    fi
     chmod -R 755 "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d"
     # Exchange directories (logs & shared) require write access for both host user and container engine
     chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared"
@@ -535,7 +539,9 @@ for VER in "${TARGET_VERSIONS[@]}"; do
 
     # Ensure user-space configs, compose file, logs, and shared directories remain accessible to host user
     echo "[+] Ensuring user access permissions on configuration and exchange directories..."
-    chown -R "${USER}:${USER}" "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d" "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
+    if [[ -e "${TARGET_DIR}/config" && ! -O "${TARGET_DIR}/config" ]]; then
+        sudo chown -R "${USER}:${USER}" "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d" "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
+    fi
     chmod -R 755 "${TARGET_DIR}/config" "${TARGET_DIR}/initdb.d"
     chmod 644 "${TARGET_DIR}/docker-compose.yml" 2>/dev/null || true
     chmod 777 "${TARGET_DIR}/logs" "${TARGET_DIR}/shared"
