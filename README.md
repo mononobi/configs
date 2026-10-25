@@ -17,6 +17,14 @@ scripts for Linux environments, development tools, databases, and IDEs.
 > - **Never edit `AGENTS.md` directly**: All documentation changes must be made to `README.md`.
 > - **No comparison or sync needed**: AI agents must never compare `AGENTS.md` and `README.md`
 >   or attempt to synchronize them—`AGENTS.md` automatically reflects `README.md`.
+> - **Mandatory container testing**: AI agents must always test new or modified scripts inside
+>   the test container (`./docker-test.sh`) to verify execution.
+> - **Bare-metal first, no container workarounds in recipes**: Scripts must never be altered
+>   just to satisfy container quirks; they must remain standard and production-ready for
+>   bare-metal desktops and servers. Any container shims belong strictly in `Dockerfile`.
+> - **Host execution requires explicit user permission**: If a script cannot be tested in a
+>   container, agents must ask the user for explicit permission before running it on the real
+>   host.
 
 ---
 
@@ -1027,3 +1035,29 @@ Inside the container:
   `root`).
 - The working directory is pre-set to `/home/ubuntu/configs/linux/install`.
 - All recipes and runners are fully self-contained and run against a fresh system.
+
+#### Mandatory Testing Protocol for AI Agents
+
+> [!IMPORTANT]
+>
+> All AI agents modifying or adding automation scripts in this repository must strictly follow
+> these testing guidelines:
+>
+> 1. **Always Test in the Container**: Whenever an AI agent creates, updates, or refactors an
+>    installation recipe, runner, or helper script, it must always test the modified script
+>    inside the Docker test container (`./docker-test.sh <path-to-script>`) to verify syntax,
+>    execution flow, package installation, and idempotency.
+> 2. **Standard & Bare-Metal Usability First (No Container-Specific Hacks)**: Scripts must
+>    **never** be compromised, weakened, or modified simply to satisfy container environment
+>    limitations. Every recipe must remain fully standard, robust, and production-ready for
+>    regular bare-metal Linux desktops and servers. Any accommodations needed for container
+>    testing (e.g. mock stubs for `apparmor_parser`, `udevadm`, D-Bus services, or systemd)
+>    must live strictly within `Dockerfile` or `docker-compose.yml`, **never** in the
+>    production recipes themselves.
+> 3. **Explicit User Permission for Host Testing**: If a script cannot be meaningfully tested
+>    inside a container (e.g. low-level hardware drivers, kernel modules, display manager/GDM
+>    screen setups, Secure Boot keys, or physical hardware configurations) or if container
+>    testing cannot accurately reveal issues that could occur on a real machine, AI agents must
+>    **never execute the script on the real host system automatically**. Agents must explicitly
+>    explain why container testing is insufficient and ask the user for explicit permission
+>    before running any scripts on the real host.
