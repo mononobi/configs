@@ -3,10 +3,19 @@ FROM ubuntu:26.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV USER=ubuntu
 
-# Install only minimal container infrastructure packages
+# Install core baseline infrastructure packages matching bare-metal Ubuntu
 RUN apt-get update -qq && \
     apt-get install -y -qq --no-install-recommends \
         sudo \
+        curl \
+        wget \
+        ca-certificates \
+        gnupg \
+        python3 \
+        python3-pip \
+        python3-venv \
+        jq \
+        lsof \
         iptables \
         dbus && \
     rm -rf /var/lib/apt/lists/*
